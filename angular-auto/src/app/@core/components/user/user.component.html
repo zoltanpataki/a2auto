@@ -1,0 +1,53 @@
+<div class="user-container">
+  <form #userForm=ngForm (ngSubmit)="saveUser(userForm)" class="form userForm">
+    <h5>Új vásárló adatai</h5>
+    <div>
+      <div class="inputContainer">
+        <div class="leftSide">
+          <div *ngFor="let item of fieldsOne | keyvalue:keepOriginalOrder; trackBy: trackByFn">
+            <mat-form-field class="example-full-width">
+              <label>
+                <input matInput placeholder="{{item.value}}" ngModel name="{{item.key}}">
+              </label>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="middle">
+          <div>
+            <mat-form-field class="example-full-width">
+              <input matInput [matDatepicker]="birthPicker" placeholder="Születésnap" ngModel name="birthDate">
+              <mat-datepicker-toggle matSuffix [for]="birthPicker"></mat-datepicker-toggle>
+              <mat-datepicker #birthPicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div *ngFor="let item of fieldsTwo | keyvalue:keepOriginalOrder; trackBy: trackByFn">
+            <mat-form-field class="example-full-width">
+              <label>
+                <input matInput placeholder="{{item.value}}" ngModel name="{{item.key}}">
+              </label>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="rightSide">
+          <div *ngFor="let item of fieldsThree | keyvalue:keepOriginalOrder; trackBy: trackByFn">
+            <mat-form-field class="example-full-width">
+              <label>
+                <input matInput placeholder="{{item.value}}" ngModel name="{{item.key}}">
+              </label>
+            </mat-form-field>
+          </div>
+          <div *ngFor="let item of fieldsFour | keyvalue:keepOriginalOrder; index as i; trackBy: trackByFn">
+            <mat-form-field class="example-full-width">
+              <input matInput [matDatepicker]="picker" placeholder="{{item.value}}" ngModel name="{{item.key}}">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="saveButton">
+      <button mat-fab><i class="material-icons">save</i></button>
+    </div>
+  </form>
+</div>

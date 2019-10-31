@@ -1,0 +1,32 @@
+<mat-dialog-content>
+  <h5>Add meg a hitel adatokat!</h5>
+  <form #creditForm=ngForm (ngSubmit)="saveCredit(creditForm)" class="creditForm">
+    <div>
+      <div class="inputContainer">
+        <div class="leftSide">
+          <div *ngFor="let item of fieldsString | keyvalue:keepOriginalOrder; trackBy: trackByFn">
+            <mat-form-field class="example-full-width">
+              <label>
+                <input matInput placeholder="{{item.value}}" ngModel name="{{item.key}}">
+              </label>
+            </mat-form-field>
+          </div>
+          <div *ngFor="let item of fieldsNumber | keyvalue:keepOriginalOrder; trackBy: trackByFn">
+            <mat-form-field class="example-full-width">
+              <label>
+                <input matInput type="number" placeholder="{{item.value}}" ngModel name="{{item.key}}">
+              </label>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="saveButton">
+      <button mat-button>Mentés</button>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions class="yesOrNoButtons">
+  <button class="mat-raised-button mat-accent" (click)="close()"><strong class="X">X</strong></button>
+</mat-dialog-actions>

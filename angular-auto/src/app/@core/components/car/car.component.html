@@ -1,0 +1,101 @@
+<div class="car-container">
+  <form #carForm=ngForm (ngSubmit)="saveCar(carForm)" class="form carForm">
+    <h5>Autó adatai</h5>
+    <div class="inputContainer">
+      <div class="leftSide">
+        <div *ngFor="let item of fieldsOneFirstHalf | keyvalue:keepOriginalOrder; trackBy: trackByFn">
+          <mat-form-field class="example-full-width">
+            <label>
+              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput placeholder="{{item.value}}" ngModel="{{carData[item.key]}}" name="{{item.key}}">
+            </label>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="example-full-width">
+            <label>
+              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput placeholder="Rendszam (6 karakter)" maxlength="6" minlength="6" ngModel="{{carData.plateNumber}}" name="plateNumber">
+            </label>
+          </mat-form-field>
+          <mat-error *ngIf="!utilService.validPlateNumber">A rendszam hossza 6 karakter kell legyen</mat-error>
+        </div>
+        <div *ngFor="let item of fieldsOneSecondHalf | keyvalue:keepOriginalOrder; trackBy: trackByFn">
+          <mat-form-field class="example-full-width">
+            <label>
+              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput placeholder="{{item.value}}" ngModel="{{carData[item.key]}}" name="{{item.key}}">
+            </label>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="example-full-width">
+            <label>
+              <input matInput type="number" placeholder="Hengerűrtartalom" ngModel="{{carData.capacity}}" name="capacity">
+            </label>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="middle">
+        <div>
+          <mat-form-field class="example-full-width">
+            <input matInput [matDatepicker]="motExpiryPicker" placeholder="Muszaki vizsga lejarata" ngModel="{{carData.motExpiry | date:'yyyy-MM-dd'}}" name="motExpiry">
+            <mat-datepicker-toggle matSuffix [for]="motExpiryPicker"></mat-datepicker-toggle>
+            <mat-datepicker #motExpiryPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="example-full-width">
+            <mat-label>Jármű típusa</mat-label>
+            <mat-select [ngModel]="carData.carOrTruck" name="carOrTruck">
+              <mat-option *ngFor="let type of carOrTruck; trackBy: trackByFn" [value]="type">
+                {{type}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div *ngFor="let item of fieldTwo | keyvalue:keepOriginalOrder; trackBy: trackByFn">
+          <mat-form-field class="example-full-width">
+            <label>
+              <input matInput type="number" placeholder="{{item.value}}" ngModel="{{carData[item.key]}}" name="{{item.key}}">
+            </label>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="rightSide">
+        <div>
+          <mat-form-field class="example-full-width">
+            <label>
+              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput placeholder="Költségek leírása" ngModel="{{carData.costDescriptions}}" name="costDescriptions">
+            </label>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="example-full-width">
+            <mat-label>Vasarlas tipusa</mat-label>
+            <mat-select [ngModel]="carData.typeOfBuying" name="typeOfBuying">
+              <mat-option *ngFor="let type of typeOfBuying; trackBy: trackByFn" [value]="type">
+                {{type}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div *ngFor="let item of fieldFour | keyvalue:keepOriginalOrder; index as i; trackBy: trackByFn">
+          <mat-form-field class="example-full-width">
+            <input matInput [matDatepicker]="picker" placeholder="{{item.value}}" ngModel="{{carData[item.key] | date:'yyyy-MM-dd'}}" name="{{item.key}}">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="example-full-width">
+            <input matInput [matDatepicker]="carHandoverPicker" placeholder="Auto atadasanak idopontja" ngModel="{{carData.carHandover | date:'yyyy-MM-dd'}}" name="carHandover">
+            <mat-datepicker-toggle matSuffix [for]="carHandoverPicker"></mat-datepicker-toggle>
+            <mat-datepicker #carHandoverPicker></mat-datepicker>
+          </mat-form-field>
+          <ngb-timepicker [(ngModel)]="carHandoverTime" name="carHandoverTime"></ngb-timepicker>
+        </div>
+      </div>
+    </div>
+    <div class="saveButton">
+      <button mat-fab><i class="material-icons">save</i></button>
+    </div>
+  </form>
+</div>

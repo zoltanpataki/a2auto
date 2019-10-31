@@ -1,0 +1,25 @@
+.mat-button {
+  background-color: dodgerblue;
+  width: 300px !important;
+}
+
+.saveButton {
+  width: 80%;
+  text-align: left;
+  margin-top: 5%;
+}
+
+.inputContainer {
+  width: 80%;
+  display: flex;
+  flex-flow: row wrap ;
+  justify-content: space-between;
+}
+
+mat-form-field {
+  width: 150%;
+}
+
+button:focus {
+  outline: none;
+}

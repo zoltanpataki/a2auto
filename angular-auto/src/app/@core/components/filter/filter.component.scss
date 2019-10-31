@@ -1,0 +1,113 @@
+.selectedCars {
+  margin-top: 5%;
+}
+
+.selectedCarHeaders {
+  display: flex;
+  justify-content: space-between;
+}
+
+.buyButton {
+  max-width: 11%;
+  justify-content: flex-end;
+  cursor: pointer;
+}
+
+.money {
+  color: deeppink;
+}
+
+.edit {
+  color: black;
+  cursor: pointer;
+}
+
+.delete {
+  color: #993300;
+}
+
+::ng-deep .mat-expansion-panel-header[aria-disabled=true] {
+  color: rgba(0,0,0,.87);
+}
+
+.userFilter {
+  margin-bottom: 5%;
+}
+
+.selectBetweenPreviousAndNew {
+  display: flex;
+  justify-content: space-between;
+  max-width: 40%;
+  margin: 2% auto;
+}
+
+.newIndOrCorp {
+  margin-top: 2%;
+}
+
+.typeOfBuying {
+  display: flex;
+  align-items: center;
+}
+
+.editTypeOfBuying {
+  color: black;
+  margin-left: 10%;
+  cursor: pointer;
+}
+
+.userSearchContainer {
+  display: flex;
+  flex-flow: row wrap;
+  width: 100%;
+}
+
+.userFilterRightSide {
+  width: 75%;
+}
+
+.userFilterLeftSide {
+  width: 20%;
+}
+
+.userButton {
+  margin-bottom: 2%;
+}
+
+.indOrCorpCheckbox {
+  display: flex;
+  flex-direction: column;
+}
+
+mat-divider {
+  margin-bottom: 2%;
+  margin-top: 2%;
+}
+
+.fab {
+  display: flex;
+  flex-flow: row;
+}
+
+.miniFab {
+  margin-left: 2%;
+}
+
+.inputContainer {
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+}
+
+.descriptions {
+  display: flex;
+  align-items: center;
+}
+
+button:focus {
+  outline: none;
+}
+
+table {
+  width: 100%;
+}
