@@ -38,7 +38,7 @@ export class FilterComponent implements OnInit {
   private individualOrCorporate: string;
   private selectedTypeOfBuying;
   private carOfTransaction: Car;
-  private userSearchResult = new MatTableDataSource<Users>();;
+  private userSearchResult = new MatTableDataSource<Users>();
   private companySearchResult = [];
   private inheritanceTax: number;
   private orderProgress: number = 0;
@@ -50,6 +50,7 @@ export class FilterComponent implements OnInit {
   private description: FormArray;
   private clickedCarIndex: number;
   private downPaymentForm: FormGroup;
+  private downpayment: number;
   private displayedColumns: string[] = ['name', 'city', 'taxNumber', 'symbol'];
   private pickedUser: number;
 
@@ -451,6 +452,7 @@ export class FilterComponent implements OnInit {
 
   private saveDownPaymentAmount(form: FormGroup) {
     console.log(form.value);
+    this.downpayment = form.value.downPayment;
     this.setOrderProgressInSessionStorage(6);
   }
 
