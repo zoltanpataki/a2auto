@@ -14,6 +14,8 @@ export class CarComponent implements OnInit {
   public carData: Car;
   @Output()
   public orderProgress: EventEmitter<any> = new EventEmitter<any>();
+  @Output()
+  public countInCar: EventEmitter<any> = new EventEmitter<any>();
   public fieldsOneFirstHalf = {name: 'Auto neve', type: 'Auto tipusa', color: 'Szin'};
   public fieldsOneSecondHalf = {specification: 'Felszereltseg', bodyNumber: 'Alvazszam', engineNumber: 'Motorszam', carRegistry: 'Forgalmi engedely szama'};
   public fieldTwo = {vintage: 'Evjarat', mileage: 'Futott km', price: 'Ar', cost: 'Koltseg', inheritanceTax: 'Atirasi illetek', downPayment: 'Foglalo', payedAmount: 'Befizetett osszeg', kwh: 'Teljesitmeny'};
@@ -29,13 +31,12 @@ export class CarComponent implements OnInit {
 
   public ngOnInit() {
     if (this.carData == null) {
-      this.carData = new Car(null,'','', '', '', '', '', '', null, null, null, null, null, null, '', null, null, '', null, null, null, null, '', null, null, null, null, null, '');
+      this.carData = new Car(null,null,null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     } else {
       const carHandoverDate: Date = new Date(this.carData.carHandover);
       this.carHandoverTime['hour'] = carHandoverDate.getHours();
       this.carHandoverTime['minute'] = carHandoverDate.getMinutes();
     }
-    console.log(this.carData);
   }
 
   public saveCar(form: any) {
@@ -49,8 +50,9 @@ export class CarComponent implements OnInit {
       )} else {
       this.setValidPlateNumber();
       this.httpService.saveCar(this.createNewCarObject(form)).subscribe(data => {
-          console.log(data);
+          const newCar = new Car(data.id, data.name, data.type, data.color, data.plateNumber, data.specification, data. bodyNumber, data.engineNumber, Number(data.capacity), Number(data.vintage), Number(data.mileage), new Date(data.motExpiry), Number(data.price), Number(data.cost), data.costDescriptions, new Date(data.dateOfArrival), new Date(data.dateOfLeaving), data.typeOfBuying, Number(data.inheritanceTax), Number(data.downPayment), Number(data.payedAmount), Number(data.kwh), data.carRegistry, new Date(data.documentsHandover), new Date(data.dueOfContract), new Date(data.carHandover), new Date(data.dateOfContract), Boolean(JSON.parse(data.sold)), data.carOrTruck, data.salesman);
           this.orderProgress.emit('saved');
+          this.countInCar.emit(newCar);
         }, error => {
           this.utilService.openSnackBar('Az adatbáziskapcsolat váratlanul megszakadt!', 'Hiba :(');
         }
@@ -63,9 +65,9 @@ export class CarComponent implements OnInit {
 
   public createNewCarObject(form: any): Car {
     if (this.utilService.carUpdate) {
-      return  new Car(this.carData.id, form.value.name, form.value.type, form.value.color, form.value.plateNumber, form.value.specification, form.value.bodyNumber, form.value.engineNumber, form.value.capacity, form.value.vintage, form.value.mileage, form.value.motExpiry, form.value.price, form.value.cost, form.value.costDescription, form.value.dateOfArrival, form.value.dateOfLeaving, form.value.typeOfBuying, form.value.inheritanceTax, form.value.downPayment, form.value.payedAmount, form.value.kwh, form.value.carRegistry, form.value.documentsHandover, form.value.dueOfContract, form.value.carHandover, form.value.dateOfContract, false, form.value.carOrTruck);
+      return  new Car(this.carData.id, form.value.name, form.value.type, form.value.color, form.value.plateNumber, form.value.specification, form.value.bodyNumber, form.value.engineNumber, form.value.capacity, form.value.vintage, form.value.mileage, form.value.motExpiry, form.value.price, form.value.cost, form.value.costDescription, form.value.dateOfArrival, form.value.dateOfLeaving, form.value.typeOfBuying, form.value.inheritanceTax, form.value.downPayment, form.value.payedAmount, form.value.kwh, form.value.carRegistry, form.value.documentsHandover, form.value.dueOfContract, form.value.carHandover, form.value.dateOfContract, false, form.value.carOrTruck, form.value.salesman);
     } else {
-      return  new Car(null, form.value.name, form.value.type, form.value.color, form.value.plateNumber, form.value.specification, form.value.bodyNumber, form.value.engineNumber, form.value.capacity, form.value.vintage, form.value.mileage, form.value.motExpiry, form.value.price, form.value.cost, form.value.costDescription, form.value.dateOfArrival, form.value.dateOfLeaving, form.value.typeOfBuying, form.value.inheritanceTax, form.value.downPayment, form.value.payedAmount, form.value.kwh, form.value.carRegistry, form.value.documentsHandover, form.value.dueOfContract, form.value.carHandover, form.value.dateOfContract, false, form.value.carOrTruck);
+      return  new Car(null, form.value.name, form.value.type, form.value.color, form.value.plateNumber, form.value.specification, form.value.bodyNumber, form.value.engineNumber, form.value.capacity, form.value.vintage, form.value.mileage, form.value.motExpiry, form.value.price, form.value.cost, form.value.costDescription, form.value.dateOfArrival, form.value.dateOfLeaving, form.value.typeOfBuying, form.value.inheritanceTax, form.value.downPayment, form.value.payedAmount, form.value.kwh, form.value.carRegistry, form.value.documentsHandover, form.value.dueOfContract, form.value.carHandover, form.value.dateOfContract, false, form.value.carOrTruck, form.value.salesman);
 
     }
   }

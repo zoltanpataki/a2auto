@@ -3,6 +3,7 @@ import {Company} from "../../models/company";
 import {HttpService} from "../../services/http.service";
 import {UtilService} from "../../services/util.service";
 import {ActivatedRoute} from "@angular/router";
+import {Address} from "../../models/address";
 
 @Component({
   selector: 'app-company',
@@ -13,7 +14,7 @@ export class CompanyComponent implements OnInit {
 
   @Output()
   public orderProgress: EventEmitter<any> = new EventEmitter<any>();
-  public fields = {name: 'Cégnév', address: 'Cím', companyRegistrationNumber: 'Cégjegyzékszám', representation: 'Képviselő'};
+  public fields = {name: 'Cégnév', country: 'Ország', zipcode: 'Irányítószám', city: 'Város', address: 'Cím', companyRegistrationNumber: 'Cégjegyzékszám', representation: 'Képviselő'};
   public keepOriginalOrder = (a, b) => a.key;
   private currentUrl;
 
@@ -33,7 +34,7 @@ export class CompanyComponent implements OnInit {
   }
 
   public saveCompany(form: any) {
-    const company = new Company(null, form.value.name, form.value.address, form.value.companyRegistrationNumber, form.value.representation);
+    const company = new Company(null, form.value.name, new Address(null, form.value.zipcode, form.value.country, form.value.city, form.value.address), form.value.companyRegistrationNumber, form.value.representation);
     this.httpService.saveCompany(company).subscribe(data => {
       console.log(data);
       this.orderProgress.emit('saved');

@@ -44,11 +44,15 @@ public class Car {
     private Date dateOfContract;
     private boolean sold;
     private String carOrTruck;
+    private String salesman;
+
+    @OneToOne(mappedBy = "countInCar")
+    private Order order;
 
     public Car() {
     }
 
-    public Car(Users user, Company company, String name, String type, String color, String plateNumber, String specification, String bodyNumber, String engineNumber, int capacity, int vintage, int mileage, Date motExpiry, int price, int cost, String costDescriptions, Date dateOfArrival, Date dateOfLeaving, String typeOfBuying, int inheritanceTax, int downPayment, int payedAmount, int kwh, String carRegistry, Date documentsHandover, Date dueOfContract, Date carHandover, Date dateOfContract, boolean sold, String carOrTruck) {
+    public Car(Users user, Company company, String name, String type, String color, String plateNumber, String specification, String bodyNumber, String engineNumber, int capacity, int vintage, int mileage, Date motExpiry, int price, int cost, String costDescriptions, Date dateOfArrival, Date dateOfLeaving, String typeOfBuying, int inheritanceTax, int downPayment, int payedAmount, int kwh, String carRegistry, Date documentsHandover, Date dueOfContract, Date carHandover, Date dateOfContract, boolean sold, String carOrTruck, String salesman) {
         this.company = company;
         this.user =user;
         this.name = name;
@@ -79,6 +83,15 @@ public class Car {
         this.dateOfContract = dateOfContract;
         this.sold = sold;
         this.carOrTruck = carOrTruck;
+        this.salesman = salesman;
+    }
+
+    public String getSalesman() {
+        return salesman;
+    }
+
+    public void setSalesman(String salesman) {
+        this.salesman = salesman;
     }
 
     public String getCarOrTruck() {
@@ -342,7 +355,7 @@ public class Car {
                 ", specification='" + specification + '\'' +
                 ", bodyNumber='" + bodyNumber + '\'' +
                 ", engineNumber='" + engineNumber + '\'' +
-                ", capacity='" + capacity + '\'' +
+                ", capacity=" + capacity +
                 ", vintage=" + vintage +
                 ", mileage=" + mileage +
                 ", motExpiry=" + motExpiry +
@@ -362,6 +375,9 @@ public class Car {
                 ", carHandover=" + carHandover +
                 ", dateOfContract=" + dateOfContract +
                 ", sold=" + sold +
+                ", carOrTruck='" + carOrTruck + '\'' +
+                ", salesman='" + salesman + '\'' +
+                ", order=" + order +
                 '}';
     }
 }

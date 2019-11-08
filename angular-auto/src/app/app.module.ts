@@ -30,6 +30,9 @@ import { CompanyComponent } from './@core/components/company/company.component';
 import { CreditDialogComponent } from './@core/dialog/credit-dialog/credit-dialog.component';
 import {MatDividerModule} from "@angular/material/divider";
 import {MatTableModule} from "@angular/material/table";
+import { OrderPageComponent } from './@ui/order-page/order-page.component';
+import { SellingPageComponent } from './@ui/selling-page/selling-page.component';
+import { GdprPageComponent } from './@ui/gdpr-page/gdpr-page.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +47,9 @@ import {MatTableModule} from "@angular/material/table";
     WarningDialogComponent,
     CompanyComponent,
     CreditDialogComponent,
+    OrderPageComponent,
+    SellingPageComponent,
+    GdprPageComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,3 +1,42 @@
+.mat-button {
+  background-color: deeppink;
+  color: white;
+}
+
+.search {
+  width: 70%;
+}
+
+.searchButton {
+  width: 100%;
+}
+
+.searchType {
+  width: 100% !important;
+}
+
+.inheritanceTax {
+  display: flex;
+}
+
+.inheritanceTaxLeftSide {
+  width: 30%;
+}
+
+.saveButton {
+  width: 13%;
+}
+
+.countInCarSupplement {
+  display: flex;
+  flex-direction: column;
+}
+
+.summary {
+  display:flex;
+  justify-content: space-evenly;
+}
+
 .selectedCars {
   margin-top: 5%;
 }
@@ -24,6 +63,7 @@
 
 .delete {
   color: #993300;
+  cursor: pointer;
 }
 
 ::ng-deep .mat-expansion-panel-header[aria-disabled=true] {
@@ -62,11 +102,25 @@
   width: 100%;
 }
 
+.companySearchContainer {
+  display: flex;
+  flex-flow: row wrap;
+  width: 100%;
+}
+
 .userFilterRightSide {
   width: 75%;
 }
 
+.companyFilterRightSide {
+  width: 75%;
+}
+
 .userFilterLeftSide {
+  width: 20%;
+}
+
+.companyFilterLeftSide {
   width: 20%;
 }
 
@@ -89,10 +143,6 @@ mat-divider {
   flex-flow: row;
 }
 
-.miniFab {
-  margin-left: 2%;
-}
-
 .inputContainer {
   display: flex;
   justify-content: space-between;
@@ -111,3 +161,4 @@ button:focus {
 table {
   width: 100%;
 }
+

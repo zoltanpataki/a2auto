@@ -23,18 +23,12 @@ export class HttpService {
 
   public saveCar(car: Car): Observable<any> {
     const urlPostFix = 'saveCar';
-    return this.http.post(this.carServerUrl + urlPostFix, car, {
-      headers: httpOptions.headers,
-      responseType: 'text',
-    });
+    return this.http.post(this.carServerUrl + urlPostFix, car, httpOptions);
   }
 
   public updateCar(car: Car): Observable<any> {
     const urlPostFix = 'updateCar';
-    return this.http.put(this.carServerUrl + urlPostFix, car, {
-      headers: httpOptions.headers,
-      responseType: 'text',
-    });
+    return this.http.put(this.carServerUrl + urlPostFix, car, httpOptions);
   }
 
   public deleteCar(carId: any): Observable<any> {

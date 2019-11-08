@@ -19,17 +19,29 @@ public class Order {
     private String selectedTypeOfBuying;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "count_in_order_id", referencedColumnName = "id")
+    @JoinColumn(name = "users", referencedColumnName = "id")
+    private Users users;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "company", referencedColumnName = "id")
+    private Company company;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "count_in_car_supplement_id", referencedColumnName = "id")
     private CountInCarSupplement countInCarSupplement;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "credit_order_id", referencedColumnName = "id")
     private Credit credit;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "count_in_car", referencedColumnName = "id")
+    private Car countInCar;
+
     public Order() {
     }
 
-    public Order(boolean alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready, boolean selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate, boolean wantInheritanceTaxCalculation, int inheritanceTax, boolean thereIsCountInCar, int downPayment, String selectedTypeOfBuying, CountInCarSupplement countInCarSupplement, Credit credit) {
+    public Order(boolean alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready, boolean selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate, boolean wantInheritanceTaxCalculation, int inheritanceTax, boolean thereIsCountInCar, int downPayment, String selectedTypeOfBuying, CountInCarSupplement countInCarSupplement, Credit credit, Users users, Company company, Car countInCar) {
         this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready;
         this.selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate = selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate;
         this.wantInheritanceTaxCalculation = wantInheritanceTaxCalculation;
@@ -39,6 +51,33 @@ public class Order {
         this.selectedTypeOfBuying = selectedTypeOfBuying;
         this.countInCarSupplement = countInCarSupplement;
         this.credit = credit;
+        this.users = users;
+        this.company = company;
+        this.countInCar = countInCar;
+    }
+
+    public Car getCountInCar() {
+        return countInCar;
+    }
+
+    public void setCountInCar(Car countInCar) {
+        this.countInCar = countInCar;
+    }
+
+    public Users getUsers() {
+        return users;
+    }
+
+    public void setUsers(Users users) {
+        this.users = users;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     public Long getId() {
@@ -132,8 +171,11 @@ public class Order {
                 ", thereIsCountInCar=" + thereIsCountInCar +
                 ", downPayment=" + downPayment +
                 ", selectedTypeOfBuying='" + selectedTypeOfBuying + '\'' +
+                ", users=" + users +
+                ", company=" + company +
                 ", countInCarSupplement=" + countInCarSupplement +
                 ", credit=" + credit +
+                ", countInCar=" + countInCar +
                 '}';
     }
 }

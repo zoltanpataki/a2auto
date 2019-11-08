@@ -1,0 +1,91 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.title {
+  margin-top: 5%;
+  margin-bottom: 5%;
+  text-align: center;
+}
+
+.titleText {
+  text-decoration: underline;
+  font-size: 370%;
+  font-style: italic;
+  font-weight: bolder;
+}
+
+.gridContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 5%;
+}
+
+.mainGrid {
+  display: flex;
+  justify-content: center;
+  border: 1px solid black;
+  width: 80%;
+}
+
+.leftGrid, .rightGrid {
+  width: 50%;
+}
+
+.border{
+  border: 1px solid black !important;
+}
+
+.sectionLiner {
+  font-weight: bolder;
+  font-size: 200%;
+}
+
+.silverStart {
+  background-color: silver;
+}
+
+.silverCenter {
+  background-color: silver;
+  text-align: center;
+}
+
+.subSectionLiner {
+  font-weight: bold;
+  font-size: 160%;
+}
+
+.texts {
+  font-size: 140%;
+}
+
+p, h1 {
+  font-family: Lucida Console, Courier, monospace;
+}
+
+p {
+  margin-bottom: 1%;
+  margin-top: 1%;
+}
+
+.extraCarInfo {
+  border-top: 1px solid black;
+}
+
+.date {
+  margin-bottom: 5%;
+  margin-left: 10%;
+}
+
+.signature {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.upperLine {
+  border-top: 1px solid black;
+  padding-left: 5%;
+  padding-right: 5%;
+  padding-top: 1%;
+}

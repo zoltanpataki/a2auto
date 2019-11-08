@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {HttpService} from "../../services/http.service";
 import {UtilService} from "../../services/util.service";
 import {SelectedFilter} from "../../models/selectedFilter";
@@ -11,6 +11,9 @@ import {CountInCarSupplement} from "../../models/countInCarSupplement";
 import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
 import {MatTableDataSource} from "@angular/material/table";
 import {Users} from "../../models/users";
+import {Credit} from "../../models/credit";
+import {Company} from "../../models/company";
+import {NavigationExtras, Router} from "@angular/router";
 
 @Component({
   selector: 'app-filter',
@@ -39,7 +42,7 @@ export class FilterComponent implements OnInit {
   private selectedTypeOfBuying;
   private carOfTransaction: Car;
   private userSearchResult = new MatTableDataSource<Users>();
-  private companySearchResult = [];
+  private companySearchResult = new MatTableDataSource<Company>();
   private inheritanceTax: number;
   private orderProgress: number = 0;
   private askForInheritanceTaxCalculation: string;
@@ -51,14 +54,23 @@ export class FilterComponent implements OnInit {
   private clickedCarIndex: number;
   private downPaymentForm: FormGroup;
   private downpayment: number;
-  private displayedColumns: string[] = ['name', 'city', 'taxNumber', 'symbol'];
-  private pickedUser: number;
+  private userDisplayedColumns: string[] = ['name', 'city', 'taxNumber', 'symbol'];
+  private companyDisplayedColumns: string[] = ['name', 'registrationNumber', 'representation', 'symbol'];
+  private pickedUser: Users;
+  private pickedCompany: Company;
+  private indexOfPickedUser: number;
+  private indexOfPickedCompany: number;
+  private creditData: Credit;
+  private countInCar: Car;
+  private salesmanForm: FormGroup;
+  private salesman: string;
 
   constructor(private httpService: HttpService,
               private utilService: UtilService,
               private dialog: MatDialog,
               private formBuilder: FormBuilder,
-              private changeDetectorRefs: ChangeDetectorRef,) { }
+              private changeDetectorRefs: ChangeDetectorRef,
+              private router: Router,) { }
 
   ngOnInit() {
     // this.orderProgress = Number(sessionStorage.getItem('orderProgress'));
@@ -90,6 +102,10 @@ export class FilterComponent implements OnInit {
     }
     this.downPaymentForm = this.formBuilder.group({
       downPayment: [null],
+    });
+
+    this.salesmanForm = this.formBuilder.group({
+      salesman: [null],
     });
   }
 
@@ -155,7 +171,6 @@ export class FilterComponent implements OnInit {
         });
       } else {
         this.httpService.getAllCars().subscribe(data => {
-          console.log(data);
           this.selectedCars = data;
           sessionStorage.setItem('selectedCars', JSON.stringify(data));
         })
@@ -210,7 +225,10 @@ export class FilterComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      console.log(result);
+      this.creditData = result;
+      if (this.creditData) {
+        sessionStorage.setItem("credit", JSON.stringify(this.creditData));
+      }
     });
   }
 
@@ -220,7 +238,6 @@ export class FilterComponent implements OnInit {
 
   private filterUser(form: any) {
     this.httpService.getUser(this.setFormValuesToUpperCase(form), this.selectedUserFilter.value).subscribe(data => {
-      console.log(data);
       this.userSearchResult.data = data;
       this.changeDetectorRefs.detectChanges();
     });
@@ -229,8 +246,8 @@ export class FilterComponent implements OnInit {
 
   private filterCompany(form: any) {
     this.httpService.getCompany(this.setFormValuesToUpperCase(form), this.selectedCompanyFilter.value).subscribe(data => {
-      console.log(data);
-      this.companySearchResult = data;
+      this.companySearchResult.data = data;
+      this.changeDetectorRefs.detectChanges();
     });
     this.setOrderProgressInSessionStorage(2);
   }
@@ -264,6 +281,7 @@ export class FilterComponent implements OnInit {
       this.previousOrNew = selection ? 'new' : 'previous';
     }
     this.orderProgress = this.orderProgress > 1 ? this.orderProgress : 1;
+    sessionStorage.setItem('alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready', this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready.toString())
   }
 
   private changeCheckBoxValuesToNull() {
@@ -288,6 +306,7 @@ export class FilterComponent implements OnInit {
         this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate = false;
       }
     }
+    sessionStorage.setItem('selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate', this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate.toString());
   }
 
   private setInheritanceTaxCheckboxValue(wantOrNotCalculation: string, car: Car, selection: boolean) {
@@ -304,6 +323,7 @@ export class FilterComponent implements OnInit {
       }
     } else if (wantOrNotCalculation === 'dontWantCalculation') {
       if (selection) {
+        this.inheritanceTax = null;
         this.askForInheritanceTaxCalculation = 'dontWantCalculation';
         this.wantInheritanceTaxCalculation = false;
         this.setOrderProgressInSessionStorage(3);
@@ -313,6 +333,7 @@ export class FilterComponent implements OnInit {
         this.countInheritanceTax(car);
       }
     }
+    sessionStorage.setItem('wantInheritanceTaxCalculation', this.wantInheritanceTaxCalculation.toString());
   }
 
   private countInheritanceTax (car: Car) {
@@ -354,6 +375,7 @@ export class FilterComponent implements OnInit {
     this.httpService.getUtility(stringCapacity).subscribe(utility => {
       this.httpService.getChargeForInheritanceTax(stringKw, stringAge).subscribe(chargeForInheritanceTax => {
         this.inheritanceTax = Number(utility.value) + (chargeForInheritanceTax * car.kwh);
+        sessionStorage.setItem('inheritanceTax', this.inheritanceTax.toString());
         this.setOrderProgressInSessionStorage(3);
       });
     });
@@ -379,6 +401,7 @@ export class FilterComponent implements OnInit {
         this.thereIsCountInCar = true;
       }
     }
+    sessionStorage.setItem('thereIsCountInCar', this.thereIsCountInCar.toString());
   }
 
   private setAlreadyOrNewCustomerSelectorAndCarOfTransaction(car: Car, index: number) {
@@ -413,7 +436,8 @@ export class FilterComponent implements OnInit {
     if (this.selectedTypeOfBuying === 'HITEL') {
       this.openCreditModal(car);
     }
-
+    this.setOrderProgressInSessionStorage(7);
+    sessionStorage.setItem('selectedTypeOfBuying', this.selectedTypeOfBuying);
   }
 
   private clearSelectedCars() {
@@ -438,12 +462,6 @@ export class FilterComponent implements OnInit {
     }
   }
 
-  private checkIfCreditWasClicked(type: string, car: Car) {
-    if (type === 'HITEL' && this.selectedTypeOfBuying === 'HITEL') {
-      this.openCreditModal(car);
-    }
-  }
-
   private saveCountInCarSupplement(form: FormGroup) {
     this.countInCarSupplement = new CountInCarSupplement(form.value.countInPrice, form.value.previousLoan, form.value.previousBank, form.value.loanType, form.value.description);
     sessionStorage.setItem('countInCarSupplement', JSON.stringify(this.countInCarSupplement));
@@ -451,13 +469,48 @@ export class FilterComponent implements OnInit {
   }
 
   private saveDownPaymentAmount(form: FormGroup) {
-    console.log(form.value);
     this.downpayment = form.value.downPayment;
+    sessionStorage.setItem('downPayment', this.downpayment.toString());
     this.setOrderProgressInSessionStorage(6);
   }
 
   private pickUser(index: number) {
-    this.pickedUser = index;
-    console.log(this.pickedUser);
+    this.indexOfPickedUser = index;
+    const pickedUserFromDataTable = this.userSearchResult.data[index];
+    this.pickedUser = new Users(pickedUserFromDataTable.fullName, pickedUserFromDataTable.birthName, pickedUserFromDataTable.zipCode, pickedUserFromDataTable.city, pickedUserFromDataTable.phoneNumber, pickedUserFromDataTable.email, pickedUserFromDataTable.nameOfMother, pickedUserFromDataTable.birthDate, pickedUserFromDataTable.personNumber, pickedUserFromDataTable.idCardNumber, pickedUserFromDataTable.dueTimeOfIdCard, pickedUserFromDataTable.drivingLicenceNumber, pickedUserFromDataTable.dueTimeOfDrivingLicence, pickedUserFromDataTable.taxNumber, pickedUserFromDataTable.healthcareNumber);
+    sessionStorage.setItem('pickedUser', JSON.stringify(this.pickedUser));
+  }
+
+  private pickCompany(index: number) {
+    this.indexOfPickedCompany = index;
+    const pickedCompanyFromDataTable = this.companySearchResult.data[index];
+    this.pickedCompany = new Company(pickedCompanyFromDataTable.id, pickedCompanyFromDataTable.name, pickedCompanyFromDataTable.address, pickedCompanyFromDataTable.companyRegistrationNumber, pickedCompanyFromDataTable.representation);
+    sessionStorage.setItem('pickedCompany', JSON.stringify(this.pickedCompany));
+  }
+
+  private getCountInCarData(event: Car) {
+    this.countInCar = event;
+    sessionStorage.setItem('countInCar', JSON.stringify(this.countInCar));
+  }
+
+  private saveSalesman(form: FormGroup, car: Car) {
+    this.salesman = form.value.salesman;
+    car.salesman = this.salesman;
+    this.httpService.updateCar(car).subscribe(data => {
+      console.log(data);
+      this.setOrderProgressInSessionStorage(8);
+    });
+  }
+
+  private navigateToOrderPage() {
+    this.router.navigate(['/orderPage'], {state: {data: 'valami'}});
+  }
+
+  private navigateToSellingPage() {
+    this.router.navigate(['/sellingPage']);
+  }
+
+  private navigateToGdprPage() {
+    this.router.navigate(['/gdprPage']);
   }
 }

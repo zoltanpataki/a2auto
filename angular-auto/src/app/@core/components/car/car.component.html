@@ -69,6 +69,13 @@
         </div>
         <div>
           <mat-form-field class="example-full-width">
+            <label>
+              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput placeholder="Értékesítő" ngModel="{{carData.salesman}}" name="salesman">
+            </label>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="example-full-width">
             <mat-label>Vasarlas tipusa</mat-label>
             <mat-select [ngModel]="carData.typeOfBuying" name="typeOfBuying">
               <mat-option *ngFor="let type of typeOfBuying; trackBy: trackByFn" [value]="type">

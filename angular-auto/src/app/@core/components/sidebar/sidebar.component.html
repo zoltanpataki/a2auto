@@ -1,28 +1,33 @@
 <nav>
   <ul>
     <li>
-      <a routerLink="">
+      <a routerLink="" [class.activated]="currentUrl == '/'">
         <i class="material-icons">home</i>
       </a>
     </li>
     <li>
-      <a routerLink="newCar">
+      <a routerLink="newCar" [class.activated]="currentUrl == '/newCar'">
         <i class="material-icons">directions_car</i>
       </a>
     </li>
     <li>
-      <a routerLink="newUser">
+      <a routerLink="newUser" [class.activated]="currentUrl == '/newUser'">
         <i class="material-icons">airline_seat_recline_extra</i>
       </a>
     </li>
     <li>
-      <a routerLink="newCompany">
+      <a routerLink="newCompany" [class.activated]="currentUrl == '/newCompany'">
         <i class="material-icons">business</i>
       </a>
     </li>
     <li>
-      <a routerLink="filter">
+      <a routerLink="filter" [class.activated]="currentUrl == '/filter'">
         <i class="material-icons">search</i>
+      </a>
+    </li>
+    <li>
+      <a routerLink="gdprPage" [class.activated]="currentUrl == '/gdprPage'">
+        <i class="material-icons">lock_open</i>
       </a>
     </li>
   </ul>

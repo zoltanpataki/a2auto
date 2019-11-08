@@ -90,21 +90,25 @@
             </mat-form-field>
             <div class="userFilter" *ngIf="selectedUserFilter">
               <form #filterUserForm=ngForm (ngSubmit)="filterUser(filterUserForm)" class="form filterForm">
-                <div *ngIf="selectedUserFilter.value == 'name'">
-                  <mat-form-field class="example-full-width">
-                    <label>
-                      <input matInput placeholder="Itt kereshetsz ({{selectedUserFilter.viewValue}})" ngModel name="name">
-                    </label>
-                  </mat-form-field>
+                <div class="search">
+                  <div class="searchType" *ngIf="selectedUserFilter.value == 'name'">
+                    <mat-form-field class="example-full-width">
+                      <label>
+                        <input matInput placeholder="Itt kereshetsz ({{selectedUserFilter.viewValue}})" ngModel name="name">
+                      </label>
+                    </mat-form-field>
+                  </div>
+                  <div class="searchType" *ngIf="selectedUserFilter.value == 'city'">
+                    <mat-form-field class="example-full-width">
+                      <label>
+                        <input matInput placeholder="Itt kereshetsz ({{selectedUserFilter.viewValue}})" ngModel name="city">
+                      </label>
+                    </mat-form-field>
+                  </div>
+                  <div>
+                    <button mat-button class="searchButton">Keresés</button>
+                  </div>
                 </div>
-                <div *ngIf="selectedUserFilter.value == 'city'">
-                  <mat-form-field class="example-full-width">
-                    <label>
-                      <input matInput placeholder="Itt kereshetsz ({{selectedUserFilter.viewValue}})" ngModel name="city">
-                    </label>
-                  </mat-form-field>
-                </div>
-                <button mat-fab><i class="material-icons">search</i></button>
               </form>
             </div>
           </div>
@@ -133,45 +137,88 @@
                 <!-- Symbol Column -->
                 <ng-container matColumnDef="symbol">
                   <th mat-header-cell *matHeaderCellDef> &nbsp; </th>
-                  <td mat-cell *matCellDef="let element; let tableIndex = index;">
-                    <mat-checkbox #userTable (change)="pickUser(tableIndex)" [checked]="pickedUser === tableIndex"></mat-checkbox>
+                  <td mat-cell *matCellDef="let element; let userTableIndex = index;">
+                    <mat-checkbox #userTable (change)="pickUser(userTableIndex)" [checked]="indexOfPickedUser === userTableIndex"></mat-checkbox>
                   </td>
                 </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <tr mat-header-row *matHeaderRowDef="userDisplayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: userDisplayedColumns;"></tr>
               </table>
             </div>
           </div>
         </div>
       </div>
       <div *ngIf="alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready == false && selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate == false">
-        <mat-form-field>
-          <mat-label>Szűrési feltétel</mat-label>
-          <mat-select [(ngModel)]="selectedCompanyFilter" name="companyFilter">
-            <mat-option *ngFor="let companyFilter of companyFilters; trackBy: trackByFn" [value]="companyFilter">
-              {{companyFilter.viewValue}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <div class="userFilter" *ngIf="selectedCompanyFilter">
-          <form #filterCompanyForm=ngForm (ngSubmit)="filterCompany(filterCompanyForm)" class="form filterForm">
-            <div *ngIf="selectedCompanyFilter.value == 'name'">
-              <mat-form-field class="example-full-width">
-                <label>
-                  <input matInput placeholder="Itt kereshetsz ({{selectedCompanyFilter.viewValue}})" ngModel name="name">
-                </label>
-              </mat-form-field>
+        <div class="companySearchContainer">
+          <div class="companyFilterLeftSide">
+            <mat-form-field>
+              <mat-label>Szűrési feltétel</mat-label>
+              <mat-select [(ngModel)]="selectedCompanyFilter" name="companyFilter">
+                <mat-option *ngFor="let companyFilter of companyFilters; trackBy: trackByFn" [value]="companyFilter">
+                  {{companyFilter.viewValue}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div class="userFilter" *ngIf="selectedCompanyFilter">
+              <form #filterCompanyForm=ngForm (ngSubmit)="filterCompany(filterCompanyForm)" class="form filterForm">
+                <div class="search">
+                  <div class="searchType" *ngIf="selectedCompanyFilter.value == 'name'">
+                    <mat-form-field class="example-full-width">
+                      <label>
+                        <input matInput placeholder="Itt kereshetsz ({{selectedCompanyFilter.viewValue}})" ngModel name="name">
+                      </label>
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="selectedCompanyFilter.value == 'companyRegistrationNumber'">
+                    <mat-form-field class="example-full-width">
+                      <label>
+                        <input matInput placeholder="Itt kereshetsz ({{selectedCompanyFilter.viewValue}})" ngModel name="companyRegistrationNumber">
+                      </label>
+                    </mat-form-field>
+                  </div>
+                  <div class="searchButton">
+                    <button mat-button class="search">Keresés</button>
+                  </div>
+                </div>
+              </form>
             </div>
-            <div *ngIf="selectedCompanyFilter.value == 'companyRegistrationNumber'">
-              <mat-form-field class="example-full-width">
-                <label>
-                  <input matInput placeholder="Itt kereshetsz ({{selectedCompanyFilter.viewValue}})" ngModel name="companyRegistrationNumber">
-                </label>
-              </mat-form-field>
+          </div>
+          <div class="companyFilterRightSide">
+            <div>
+              <table *ngIf="companySearchResult.data.length > 0" mat-table [dataSource]="companySearchResult" class="mat-elevation-z8">
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                  <th mat-header-cell *matHeaderCellDef> Név </th>
+                  <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                </ng-container>
+
+                <!-- City Column -->
+                <ng-container matColumnDef="registrationNumber">
+                  <th mat-header-cell *matHeaderCellDef> Cégjegyzékszám </th>
+                  <td mat-cell *matCellDef="let element"> {{element.companyRegistrationNumber}} </td>
+                </ng-container>
+
+                <!-- Tax number Column -->
+                <ng-container matColumnDef="representation">
+                  <th mat-header-cell *matHeaderCellDef> Képviselő </th>
+                  <td mat-cell *matCellDef="let element"> {{element.representation}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="symbol">
+                  <th mat-header-cell *matHeaderCellDef> &nbsp; </th>
+                  <td mat-cell *matCellDef="let element; let compTableIndex = index;">
+                    <mat-checkbox #companyTable (change)="pickCompany(compTableIndex)" [checked]="indexOfpickedUser === compTableIndex"></mat-checkbox>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="companyDisplayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: companyDisplayedColumns;"></tr>
+              </table>
             </div>
-            <button mat-fab><i class="material-icons">search</i></button>
-          </form>
+          </div>
         </div>
       </div>
       <div class="newIndOrCorp">
@@ -180,11 +227,18 @@
       </div>
       <div *ngIf="orderProgress > 1">
         <mat-divider></mat-divider>
-        <div>
-          <mat-checkbox #inhtax (change)="setInheritanceTaxCheckboxValue('wantCalculation', car, inhtax.checked)" [checked]="askForInheritanceTaxCalculation === 'wantCalculation'">Kérek átírási költség számítását</mat-checkbox>
-        </div>
-        <div>
-          <mat-checkbox #noinhtax (change)="setInheritanceTaxCheckboxValue('dontWantCalculation', car, noinhtax.checked)" [checked]="askForInheritanceTaxCalculation === 'dontWantCalculation'">Nem kérek átírási költség számítását</mat-checkbox>
+        <div class="inheritanceTax">
+          <div class="inheritanceTaxLeftSide">
+            <div>
+              <mat-checkbox #inhtax (change)="setInheritanceTaxCheckboxValue('wantCalculation', car, inhtax.checked)" [checked]="askForInheritanceTaxCalculation === 'wantCalculation'">Kérek átírási költség számítását</mat-checkbox>
+            </div>
+            <div>
+              <mat-checkbox #noinhtax (change)="setInheritanceTaxCheckboxValue('dontWantCalculation', car, noinhtax.checked)" [checked]="askForInheritanceTaxCalculation === 'dontWantCalculation'">Nem kérek átírási költség számítását</mat-checkbox>
+            </div>
+          </div>
+          <div class="inheritanceTaxRightSide" *ngIf="inheritanceTax">
+            <p>Az átírási költség: {{inheritanceTax}}</p>
+          </div>
         </div>
       </div>
       <div *ngIf="orderProgress > 2">
@@ -198,66 +252,70 @@
       </div>
       <div *ngIf="thereIsCountInCar && clickedCarIndex == i">
         <mat-divider></mat-divider>
-        <app-car (orderProgress)="orderOnProgressWithCar($event)"></app-car>
+        <app-car (orderProgress)="orderOnProgressWithCar($event)"
+                 (countInCar)="getCountInCarData($event)"
+        ></app-car>
       </div>
       <div *ngIf="orderProgress > 3">
         <mat-divider></mat-divider>
         <div class="countInCarSupplement-container">
           <form [formGroup]="countInCarSupplementForm" (submit)="saveCountInCarSupplement(countInCarSupplementForm)" class="countInCarSupplementForm">
             <h5>Add meg a beszámított autó egyéb adatait</h5>
-            <div>
-              <div class="inputContainer">
-                <div class="leftSide">
-                  <div>
-                    <mat-form-field class="example-full-width">
-                      <label>
-                        <input matInput type="number" placeholder="Beszámított autó ár" formControlName="countInPrice">
-                      </label>
-                    </mat-form-field>
+            <div class="countInCarSupplement">
+              <div>
+                <div class="inputContainer">
+                  <div class="leftSide">
+                    <div>
+                      <mat-form-field class="example-full-width">
+                        <label>
+                          <input matInput type="number" placeholder="Beszámított autó ár" formControlName="countInPrice">
+                        </label>
+                      </mat-form-field>
+                    </div>
+                    <div>
+                      <mat-form-field class="example-full-width">
+                        <label>
+                          <input matInput type="number" placeholder="Korábbi hitel" formControlName="previousLoan">
+                        </label>
+                      </mat-form-field>
+                    </div>
+                    <div>
+                      <mat-form-field class="example-full-width">
+                        <label>
+                          <input matInput placeholder="Korábbi bank" formControlName="previousBank">
+                        </label>
+                      </mat-form-field>
+                    </div>
+                    <div>
+                      <mat-form-field class="example-full-width">
+                        <label>
+                          <input matInput placeholder="Hitel típusa" formControlName="loanType">
+                        </label>
+                      </mat-form-field>
+                    </div>
                   </div>
-                  <div>
-                    <mat-form-field class="example-full-width">
-                      <label>
-                        <input matInput type="number" placeholder="Korábbi hitel" formControlName="previousLoan">
-                      </label>
-                    </mat-form-field>
-                  </div>
-                  <div>
-                    <mat-form-field class="example-full-width">
-                      <label>
-                        <input matInput placeholder="Korábbi bank" formControlName="previousBank">
-                      </label>
-                    </mat-form-field>
-                  </div>
-                  <div>
-                    <mat-form-field class="example-full-width">
-                      <label>
-                        <input matInput placeholder="Hitel típusa" formControlName="loanType">
-                      </label>
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="middle">
-                  <div>
-                    <div formArrayName="description" *ngFor="let singleDescription of countInCarSupplementForm.get('description').controls; let ind = index">
-                      <div class="descriptions">
-                        <mat-form-field class="example-full-width" [formGroupName]="ind">
-                          <label>
-                            <input matInput placeholder="Kiegészítés" formControlName="description">
-                          </label>
-                        </mat-form-field>
-                        <div><i class="material-icons delete" (click)="removeDescriptionRow(ind)">delete_forever</i></div>
+                  <div class="middle">
+                    <div>
+                      <div formArrayName="description" *ngFor="let singleDescription of countInCarSupplementForm.get('description').controls; let ind = index">
+                        <div class="descriptions">
+                          <mat-form-field class="example-full-width" [formGroupName]="ind">
+                            <label>
+                              <input matInput placeholder="Kiegészítés" formControlName="description">
+                            </label>
+                          </mat-form-field>
+                          <div><i class="material-icons delete" (click)="removeDescriptionRow(ind)">delete_forever</i></div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="rightSide">
-                  <button type="button" (click)="addNewDescriptionRow(null)" class="miniFab" mat-mini-fab><i class="material-icons">add</i></button>
+                  <div class="rightSide">
+                    <button type="button" (click)="addNewDescriptionRow(null)" class="miniFab" mat-mini-fab><i class="material-icons">add</i></button>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="saveButton">
-              <button mat-fab type="submit"><i class="material-icons">save</i></button>
+              <div>
+                <button class="saveButton" mat-button type="submit">Tovább</button>
+              </div>
             </div>
           </form>
         </div>
@@ -269,12 +327,12 @@
           <div>
             <mat-form-field class="example-full-width">
               <label>
-                <input matInput type="number" placeholder="Beszámított autó ár" formControlName="downPayment">
+                <input matInput type="number" placeholder="Összeg" formControlName="downPayment">
               </label>
             </mat-form-field>
           </div>
-          <div class="saveButton">
-            <button mat-fab type="submit"><i class="material-icons">save</i></button>
+          <div>
+            <button class="saveButton" mat-button type="submit">Tovább</button>
           </div>
         </form>
       </div>
@@ -293,6 +351,37 @@
           </div>
           <div>
             <i *ngIf="selectedTypeOfBuying == 'HITEL'" class="material-icons editTypeOfBuying " (click)="openCreditModal(car)">edit</i>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="orderProgress > 6 && clickedCarIndex == i">
+        <mat-divider></mat-divider>
+        <h5>Értékesítő</h5>
+        <form [formGroup]="salesmanForm" (submit)="saveSalesman(salesmanForm, car)">
+          <div>
+            <mat-form-field class="example-full-width">
+              <label>
+                <input matInput placeholder="Név" formControlName="salesman">
+              </label>
+            </mat-form-field>
+          </div>
+          <div>
+            <button class="saveButton" mat-button type="submit">Tovább</button>
+          </div>
+        </form>
+      </div>
+      <div *ngIf="orderProgress > 7 && clickedCarIndex == i">
+        <mat-divider></mat-divider>
+        <h5>Összesítő</h5>
+        <div class="summary">
+          <div>
+            <button mat-button type="submit" (click)="navigateToOrderPage()">Megrendelőlap</button>
+          </div>
+          <div>
+            <button mat-button type="submit" (click)="navigateToSellingPage()">Adás-vételi szerződés</button>
+          </div>
+          <div>
+            <button mat-button type="submit" (click)="navigateToGdprPage()">GDPR dokumentum</button>
           </div>
         </div>
       </div>

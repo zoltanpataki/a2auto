@@ -13,7 +13,7 @@ public class Users {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
     private long id;
 
-    @OneToMany(fetch=FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true, mappedBy = "user")
     private List<Car> cars = new ArrayList<>();
     private String fullName;
     private String birthName;
@@ -30,6 +30,9 @@ public class Users {
     private String dueTimeOfDrivingLicence;
     private String taxNumber;
     private String healthcareNumber;
+
+    @OneToOne(mappedBy = "users")
+    private Order order;
 
     public Users() {
     }

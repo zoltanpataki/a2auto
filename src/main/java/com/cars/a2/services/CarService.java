@@ -28,7 +28,7 @@ public class CarService {
     public ResponseEntity<Object> saveNewCar(Car car) {
         try {
             carRepository.save(car);
-            return new ResponseEntity<>("New car is saved!", HttpStatus.OK);
+            return new ResponseEntity<>(car, HttpStatus.OK);
         } catch (Exception e) {
             logger.info(e.getMessage());
             throw new EntityFailedToSaveException("New car couldn't be saved!");
@@ -71,7 +71,7 @@ public class CarService {
     public ResponseEntity<Object> updateCar(Car car) {
         try {
             carRepository.save(car);
-            return new ResponseEntity<>("Car is updated!", HttpStatus.OK);
+            return new ResponseEntity<>(car, HttpStatus.OK);
         } catch (Exception e) {
             logger.info(e.getMessage());
             throw new EntityFailedToSaveException("Car couldn't be updated!");

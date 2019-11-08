@@ -10,18 +10,26 @@ public class Company {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq3")
+    @Column(name = "id")
     private long id;
-    @OneToMany(fetch=FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true, mappedBy = "company")
+    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true, mappedBy = "company")
     private List<Car> cars = new ArrayList<>();
     private String name;
-    private String address;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
+    private Address address;
+
     private String companyRegistrationNumber;
     private String representation;
+
+    @OneToOne(mappedBy = "company")
+    private Order order;
 
     public Company() {
     }
 
-    public Company(String name, String address, String companyRegistrationNumber, String representation) {
+    public Company(String name, Address address, String companyRegistrationNumber, String representation) {
         this.name = name;
         this.address = address;
         this.companyRegistrationNumber = companyRegistrationNumber;
@@ -44,11 +52,11 @@ public class Company {
         this.name = name;
     }
 
-    public String getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 
