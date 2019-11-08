@@ -1,0 +1,61 @@
+.title {
+  text-align: center;
+  font-size: 370%;
+}
+
+p, h1 {
+  font-family: Lucida Console, Courier, monospace;
+}
+.company {
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+.handledData {
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+.sectionLiner {
+  font-weight: bolder;
+  font-size: 120%;
+}
+
+.listItem {
+  margin-left: 3%;
+}
+
+.sectionSeparateur {
+  margin-top: 3%;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+.date {
+  margin-bottom: 5%;
+  margin-left: 10%;
+}
+
+.signature {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+.upperLineBuyer {
+  text-align: center;
+  min-width: 25%;
+  border-top: 1px solid black;
+  padding-left: 5%;
+  padding-right: 5%;
+  padding-top: 1%;
+}
+
+.upperLineCompany {
+  text-align: center;
+  min-width: 30%;
+  border-top: 1px solid black;
+  padding-left: 5%;
+  padding-right: 5%;
+  padding-top: 1%;
+}

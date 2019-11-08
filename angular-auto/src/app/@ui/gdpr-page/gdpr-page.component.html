@@ -3,54 +3,54 @@
     <p>ADATKEZELÉSI TÁJÉKOZTATÓ</p>
   </div>
   <div class="company">
-    <p>Az Adatkezető adatai</p>
-    <p>Név: Inter Autóház-Vác Kft.</p>
-    <p>Székhely: 2600 Vác. szent László út 29.</p>
-    <p>Cégjegyzékszám: 13-09-100322</p>
-    <p>Adószám: 12623419-2-13</p>
-    <p>Telefonszám: 0630/919-4489</p>
-    <p>E-mail: adatvedelem@interautohazvac.hu</p>
+    <p class="sectionLiner">Az Adatkezető adatai</p>
+    <p *ngIf="Autocentrum">Név: {{Autocentrum.name}}</p>
+    <p *ngIf="AutocentrumAddress">Székhely: {{AutocentrumAddress}}</p>
+    <p *ngIf="Autocentrum">Cégjegyzékszám: {{Autocentrum.companyRegistrationNumber}}</p>
+    <p *ngIf="Autocentrum">Adószám: {{Autocentrum.taxNumber}}</p>
+    <p *ngIf="Autocentrum">Telefonszám: {{Autocentrum.phoneNumber}}</p>
+    <p *ngIf="Autocentrum">E-mail: {{Autocentrum.email}}</p>
   </div>
   <div class="handledData">
-    <p>Az Adatkezelő által kezelni kívánt adatok</p>
-      <p> - Vezetéknév</p>
-      <p> - Keresztnév</p>
-      <p> - Nem (férfi/nö)</p>
-      <p> - Mobiltelefonszám</p>
-      <p> - E-mail cím</p>
-      <p> - Lakcím</p>
-      <p> - Születési dátum</p>
-      <p> - Az adategyeztetés dátuma</p>
+    <p class="sectionLiner">Az Adatkezelő által kezelni kívánt adatok</p>
+      <p class="listItem"> - Vezetéknév</p>
+      <p class="listItem"> - Keresztnév</p>
+      <p class="listItem"> - Nem (férfi/nö)</p>
+      <p class="listItem"> - Mobiltelefonszám</p>
+      <p class="listItem"> - E-mail cím</p>
+      <p class="listItem"> - Lakcím</p>
+      <p class="listItem"> - Születési dátum</p>
+      <p class="listItem"> - Az adategyeztetés dátuma</p>
     <p>A fenti felsorolásból kihúzott adatok azok, amelyeknek az Adatkezelő általi kezeléséhez Ön nem járul hozzá!</p>
   </div>
-  <div>
+  <div class="sectionSeparateur sectionLiner">
     <p>Az adatkezelés célja, módja és jogalapja</p>
   </div>
-  <div>
+  <div class="sectionSeparateur">
     <p>Felhasználó tudomásul veszi, hogy bizonyos szolgáltatások igénybevételéhez szükséges lehet egyes személyes adatainak megadására is, ezeket pedig az Adatkezelö üzleti és marketing célokra felhasználhatja.</p>
   </div>
-  <div>
+  <div class="sectionSeparateur">
     <p>Az elözöekben felsorolt adatokat az Adatkezelö az alábbi célokra kívánja használni:</p>
-    <p> - Kapcsolattartás (pl. termékértékesítés, szolgáltatásnyújtás )</p>
-    <p> - Közvetlen üzletszerzés (pl. tájékoztatás, ajánlatadás a forgalmazott termékekröl és a nyújtott szolgáltatásokról; reklámanyagok és elektronikus hirdetések küldése)</p>
-    <p> - Ügyfél elégedettségi kutatások megszervezése és lebonyolítása</p>
+    <p class="listItem"> - Kapcsolattartás (pl. termékértékesítés, szolgáltatásnyújtás )</p>
+    <p class="listItem"> - Közvetlen üzletszerzés (pl. tájékoztatás, ajánlatadás a forgalmazott termékekröl és a nyújtott szolgáltatásokról; reklámanyagok és elektronikus hirdetések küldése)</p>
+    <p class="listItem"> - Ügyfél elégedettségi kutatások megszervezése és lebonyolítása</p>
   </div>
-  <div>
+  <div class="sectionSeparateur">
     <p>Az Ön által az Adatkezelö részére önkéntesen megadott személyes adatokat az Adatkezelö az Ön beleegyezésének visszavonásáig adatbázisokban kezeli a cég telephelyén, és az adatokat az Adatkezelö dolgozóin és adatfeldolgozóin (pl. könyvelö) kívül mások nem ismerhetik meg. Az Önről kezelt adatokat az Adatkezelö a jogszabályok által lehetövé tett vagy kötelezöen elöírt adattovábbítások kivételével csak az Ön kifejezett és előzetes hozzájárulása alapján továbbíthatja</p>
   </div>
-  <div>
+  <div class="sectionSeparateur">
     <p>Adatkezelö tevékenységének adatkezelései önkéntes hozzájáruláson, illetve törvényi felhatalmazáson alapulnak. Az önkéntes hozzájáruláson alapuló adatkezelések esetében Önnek bármikor tehetösége van az Adatkezelö címére küldött levélben (2600 Vác, Szent László út 29.), az <strong>adatvedelem@interautohazvac.hu</strong> e-mail címen, illetve a +3627-502040 telefonszámon az Adatkezelönél hozzájárulását visszavonni, hozzájárulását egyes adatokra, illetve adatkezelési müveletekre korlátozni, illetve személyes adatai kezelése ellen az információs önrendelkezési jogról és az információszabadságról szóló 2011. évi CXII. törvény (Infotv.) által meghatározott esetekben tiltakozni. Az érintett tájékoztatást kérhet személyes adatai kezeléséröl, valamint kérheti személyes adatainak helyesbítését, illetve — a kötelezö adatkezelések kivételével — törlését, visszavonását, élhet adathordozási-, és tiltakozási jogával az adat felvételénél jelzett módon, illetve az adatkezelö fenti elérhetöségein.</p>
   </div>
-  <div>
-    <p>Panasszal a Nemzeti Adatvédelmi és Információszabadság Hatóságnál lehet élni:</p>
+  <div class="sectionSeparateur">
+    <p class="sectionLiner">Panasszal a Nemzeti Adatvédelmi és Információszabadság Hatóságnál lehet élni:</p>
     <p>Név: Nemzeti Adatvédelmi és Információszabadság Hatóság</p>
     <p>Székhely: 1125 Budapest, Szilágyi Erzsébet fasor 221C.</p>
     <p>Levelezési cim: 1530 Budapest, Pf.: 5.</p>
     <p>Telefon: 0613911400</p>
     <p>E-mail: uqyfelszolqalat@naih.hu</p>
   </div>
-  <div>
-    <p>Adatkezelési alapelvei összhangban vannak az adatvédelemmel kapcsolatos hatályos jogszabályokkal, így különösen az alábbiakkal:</p>
+  <div class="sectionSeparateur">
+    <p class="sectionLiner">Adatkezelési alapelvei összhangban vannak az adatvédelemmel kapcsolatos hatályos jogszabályokkal, így különösen az alábbiakkal:</p>
     <p>2011. évi CXII. törvény - az információs önrendelkezési jogról és az információ-szabadságról (Infotv.);</p>
     <p>Az Európai Parlament és a Tanács (EU) 2016/679 rendelete (2016. április 27.) — a természetes személyeknek a személyes adatok kezelése tekintetében tör-ténö védelméről és az ilyen adatok szabad áramlásáról, valamint a 95/46/EK rendelet hatályon kívül helyezéséről (általános adatvédelmi rendelet, GDPR);</p>
     <p>2013. évi V. törvény — a Polgári Törvénykönyvről (Ptk.);</p>
@@ -58,14 +58,14 @@
     <p>2017. évi LIII. törvény — a pénzmosás és terrorizmus finanszírozása megelőzéséröl és megakadályozásáról (Pmt.);</p>
     <p>2013. évi CCXXXVII. törvény — a hitelintézetekről és a pénzügyi vállalkozások-ról (Hpt.).</p>
   </div>
-  <div>
+  <div class="sectionSeparateur">
     <p>Aláírásommal hozzájárulok ahhoz, hogy a megjelölt célok érdekében az Adatkezelö címemet, mobiltelefonszámomat és/vagy e-mail címemet használja, és azon keresłqłhleptlfiťlqźézs_ folytasson, kommunikáljon, adatokat, információkat közöljön. Kft.</p>
   </div>
-  <div class="date">
+  <div class="date sectionSeparateur">
     <p class="texts">Kelt., Székesfehérvár, </p>
   </div>
   <div class="signature">
-    <p class="upperLine texts">Vásárló aláírása</p>
-    <p class="upperLine texts">A2 Autócentrum Kft. aláírása</p>
+    <p class="upperLineBuyer texts">Vásárló aláírása</p>
+    <p class="upperLineCompany texts">A2 Autócentrum Kft. aláírása</p>
   </div>
 </div>

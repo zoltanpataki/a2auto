@@ -6,3 +6,13 @@
 button:focus {
   outline: none;
 }
+
+.inputContainer {
+  width: 55%;
+  display: flex;
+  justify-content: space-between;
+}
+
+mat-form-field {
+  width: 150%;
+}

@@ -14,7 +14,8 @@ export class CompanyComponent implements OnInit {
 
   @Output()
   public orderProgress: EventEmitter<any> = new EventEmitter<any>();
-  public fields = {name: 'Cégnév', country: 'Ország', zipcode: 'Irányítószám', city: 'Város', address: 'Cím', companyRegistrationNumber: 'Cégjegyzékszám', representation: 'Képviselő'};
+  public fields = {name: 'Cégnév', country: 'Ország', zipcode: 'Irányítószám', city: 'Város', address: 'Cím'};
+  public fields2 = {companyRegistrationNumber: 'Cégjegyzékszám', representation: 'Képviselő', taxNumber: 'Adószám', phoneNumber: 'Telefonszám', email: 'E-mail cím'};
   public keepOriginalOrder = (a, b) => a.key;
   private currentUrl;
 
@@ -34,7 +35,7 @@ export class CompanyComponent implements OnInit {
   }
 
   public saveCompany(form: any) {
-    const company = new Company(null, form.value.name, new Address(null, form.value.zipcode, form.value.country, form.value.city, form.value.address), form.value.companyRegistrationNumber, form.value.representation);
+    const company = new Company(null, form.value.name, new Address(null, form.value.zipcode, form.value.country, form.value.city, form.value.address), form.value.companyRegistrationNumber, form.value.representation, form.value.taxNumber, form.value.phoneNumber, form.value.email);
     this.httpService.saveCompany(company).subscribe(data => {
       console.log(data);
       this.orderProgress.emit('saved');

@@ -22,6 +22,9 @@ public class Company {
 
     private String companyRegistrationNumber;
     private String representation;
+    private String taxNumber;
+    private String phoneNumber;
+    private String email;
 
     @OneToOne(mappedBy = "company")
     private Order order;
@@ -29,11 +32,38 @@ public class Company {
     public Company() {
     }
 
-    public Company(String name, Address address, String companyRegistrationNumber, String representation) {
+    public Company(String name, Address address, String companyRegistrationNumber, String representation, String taxNumber, String phoneNumber, String email) {
         this.name = name;
         this.address = address;
         this.companyRegistrationNumber = companyRegistrationNumber;
         this.representation = representation;
+        this.taxNumber = taxNumber;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+    }
+
+    public String getTaxNumber() {
+        return taxNumber;
+    }
+
+    public void setTaxNumber(String taxNumber) {
+        this.taxNumber = taxNumber;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public long getId() {
@@ -80,10 +110,15 @@ public class Company {
     public String toString() {
         return "Company{" +
                 "id=" + id +
+                ", cars=" + cars +
                 ", name='" + name + '\'' +
-                ", address='" + address + '\'' +
+                ", address=" + address +
                 ", companyRegistrationNumber='" + companyRegistrationNumber + '\'' +
                 ", representation='" + representation + '\'' +
+                ", taxNumber='" + taxNumber + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", order=" + order +
                 '}';
     }
 }

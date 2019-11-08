@@ -484,7 +484,7 @@ export class FilterComponent implements OnInit {
   private pickCompany(index: number) {
     this.indexOfPickedCompany = index;
     const pickedCompanyFromDataTable = this.companySearchResult.data[index];
-    this.pickedCompany = new Company(pickedCompanyFromDataTable.id, pickedCompanyFromDataTable.name, pickedCompanyFromDataTable.address, pickedCompanyFromDataTable.companyRegistrationNumber, pickedCompanyFromDataTable.representation);
+    this.pickedCompany = new Company(pickedCompanyFromDataTable.id, pickedCompanyFromDataTable.name, pickedCompanyFromDataTable.address, pickedCompanyFromDataTable.companyRegistrationNumber, pickedCompanyFromDataTable.representation, pickedCompanyFromDataTable.taxNumber, pickedCompanyFromDataTable.phoneNumber, pickedCompanyFromDataTable.email);
     sessionStorage.setItem('pickedCompany', JSON.stringify(this.pickedCompany));
   }
 

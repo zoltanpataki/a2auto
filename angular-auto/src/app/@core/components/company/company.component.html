@@ -1,10 +1,19 @@
-<div class="company-container">10
+<div class="company-container">
   <form #companyForm=ngForm (ngSubmit)="saveCompany(companyForm)" class="companyForm">
     <h5>Új vásárló adatai</h5>
     <div>
       <div class="inputContainer">
         <div class="leftSide">
           <div *ngFor="let item of fields | keyvalue:keepOriginalOrder; trackBy: trackByFn">
+            <mat-form-field class="example-full-width">
+              <label>
+                <input matInput placeholder="{{item.value}}" ngModel name="{{item.key}}">
+              </label>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="rightSide">
+          <div *ngFor="let item of fields2 | keyvalue:keepOriginalOrder; trackBy: trackByFn">
             <mat-form-field class="example-full-width">
               <label>
                 <input matInput placeholder="{{item.value}}" ngModel name="{{item.key}}">
