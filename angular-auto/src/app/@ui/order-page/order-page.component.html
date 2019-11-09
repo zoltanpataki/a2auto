@@ -155,7 +155,8 @@
         <p class="texts">Cím:</p>
       </div>
       <div class="border">
-        <p class="texts">Telefon:</p>
+        <p *ngIf="order.users && order.users.phoneNumber" class="texts">Telefon: {{order.users.phoneNumber}}</p>
+        <p *ngIf="!order.users || order.users && !order.users.phoneNumber" class="texts">Telefon:</p>
       </div>
       <div class="border">
         <p class="texts">E-mail:</p>
