@@ -16,10 +16,10 @@ export class CarComponent implements OnInit {
   public orderProgress: EventEmitter<any> = new EventEmitter<any>();
   @Output()
   public countInCar: EventEmitter<any> = new EventEmitter<any>();
-  public fieldsOneFirstHalf = {name: 'Auto neve', type: 'Auto tipusa', color: 'Szin'};
-  public fieldsOneSecondHalf = {specification: 'Felszereltseg', bodyNumber: 'Alvazszam', engineNumber: 'Motorszam', carRegistry: 'Forgalmi engedely szama'};
-  public fieldTwo = {vintage: 'Evjarat', mileage: 'Futott km', price: 'Ar', cost: 'Koltseg', inheritanceTax: 'Atirasi illetek', downPayment: 'Foglalo', payedAmount: 'Befizetett osszeg', kwh: 'Teljesitmeny'};
-  public fieldFour = {dateOfArrival: 'Vetel datuma', dateOfLeaving: 'Eladas datuma', documentsHandover: 'Dokumentumok atadasanak idopontja', dateOfContract : 'Szerzodes szerinti teljesites idopontja', dueOfContract: 'Szerzodes lejarata'};
+  public fieldsOneFirstHalf = {name: 'Autó neve', type: 'Autó típusa', color: 'Szín'};
+  public fieldsOneSecondHalf = {specification: 'Felszereltség', bodyNumber: 'Alvázszám', engineNumber: 'Motorszám', carRegistry: 'Forgalmi engedély száma'};
+  public fieldTwo = {vintage: 'Évjárat', mileage: 'Futott km', price: 'Ár', cost: 'Költség', inheritanceTax: 'Átírási illeték', downPayment: 'Foglaló', payedAmount: 'Befizetett összeg', kwh: 'Teljesítmény'};
+  public fieldFour = {dateOfArrival: 'Vétel dátuma', dateOfLeaving: 'Eladás dátuma', documentsHandover: 'Dokumentumok átadásának időpontja', dateOfContract : 'Szerződés szerinti teljesítés időpontja', dueOfContract: 'Szerződés lejárata'};
   public keepOriginalOrder = (a, b) => a.key;
   public carHandoverTime = {};
 

@@ -18,7 +18,7 @@ public class CountInCarSupplement {
     private String loanType;
 
     @OneToMany(fetch=FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true, mappedBy = "countInCarSupplement")
-    private List<Description> descriptions = new ArrayList<>();
+    private List<Description> description = new ArrayList<>();
 
     @OneToOne(mappedBy = "countInCarSupplement")
     private Order countInOrder;
@@ -73,12 +73,12 @@ public class CountInCarSupplement {
         this.loanType = loanType;
     }
 
-    public List<Description> getDescriptions() {
-        return descriptions;
+    public List<Description> getDescription() {
+        return description;
     }
 
-    public void setDescriptions(List<Description> descriptions) {
-        this.descriptions = descriptions;
+    public void setDescription(List<Description> description) {
+        this.description = description;
     }
 
     @Override
@@ -89,7 +89,7 @@ public class CountInCarSupplement {
                 ", previousLoan=" + previousLoan +
                 ", previousBank='" + previousBank + '\'' +
                 ", loanType='" + loanType + '\'' +
-                ", descriptions=" + descriptions +
+                ", description=" + description +
                 '}';
     }
 }

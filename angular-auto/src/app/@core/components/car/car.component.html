@@ -13,10 +13,10 @@
         <div>
           <mat-form-field class="example-full-width">
             <label>
-              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput placeholder="Rendszam (6 karakter)" maxlength="6" minlength="6" ngModel="{{carData.plateNumber}}" name="plateNumber">
+              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput placeholder="Rendszám (6 karakter)" maxlength="6" minlength="6" ngModel="{{carData.plateNumber}}" name="plateNumber">
             </label>
           </mat-form-field>
-          <mat-error *ngIf="!utilService.validPlateNumber">A rendszam hossza 6 karakter kell legyen</mat-error>
+          <mat-error *ngIf="!utilService.validPlateNumber">A rendszám hossza 6 karakter kell legyen</mat-error>
         </div>
         <div *ngFor="let item of fieldsOneSecondHalf | keyvalue:keepOriginalOrder; trackBy: trackByFn">
           <mat-form-field class="example-full-width">
@@ -36,7 +36,7 @@
       <div class="middle">
         <div>
           <mat-form-field class="example-full-width">
-            <input matInput [matDatepicker]="motExpiryPicker" placeholder="Muszaki vizsga lejarata" ngModel="{{carData.motExpiry | date:'yyyy-MM-dd'}}" name="motExpiry">
+            <input matInput [matDatepicker]="motExpiryPicker" placeholder="Műszaki vizsga lejárata" ngModel="{{carData.motExpiry | date:'yyyy-MM-dd'}}" name="motExpiry">
             <mat-datepicker-toggle matSuffix [for]="motExpiryPicker"></mat-datepicker-toggle>
             <mat-datepicker #motExpiryPicker></mat-datepicker>
           </mat-form-field>
@@ -76,7 +76,7 @@
         </div>
         <div>
           <mat-form-field class="example-full-width">
-            <mat-label>Vasarlas tipusa</mat-label>
+            <mat-label>Vásárlás típusa</mat-label>
             <mat-select [ngModel]="carData.typeOfBuying" name="typeOfBuying">
               <mat-option *ngFor="let type of typeOfBuying; trackBy: trackByFn" [value]="type">
                 {{type}}
@@ -93,7 +93,7 @@
         </div>
         <div>
           <mat-form-field class="example-full-width">
-            <input matInput [matDatepicker]="carHandoverPicker" placeholder="Auto atadasanak idopontja" ngModel="{{carData.carHandover | date:'yyyy-MM-dd'}}" name="carHandover">
+            <input matInput [matDatepicker]="carHandoverPicker" placeholder="Autó átadásának időpontja" ngModel="{{carData.carHandover | date:'yyyy-MM-dd'}}" name="carHandover">
             <mat-datepicker-toggle matSuffix [for]="carHandoverPicker"></mat-datepicker-toggle>
             <mat-datepicker #carHandoverPicker></mat-datepicker>
           </mat-form-field>
@@ -102,7 +102,7 @@
       </div>
     </div>
     <div class="saveButton">
-      <button mat-fab><i class="material-icons">save</i></button>
+      <button mat-button>Mentés</button>
     </div>
   </form>
 </div>

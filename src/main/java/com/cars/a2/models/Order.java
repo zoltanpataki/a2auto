@@ -17,12 +17,13 @@ public class Order {
     private boolean thereIsCountInCar;
     private int downPayment;
     private String selectedTypeOfBuying;
+    private Long carId;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "users", referencedColumnName = "id")
     private Users users;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "company", referencedColumnName = "id")
     private Company company;
 
@@ -34,14 +35,14 @@ public class Order {
     @JoinColumn(name = "credit_order_id", referencedColumnName = "id")
     private Credit credit;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "count_in_car", referencedColumnName = "id")
     private Car countInCar;
 
     public Order() {
     }
 
-    public Order(boolean alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready, boolean selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate, boolean wantInheritanceTaxCalculation, int inheritanceTax, boolean thereIsCountInCar, int downPayment, String selectedTypeOfBuying, CountInCarSupplement countInCarSupplement, Credit credit, Users users, Company company, Car countInCar) {
+    public Order(boolean alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready, boolean selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate, boolean wantInheritanceTaxCalculation, int inheritanceTax, boolean thereIsCountInCar, int downPayment, String selectedTypeOfBuying, CountInCarSupplement countInCarSupplement, Credit credit, Users users, Company company, Car countInCar, Long carId) {
         this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready;
         this.selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate = selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate;
         this.wantInheritanceTaxCalculation = wantInheritanceTaxCalculation;
@@ -54,6 +55,15 @@ public class Order {
         this.users = users;
         this.company = company;
         this.countInCar = countInCar;
+        this.carId = carId;
+    }
+
+    public Long getCarId() {
+        return carId;
+    }
+
+    public void setCarId(Long carId) {
+        this.carId = carId;
     }
 
     public Car getCountInCar() {
@@ -171,6 +181,7 @@ public class Order {
                 ", thereIsCountInCar=" + thereIsCountInCar +
                 ", downPayment=" + downPayment +
                 ", selectedTypeOfBuying='" + selectedTypeOfBuying + '\'' +
+                ", carId=" + carId +
                 ", users=" + users +
                 ", company=" + company +
                 ", countInCarSupplement=" + countInCarSupplement +

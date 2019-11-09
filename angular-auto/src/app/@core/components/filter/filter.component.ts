@@ -14,6 +14,7 @@ import {Users} from "../../models/users";
 import {Credit} from "../../models/credit";
 import {Company} from "../../models/company";
 import {NavigationExtras, Router} from "@angular/router";
+import {Order} from "../../models/order";
 
 @Component({
   selector: 'app-filter',
@@ -497,13 +498,18 @@ export class FilterComponent implements OnInit {
     this.salesman = form.value.salesman;
     car.salesman = this.salesman;
     this.httpService.updateCar(car).subscribe(data => {
-      console.log(data);
       this.setOrderProgressInSessionStorage(8);
     });
   }
 
-  private navigateToOrderPage() {
-    this.router.navigate(['/orderPage'], {state: {data: 'valami'}});
+  private navigateToOrderPage(car: Car) {
+    const companyOrdered = this.companySearchResult.data.length > 0 ? this.companySearchResult.data[this.indexOfPickedCompany] : null;
+    let userOrdered = this.userSearchResult.data.length > 0 ? this.userSearchResult.data[this.indexOfPickedUser] : null;
+    const newOrder = new Order(null, this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready, this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate, this.wantInheritanceTaxCalculation, this.inheritanceTax, this.thereIsCountInCar, this.downpayment, this.selectedTypeOfBuying, userOrdered, companyOrdered, this.countInCarSupplement, this.creditData, this.countInCar, car.id);
+    console.log(newOrder);
+    this.httpService.saveOrder(newOrder).subscribe(order => {
+      this.router.navigate(['/orderPage'], {state: {data: {order: order, orderedCar: car}}});
+    });
   }
 
   private navigateToSellingPage() {

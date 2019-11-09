@@ -55,6 +55,11 @@ export class HttpService {
     });
   }
 
+  public saveOrder(order: any): Observable<any> {
+    const urlPostFix = 'saveOrder';
+    return this.http.post(this.carServerUrl + urlPostFix, order, httpOptions);
+  }
+
   public getUser(filter: string, filterType: string): Observable<any> {
     const urlPostFix = 'getUser';
     const params = new HttpParams()
