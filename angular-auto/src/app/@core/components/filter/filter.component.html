@@ -55,7 +55,7 @@
           <i class="material-icons money" (click)="setAlreadyOrNewCustomerSelectorAndCarOfTransaction(car, i)">shopping_cart</i>
         </mat-panel-title>
         <mat-panel-title class="buyButton">
-          <i class="material-icons delete" (click)="openWarningModal(car.id)">delete_forever</i>
+          <i class="material-icons delete" (click)="openWarningModal(car.id)">clear</i>
         </mat-panel-title>
       </mat-expansion-panel-header>
       <div>
@@ -222,8 +222,13 @@
         </div>
       </div>
       <div class="newIndOrCorp">
-        <app-user [userData]="newUser" (orderProgress)="orderOnProgressWithUser($event)" *ngIf="alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready && selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate && clickedCarIndex == i"></app-user>
-        <app-company [companyData]="newCompany" (orderProgress)="orderOnProgressWithUser($event)" *ngIf="alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready && selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate == false && clickedCarIndex == i"></app-company>
+        <app-user *ngIf="alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready && selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate && clickedCarIndex == i"
+                  [userData]="newUser"
+                  (newUser)="addNewUserToOrder($event)"
+                  (orderProgress)="orderOnProgressWithUser($event)"></app-user>
+        <app-company *ngIf="alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready && selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate == false && clickedCarIndex == i"
+                     [companyData]="newCompany"
+                     (orderProgress)="orderOnProgressWithUser($event)" (newCompany)="addNewCompanyToOrder($event)"></app-company>
       </div>
       <div *ngIf="orderProgress > 1">
         <mat-divider></mat-divider>
@@ -304,7 +309,7 @@
                               <input matInput placeholder="Kiegészítés" formControlName="description">
                             </label>
                           </mat-form-field>
-                          <div><i class="material-icons delete" (click)="removeDescriptionRow(ind)">delete_forever</i></div>
+                          <div><i class="material-icons delete" (click)="removeDescriptionRow(ind)">clear</i></div>
                         </div>
                       </div>
                     </div>
@@ -324,11 +329,11 @@
       <div *ngIf="orderProgress > 4">
         <mat-divider></mat-divider>
         <h5>Foglaló</h5>
-        <form [formGroup]="downPaymentForm" (submit)="saveDownPaymentAmount(downPaymentForm)">
+        <form [formGroup]="downPaymentForm" (submit)="saveDownPaymentAmount(downPaymentForm, car)">
           <div>
             <mat-form-field class="example-full-width">
               <label>
-                <input matInput type="number" placeholder="Összeg" formControlName="downPayment">
+                <input matInput type="number" placeholder="Összeg" formControlName="downPayment" [(ngModel)]="downPayment">
               </label>
             </mat-form-field>
           </div>

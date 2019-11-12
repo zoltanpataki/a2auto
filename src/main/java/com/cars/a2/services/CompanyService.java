@@ -30,7 +30,7 @@ public class CompanyService {
     public ResponseEntity<Object> saveNewCompany(Company company) {
         try {
             companyRepository.save(company);
-            return new ResponseEntity<>("New company saved!", HttpStatus.OK);
+            return new ResponseEntity<>(company, HttpStatus.OK);
         } catch (Exception e) {
             logger.info(e.getMessage());
             throw new EntityFailedToSaveException("Company couldn't be saved!");

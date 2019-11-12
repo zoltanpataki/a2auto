@@ -15,6 +15,8 @@ export class UserComponent implements OnInit {
   public userData: Users;
   @Output()
   public orderProgress: EventEmitter<any> = new EventEmitter<any>();
+  @Output()
+  public newUser: EventEmitter<any> = new EventEmitter<any>();
   public fieldsOne = {fullName: 'Teljes Név', birthName: 'Születéskori Név', zipcode: 'Irányítószám', city: 'Város', address: 'Lakcím', phoneNumber: 'Telefonszám'};
   public fieldsTwo = {birthPlace: 'Születési hely', email: 'E-mail', nameOfMother: 'Anyja neve', idCardNumber: 'Személyi igazolvány szám', drivingLicenceNumber: 'Vezetői engedély száma'};
   public fieldsThree = {personNumber: 'Személyi szám', taxNumber: 'Adószám', healthCareNumber: 'TAJ szám'};
@@ -31,6 +33,7 @@ export class UserComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this.userData);
     if (this.userData == null) {
       this.userData = new Users(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     }
@@ -45,6 +48,7 @@ export class UserComponent implements OnInit {
     this.httpService.saveUser(user).subscribe(data => {
       console.log(data);
       this.orderProgress.emit('saved');
+      this.newUser.emit(data);
     }, error => {
       this.orderProgress.emit('unsaved');
       this.utilService.openSnackBar('A felhasználót nem sikerült menteni!', 'Hiba :(');

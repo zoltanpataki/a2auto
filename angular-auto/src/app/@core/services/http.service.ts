@@ -41,18 +41,12 @@ export class HttpService {
 
   public saveUser(user: any): Observable<any> {
     const urlPostFix = 'saveUser';
-    return this.http.post(this.carServerUrl + urlPostFix, user, {
-      headers: httpOptions.headers,
-      responseType: 'text',
-    });
+    return this.http.post(this.carServerUrl + urlPostFix, user, httpOptions);
   }
 
   public saveCompany(company: any): Observable<any> {
     const urlPostFix = 'saveCompany';
-    return this.http.post(this.carServerUrl + urlPostFix, company, {
-      headers: httpOptions.headers,
-      responseType: 'text',
-    });
+    return this.http.post(this.carServerUrl + urlPostFix, company, httpOptions);
   }
 
   public saveOrder(order: any): Observable<any> {

@@ -16,6 +16,8 @@ export class CompanyComponent implements OnInit {
   public companyData: Company;
   @Output()
   public orderProgress: EventEmitter<any> = new EventEmitter<any>();
+  @Output()
+  public newCompany: EventEmitter<any> = new EventEmitter<any>();
   public fields = {name: 'Cégnév', country: 'Ország', zipcode: 'Irányítószám', city: 'Város', address: 'Cím'};
   public fields2 = {companyRegistrationNumber: 'Cégjegyzékszám', representation: 'Képviselő', taxNumber: 'Adószám', phoneNumber: 'Telefonszám', email: 'E-mail cím'};
   public keepOriginalOrder = (a, b) => a.key;
@@ -44,6 +46,7 @@ export class CompanyComponent implements OnInit {
     this.httpService.saveCompany(company).subscribe(data => {
       console.log(data);
       this.orderProgress.emit('saved');
+      this.newCompany.emit(data);
     }, error => {
       this.orderProgress.emit('unsaved');
       this.utilService.openSnackBar('A társaságot nem sikerült menteni!', 'Hiba :(');
