@@ -66,6 +66,8 @@ export class FilterComponent implements OnInit {
   private salesmanForm: FormGroup;
   private salesman: string;
   private newOrder: Order;
+  private newUser: Users;
+  private newCompany: Company;
 
   constructor(private httpService: HttpService,
               private utilService: UtilService,

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Company} from "../../models/company";
 import {HttpService} from "../../services/http.service";
 import {UtilService} from "../../services/util.service";
@@ -12,6 +12,8 @@ import {Address} from "../../models/address";
 })
 export class CompanyComponent implements OnInit {
 
+  @Input('companyData')
+  public companyData: Company;
   @Output()
   public orderProgress: EventEmitter<any> = new EventEmitter<any>();
   public fields = {name: 'Cégnév', country: 'Ország', zipcode: 'Irányítószám', city: 'Város', address: 'Cím'};
@@ -28,6 +30,9 @@ export class CompanyComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.companyData == null) {
+      this.companyData = new Company(null, null, null, null, null, null, null, null);
+    }
   }
 
   public trackByFn(index, item) {

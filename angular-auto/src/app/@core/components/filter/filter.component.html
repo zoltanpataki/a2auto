@@ -222,8 +222,8 @@
         </div>
       </div>
       <div class="newIndOrCorp">
-        <app-user (orderProgress)="orderOnProgressWithUser($event)" *ngIf="alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready && selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate && clickedCarIndex == i"></app-user>
-        <app-company (orderProgress)="orderOnProgressWithUser($event)" *ngIf="alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready && selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate == false && clickedCarIndex == i"></app-company>
+        <app-user [userData]="newUser" (orderProgress)="orderOnProgressWithUser($event)" *ngIf="alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready && selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate && clickedCarIndex == i"></app-user>
+        <app-company [companyData]="newCompany" (orderProgress)="orderOnProgressWithUser($event)" *ngIf="alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready && selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate == false && clickedCarIndex == i"></app-company>
       </div>
       <div *ngIf="orderProgress > 1">
         <mat-divider></mat-divider>

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {HttpService} from "../../services/http.service";
 import {Users} from "../../models/users";
 import {ActivatedRoute} from "@angular/router";
@@ -11,6 +11,8 @@ import {UtilService} from "../../services/util.service";
 })
 export class UserComponent implements OnInit {
 
+  @Input('userData')
+  public userData: Users;
   @Output()
   public orderProgress: EventEmitter<any> = new EventEmitter<any>();
   public fieldsOne = {fullName: 'Teljes Név', birthName: 'Születéskori Név', zipcode: 'Irányítószám', city: 'Város', address: 'Lakcím', phoneNumber: 'Telefonszám'};
@@ -29,6 +31,9 @@ export class UserComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.userData == null) {
+      this.userData = new Users(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+    }
   }
 
   public trackByFn(index, item) {
