@@ -37,7 +37,7 @@
         </mat-panel-title>
       </div>
     </mat-card>
-    <mat-expansion-panel [disabled]="true" #mep="matExpansionPanel" hideToggle *ngFor="let car of selectedCars; index as i; trackBy: trackByFn">
+    <mat-expansion-panel [disabled]="true" #mep="matExpansionPanel" [expanded]="i == clickedCarIndex" hideToggle *ngFor="let car of selectedCars; index as i; trackBy: trackByFn">
       <mat-expansion-panel-header>
         <mat-panel-title>
           {{car.type}}
@@ -52,7 +52,7 @@
           <i class="material-icons edit" (click)="openUpdateModal(car)">edit</i>
         </mat-panel-title>
         <mat-panel-title class="buyButton">
-          <i class="material-icons money" (click)="mep.expanded = !mep.expanded; setAlreadyOrNewCustomerSelectorAndCarOfTransaction(car, i)">shopping_cart</i>
+          <i class="material-icons money" (click)="setAlreadyOrNewCustomerSelectorAndCarOfTransaction(car, i)">shopping_cart</i>
         </mat-panel-title>
         <mat-panel-title class="buyButton">
           <i class="material-icons delete" (click)="openWarningModal(car.id)">delete_forever</i>
@@ -254,9 +254,10 @@
         <mat-divider></mat-divider>
         <app-car (orderProgress)="orderOnProgressWithCar($event)"
                  (countInCar)="getCountInCarData($event)"
+                 [carData] = countInCar
         ></app-car>
       </div>
-      <div *ngIf="orderProgress > 3">
+      <div *ngIf="orderProgress > 3 && thereIsCountInCar">
         <mat-divider></mat-divider>
         <div class="countInCarSupplement-container">
           <form [formGroup]="countInCarSupplementForm" (submit)="saveCountInCarSupplement(countInCarSupplementForm)" class="countInCarSupplementForm">
@@ -341,7 +342,7 @@
         <div class="typeOfBuying">
           <div>
             <mat-form-field class="example-full-width">
-              <mat-label>Vasarlas tipusa</mat-label>
+              <mat-label>Vásárlás típusa</mat-label>
               <mat-select [(ngModel)]="selectedTypeOfBuying" (ngModelChange)="selectTypeOfBuying($event, car)" name="typeOfBuying">
                 <mat-option *ngFor="let type of typeOfBuying; trackBy: trackByFn" [value]="type">
                   {{type}}
@@ -361,12 +362,12 @@
           <div>
             <mat-form-field class="example-full-width">
               <label>
-                <input matInput placeholder="Név" formControlName="salesman">
+                <input matInput placeholder="Név" formControlName="salesman" [(ngModel)]="salesman">
               </label>
             </mat-form-field>
           </div>
           <div>
-            <button class="saveButton" mat-button type="submit">Tovább</button>
+            <button *ngIf="!newOrder" class="saveButton" mat-button type="submit">Tovább</button>
           </div>
         </form>
       </div>

@@ -19,6 +19,8 @@ public class Users {
     private String birthName;
     private String zipCode;
     private String city;
+    private String address;
+    private String birthPlace;
     private String phoneNumber;
     private String email;
     private String nameOfMother;
@@ -37,11 +39,13 @@ public class Users {
     public Users() {
     }
 
-    public Users(String fullName, String birthName, String zipCode, String city, String phoneNumber, String email, String nameOfMother, Date birthDate, String personNumber, String idCardNumber, String dueTimeOfIdCard, String drivingLicenceNumber, String dueTimeOfDrivingLicence, String taxNumber, String healthcareNumber) {
+    public Users(String fullName, String birthName, String zipCode, String city, String address, String birthPlace, String phoneNumber, String email, String nameOfMother, Date birthDate, String personNumber, String idCardNumber, String dueTimeOfIdCard, String drivingLicenceNumber, String dueTimeOfDrivingLicence, String taxNumber, String healthcareNumber) {
         this.fullName = fullName;
         this.birthName = birthName;
         this.zipCode = zipCode;
         this.city = city;
+        this.address = address;
+        this.birthPlace = birthPlace;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.nameOfMother = nameOfMother;
@@ -53,6 +57,22 @@ public class Users {
         this.dueTimeOfDrivingLicence = dueTimeOfDrivingLicence;
         this.taxNumber = taxNumber;
         this.healthcareNumber = healthcareNumber;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getBirthPlace() {
+        return birthPlace;
+    }
+
+    public void setBirthPlace(String birthPlace) {
+        this.birthPlace = birthPlace;
     }
 
     public long getId() {
@@ -187,10 +207,13 @@ public class Users {
     public String toString() {
         return "Users{" +
                 "id=" + id +
+                ", cars=" + cars +
                 ", fullName='" + fullName + '\'' +
                 ", birthName='" + birthName + '\'' +
                 ", zipCode='" + zipCode + '\'' +
                 ", city='" + city + '\'' +
+                ", address='" + address + '\'' +
+                ", birthPlace='" + birthPlace + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", nameOfMother='" + nameOfMother + '\'' +
@@ -202,6 +225,7 @@ public class Users {
                 ", dueTimeOfDrivingLicence='" + dueTimeOfDrivingLicence + '\'' +
                 ", taxNumber='" + taxNumber + '\'' +
                 ", healthcareNumber='" + healthcareNumber + '\'' +
+                ", order=" + order +
                 '}';
     }
 }

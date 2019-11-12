@@ -152,17 +152,20 @@
         <p *ngIf="!order.users || order.users && !order.users.city" class="texts">Helység:</p>
       </div>
       <div class="border">
-        <p class="texts">Cím:</p>
+        <p *ngIf="order.users && order.users.address"class="texts">Cím: {{order.users.address}}</p>
+        <p *ngIf="!order.users || order.users && !order.users.address" class="texts">Cím:</p>
       </div>
       <div class="border">
         <p *ngIf="order.users && order.users.phoneNumber" class="texts">Telefon: {{order.users.phoneNumber}}</p>
         <p *ngIf="!order.users || order.users && !order.users.phoneNumber" class="texts">Telefon:</p>
       </div>
       <div class="border">
-        <p class="texts">E-mail:</p>
+        <p *ngIf="order.users && order.users.email" class="texts">E-mail: {{order.users.email}}</p>
+        <p *ngIf="!order.users || order.users && !order.users.email" class="texts">E-mail:</p>
       </div>
       <div class="border">
-        <p class="texts">Születési hely:</p>
+        <p *ngIf="order.users && order.users.birthPlace" class="texts">Születési hely: {{order.users.birthPlace}}</p>
+        <p *ngIf="!order.users || order.users && !order.users.birthPlace" class="texts">Születési hely:</p>
       </div>
       <div class="border">
         <p *ngIf="order.users && order.users.birthDate" class="texts">Születési idő: {{order.users.birthDate | date:'yyyy-MM-dd'}}</p>
