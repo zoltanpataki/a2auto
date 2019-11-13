@@ -15,6 +15,7 @@ import {Credit} from "../../models/credit";
 import {Company} from "../../models/company";
 import {NavigationEnd, NavigationStart, Router} from "@angular/router";
 import {Order} from "../../models/order";
+import {MatExpansionPanel} from "@angular/material/expansion";
 
 @Component({
   selector: 'app-filter',
@@ -31,7 +32,7 @@ export class FilterComponent implements OnInit {
   private companyFilters = [{viewValue: 'Név', value: 'name'}, {viewValue: 'Cégjegyzékszám', value: 'companyRegistrationNumber'}];
   private selectedCompanyFilter: SelectedFilter;
   private selectedCars = [];
-  private selectedCarHeader = ['Márka', 'Modell', 'Rendszám', ''];
+  private selectedCarHeader = ['Márka', 'Modell', 'Rendszám', '', '', ''];
   public typeOfBuying = ['KÉSZPÉNZ', 'ÁTUTALÁS', 'HITEL'];
   private noMatch = false;
   private selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate: boolean;
@@ -86,45 +87,86 @@ export class FilterComponent implements OnInit {
           sessionStorage.removeItem('indexOfPickedCompany');
           sessionStorage.removeItem('pickedUser');
           sessionStorage.removeItem('pickedCompany');
+          sessionStorage.removeItem('alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready');
+          sessionStorage.removeItem('selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate');
+          sessionStorage.removeItem('wantInheritanceTaxCalculation');
+          sessionStorage.removeItem('thereIsCountInCar');
+          sessionStorage.removeItem('downPayment');
+          sessionStorage.removeItem('selectedTypeOfBuying');
+          sessionStorage.removeItem('salesman');
+          sessionStorage.removeItem('countInCarSupplement');
+          sessionStorage.removeItem('countInCar');
+          sessionStorage.removeItem('inheritanceTax');
+          sessionStorage.removeItem('orderedCar');
         }
       });
   }
 
   ngOnInit() {
-    // this.orderProgress = Number(sessionStorage.getItem('orderProgress'));
     if (sessionStorage.getItem('selectedCars')) {
       this.selectedCars = JSON.parse(sessionStorage.getItem('selectedCars'));
     }
-    if (sessionStorage.getItem('clickedCarIndex')) {
-      this.clickedCarIndex = Number(sessionStorage.getItem('clickedCarIndex'));
-      this.carOfTransaction = this.selectedCars[this.clickedCarIndex];
-    }
+
     if (sessionStorage.getItem('order')) {
-      this.newOrder = JSON.parse(sessionStorage.getItem('order'));
-      this.setFilterComponentVariablesAccordingToOrder(this.newOrder);
-    }
-    if (sessionStorage.getItem('countInCarSupplement')) {
-      this.countInCarSupplement = JSON.parse(sessionStorage.getItem('countInCarSupplement'));
-    }
-    if (sessionStorage.getItem('userSearchData')) {
-      this.userSearchResult.data = JSON.parse(sessionStorage.getItem('userSearchData'));
-    }
-    if (sessionStorage.getItem('companySearchData')) {
-      this.companySearchResult.data = JSON.parse(sessionStorage.getItem('companySearchData'));
-    }
-    if (sessionStorage.getItem('indexOfPickedUser')) {
-      this.indexOfPickedUser = Number(sessionStorage.getItem('indexOfPickedUser'));
-    }
-    if (sessionStorage.getItem('indexOfPickedCompany')) {
-      this.indexOfPickedCompany = Number(sessionStorage.getItem('indexOfPickedCompany'));
-    }
-    if (sessionStorage.getItem('pickedUser')) {
-      this.pickedUser = JSON.parse(sessionStorage.getItem('pickedUser'));
-    }
-    if (sessionStorage.getItem('pickedCompany')) {
-      console.log('valami');
-      console.log(sessionStorage.getItem('pickedCompany'));
-      this.pickedCompany = JSON.parse(sessionStorage.getItem('pickedCompany'));
+      const order = JSON.parse(sessionStorage.getItem('order'));
+      if (order.carId === this.clickedCarIndex) {
+        this.newOrder = JSON.parse(sessionStorage.getItem('order'));
+        this.setFilterComponentVariablesAccordingToOrder(this.newOrder);
+
+        if (sessionStorage.getItem('clickedCarIndex')) {
+          this.clickedCarIndex = Number(sessionStorage.getItem('clickedCarIndex'));
+          this.carOfTransaction = this.selectedCars[this.clickedCarIndex];
+        }
+        if (sessionStorage.getItem('orderProgress')) {
+          this.orderProgress = Number(sessionStorage.getItem('orderProgress'));
+        }
+        if (sessionStorage.getItem('countInCarSupplement')) {
+          this.countInCarSupplement = JSON.parse(sessionStorage.getItem('countInCarSupplement'));
+        }
+        if (sessionStorage.getItem('userSearchData')) {
+          this.userSearchResult.data = JSON.parse(sessionStorage.getItem('userSearchData'));
+        }
+        if (sessionStorage.getItem('companySearchData')) {
+          this.companySearchResult.data = JSON.parse(sessionStorage.getItem('companySearchData'));
+        }
+        if (sessionStorage.getItem('indexOfPickedUser')) {
+          this.indexOfPickedUser = Number(sessionStorage.getItem('indexOfPickedUser'));
+        }
+        if (sessionStorage.getItem('indexOfPickedCompany')) {
+          this.indexOfPickedCompany = Number(sessionStorage.getItem('indexOfPickedCompany'));
+        }
+        if (sessionStorage.getItem('pickedUser')) {
+          this.pickedUser = JSON.parse(sessionStorage.getItem('pickedUser'));
+        }
+        if (sessionStorage.getItem('pickedCompany')) {
+          this.pickedCompany = JSON.parse(sessionStorage.getItem('pickedCompany'));
+        }
+        if (sessionStorage.getItem('alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready')) {
+          this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = JSON.parse(sessionStorage.getItem('alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready'));
+          this.previousOrNew = this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready ? 'new' : 'previous';
+        }
+        if (sessionStorage.getItem('selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate')) {
+          this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate = JSON.parse(sessionStorage.getItem('selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate'));
+          this.individualOrCorporate = this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate ? 'individual' : 'corporate';
+        }
+        if (sessionStorage.getItem('wantInheritanceTaxCalculation')) {
+          this.wantInheritanceTaxCalculation = JSON.parse(sessionStorage.getItem('wantInheritanceTaxCalculation'));
+          this.askForInheritanceTaxCalculation = this.wantInheritanceTaxCalculation ? 'wantCalculation' : 'dontWantCalculation';
+        }
+        if (sessionStorage.getItem('thereIsCountInCar')) {
+          this.thereIsCountInCar = JSON.parse(sessionStorage.getItem('thereIsCountInCar'));
+          this.addCountInCar = this.thereIsCountInCar ? 'countIn' : 'noCountIn';
+        }
+        if (sessionStorage.getItem('downPayment')) {
+          this.downPayment = Number(sessionStorage.getItem('downPayment'));
+        }
+        if (sessionStorage.getItem('selectedTypeOfBuying')) {
+          this.selectedTypeOfBuying = sessionStorage.getItem('selectedTypeOfBuying');
+        }
+        if (sessionStorage.getItem('salesman')) {
+          this.salesman = sessionStorage.getItem('salesman');
+        }
+      }
     }
     if (this.countInCarSupplement == null) {
       this.countInCarSupplementForm = this.formBuilder.group({
@@ -167,7 +209,7 @@ export class FilterComponent implements OnInit {
   }
 
   private setFilterComponentVariablesAccordingToOrder(order: Order) {
-    this.setOrderProgressInSessionStorage(8);
+    this.setOrderProgressInSessionStorage(9);
 
     if (order.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready) {
       this.previousOrNew = 'new';
@@ -176,6 +218,7 @@ export class FilterComponent implements OnInit {
       this.previousOrNew = 'previous';
       this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = false;
     }
+    sessionStorage.setItem('alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready', this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready.toString());
     if (order.selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate) {
       this.individualOrCorporate = 'individual';
       this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate = true;
@@ -183,6 +226,7 @@ export class FilterComponent implements OnInit {
       this.individualOrCorporate = 'corporate';
       this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate = false;
     }
+    sessionStorage.setItem('selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate', this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate.toString());
     if (order.wantInheritanceTaxCalculation) {
       this.askForInheritanceTaxCalculation = 'wantCalculation';
       this.wantInheritanceTaxCalculation = true;
@@ -190,8 +234,10 @@ export class FilterComponent implements OnInit {
       this.askForInheritanceTaxCalculation = 'dontWantCalculation';
       this.wantInheritanceTaxCalculation = false;
     }
+    sessionStorage.setItem('wantInheritanceTaxCalculation', this.wantInheritanceTaxCalculation.toString());
     if (order.inheritanceTax != null) {
       this.inheritanceTax = order.inheritanceTax;
+      sessionStorage.setItem('inheritanceTax', this.inheritanceTax.toString());
     }
     if (order.thereIsCountInCar) {
       this.addCountInCar = 'countIn';
@@ -201,8 +247,10 @@ export class FilterComponent implements OnInit {
       this.addCountInCar = 'noCountIn';
       this.thereIsCountInCar = false;
     }
+    sessionStorage.setItem('thereIsCountInCar', this.thereIsCountInCar.toString());
     if (order.downPayment != null) {
       this.downPayment = order.downPayment;
+      sessionStorage.setItem('downPayment', this.downPayment.toString());
     }
     if (order.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready) {
       if (order.selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate) {
@@ -390,6 +438,7 @@ export class FilterComponent implements OnInit {
       this.previousOrNew = selection ? 'new' : 'previous';
     }
     this.orderProgress = this.orderProgress > 1 ? this.orderProgress : 1;
+    this.setOrderProgressInSessionStorage(this.orderProgress);
     sessionStorage.setItem('alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready', this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready.toString())
   }
 
@@ -490,6 +539,32 @@ export class FilterComponent implements OnInit {
     });
   }
 
+  private setAlreadyOrNewCustomerSelectorAndCarOfTransaction(car: Car, index: number) {
+    if (index !== this.clickedCarIndex) {
+      this.httpService.getOrder(car.id).subscribe(data => {
+        this.newOrder = <Order> data;
+        this.setAllOrderDataAfterHttpCall(this.newOrder, car);
+        sessionStorage.setItem('order', JSON.stringify(this.newOrder));
+      }, error => {
+        if (error.error.errorCode === '404') {
+          this.utilService.openSnackBar('Ehhez az autóhoz még nincs rendelés!', ':(');
+        }
+      });
+      this.clickedCarIndex = this.clickedCarIndex !== index ? index : null;
+      if (this.clickedCarIndex != null) {
+        sessionStorage.setItem('clickedCarIndex', this.clickedCarIndex.toString());
+      }
+      this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = null;
+      this.selectedUserFilter = null;
+      this.orderProgress = 0;
+      this.previousOrNew = null;
+      this.setOrderProgressInSessionStorage(this.orderProgress);
+      this.carOfTransaction = car;
+    } else {
+      this.clickedCarIndex = this.clickedCarIndex !== index ? index : null;
+    }
+  }
+
   private setCountInCar(isOrNotCountIn: string, selection: boolean) {
     if (isOrNotCountIn === 'countIn') {
       if (selection) {
@@ -515,16 +590,28 @@ export class FilterComponent implements OnInit {
     sessionStorage.setItem('thereIsCountInCar', this.thereIsCountInCar.toString());
   }
 
-  private setAlreadyOrNewCustomerSelectorAndCarOfTransaction(car: Car, index: number) {
-    this.clickedCarIndex = this.clickedCarIndex !== index ? index : null;
-    if (this.clickedCarIndex != null) {
-      sessionStorage.setItem('clickedCarIndex', this.clickedCarIndex.toString());
+  private setAllOrderDataAfterHttpCall(order: Order, car: Car) {
+    this.setFilterComponentVariablesAccordingToOrder(order);
+    if (order.users != null) {
+      let userList: Users[] = [];
+      userList.push(order.users);
+      this.userSearchResult.data = userList;
+      sessionStorage.setItem('userSearchData', JSON.stringify(userList));
+      this.indexOfPickedUser = 0;
+      sessionStorage.setItem('indexOfPickedUser', this.indexOfPickedUser.toString());
+      this.pickedUser = order.users;
+      sessionStorage.setItem('pickedUser', JSON.stringify(this.pickedUser));
     }
-    this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = null;
-    this.selectedUserFilter = null;
-    this.orderProgress = 0;
-    this.previousOrNew = null;
-    this.setOrderProgressInSessionStorage(this.orderProgress);
+    if (order.company != null) {
+      let companyList: Company[] = [];
+      companyList.push(order.company);
+      this.companySearchResult.data = companyList;
+      sessionStorage.setItem('companySearchData', JSON.stringify(companyList));
+      this.indexOfPickedCompany = 0;
+      sessionStorage.setItem('indexOfPickedCompany', this.indexOfPickedCompany.toString());
+      this.pickedCompany = order.company;
+      sessionStorage.setItem('pickedCompany', JSON.stringify(this.pickedCompany));
+    }
     this.carOfTransaction = car;
   }
 
@@ -561,7 +648,7 @@ export class FilterComponent implements OnInit {
   }
 
   private setOrderProgressInSessionStorage(stage: number) {
-    if (this.newOrder == null || stage === 8) {
+    if (this.newOrder == null || stage === 9) {
       this.orderProgress = stage;
       sessionStorage.setItem('orderProgress', this.orderProgress.toString());
     }
@@ -603,12 +690,14 @@ export class FilterComponent implements OnInit {
     car.downPayment = this.downPayment;
     this.setOrderProgressInSessionStorage(6);
     this.updateCarOfTransaction(car);
+    sessionStorage.setItem('downPayment', this.downPayment.toString());
   }
 
   private pickUser(index: number) {
     this.indexOfPickedUser = index;
     const pickedUserFromDataTable = this.userSearchResult.data[index];
     this.pickedUser = new Users(
+      pickedUserFromDataTable.id,
       pickedUserFromDataTable.fullName,
       pickedUserFromDataTable.birthName,
       pickedUserFromDataTable.zipCode,
@@ -627,6 +716,7 @@ export class FilterComponent implements OnInit {
       pickedUserFromDataTable.taxNumber,
       pickedUserFromDataTable.healthcareNumber);
     sessionStorage.setItem('pickedUser', JSON.stringify(this.pickedUser));
+    sessionStorage.setItem('indexOfPickedUser', this.indexOfPickedUser.toString());
   }
 
   private pickCompany(index: number) {
@@ -642,6 +732,7 @@ export class FilterComponent implements OnInit {
       pickedCompanyFromDataTable.phoneNumber,
       pickedCompanyFromDataTable.email);
     sessionStorage.setItem('pickedCompany', JSON.stringify(this.pickedCompany));
+    sessionStorage.setItem('indexOfPickedCompany', this.indexOfPickedCompany.toString());
   }
 
   private getCountInCarData(event: Car) {
@@ -653,6 +744,8 @@ export class FilterComponent implements OnInit {
     this.salesman = form.value.salesman;
     car.salesman = this.salesman;
     this.updateCarOfTransaction(car);
+    this.setOrderProgressInSessionStorage(8);
+    sessionStorage.setItem('salesman', this.salesman);
   }
 
   private updateCarOfTransaction(car: Car) {
@@ -660,8 +753,13 @@ export class FilterComponent implements OnInit {
       this.carOfTransaction = data;
       this.selectedCars[this.clickedCarIndex] = data;
       sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
-      this.setOrderProgressInSessionStorage(8);
     });
+  }
+
+  private submitHandOver(form: any, car: Car) {
+    car.carHandover = form.value.handover;
+    this.updateCarOfTransaction(car);
+    this.setOrderProgressInSessionStorage(9);
   }
 
   private navigateToOrderPage(car: Car) {
@@ -673,37 +771,59 @@ export class FilterComponent implements OnInit {
       car.downPayment = this.downPaymentForm.value.downPayment;
       this.updateCarOfTransaction(car);
     }
-    const companyOrdered = this.companySearchResult.data.length > 0 ? this.companySearchResult.data[this.indexOfPickedCompany] : null;
-    // let userOrdered = this.userSearchResult.data.length > 0 ? this.userSearchResult.data[this.indexOfPickedUser] : null;
-    this.newOrder = new Order(null,
-      this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready,
-      this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate,
-      this.wantInheritanceTaxCalculation,
-      this.inheritanceTax,
-      this.thereIsCountInCar,
-      this.downPayment,
-      this.selectedTypeOfBuying,
-      this.pickedUser,
-      companyOrdered,
-      this.countInCarSupplement,
-      this.creditData,
-      this.countInCar,
-      car.id);
-    this.httpService.saveOrder(this.newOrder).subscribe(order => {
-      sessionStorage.setItem('order', JSON.stringify(this.newOrder));
-      sessionStorage.setItem('orderedCar', JSON.stringify(car));
-      this.router.navigate(['/orderPage'], {state: {data: {
-            order: order,
-            orderedCar: car,
-            clickedCarIndex: this.clickedCarIndex,
-            userSearchResult: this.userSearchResult.data,
-            companySearchResult: this.companySearchResult.data,
-            indexOfPickedUser: this.indexOfPickedUser,
-            pickedUser: this.pickedUser,
-            indexOfPickedCompany: this.indexOfPickedCompany,
-            pickedCompany: this.pickedCompany,
-      }}});
-    });
+    if (this.newOrder == null) {
+      this.newOrder = new Order(null,
+        this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready,
+        this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate,
+        this.wantInheritanceTaxCalculation,
+        this.inheritanceTax,
+        this.thereIsCountInCar,
+        this.downPayment,
+        this.selectedTypeOfBuying,
+        this.pickedUser,
+        this.pickedCompany,
+        this.countInCarSupplement,
+        this.creditData,
+        this.countInCar,
+        car.id);
+      this.httpService.saveOrder(this.newOrder).subscribe(order => {
+        this.prepareNavigationToOrderPage(order, car);
+      });
+    } else {
+      this.newOrder.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready;
+      this.newOrder.selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate = this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate;
+      this.newOrder.wantInheritanceTaxCalculation = this.wantInheritanceTaxCalculation;
+      this.newOrder.inheritanceTax = this.inheritanceTax;
+      this.newOrder.thereIsCountInCar = this.thereIsCountInCar;
+      this.newOrder.downPayment = this.downPayment;
+      this.newOrder.selectedTypeOfBuying = this.selectedTypeOfBuying;
+      this.newOrder.users = this.pickedUser;
+      this.newOrder.company = this.pickedCompany;
+      this.newOrder.countInCarSupplement = this.countInCarSupplement;
+      this.newOrder.credit = this.creditData;
+      this.newOrder.countInCar = this.countInCar;
+      this.newOrder.carId = car.id;
+      this.httpService.updateOrder(this.newOrder).subscribe(order => {
+        console.log(order);
+        this.prepareNavigationToOrderPage(<Order> order, car);
+      });
+    }
+  }
+
+  private prepareNavigationToOrderPage(order: Order, car: Car) {
+    sessionStorage.setItem('order', JSON.stringify(this.newOrder));
+    sessionStorage.setItem('orderedCar', JSON.stringify(car));
+    this.router.navigate(['/orderPage'], {state: {data: {
+          order: order,
+          orderedCar: car,
+          clickedCarIndex: this.clickedCarIndex,
+          userSearchResult: this.userSearchResult.data,
+          companySearchResult: this.companySearchResult.data,
+          indexOfPickedUser: this.indexOfPickedUser,
+          pickedUser: this.pickedUser,
+          indexOfPickedCompany: this.indexOfPickedCompany,
+          pickedCompany: this.pickedCompany,
+        }}});
   }
 
   private navigateToSellingPage() {

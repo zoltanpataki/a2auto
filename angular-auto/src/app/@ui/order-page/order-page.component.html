@@ -19,7 +19,8 @@
         <p *ngIf="!order.selectedTypeOfBuying" class="sectionLiner">Fizetési mód:</p>
       </div>
       <div class="border">
-        <p class="sectionLiner">Várható átadás:</p>
+        <p *ngIf="orderedCar.carHandover" class="sectionLiner">Várható átadás: {{orderedCar.carHandover | date:'yyyy-MM-dd'}}</p>
+        <p *ngIf="!orderedCar.carHandover" class="sectionLiner">Várható átadás:</p>
       </div>
       <div class="silverCenter border">
         <p class="sectionLiner">Gépjármű adatai:</p>
@@ -234,9 +235,6 @@
         <p class="sectionLiner">Kiegészítések:</p>
       </div>
       <div *ngIf="order.countInCarSupplement && order.countInCarSupplement.description" class="extraCarInfo">
-        <p class="texts" *ngFor="let description of order.countInCarSupplement.description">- {{description.description}}</p>
-      </div>
-      <div *ngIf="!order.countInCarSupplement || order.countInCarSupplement && !order.countInCarSupplement.description" class="extraCarInfo">
         <p class="texts" *ngFor="let description of order.countInCarSupplement.description">- {{description.description}}</p>
       </div>
     </div>

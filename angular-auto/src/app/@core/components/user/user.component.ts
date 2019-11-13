@@ -35,7 +35,7 @@ export class UserComponent implements OnInit {
   ngOnInit() {
     console.log(this.userData);
     if (this.userData == null) {
-      this.userData = new Users(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+      this.userData = new Users(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     }
   }
 
@@ -44,7 +44,7 @@ export class UserComponent implements OnInit {
   }
 
   public saveUser(form: any) {
-    const user = new Users(form.value.fullName, form.value.birthName, form.value.zipCode, form.value.city, form.value.address, form.value.birthPlace, form.value.phoneNumber, form.value.email, form.value.nameOfMother, form.value.birthDate, form.value.personNumber, form.value.idCardNumber, form.value.dueTimeOfIdCard, form.value.drivingLicenceNumber, form.value.dueTimeOfDrivingLicence, form.value.taxNumber, form.value.healthCareNumber);
+    const user = new Users(null, form.value.fullName, form.value.birthName, form.value.zipCode, form.value.city, form.value.address, form.value.birthPlace, form.value.phoneNumber, form.value.email, form.value.nameOfMother, form.value.birthDate, form.value.personNumber, form.value.idCardNumber, form.value.dueTimeOfIdCard, form.value.drivingLicenceNumber, form.value.dueTimeOfDrivingLicence, form.value.taxNumber, form.value.healthCareNumber);
     this.httpService.saveUser(user).subscribe(data => {
       console.log(data);
       this.orderProgress.emit('saved');

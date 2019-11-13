@@ -33,6 +33,7 @@ import {MatTableModule} from "@angular/material/table";
 import { OrderPageComponent } from './@ui/order-page/order-page.component';
 import { SellingPageComponent } from './@ui/selling-page/selling-page.component';
 import { GdprPageComponent } from './@ui/gdpr-page/gdpr-page.component';
+import {FlexModule} from "@angular/flex-layout";
 
 @NgModule({
   declarations: [
@@ -72,6 +73,7 @@ import { GdprPageComponent } from './@ui/gdpr-page/gdpr-page.component';
     MatCheckboxModule,
     MatDividerModule,
     MatTableModule,
+    FlexModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

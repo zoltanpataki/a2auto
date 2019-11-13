@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Car} from "../models/car";
+import {Order} from "../models/order";
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -90,6 +91,21 @@ export class HttpService {
       headers: httpOptions.headers,
       params: params
     })
+  }
+
+  public getOrder(carId: number) {
+    const urlPostFix = 'getOrder';
+    const params = new HttpParams()
+      .set('carId', carId.toString());
+    return this.http.get(this.carServerUrl + urlPostFix, {
+      headers: httpOptions.headers,
+      params: params
+    })
+  }
+
+  public updateOrder(order: Order) {
+    const urlPostFix = 'updateOrder';
+    return this.http.put(this.carServerUrl + urlPostFix, order, httpOptions);
   }
 
   public getUtility(name: string): Observable<any> {

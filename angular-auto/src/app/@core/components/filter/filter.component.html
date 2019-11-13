@@ -31,32 +31,34 @@
 <div class="selectedCars" *ngIf="selectedCars.length > 0">
   <mat-accordion>
     <mat-card>
-      <div class="selectedCarHeaders">
-        <mat-panel-title *ngFor="let header of selectedCarHeader; trackBy: trackByFn">
+      <div class="selectedCarHeaders" fxLayout="row" fxFlex="100%" fxLayoutAlign="space-between">
+        <mat-panel-title fxFlex="100%" *ngFor="let header of selectedCarHeader; trackBy: trackByFn">
           <strong>{{header}}</strong>
         </mat-panel-title>
       </div>
     </mat-card>
     <mat-expansion-panel [disabled]="true" #mep="matExpansionPanel" [expanded]="i == clickedCarIndex" hideToggle *ngFor="let car of selectedCars; index as i; trackBy: trackByFn">
       <mat-expansion-panel-header>
-        <mat-panel-title>
-          {{car.type}}
-        </mat-panel-title>
-        <mat-panel-title>
-          {{car.name}}
-        </mat-panel-title>
-        <mat-panel-title>
-          {{car.plateNumber}}
-        </mat-panel-title>
-        <mat-panel-title class="buyButton">
-          <i class="material-icons edit" (click)="openUpdateModal(car)">edit</i>
-        </mat-panel-title>
-        <mat-panel-title class="buyButton">
-          <i class="material-icons money" (click)="setAlreadyOrNewCustomerSelectorAndCarOfTransaction(car, i)">shopping_cart</i>
-        </mat-panel-title>
-        <mat-panel-title class="buyButton">
-          <i class="material-icons delete" (click)="openWarningModal(car.id)">clear</i>
-        </mat-panel-title>
+        <div fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
+          <mat-panel-title fxFlex="25">
+            {{car.type}}
+          </mat-panel-title>
+          <mat-panel-title fxFlex="25">
+            {{car.name}}
+          </mat-panel-title>
+          <mat-panel-title fxFlex="25">
+            {{car.plateNumber}}
+          </mat-panel-title>
+          <mat-panel-title class="buyButton" fxFlex="9">
+            <i class="material-icons edit" (click)="openUpdateModal(car)">edit</i>
+          </mat-panel-title>
+          <mat-panel-title class="buyButton" fxFlex="8">
+            <i class="material-icons money" (click)="setAlreadyOrNewCustomerSelectorAndCarOfTransaction(car, i)">shopping_cart</i>
+          </mat-panel-title>
+          <mat-panel-title class="buyButton" fxFlex="8">
+            <i class="material-icons delete" (click)="openWarningModal(car.id)">clear</i>
+          </mat-panel-title>
+        </div>
       </mat-expansion-panel-header>
       <div>
         <mat-divider></mat-divider>
@@ -377,6 +379,22 @@
         </form>
       </div>
       <div *ngIf="orderProgress > 7 && clickedCarIndex == i">
+        <mat-divider></mat-divider>
+        <h5>Várható átadás</h5>
+        <form #handOverForm=ngForm (ngSubmit)="submitHandOver(handOverForm, car)" class="form handOverForm">
+          <div>
+            <mat-form-field class="example-full-width">
+              <input matInput [matDatepicker]="handOverPicker" placeholder="Dátum" ngModel="{{carOfTransaction.carHandover | date:'yyyy-MM-dd'}}" name="handover">
+              <mat-datepicker-toggle matSuffix [for]="handOverPicker"></mat-datepicker-toggle>
+              <mat-datepicker #handOverPicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div>
+            <button *ngIf="!newOrder" class="saveButton" mat-button>Tovább</button>
+          </div>
+        </form>
+      </div>
+      <div *ngIf="orderProgress > 8 && clickedCarIndex == i">
         <mat-divider></mat-divider>
         <h5>Összesítő</h5>
         <div class="summary">

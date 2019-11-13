@@ -35,7 +35,7 @@ public class OrderService {
 
     public ResponseEntity<Object> getSingleOrder(Long carId) {
         try {
-            Optional<Order> orderByCarId = orderRepository.findByCarId(carId);
+            Order orderByCarId = orderRepository.findByCarId(carId).orElseThrow(() -> new EntityNotFoundException("Order is not found by carId!"));
             return new ResponseEntity<>(orderByCarId, HttpStatus.OK);
         } catch (Exception e) {
             throw new EntityNotFoundException("Order is not found by carId!");
@@ -45,7 +45,7 @@ public class OrderService {
     public ResponseEntity<Object> updateOrder(Order order) {
         try {
             orderRepository.save(order);
-            return new ResponseEntity<>("Order is updated!", HttpStatus.OK);
+            return new ResponseEntity<>(order, HttpStatus.OK);
         } catch (Exception e) {
             logger.info(e.getMessage());
             throw new EntityFailedToSaveException("Order couldn't be updated!");
