@@ -15,7 +15,6 @@ import {Credit} from "../../models/credit";
 import {Company} from "../../models/company";
 import {NavigationEnd, NavigationStart, Router} from "@angular/router";
 import {Order} from "../../models/order";
-import {MatExpansionPanel} from "@angular/material/expansion";
 
 @Component({
   selector: 'app-filter',
@@ -32,7 +31,7 @@ export class FilterComponent implements OnInit {
   private companyFilters = [{viewValue: 'Név', value: 'name'}, {viewValue: 'Cégjegyzékszám', value: 'companyRegistrationNumber'}];
   private selectedCompanyFilter: SelectedFilter;
   private selectedCars = [];
-  private selectedCarHeader = ['Márka', 'Modell', 'Rendszám', '', '', ''];
+  private selectedCarHeader = ['Márka', 'Modell', 'Rendszám'];
   public typeOfBuying = ['KÉSZPÉNZ', 'ÁTUTALÁS', 'HITEL'];
   private noMatch = false;
   private selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate: boolean;
@@ -106,17 +105,15 @@ export class FilterComponent implements OnInit {
     if (sessionStorage.getItem('selectedCars')) {
       this.selectedCars = JSON.parse(sessionStorage.getItem('selectedCars'));
     }
-
+    if (sessionStorage.getItem('clickedCarIndex')) {
+      this.clickedCarIndex = Number(sessionStorage.getItem('clickedCarIndex'));
+      this.carOfTransaction = this.selectedCars[this.clickedCarIndex];
+    }
     if (sessionStorage.getItem('order')) {
       const order = JSON.parse(sessionStorage.getItem('order'));
-      if (order.carId === this.clickedCarIndex) {
+      if (order.carId === this.carOfTransaction.id) {
         this.newOrder = JSON.parse(sessionStorage.getItem('order'));
         this.setFilterComponentVariablesAccordingToOrder(this.newOrder);
-
-        if (sessionStorage.getItem('clickedCarIndex')) {
-          this.clickedCarIndex = Number(sessionStorage.getItem('clickedCarIndex'));
-          this.carOfTransaction = this.selectedCars[this.clickedCarIndex];
-        }
         if (sessionStorage.getItem('orderProgress')) {
           this.orderProgress = Number(sessionStorage.getItem('orderProgress'));
         }

@@ -96,7 +96,8 @@
         <p class="sectionLiner">Fizetendő:</p>
       </div>
       <div class="border">
-        <p class="subSectionLiner">Vételár:</p>
+        <p *ngIf="orderedCar.price" class="subSectionLiner">Vételár: {{orderedCar.price}}</p>
+        <p *ngIf="!orderedCar.price" class="subSectionLiner">Vételár:</p>
       </div>
       <div class="border">
         <p *ngIf="order.inheritanceTax" class="texts">Átírás/Ügyintézés: {{order.inheritanceTax}}</p>
@@ -113,7 +114,8 @@
         <p *ngIf="!orderedCar.downPayment" class="texts">Foglaló (Fizetve):</p>
       </div>
       <div class="border">
-        <p class="texts">Előleg:</p>
+        <p *ngIf="order.countInCarSupplement && order.countInCarSupplement.countInPrice" class="texts">Előleg: {{order.countInCarSupplement.countInPrice}}</p>
+        <p *ngIf="!order.countInCarSupplement || order.countInCarSupplement && !order.countInCarSupplement.countInPrice" class="texts">Előleg:</p>
       </div>
       <div class="border">
         <p class="subSectionLiner">Hitelösszeg:</p>
@@ -241,7 +243,7 @@
   </div>
 </div>
 <div class="date">
-  <p class="texts">Kelt., Székesfehérvár, {{today | date:'yyyy-MM-dd'}}</p>
+  <p class="texts">Kelt: Székesfehérvár, {{today | date:'yyyy-MM-dd'}}</p>
 </div>
 <div class="signature">
   <p class="upperLine texts">Vásárló aláírása</p>

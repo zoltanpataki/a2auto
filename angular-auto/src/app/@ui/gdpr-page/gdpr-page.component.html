@@ -1,4 +1,4 @@
-<div class="gdprContainer">
+<div class="gdprContainer" id="gdprContainer">
   <div class="title">
     <p>ADATKEZELÉSI TÁJÉKOZTATÓ</p>
   </div>
@@ -59,13 +59,16 @@
     <p>2013. évi CCXXXVII. törvény — a hitelintézetekről és a pénzügyi vállalkozások-ról (Hpt.).</p>
   </div>
   <div class="sectionSeparateur">
-    <p>Aláírásommal hozzájárulok ahhoz, hogy a megjelölt célok érdekében az Adatkezelö címemet, mobiltelefonszámomat és/vagy e-mail címemet használja, és azon keresłqłhleptlfiťlqźézs_ folytasson, kommunikáljon, adatokat, információkat közöljön. Kft.</p>
+    <p>Aláírásommal hozzájárulok ahhoz, hogy a megjelölt célok érdekében az Adatkezelö címemet, mobiltelefonszámomat és/vagy e-mail címemet használja, és azon keresztül velem levelezést folytasson, kommunikáljon, adatokat, információkat közöljön.</p>
   </div>
   <div class="date sectionSeparateur">
-    <p class="texts">Kelt., Székesfehérvár, </p>
+    <p class="texts">Kelt: Székesfehérvár, {{today | date:'yyyy-MM-dd'}}</p>
   </div>
   <div class="signature">
     <p class="upperLineBuyer texts">Vásárló aláírása</p>
     <p class="upperLineCompany texts">A2 Autócentrum Kft. aláírása</p>
   </div>
+</div>
+<div>
+  <button (click)="captureScreen()" mat-button>PDF Konvertálás</button>
 </div>

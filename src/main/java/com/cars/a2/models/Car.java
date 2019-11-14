@@ -28,6 +28,7 @@ public class Car {
     private int mileage;
     private Date motExpiry;
     private int price;
+    private int purchasingPrice;
     private int cost;
     private String costDescriptions;
     private Date dateOfArrival;
@@ -52,7 +53,7 @@ public class Car {
     public Car() {
     }
 
-    public Car(Users user, Company company, String name, String type, String color, String plateNumber, String specification, String bodyNumber, String engineNumber, int capacity, int vintage, int mileage, Date motExpiry, int price, int cost, String costDescriptions, Date dateOfArrival, Date dateOfLeaving, String typeOfBuying, int inheritanceTax, int downPayment, int payedAmount, int kwh, String carRegistry, Date documentsHandover, Date dueOfContract, Date carHandover, Date dateOfContract, boolean sold, String carOrTruck, String salesman) {
+    public Car(Users user, Company company, String name, String type, String color, String plateNumber, String specification, String bodyNumber, String engineNumber, int capacity, int vintage, int mileage, Date motExpiry, int price, int purchasingPrice, int cost, String costDescriptions, Date dateOfArrival, Date dateOfLeaving, String typeOfBuying, int inheritanceTax, int downPayment, int payedAmount, int kwh, String carRegistry, Date documentsHandover, Date dueOfContract, Date carHandover, Date dateOfContract, boolean sold, String carOrTruck, String salesman) {
         this.company = company;
         this.user =user;
         this.name = name;
@@ -67,6 +68,7 @@ public class Car {
         this.mileage = mileage;
         this.motExpiry = motExpiry;
         this.price = price;
+        this.purchasingPrice = purchasingPrice;
         this.cost = cost;
         this.costDescriptions = costDescriptions;
         this.dateOfArrival = dateOfArrival;
@@ -84,6 +86,14 @@ public class Car {
         this.sold = sold;
         this.carOrTruck = carOrTruck;
         this.salesman = salesman;
+    }
+
+    public int getPurchasingPrice() {
+        return purchasingPrice;
+    }
+
+    public void setPurchasingPrice(int purchasingPrice) {
+        this.purchasingPrice = purchasingPrice;
     }
 
     public String getSalesman() {
@@ -360,6 +370,7 @@ public class Car {
                 ", mileage=" + mileage +
                 ", motExpiry=" + motExpiry +
                 ", price=" + price +
+                ", purchasingPrice=" + purchasingPrice +
                 ", cost=" + cost +
                 ", costDescriptions='" + costDescriptions + '\'' +
                 ", dateOfArrival=" + dateOfArrival +
