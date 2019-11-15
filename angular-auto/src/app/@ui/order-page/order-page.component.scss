@@ -1,3 +1,9 @@
+#orderContainer {
+  padding-top: 3%;
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -10,8 +16,7 @@
 }
 
 .titleText {
-  text-decoration: underline;
-  font-size: 370%;
+  font-size: 280%;
   font-style: italic;
   font-weight: bolder;
 }
@@ -39,7 +44,7 @@
 
 .sectionLiner {
   font-weight: bolder;
-  font-size: 200%;
+  font-size: 150%;
 }
 
 .silverStart {
@@ -53,11 +58,11 @@
 
 .subSectionLiner {
   font-weight: bold;
-  font-size: 160%;
+  font-size: 120%;
 }
 
 .texts {
-  font-size: 140%;
+  font-size: 100%;
 }
 
 p, h1 {
@@ -88,4 +93,9 @@ p {
   padding-left: 5%;
   padding-right: 5%;
   padding-top: 1%;
+}
+
+button {
+  background-color: deeppink;
+  color: white;
 }

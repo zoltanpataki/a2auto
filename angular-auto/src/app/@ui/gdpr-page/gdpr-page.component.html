@@ -4,12 +4,12 @@
   </div>
   <div class="company">
     <p class="sectionLiner">Az Adatkezető adatai</p>
-    <p *ngIf="Autocentrum">Név: {{Autocentrum.name}}</p>
-    <p *ngIf="AutocentrumAddress">Székhely: {{AutocentrumAddress}}</p>
-    <p *ngIf="Autocentrum">Cégjegyzékszám: {{Autocentrum.companyRegistrationNumber}}</p>
-    <p *ngIf="Autocentrum">Adószám: {{Autocentrum.taxNumber}}</p>
-    <p *ngIf="Autocentrum">Telefonszám: {{Autocentrum.phoneNumber}}</p>
-    <p *ngIf="Autocentrum">E-mail: {{Autocentrum.email}}</p>
+    <p class="listItem" *ngIf="Autocentrum">Név: {{Autocentrum.name}}</p>
+    <p class="listItem" *ngIf="AutocentrumAddress">Székhely: {{AutocentrumAddress}}</p>
+    <p class="listItem" *ngIf="Autocentrum">Cégjegyzékszám: {{Autocentrum.companyRegistrationNumber}}</p>
+    <p class="listItem" *ngIf="Autocentrum">Adószám: {{Autocentrum.taxNumber}}</p>
+    <p class="listItem" *ngIf="Autocentrum">Telefonszám: {{Autocentrum.phoneNumber}}</p>
+    <p class="listItem" *ngIf="Autocentrum">E-mail: {{Autocentrum.email}}</p>
   </div>
   <div class="handledData">
     <p class="sectionLiner">Az Adatkezelő által kezelni kívánt adatok</p>
@@ -32,7 +32,8 @@
   <div class="sectionSeparateur">
     <p>Az elözöekben felsorolt adatokat az Adatkezelö az alábbi célokra kívánja használni:</p>
     <p class="listItem"> - Kapcsolattartás (pl. termékértékesítés, szolgáltatásnyújtás )</p>
-    <p class="listItem"> - Közvetlen üzletszerzés (pl. tájékoztatás, ajánlatadás a forgalmazott termékekröl és a nyújtott szolgáltatásokról; reklámanyagok és elektronikus hirdetések küldése)</p>
+    <p class="listItem"> - Közvetlen üzletszerzés (pl. tájékoztatás, ajánlatadás a forgalmazott termékekröl és a nyújtott</p>
+    <p class="listItem">  &#160; szolgáltatásokról; reklámanyagok és elektronikus hirdetések küldése)</p>
     <p class="listItem"> - Ügyfél elégedettségi kutatások megszervezése és lebonyolítása</p>
   </div>
   <div class="sectionSeparateur">
@@ -43,20 +44,20 @@
   </div>
   <div class="sectionSeparateur">
     <p class="sectionLiner">Panasszal a Nemzeti Adatvédelmi és Információszabadság Hatóságnál lehet élni:</p>
-    <p>Név: Nemzeti Adatvédelmi és Információszabadság Hatóság</p>
-    <p>Székhely: 1125 Budapest, Szilágyi Erzsébet fasor 221C.</p>
-    <p>Levelezési cim: 1530 Budapest, Pf.: 5.</p>
-    <p>Telefon: 0613911400</p>
-    <p>E-mail: uqyfelszolqalat@naih.hu</p>
+    <p class="listItem">Név: Nemzeti Adatvédelmi és Információszabadság Hatóság</p>
+    <p class="listItem">Székhely: 1125 Budapest, Szilágyi Erzsébet fasor 221C.</p>
+    <p class="listItem">Levelezési cim: 1530 Budapest, Pf.: 5.</p>
+    <p class="listItem">Telefon: 0613911400</p>
+    <p class="listItem">E-mail: uqyfelszolqalat@naih.hu</p>
   </div>
   <div class="sectionSeparateur">
     <p class="sectionLiner">Adatkezelési alapelvei összhangban vannak az adatvédelemmel kapcsolatos hatályos jogszabályokkal, így különösen az alábbiakkal:</p>
-    <p>2011. évi CXII. törvény - az információs önrendelkezési jogról és az információ-szabadságról (Infotv.);</p>
-    <p>Az Európai Parlament és a Tanács (EU) 2016/679 rendelete (2016. április 27.) — a természetes személyeknek a személyes adatok kezelése tekintetében tör-ténö védelméről és az ilyen adatok szabad áramlásáról, valamint a 95/46/EK rendelet hatályon kívül helyezéséről (általános adatvédelmi rendelet, GDPR);</p>
-    <p>2013. évi V. törvény — a Polgári Törvénykönyvről (Ptk.);</p>
-    <p>2000. évi C. törvény — a számvitelről (Számv. tv.);</p>
-    <p>2017. évi LIII. törvény — a pénzmosás és terrorizmus finanszírozása megelőzéséröl és megakadályozásáról (Pmt.);</p>
-    <p>2013. évi CCXXXVII. törvény — a hitelintézetekről és a pénzügyi vállalkozások-ról (Hpt.).</p>
+    <p class="listItem">2011. évi CXII. törvény - az információs önrendelkezési jogról és az információ-szabadságról (Infotv.);</p>
+    <p class="listItem">Az Európai Parlament és a Tanács (EU) 2016/679 rendelete (2016. április 27.) — a természetes személyeknek a személyes adatok kezelése tekintetében tör-ténö védelméről és az ilyen adatok szabad áramlásáról, valamint a 95/46/EK rendelet hatályon kívül helyezéséről (általános adatvédelmi rendelet, GDPR);</p>
+    <p class="listItem">2013. évi V. törvény — a Polgári Törvénykönyvről (Ptk.);</p>
+    <p class="listItem">2000. évi C. törvény — a számvitelről (Számv. tv.);</p>
+    <p class="listItem">2017. évi LIII. törvény — a pénzmosás és terrorizmus finanszírozása megelőzéséröl és megakadályozásáról (Pmt.);</p>
+    <p class="listItem">2013. évi CCXXXVII. törvény — a hitelintézetekről és a pénzügyi vállalkozások-ról (Hpt.).</p>
   </div>
   <div class="sectionSeparateur">
     <p>Aláírásommal hozzájárulok ahhoz, hogy a megjelölt célok érdekében az Adatkezelö címemet, mobiltelefonszámomat és/vagy e-mail címemet használja, és azon keresztül velem levelezést folytasson, kommunikáljon, adatokat, információkat közöljön.</p>

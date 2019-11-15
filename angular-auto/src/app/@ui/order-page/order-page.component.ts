@@ -4,6 +4,10 @@ import {Car} from "../../@core/models/car";
 import {Users} from "../../@core/models/users";
 import {Company} from "../../@core/models/company";
 
+import * as jspdf from 'jspdf';
+
+import html2canvas from 'html2canvas';
+
 @Component({
   selector: 'app-order-page',
   templateUrl: './order-page.component.html',
@@ -25,6 +29,12 @@ export class OrderPageComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    if (sessionStorage.getItem('order') != null) {
+      this.order = JSON.parse(sessionStorage.getItem('order'));
+    }
+    if (sessionStorage.getItem('orderedCar') != null) {
+      this.order = JSON.parse(sessionStorage.getItem('orderedCar'));
+    }
     this.today = new Date();
     if (history.state.data) {
       this.order = history.state.data.order;
@@ -36,6 +46,7 @@ export class OrderPageComponent implements OnInit {
       this.pickedUser = history.state.data.pickedUser;
       this.pickedCompany = history.state.data.pickedCompany;
       sessionStorage.setItem('clickedCarIndex', history.state.data.clickedCarIndex);
+      sessionStorage.setItem('orderedCar', JSON.stringify(this.orderedCar));
       sessionStorage.setItem('order', JSON.stringify(this.order));
       sessionStorage.setItem('userSearchData', JSON.stringify(this.userSearchResult));
       sessionStorage.setItem('companySearchData', JSON.stringify(this.companySearchResult));
@@ -56,6 +67,23 @@ export class OrderPageComponent implements OnInit {
       this.order = JSON.parse(sessionStorage.getItem('order'));
       this.orderedCar = JSON.parse(sessionStorage.getItem('orderedCar'));
     }
+  }
+
+  public captureScreen() {
+    var data = document.getElementById('orderContainer');
+    html2canvas(data).then(canvas => {
+      // Few necessary setting options
+      var imgWidth = 208;
+      var pageHeight = 295;
+      var imgHeight = canvas.height * imgWidth / canvas.width;
+      var heightLeft = imgHeight;
+
+      const contentDataURL = canvas.toDataURL('image/png');
+      let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF
+      var position = 0;
+      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+      pdf.save('GDPR.pdf'); // Generated PDF
+    });
   }
 
 }
