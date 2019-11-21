@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@SequenceGenerator(name = "seq2", initialValue = 4, allocationSize = 100)
+@SequenceGenerator(name = "seq2", initialValue = 5, allocationSize = 100)
 public class Car {
 
     @Id

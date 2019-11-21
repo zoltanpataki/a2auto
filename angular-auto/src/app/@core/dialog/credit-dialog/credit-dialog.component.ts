@@ -31,10 +31,6 @@ export class CreditDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  public trackByFn(index, item) {
-    return item.id; // unique id corresponding to the item
-  }
-
   closeWithData() {
     this.dialogRef.close(this.credit);
   }

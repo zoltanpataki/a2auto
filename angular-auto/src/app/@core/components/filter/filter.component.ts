@@ -16,6 +16,7 @@ import {Company} from "../../models/company";
 import {NavigationEnd, NavigationStart, Router} from "@angular/router";
 import {Order} from "../../models/order";
 import {Description} from "../../models/description";
+import {CarTimeInfoComponent} from "../../dialog/car-time-info/car-time-info.component";
 
 @Component({
   selector: 'app-filter',
@@ -183,7 +184,7 @@ export class FilterComponent implements OnInit {
       this.descriptionList = JSON.parse(sessionStorage.getItem('descriptionList'));
     }
     if (sessionStorage.getItem('extra')) {
-      this.downPayment = Number(sessionStorage.getItem('extra'));
+      this.extra = Number(sessionStorage.getItem('extra'));
     }
     if (sessionStorage.getItem('selectedTypeOfBuying')) {
       this.selectedTypeOfBuying = sessionStorage.getItem('selectedTypeOfBuying');
@@ -448,6 +449,26 @@ export class FilterComponent implements OnInit {
     });
   }
 
+  public openCarTimeInfoDialog(car: Car) {
+    const carTimeInfoDialogConfig = new MatDialogConfig();
+
+    carTimeInfoDialogConfig.disableClose = true;
+    carTimeInfoDialogConfig.width = '50%';
+
+    carTimeInfoDialogConfig.data = {
+      car: car,
+    };
+
+    const dialogRef = this.dialog.open(CarTimeInfoComponent, carTimeInfoDialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.carOfTransaction = result;
+      console.log(this.carOfTransaction);
+      // this.updateCarOfTransaction(this.carOfTransaction);
+    });
+  }
+
   public trackByFn(index, item) {
     return item.id; // unique id corresponding to the item
   }
@@ -703,6 +724,7 @@ export class FilterComponent implements OnInit {
   }
 
   private clearSelectedCars() {
+    this.setDataToNull();
     this.selectedCars = [];
     this.setOrderProgressInSessionStorage(0);
   }
@@ -899,11 +921,8 @@ export class FilterComponent implements OnInit {
         }}});
   }
 
-  private navigateToSellingPage() {
-    this.router.navigate(['/sellingPage']);
+  private gatherSellingPageInfo(car: Car) {
+    this.openCarTimeInfoDialog(car);
   }
 
-  private navigateToGdprPage() {
-    this.router.navigate(['/gdprPage']);
-  }
 }

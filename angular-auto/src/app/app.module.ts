@@ -34,6 +34,7 @@ import { OrderPageComponent } from './@ui/order-page/order-page.component';
 import { SellingPageComponent } from './@ui/selling-page/selling-page.component';
 import { GdprPageComponent } from './@ui/gdpr-page/gdpr-page.component';
 import {FlexModule} from "@angular/flex-layout";
+import { CarTimeInfoComponent } from './@core/dialog/car-time-info/car-time-info.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import {FlexModule} from "@angular/flex-layout";
     OrderPageComponent,
     SellingPageComponent,
     GdprPageComponent,
+    CarTimeInfoComponent,
   ],
   imports: [
     BrowserModule,
@@ -77,6 +79,6 @@ import {FlexModule} from "@angular/flex-layout";
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [DialogComponent, WarningDialogComponent, CreditDialogComponent]
+  entryComponents: [DialogComponent, WarningDialogComponent, CreditDialogComponent, CarTimeInfoComponent]
 })
 export class AppModule { }

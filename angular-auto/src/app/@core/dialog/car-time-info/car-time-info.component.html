@@ -1,0 +1,34 @@
+<mat-dialog-content>
+  <h5>Add meg az eladáshoz kötődő időpontokat!</h5>
+  <form #carTimeInfoForm=ngForm (ngSubmit)="saveCarData(carTimeInfoForm)" class="carTimeInfoForm">
+    <div class="dateContainer">
+      <div class="leftSide">
+        <div *ngFor="let item of fields1 | keyvalue:keepOriginalOrder; index as i; trackBy: trackByFn">
+          <mat-form-field class="example-full-width">
+            <input matInput [matDatepicker]="picker" placeholder="{{item.value}}" (ngModelChange)="changeAllDateFieldIfEmptyElseOnlyThisOne($event, item.key)" ngModel="{{carData[item.key] | date:'yyyy-MM-dd'}}" name="{{item.key}}">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="rightSide">
+        <div>
+          <mat-form-field class="example-full-width">
+            <input matInput [matDatepicker]="carHandoverPicker" placeholder="Autó átadásának időpontja" (ngModelChange)="changeAllDateFieldIfEmptyElseOnlyThisOne($event, 'carHandover')" ngModel="{{carData.carHandover | date:'yyyy-MM-dd'}}" name="carHandover">
+            <mat-datepicker-toggle matSuffix [for]="carHandoverPicker"></mat-datepicker-toggle>
+            <mat-datepicker #carHandoverPicker></mat-datepicker>
+          </mat-form-field>
+          <ngb-timepicker [(ngModel)]="carHandoverTime" name="carHandoverTime"></ngb-timepicker>
+        </div>
+      </div>
+    </div>
+    <div class="buttons">
+      <div class="saveButton">
+        <button mat-button>Mentés</button>
+      </div>
+      <div>
+        <button type="button" class="mat-raised-button mat-accent" (click)="close()"><strong class="X">X</strong></button>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
