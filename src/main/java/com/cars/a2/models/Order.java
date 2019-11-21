@@ -1,6 +1,10 @@
 package com.cars.a2.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -16,8 +20,18 @@ public class Order {
     private int inheritanceTax;
     private boolean thereIsCountInCar;
     private int downPayment;
+    private int extra;
     private String selectedTypeOfBuying;
     private Long carId;
+
+    @OneToMany(
+            mappedBy = "order",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER
+    )
+    @JsonManagedReference
+    private List<Description> description = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "users", referencedColumnName = "id")
@@ -42,13 +56,14 @@ public class Order {
     public Order() {
     }
 
-    public Order(boolean alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready, boolean selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate, boolean wantInheritanceTaxCalculation, int inheritanceTax, boolean thereIsCountInCar, int downPayment, String selectedTypeOfBuying, CountInCarSupplement countInCarSupplement, Credit credit, Users users, Company company, Car countInCar, Long carId) {
+    public Order(boolean alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready, boolean selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate, boolean wantInheritanceTaxCalculation, int inheritanceTax, boolean thereIsCountInCar, int downPayment, int extra, String selectedTypeOfBuying, CountInCarSupplement countInCarSupplement, Credit credit, Users users, Company company, Car countInCar, Long carId, List<Description> description) {
         this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready;
         this.selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate = selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate;
         this.wantInheritanceTaxCalculation = wantInheritanceTaxCalculation;
         this.inheritanceTax = inheritanceTax;
         this.thereIsCountInCar = thereIsCountInCar;
         this.downPayment = downPayment;
+        this.extra = extra;
         this.selectedTypeOfBuying = selectedTypeOfBuying;
         this.countInCarSupplement = countInCarSupplement;
         this.credit = credit;
@@ -56,6 +71,15 @@ public class Order {
         this.company = company;
         this.countInCar = countInCar;
         this.carId = carId;
+        this.description = description;
+    }
+
+    public int getExtra() {
+        return extra;
+    }
+
+    public void setExtra(int extra) {
+        this.extra = extra;
     }
 
     public Long getCarId() {
@@ -170,6 +194,14 @@ public class Order {
         this.credit = credit;
     }
 
+    public List<Description> getDescription() {
+        return description;
+    }
+
+    public void setDescription(List<Description> description) {
+        this.description = description;
+    }
+
     @Override
     public String toString() {
         return "Order{" +
@@ -180,8 +212,10 @@ public class Order {
                 ", inheritanceTax=" + inheritanceTax +
                 ", thereIsCountInCar=" + thereIsCountInCar +
                 ", downPayment=" + downPayment +
+                ", extra=" + extra +
                 ", selectedTypeOfBuying='" + selectedTypeOfBuying + '\'' +
                 ", carId=" + carId +
+                ", description=" + description +
                 ", users=" + users +
                 ", company=" + company +
                 ", countInCarSupplement=" + countInCarSupplement +

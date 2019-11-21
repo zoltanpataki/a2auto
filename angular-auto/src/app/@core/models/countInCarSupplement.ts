@@ -6,15 +6,13 @@ export class CountInCarSupplement {
   previousLoan: number;
   previousBank: string;
   loanType: string;
-  description: Description[];
 
 
-  constructor(countInPrice: number, previousLoan: number, previousBank: string, loanType: string, description: Description[]) {
+  constructor(countInPrice: number, previousLoan: number, previousBank: string, loanType: string) {
     this.countInPrice = countInPrice;
     this.previousLoan = previousLoan;
     this.previousBank = previousBank;
     this.loanType = loanType;
-    this.description = description;
   }
 
 }

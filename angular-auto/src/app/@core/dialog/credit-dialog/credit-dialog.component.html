@@ -4,17 +4,45 @@
     <div>
       <div class="inputContainer">
         <div class="leftSide">
-          <div *ngFor="let item of fieldsString | keyvalue:keepOriginalOrder; trackBy: trackByFn">
+          <div>
             <mat-form-field class="example-full-width">
               <label>
-                <input matInput placeholder="{{item.value}}" ngModel name="{{item.key}}">
+                <input matInput placeholder="Bank" ngModel="{{credit.bank}}" name="bank">
               </label>
             </mat-form-field>
           </div>
-          <div *ngFor="let item of fieldsNumber | keyvalue:keepOriginalOrder; trackBy: trackByFn">
+          <div>
             <mat-form-field class="example-full-width">
               <label>
-                <input matInput type="number" placeholder="{{item.value}}" ngModel name="{{item.key}}">
+                <input matInput placeholder="Hitel típus" ngModel="{{credit.creditType}}" name="creditType">
+              </label>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field class="example-full-width">
+              <label>
+                <input matInput type="number" placeholder="Kezdő befizetés" ngModel="{{credit.initialPayment}}" name="initialPayment">
+              </label>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field class="example-full-width">
+              <label>
+                <input matInput type="number" placeholder="Hitel összege" ngModel="{{credit.creditAmount}}" name="creditAmount">
+              </label>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field class="example-full-width">
+              <label>
+                <input matInput type="number" placeholder="Futamidő" ngModel="{{credit.creditLength}}" name="creditLength">
+              </label>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field class="example-full-width">
+              <label>
+                <input matInput type="number" placeholder="Törlesztőrészlet/hó." ngModel="{{credit.repayment}}" name="repayment">
               </label>
             </mat-form-field>
           </div>

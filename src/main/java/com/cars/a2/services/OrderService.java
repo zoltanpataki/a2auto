@@ -26,6 +26,7 @@ public class OrderService {
     public ResponseEntity<Object> saveNewOrder(Order order) {
         try {
             orderRepository.save(order);
+
             return new ResponseEntity<>(order, HttpStatus.OK);
         } catch (Exception e) {
             logger.info(e.getMessage());

@@ -119,7 +119,7 @@
           </div>
           <div class="userFilterRightSide">
             <div>
-              <table *ngIf="userSearchResult.data.length > 0" mat-table [dataSource]="userSearchResult" class="mat-elevation-z8">
+              <table *ngIf="userSearchResult.data && userSearchResult.data.length > 0" mat-table [dataSource]="userSearchResult" class="mat-elevation-z8">
 
                 <!-- Name Column -->
                 <ng-container matColumnDef="name">
@@ -333,12 +333,19 @@
       </div>
       <div *ngIf="orderProgress > 4">
         <mat-divider></mat-divider>
-        <h5>Foglaló</h5>
+        <h5>Foglaló + extra</h5>
         <form [formGroup]="downPaymentForm" (submit)="saveDownPaymentAmount(downPaymentForm, car)">
           <div>
             <mat-form-field class="example-full-width">
               <label>
-                <input matInput type="number" placeholder="Összeg" formControlName="downPayment" [(ngModel)]="downPayment">
+                <input matInput type="number" placeholder="Foglaló összege" formControlName="downPayment" [(ngModel)]="downPayment">
+              </label>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field class="example-full-width">
+              <label>
+                <input matInput type="number" placeholder="Extrák összege" formControlName="extra" [(ngModel)]="extra">
               </label>
             </mat-form-field>
           </div>

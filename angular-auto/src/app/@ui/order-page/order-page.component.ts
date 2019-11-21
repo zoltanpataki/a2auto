@@ -24,6 +24,7 @@ export class OrderPageComponent implements OnInit {
   private indexOfPickedCompany: number;
   private pickedUser: Users;
   private pickedCompany: Company;
+  private remainingPrice: number;
 
 
   constructor() { }
@@ -67,6 +68,17 @@ export class OrderPageComponent implements OnInit {
       this.order = JSON.parse(sessionStorage.getItem('order'));
       this.orderedCar = JSON.parse(sessionStorage.getItem('orderedCar'));
     }
+    this.remainingPrice = this.countRemainingPrice(this.order, this.orderedCar);
+  }
+
+  private countRemainingPrice(order: Order, car: Car): number {
+    const inheritance = order.inheritanceTax ? order.inheritanceTax : 0;
+    const downPayment = order.downPayment ? order.downPayment : 0;
+    const extra = order.extra ? order.extra : 0;
+    const carPrice = car.price;
+    const countInCarPrice = order.countInCar ? order.countInCar.purchasingPrice : 0;
+    const credit = order.credit ? order.credit.creditAmount : 0;
+    return (carPrice + inheritance + extra) - (downPayment + countInCarPrice + credit);
   }
 
   public captureScreen() {
@@ -82,7 +94,7 @@ export class OrderPageComponent implements OnInit {
       let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF
       var position = 0;
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
-      pdf.save('GDPR.pdf'); // Generated PDF
+      pdf.save('order.pdf'); // Generated PDF
     });
   }
 

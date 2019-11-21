@@ -105,7 +105,8 @@
           <p *ngIf="!order.inheritanceTax" class="texts">Átírás/Ügyintézés:</p>
         </div>
         <div class="border">
-          <p class="texts">Kiegészítők összege:</p>
+          <p *ngIf="order.extra" class="texts">Kiegészítők összege: {{order.extra}}</p>
+          <p *ngIf="!order.extra" class="texts">Kiegészítők összege:</p>
         </div>
         <div class="silverCenter border">
           <p class="sectionLiner">Fizetve:</p>
@@ -119,7 +120,8 @@
           <p *ngIf="!order.countInCarSupplement || order.countInCarSupplement && !order.countInCarSupplement.countInPrice" class="texts">Előleg:</p>
         </div>
         <div class="border">
-          <p class="subSectionLiner">Hitelösszeg:</p>
+          <p *ngIf="order.credit && order.credit.creditAmount" class="subSectionLiner">Hitelösszeg: {{order.credit.creditAmount}}</p>
+          <p *ngIf="!order.credit || order.credit && !order.credit.creditAmount" class="subSectionLiner">Hitelösszeg:</p>
         </div>
         <div class="silverCenter border">
           <p class="sectionLiner">További befizetések:</p>
@@ -128,7 +130,7 @@
           <p class="texts">&nbsp;</p>
         </div>
         <div class="border">
-          <p class="subSectionLiner">Maradék befizetendő:</p>
+          <p class="subSectionLiner">Maradék befizetendő: {{remainingPrice}}</p>
         </div>
       </div>
       <div class="rightGrid">
@@ -237,8 +239,8 @@
         <div class="silverCenter border">
           <p class="sectionLiner">Kiegészítések:</p>
         </div>
-        <div *ngIf="order.countInCarSupplement && order.countInCarSupplement.description" class="extraCarInfo">
-          <p class="texts" *ngFor="let description of order.countInCarSupplement.description">- {{description.description}}</p>
+        <div *ngIf="order.description" class="extraCarInfo">
+          <p class="texts" *ngFor="let description of order.description">- {{description.description}}</p>
         </div>
       </div>
     </div>
@@ -252,5 +254,5 @@
   </div>
 </div>
 <div>
-  <button (click)="captureScreen()" mat-button>PDF Konvertálás</button>
+  <button (click)="captureScreen()" mat-button>PDF Generálás</button>
 </div>

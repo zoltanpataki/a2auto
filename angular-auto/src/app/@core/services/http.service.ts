@@ -103,6 +103,16 @@ export class HttpService {
     })
   }
 
+  public getDescriptionsForCountInCarSupplement(countInCarSupplementId: number) {
+    const urlPostFix = 'getDescriptions';
+    const params = new HttpParams()
+      .set('countInCarSupplementId', countInCarSupplementId.toString());
+    return this.http.get(this.carServerUrl + urlPostFix, {
+      headers: httpOptions.headers,
+      params: params
+    })
+  }
+
   public updateOrder(order: Order) {
     const urlPostFix = 'updateOrder';
     return this.http.put(this.carServerUrl + urlPostFix, order, httpOptions);
