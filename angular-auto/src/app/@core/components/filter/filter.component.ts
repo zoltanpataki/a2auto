@@ -219,6 +219,7 @@ export class FilterComponent implements OnInit {
   }
 
   private setDataToNull() {
+    this.clickedCarIndex = null;
     this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = null;
     this.previousOrNew = null;
     this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate = null;
@@ -457,15 +458,20 @@ export class FilterComponent implements OnInit {
 
     carTimeInfoDialogConfig.data = {
       car: car,
+      clickedCarIndex: this.clickedCarIndex,
+      selectedCars: this.selectedCars
     };
 
     const dialogRef = this.dialog.open(CarTimeInfoComponent, carTimeInfoDialogConfig);
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      this.carOfTransaction = result;
-      console.log(this.carOfTransaction);
-      // this.updateCarOfTransaction(this.carOfTransaction);
+      if (result != null) {
+        // this.carOfTransaction = result;
+        console.log(this.carOfTransaction);
+        this.updateCarOfTransaction(this.carOfTransaction);
+        this.prepareNavigationToOrderPageOrSellingPage(this.newOrder, this.carOfTransaction, '/sellingPage');
+      }
     });
   }
 
@@ -876,11 +882,9 @@ export class FilterComponent implements OnInit {
         this.countInCar,
         car.id,
         this.descriptionList);
-      console.log(this.newOrder);
 
       this.httpService.saveOrder(this.newOrder).subscribe(order => {
-        console.log(order);
-        this.prepareNavigationToOrderPage(order, car);
+        this.prepareNavigationToOrderPageOrSellingPage(order, car, '/orderPage');
       });
     } else {
       this.newOrder.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready;
@@ -900,15 +904,15 @@ export class FilterComponent implements OnInit {
       this.newOrder.description = this.descriptionList;
       this.httpService.updateOrder(this.newOrder).subscribe(order => {
         console.log(order);
-        this.prepareNavigationToOrderPage(<Order> order, car);
+        this.prepareNavigationToOrderPageOrSellingPage(<Order> order, car, '/orderPage');
       });
     }
   }
 
-  private prepareNavigationToOrderPage(order: Order, car: Car) {
+  private prepareNavigationToOrderPageOrSellingPage(order: Order, car: Car, orderOrSelling: string) {
     sessionStorage.setItem('order', JSON.stringify(this.newOrder));
     sessionStorage.setItem('orderedCar', JSON.stringify(car));
-    this.router.navigate(['/orderPage'], {state: {data: {
+    this.router.navigate([orderOrSelling], {state: {data: {
           order: order,
           orderedCar: car,
           clickedCarIndex: this.clickedCarIndex,

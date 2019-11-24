@@ -2,6 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import * as jspdf from 'jspdf';
 
 import html2canvas from 'html2canvas';
+import {Car} from "../../@core/models/car";
+import {Order} from "../../@core/models/order";
+import {Users} from "../../@core/models/users";
+import {Company} from "../../@core/models/company";
+import {UtilService} from "../../@core/services/util.service";
 
 @Component({
   selector: 'app-selling-page',
@@ -10,9 +15,63 @@ import html2canvas from 'html2canvas';
 })
 export class SellingPageComponent implements OnInit {
 
-  constructor() { }
+  private orderedCar: Car;
+  private order: Order;
+  private today: Date;
+  private userSearchResult: Users[];
+  private companySearchResult: Company[];
+  private indexOfPickedUser: number;
+  private indexOfPickedCompany: number;
+  private pickedUser: Users;
+  private pickedCompany: Company;
+  private carHandoverTime = {};
+
+  constructor(private utilService: UtilService) { }
 
   ngOnInit() {
+    if (sessionStorage.getItem('order') != null) {
+      this.order = JSON.parse(sessionStorage.getItem('order'));
+    }
+    if (sessionStorage.getItem('orderedCar') != null) {
+      this.orderedCar = JSON.parse(sessionStorage.getItem('orderedCar'));
+      this.setCarHandoverTime(this.orderedCar.carHandover);
+    }
+    this.today = new Date();
+    if (history.state.data) {
+      this.order = history.state.data.order;
+      this.orderedCar = history.state.data.orderedCar;
+      this.userSearchResult = history.state.data.userSearchResult;
+      this.companySearchResult = history.state.data.companySearchResult;
+      this.indexOfPickedUser = history.state.data.indexOfPickedUser;
+      this.indexOfPickedCompany = history.state.data.indexOfPickedCompany;
+      this.pickedUser = history.state.data.pickedUser;
+      this.pickedCompany = history.state.data.pickedCompany;
+      sessionStorage.setItem('clickedCarIndex', history.state.data.clickedCarIndex);
+      sessionStorage.setItem('orderedCar', JSON.stringify(this.orderedCar));
+      sessionStorage.setItem('order', JSON.stringify(this.order));
+      sessionStorage.setItem('userSearchData', JSON.stringify(this.userSearchResult));
+      sessionStorage.setItem('companySearchData', JSON.stringify(this.companySearchResult));
+      if (this.indexOfPickedUser != null) {
+        sessionStorage.setItem('indexOfPickedUser', JSON.stringify(this.indexOfPickedUser));
+      }
+      if (this.indexOfPickedCompany != null) {
+        sessionStorage.setItem('indexOfPickedCompany', JSON.stringify(this.indexOfPickedCompany));
+      }
+      if (this.pickedUser != null) {
+        sessionStorage.setItem('pickedUser', JSON.stringify(this.pickedUser));
+      }
+      if (this.pickedCompany != null) {
+        sessionStorage.setItem('pickedCompany', JSON.stringify(this.pickedCompany));
+      }
+      this.setCarHandoverTime(this.orderedCar.carHandover);
+    } else {
+      this.order = JSON.parse(sessionStorage.getItem('order'));
+      this.orderedCar = JSON.parse(sessionStorage.getItem('orderedCar'));
+    }
+
+    console.log(this.utilService.a2Company);
+    console.log(this.order);
+    console.log(this.orderedCar);
   }
 
   public captureScreen() {
@@ -30,6 +89,12 @@ export class SellingPageComponent implements OnInit {
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
       pdf.save('selling.pdf'); // Generated PDF
     });
+  }
+
+  private setCarHandoverTime(dateString: any) {
+    const carHandoverDate: Date = new Date(dateString);
+    this.carHandoverTime['hour'] = carHandoverDate.getHours();
+    this.carHandoverTime['minute'] = carHandoverDate.getMinutes();
   }
 
 }

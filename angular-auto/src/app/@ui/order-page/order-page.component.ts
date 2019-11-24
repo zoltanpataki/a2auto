@@ -34,7 +34,7 @@ export class OrderPageComponent implements OnInit {
       this.order = JSON.parse(sessionStorage.getItem('order'));
     }
     if (sessionStorage.getItem('orderedCar') != null) {
-      this.order = JSON.parse(sessionStorage.getItem('orderedCar'));
+      this.orderedCar = JSON.parse(sessionStorage.getItem('orderedCar'));
     }
     this.today = new Date();
     if (history.state.data) {

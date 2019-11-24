@@ -13,12 +13,19 @@ export class CarTimeInfoComponent implements OnInit {
   public fields1 = {dateOfLeaving: 'Eladás dátuma', documentsHandover: 'Dokumentumok átadásának időpontja', dateOfContract : 'Szerződés szerinti teljesítés időpontja'};
   public keepOriginalOrder = (a, b) => a.key;
   public carHandoverTime = {};
+  private clickedCarIndex: number;
+  private selectedCars: Car[];
 
   constructor(private dialogRef: MatDialogRef<CarTimeInfoComponent>,
-              @Inject(MAT_DIALOG_DATA) public data) {}
+              @Inject(MAT_DIALOG_DATA) public data,) {}
 
   ngOnInit() {
     this.carData = this.data.car;
+    this.clickedCarIndex = this.data.clickedCarIndex;
+    this.selectedCars = this.data.selectedCars;
+    const carHandoverDate: Date = new Date(this.carData.carHandover);
+    this.carHandoverTime['hour'] = carHandoverDate.getHours();
+    this.carHandoverTime['minute'] = carHandoverDate.getMinutes();
     console.log(this.data);
   }
 
@@ -27,9 +34,10 @@ export class CarTimeInfoComponent implements OnInit {
   }
 
   private saveCarData(form: any) {
-    console.log(form.value);
-    console.log(this.carHandoverTime);
-
+    const carHandover = new Date(this.carData.carHandover);
+    carHandover.setHours(this.carHandoverTime['hour']);
+    carHandover.setMinutes(this.carHandoverTime['minute']);
+    this.carData.carHandover = carHandover;
     this.closeWithData();
   }
 
@@ -43,17 +51,15 @@ export class CarTimeInfoComponent implements OnInit {
 
   private changeAllDateFieldIfEmptyElseOnlyThisOne(dateString: string, item: string) {
     const date = new Date(dateString);
-    console.log(date.getFullYear() + '-' + ("0" + (date.getMonth() + 1)).slice(-2) + '-' + ("0" + date.getDate()).slice(-2));
-    console.log(item);
-    if (this.carData.carHandover != null && this.carData.dueOfContract != null) {
-      this.carData[item] = date;
+    if (this.carData.dateOfContract != null && this.carData.dueOfContract != null) {
+      this.carData[item] = new Date(date);
     } else {
-      this.carData.carHandover = date;
-      this.carData.dueOfContract = date;
-      this.carData.dateOfArrival = date;
-      this.carData.dateOfLeaving = date;
-      this.carData.documentsHandover = date;
-      this.carData.dateOfContract = date;
+      this.carData.carHandover = new Date(date);
+      this.carData.dueOfContract = new Date(date);
+      this.carData.dateOfArrival = new Date(date);
+      this.carData.dateOfLeaving = new Date(date);
+      this.carData.documentsHandover = new Date(date);
+      this.carData.dateOfContract = new Date(date);
     }
   }
 
