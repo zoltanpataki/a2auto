@@ -25,6 +25,11 @@ export class SellingPageComponent implements OnInit {
   private pickedUser: Users;
   private pickedCompany: Company;
   private carHandoverTime = {};
+  private switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer: boolean;
+  private sellerCompany: Company;
+  private buyerCompany: Company;
+  private sellerIndividual: Users;
+  private buyerIndividual: Users;
 
   constructor(private utilService: UtilService) { }
 
@@ -36,6 +41,9 @@ export class SellingPageComponent implements OnInit {
       this.orderedCar = JSON.parse(sessionStorage.getItem('orderedCar'));
       this.setCarHandoverTime(this.orderedCar.carHandover);
     }
+    if (sessionStorage.getItem('switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer') != null) {
+      this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer = JSON.parse(sessionStorage.getItem('switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer'));
+    }
     this.today = new Date();
     if (history.state.data) {
       this.order = history.state.data.order;
@@ -46,6 +54,7 @@ export class SellingPageComponent implements OnInit {
       this.indexOfPickedCompany = history.state.data.indexOfPickedCompany;
       this.pickedUser = history.state.data.pickedUser;
       this.pickedCompany = history.state.data.pickedCompany;
+      this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer = history.state.data.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer;
       sessionStorage.setItem('clickedCarIndex', history.state.data.clickedCarIndex);
       sessionStorage.setItem('orderedCar', JSON.stringify(this.orderedCar));
       sessionStorage.setItem('order', JSON.stringify(this.order));
@@ -63,15 +72,15 @@ export class SellingPageComponent implements OnInit {
       if (this.pickedCompany != null) {
         sessionStorage.setItem('pickedCompany', JSON.stringify(this.pickedCompany));
       }
+      if (this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer != null) {
+        sessionStorage.setItem('switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer', JSON.stringify(this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer));
+      }
       this.setCarHandoverTime(this.orderedCar.carHandover);
     } else {
       this.order = JSON.parse(sessionStorage.getItem('order'));
       this.orderedCar = JSON.parse(sessionStorage.getItem('orderedCar'));
     }
-
-    console.log(this.utilService.a2Company);
-    console.log(this.order);
-    console.log(this.orderedCar);
+    this.setUserData(this.order);
   }
 
   public captureScreen() {
@@ -95,6 +104,24 @@ export class SellingPageComponent implements OnInit {
     const carHandoverDate: Date = new Date(dateString);
     this.carHandoverTime['hour'] = carHandoverDate.getHours();
     this.carHandoverTime['minute'] = carHandoverDate.getMinutes();
+  }
+
+  private setUserData(order: Order) {
+    if (this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer) {
+      this.sellerCompany = this.utilService.a2Company;
+      if (order.users != null) {
+        this.buyerIndividual = order.users;
+      } else if (order.company != null) {
+        this.buyerCompany = order.company;
+      }
+    } else {
+      this.buyerCompany = this.utilService.a2Company;
+      if (order.users != null) {
+        this.sellerIndividual = order.users;
+      } else if (order.company != null) {
+        this.sellerCompany = order.company;
+      }
+    }
   }
 
 }

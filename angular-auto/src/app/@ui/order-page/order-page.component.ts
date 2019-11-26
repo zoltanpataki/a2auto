@@ -69,6 +69,7 @@ export class OrderPageComponent implements OnInit {
       this.orderedCar = JSON.parse(sessionStorage.getItem('orderedCar'));
     }
     this.remainingPrice = this.countRemainingPrice(this.order, this.orderedCar);
+    console.log(this.order)
   }
 
   private countRemainingPrice(order: Order, car: Car): number {

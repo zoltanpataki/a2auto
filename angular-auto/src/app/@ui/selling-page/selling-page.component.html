@@ -50,29 +50,39 @@
         <col width="20%">
         <col width="40%">
         <tr>
-          <td></td>
+          <td *ngIf="sellerIndividual && sellerIndividual.fullName">{{sellerIndividual.fullName}}</td>
+          <td *ngIf="!sellerIndividual || sellerIndividual && !sellerIndividual.fullName"></td>
           <td class="middleColumn">Családi és utóneve</td>
-          <td></td>
+          <td *ngIf="buyerIndividual && buyerIndividual.fullName">{{buyerIndividual.fullName}}</td>
+          <td *ngIf="!buyerIndividual || buyerIndividual && !buyerIndividual.fullName"></td>
         </tr>
         <tr>
-          <td></td>
+          <td *ngIf="sellerIndividual && sellerIndividual.birthPlace && sellerIndividual.birthDate">{{sellerIndividual.birthPlace}}&#160;{{sellerIndividual.birthDate | date: "yyyy-MM-dd"}}</td>
+          <td *ngIf="!sellerIndividual || sellerIndividual && !sellerIndividual.birthPlace || sellerIndividual && !sellerIndividual.birthDate"></td>
           <td class="middleColumn">Születési helye, ideje</td>
-          <td></td>
+          <td *ngIf="buyerIndividual && buyerIndividual.birthPlace && buyerIndividual.birthDate">{{buyerIndividual.birthPlace}}&#160;{{buyerIndividual.birthDate | date: "yyyy-MM-dd"}}</td>
+          <td *ngIf="!buyerIndividual || buyerIndividual && !buyerIndividual.birthPlace || buyerIndividual && !buyerIndividual.birthDate"></td>
         </tr>
         <tr>
-          <td></td>
+          <td *ngIf="sellerIndividual && sellerIndividual.nameOfMother">{{sellerIndividual.nameOfMother}}</td>
+          <td *ngIf="!sellerIndividual || sellerIndividual && !sellerIndividual.nameOfMother"></td>
           <td class="middleColumn">Anyja születési családi és utóneve</td>
-          <td></td>
+          <td *ngIf="buyerIndividual && buyerIndividual.nameOfMother">{{buyerIndividual.nameOfMother}}</td>
+          <td *ngIf="!buyerIndividual || buyerIndividual && !buyerIndividual.nameOfMother"></td>
         </tr>
         <tr>
-          <td></td>
+          <td *ngIf="sellerIndividual && sellerIndividual.idCardNumber">{{sellerIndividual.idCardNumber}}</td>
+          <td *ngIf="!sellerIndividual || sellerIndividual && !sellerIndividual.idCardNumber"></td>
           <td class="middleColumn">Személyazonosságát igazoló okirat száma és típusa</td>
-          <td></td>
+          <td *ngIf="buyerIndividual && buyerIndividual.idCardNumber">{{buyerIndividual.idCardNumber}}</td>
+          <td *ngIf="!buyerIndividual || buyerIndividual && !buyerIndividual.idCardNumber"></td>
         </tr>
         <tr>
-          <td></td>
+          <td *ngIf="sellerIndividual && sellerIndividual.address">{{sellerIndividual.address}}</td>
+          <td *ngIf="!sellerIndividual || sellerIndividual && !sellerIndividual.address"></td>
           <td class="middleColumn">Lakcíme</td>
-          <td></td>
+          <td *ngIf="buyerIndividual && buyerIndividual.address">{{buyerIndividual.address}}</td>
+          <td *ngIf="!buyerIndividual || buyerIndividual && !buyerIndividual.address"></td>
         </tr>
         <tr>
           <td></td>
@@ -102,24 +112,32 @@
         <col width="20%">
         <col width="40%">
         <tr>
-          <td></td>
+          <td *ngIf="sellerCompany && sellerCompany.name">{{sellerCompany.name}}</td>
+          <td *ngIf="!sellerCompany || sellerCompany && !sellerCompany.name"></td>
           <td class="middleColumn">Neve</td>
-          <td></td>
+          <td *ngIf="buyerCompany && buyerCompany.name">{{buyerCompany.name}}</td>
+          <td *ngIf="!buyerCompany || buyerCompany && !buyerCompany.name"></td>
         </tr>
         <tr>
-          <td></td>
+          <td *ngIf="sellerCompany && sellerCompany.address.zipcode && sellerCompany.address.city && sellerCompany.address.address">{{sellerCompany.address.zipcode}}&#160;{{sellerCompany.address.city}}&#160;{{sellerCompany.address.address}}</td>
+          <td *ngIf="!sellerCompany || sellerCompany && !sellerCompany.address.zipcode || sellerCompany && !sellerCompany.address.city || sellerCompany && !sellerCompany.address.address"></td>
           <td class="middleColumn">Székhelye / telephelye címe</td>
-          <td></td>
+          <td *ngIf="buyerCompany && buyerCompany.address.zipcode && buyerCompany.address.city && buyerCompany.address.address">{{buyerCompany.address.zipcode}}&#160;{{buyerCompany.address.city}}&#160;{{buyerCompany.address.address}}</td>
+          <td *ngIf="!buyerCompany || buyerCompany && !buyerCompany.address.zipcode || buyerCompany && !buyerCompany.address.city || buyerCompany && !buyerCompany.address.address"></td>
         </tr>
         <tr>
-          <td></td>
+          <td *ngIf="sellerCompany && sellerCompany.companyRegistrationNumber">{{sellerCompany.companyRegistrationNumber}}</td>
+          <td *ngIf="!sellerCompany || sellerCompany && !sellerCompany.companyRegistrationNumber"></td>
           <td class="middleColumn">Cégjegyzékszám / nyilvántart. szám.</td>
-          <td></td>
+          <td *ngIf="buyerCompany && buyerCompany.companyRegistrationNumber">{{buyerCompany.companyRegistrationNumber}}</td>
+          <td *ngIf="!buyerCompany || buyerCompany && !buyerCompany.companyRegistrationNumber"></td>
         </tr>
         <tr>
-          <td></td>
+          <td *ngIf="sellerCompany && sellerCompany.representation">{{sellerCompany.representation}}</td>
+          <td *ngIf="!sellerCompany || sellerCompany && !sellerCompany.representation"></td>
           <td class="middleColumn">Képviselőjének családi és utóneve</td>
-          <td></td>
+          <td *ngIf="buyerCompany && buyerCompany.representation">{{buyerCompany.representation}}</td>
+          <td *ngIf="!buyerCompany || buyerCompany && !buyerCompany.representation"></td>
         </tr>
       </table>
     </div>

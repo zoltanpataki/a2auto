@@ -412,7 +412,10 @@
             <button mat-button type="submit" (click)="navigateToOrderPage(car)">Megrendelőlap</button>
           </div>
           <div>
-            <button mat-button type="submit" (click)="gatherSellingPageInfo(car)">Tovább az adás-vételi szerződéshez szükséges időpontokhoz</button>
+            <button mat-button type="submit" (click)="gatherSellingPageInfo(car, 'sell')">Tovább az eladási időpontokhoz</button>
+          </div>
+          <div *ngIf="countInCar">
+            <button mat-button type="submit" (click)="gatherSellingPageInfo(countInCar, 'buy')">Tovább a vételi időpontokhoz</button>
           </div>
         </div>
       </div>
