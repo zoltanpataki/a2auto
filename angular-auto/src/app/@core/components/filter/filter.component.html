@@ -32,9 +32,10 @@
   <mat-accordion>
     <mat-card>
       <div class="selectedCarHeaders" fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
-        <mat-panel-title fxFlex="25" *ngFor="let header of selectedCarHeader; trackBy: trackByFn">
+        <mat-panel-title fxFlex="22" *ngFor="let header of selectedCarHeader; trackBy: trackByFn">
           <strong>{{header}}</strong>
         </mat-panel-title>
+        <mat-panel-title fxFlex="9"></mat-panel-title>
         <mat-panel-title fxFlex="9"></mat-panel-title>
         <mat-panel-title fxFlex="8"></mat-panel-title>
         <mat-panel-title fxFlex="8"></mat-panel-title>
@@ -43,14 +44,17 @@
     <mat-expansion-panel [disabled]="true" #mep="matExpansionPanel" [expanded]="i == clickedCarIndex" hideToggle *ngFor="let car of selectedCars; index as i; trackBy: trackByFn">
       <mat-expansion-panel-header>
         <div fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
-          <mat-panel-title fxFlex="25">
+          <mat-panel-title fxFlex="22">
             {{car.type}}
           </mat-panel-title>
-          <mat-panel-title fxFlex="25">
+          <mat-panel-title fxFlex="22">
             {{car.name}}
           </mat-panel-title>
-          <mat-panel-title fxFlex="25">
+          <mat-panel-title fxFlex="22">
             {{car.plateNumber}}
+          </mat-panel-title>
+          <mat-panel-title class="buyButton" fxFlex="9">
+            <i class="material-icons" (click)="navigateToBlankOrderPage(car)">spellcheck</i>
           </mat-panel-title>
           <mat-panel-title class="buyButton" fxFlex="9">
             <i class="material-icons edit" (click)="openUpdateModal(car)">edit</i>
@@ -374,19 +378,16 @@
       </div>
       <div *ngIf="orderProgress > 6 && clickedCarIndex == i">
         <mat-divider></mat-divider>
-        <h5>Értékesítő</h5>
-        <form [formGroup]="salesmanForm" (submit)="saveSalesman(salesmanForm, car)">
           <div>
             <mat-form-field class="example-full-width">
-              <label>
-                <input matInput placeholder="Név" formControlName="salesman" [(ngModel)]="salesman">
-              </label>
+              <mat-label>Értékesítő</mat-label>
+              <mat-select [(ngModel)]="salesman" (ngModelChange)="saveSalesman($event, car)" placeholder="Név">
+                <mat-option *ngFor="let salesman of carSalesmen; trackBy: trackByFn" [value]="salesman">
+                  {{salesman}}
+                </mat-option>
+              </mat-select>
             </mat-form-field>
           </div>
-          <div>
-            <button *ngIf="!newOrder" class="saveButton" mat-button type="submit">Tovább</button>
-          </div>
-        </form>
       </div>
       <div *ngIf="orderProgress > 7 && clickedCarIndex == i">
         <mat-divider></mat-divider>

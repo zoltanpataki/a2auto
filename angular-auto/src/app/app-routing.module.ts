@@ -8,6 +8,7 @@ import {CompanyComponent} from "./@core/components/company/company.component";
 import {OrderPageComponent} from "./@ui/order-page/order-page.component";
 import {SellingPageComponent} from "./@ui/selling-page/selling-page.component";
 import {GdprPageComponent} from "./@ui/gdpr-page/gdpr-page.component";
+import {SettingsComponent} from "./@core/components/settings/settings.component";
 
 
 const routes: Routes = [
@@ -42,6 +43,10 @@ const routes: Routes = [
   {
     path: 'gdprPage',
     component: GdprPageComponent
+  },
+  {
+    path: 'settings',
+    component: SettingsComponent
   },
 ];
 

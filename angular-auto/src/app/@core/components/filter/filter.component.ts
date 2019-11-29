@@ -35,6 +35,7 @@ export class FilterComponent implements OnInit {
   private selectedCars = [];
   private selectedCarHeader = ['Márka', 'Modell', 'Rendszám'];
   public typeOfBuying = ['KÉSZPÉNZ', 'ÁTUTALÁS', 'HITEL'];
+  private carSalesmen = ['SOÓS GÁBOR', 'VINCZ ANTAL'];
   private noMatch = false;
   private selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate: boolean;
   private alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready: boolean;
@@ -851,8 +852,8 @@ export class FilterComponent implements OnInit {
     sessionStorage.setItem('countInCar', JSON.stringify(this.countInCar));
   }
 
-  private saveSalesman(form: FormGroup, car: Car) {
-    this.salesman = form.value.salesman;
+  private saveSalesman(salesman: any, car: Car) {
+    this.salesman = salesman;
     car.salesman = this.salesman;
     this.updateCarOfTransaction(car);
     this.setOrderProgressInSessionStorage(8);
@@ -952,6 +953,13 @@ export class FilterComponent implements OnInit {
   private gatherSellingPageInfo(car: Car, sellOrBuy: string) {
     this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer = sellOrBuy === 'sell';
     this.openCarTimeInfoDialog(car);
+  }
+
+  private navigateToBlankOrderPage(car: Car) {
+    this.router.navigate(['/orderPage'], {state: {blankData: {
+          orderedCar: car,
+          blankPage: true
+        }}});
   }
 
 }

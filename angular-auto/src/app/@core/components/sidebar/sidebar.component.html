@@ -2,32 +2,37 @@
   <ul>
     <li>
       <a routerLink="" [class.activated]="currentUrl == '/'">
-        <i class="material-icons">home</i>
+        <fa name="home"></fa>
       </a>
     </li>
     <li>
       <a routerLink="newCar" [class.activated]="currentUrl == '/newCar'">
-        <i class="material-icons">directions_car</i>
+        <fa name="car"></fa>
       </a>
     </li>
     <li>
       <a routerLink="newUser" [class.activated]="currentUrl == '/newUser'">
-        <i class="material-icons">airline_seat_recline_extra</i>
+        <fa name="user"></fa>
       </a>
     </li>
     <li>
       <a routerLink="newCompany" [class.activated]="currentUrl == '/newCompany'">
-        <i class="material-icons">business</i>
+        <fa name="industry"></fa>
       </a>
     </li>
     <li>
       <a routerLink="filter" [class.activated]="currentUrl == '/filter'">
-        <i class="material-icons">search</i>
+        <fa name="search"></fa>
+      </a>
+    </li>
+    <li>
+      <a routerLink="settings" [class.activated]="currentUrl == '/settings'">
+        <fa name="cog" animation="spin"></fa>
       </a>
     </li>
     <li>
       <a routerLink="gdprPage" [class.activated]="currentUrl == '/gdprPage'">
-        <i class="material-icons">lock_open</i>
+        <fa name="user_lock"></fa>
       </a>
     </li>
   </ul>

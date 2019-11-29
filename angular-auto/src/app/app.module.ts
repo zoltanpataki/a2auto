@@ -35,6 +35,9 @@ import { SellingPageComponent } from './@ui/selling-page/selling-page.component'
 import { GdprPageComponent } from './@ui/gdpr-page/gdpr-page.component';
 import {FlexModule} from "@angular/flex-layout";
 import { CarTimeInfoComponent } from './@core/dialog/car-time-info/car-time-info.component';
+import { SettingsComponent } from './@core/components/settings/settings.component';
+import {AngularFontAwesomeModule} from "angular-font-awesome";
+import { SalesmanComponent } from './@core/dialog/salesman/salesman.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +56,8 @@ import { CarTimeInfoComponent } from './@core/dialog/car-time-info/car-time-info
     SellingPageComponent,
     GdprPageComponent,
     CarTimeInfoComponent,
+    SettingsComponent,
+    SalesmanComponent,
   ],
   imports: [
     BrowserModule,
@@ -76,9 +81,10 @@ import { CarTimeInfoComponent } from './@core/dialog/car-time-info/car-time-info
     MatDividerModule,
     MatTableModule,
     FlexModule,
+    AngularFontAwesomeModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [DialogComponent, WarningDialogComponent, CreditDialogComponent, CarTimeInfoComponent]
+  entryComponents: [DialogComponent, WarningDialogComponent, CreditDialogComponent, CarTimeInfoComponent, SalesmanComponent]
 })
 export class AppModule { }

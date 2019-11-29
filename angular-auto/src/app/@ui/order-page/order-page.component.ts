@@ -25,6 +25,7 @@ export class OrderPageComponent implements OnInit {
   private pickedUser: Users;
   private pickedCompany: Company;
   private remainingPrice: number;
+  private blankPage: boolean;
 
 
   constructor() { }
@@ -35,6 +36,9 @@ export class OrderPageComponent implements OnInit {
     }
     if (sessionStorage.getItem('orderedCar') != null) {
       this.orderedCar = JSON.parse(sessionStorage.getItem('orderedCar'));
+    }
+    if (sessionStorage.getItem('blankPage') != null) {
+      this.blankPage = JSON.parse(sessionStorage.getItem('blankPage'));
     }
     this.today = new Date();
     if (history.state.data) {
@@ -64,12 +68,18 @@ export class OrderPageComponent implements OnInit {
         sessionStorage.setItem('pickedCompany', JSON.stringify(this.pickedCompany));
       }
 
+    } else if (history.state.blankData) {
+      this.orderedCar = history.state.blankData.orderedCar;
+      sessionStorage.setItem('orderedCar', JSON.stringify(this.orderedCar));
+      this.blankPage = history.state.blankData.blankPage;
+      sessionStorage.setItem('blankPage', this.blankPage.toString());
     } else {
       this.order = JSON.parse(sessionStorage.getItem('order'));
       this.orderedCar = JSON.parse(sessionStorage.getItem('orderedCar'));
     }
-    this.remainingPrice = this.countRemainingPrice(this.order, this.orderedCar);
-    console.log(this.order)
+    if (this.order && this.orderedCar) {
+      this.remainingPrice = this.countRemainingPrice(this.order, this.orderedCar);
+    }
   }
 
   private countRemainingPrice(order: Order, car: Car): number {

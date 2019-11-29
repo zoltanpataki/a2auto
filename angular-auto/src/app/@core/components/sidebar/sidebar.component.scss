@@ -14,6 +14,7 @@ nav {
         color: #fff;
         padding: 20px;
         display: block;
+        text-align: center;
       }
       a:hover {
         background-color: deeppink;
@@ -21,6 +22,10 @@ nav {
 
       .activated {
         background-color: deeppink;
+      }
+
+      fa {
+        font-size: 170%;
       }
     }
   }
