@@ -3,6 +3,7 @@ import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Car} from "../models/car";
 import {Order} from "../models/order";
+import {Salesmen} from "../models/salesmen";
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -93,7 +94,7 @@ export class HttpService {
     })
   }
 
-  public getOrder(carId: number) {
+  public getOrder(carId: number): Observable<any> {
     const urlPostFix = 'getOrder';
     const params = new HttpParams()
       .set('carId', carId.toString());
@@ -103,7 +104,7 @@ export class HttpService {
     })
   }
 
-  public getDescriptionsForCountInCarSupplement(countInCarSupplementId: number) {
+  public getDescriptionsForCountInCarSupplement(countInCarSupplementId: number): Observable<any> {
     const urlPostFix = 'getDescriptions';
     const params = new HttpParams()
       .set('countInCarSupplementId', countInCarSupplementId.toString());
@@ -113,7 +114,7 @@ export class HttpService {
     })
   }
 
-  public updateOrder(order: Order) {
+  public updateOrder(order: Order): Observable<any> {
     const urlPostFix = 'updateOrder';
     return this.http.put(this.carServerUrl + urlPostFix, order, httpOptions);
   }
@@ -126,5 +127,23 @@ export class HttpService {
   public getChargeForInheritanceTax(kw: string, age: string): Observable<any> {
     const urlPostFix = `getChargeForInheritanceTax/${kw}/${age}`;
     return this.http.get(this.carServerUrl + urlPostFix, httpOptions);
+  }
+
+  public saveSalesman(salesman: Salesmen): Observable<any> {
+    const urlPostFix = 'saveSalesman';
+    return this.http.post(this.carServerUrl + urlPostFix, salesman, httpOptions);
+  }
+
+  public getAllSalesmen(): Observable<any> {
+    const urlPostFix = 'getAllSalesmen';
+    return this.http.get(this.carServerUrl + urlPostFix, httpOptions);
+  }
+
+  public deleteSalesman(salesmanId: any): Observable<any> {
+    const urlPostFix = `deleteSalesman/${salesmanId}`;
+    return this.http.delete(this.carServerUrl + urlPostFix, {
+      headers: httpOptions.headers,
+      responseType: 'text',
+    });
   }
 }

@@ -21,7 +21,6 @@ public class OrderControllerImpl implements OrderController {
 
     @Override
     public ResponseEntity<Object> saveOrder(Order order) {
-        System.out.println(order.toString());
         return orderService.saveNewOrder(order);
     }
 

@@ -22,3 +22,6 @@ INSERT INTO inheritance_tax VALUES (1, 'S', 450, 300, 550);
 INSERT INTO inheritance_tax VALUES (2, 'M', 550, 450, 650);
 INSERT INTO inheritance_tax VALUES (3, 'L', 650, 550, 750);
 INSERT INTO inheritance_tax VALUES (4, 'XL', 750, 650, 850);
+
+INSERT INTO salesman VALUES (1, 'SOÓS GÁBOR');
+INSERT INTO salesman VALUES (2, 'VINCZ ANTAL');
