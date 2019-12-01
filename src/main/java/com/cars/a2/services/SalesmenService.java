@@ -45,7 +45,7 @@ public class SalesmenService {
             return new ResponseEntity<>(salesmen, HttpStatus.OK);
         } catch (Exception e) {
             logger.info(e.getMessage());
-            throw new EntityFailedToSaveException("Salesman couldn't be updated!");
+            throw new UnexpectedBehaviourException("Something went wrong while fetching all salesmen!");
         }
     }
 
@@ -55,7 +55,7 @@ public class SalesmenService {
             return new ResponseEntity<>(salesman, HttpStatus.OK);
         } catch (Exception e) {
             logger.info(e.getMessage());
-            throw new UnexpectedBehaviourException("Something went wrong while fetching all salesmen!");
+            throw new EntityFailedToSaveException("Salesman couldn't be updated!");
         }
     }
 
