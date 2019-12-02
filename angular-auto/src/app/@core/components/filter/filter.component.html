@@ -382,8 +382,8 @@
             <mat-form-field class="example-full-width">
               <mat-label>Értékesítő</mat-label>
               <mat-select [(ngModel)]="salesman" (ngModelChange)="saveSalesman($event, car)" placeholder="Név">
-                <mat-option *ngFor="let salesman of carSalesmen; trackBy: trackByFn" [value]="salesman">
-                  {{salesman}}
+                <mat-option *ngFor="let salesman of utilService.salesmen; trackBy: trackByFn" [value]="salesman.name">
+                  {{salesman.name}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -413,10 +413,10 @@
             <button mat-button type="submit" (click)="navigateToOrderPage(car)">Megrendelőlap</button>
           </div>
           <div>
-            <button mat-button type="submit" (click)="gatherSellingPageInfo(car, 'sell')">Tovább az eladási időpontokhoz</button>
+            <button mat-button type="submit" (click)="gatherSellingPageInfo(car, 'sell')">Tovább az eladási adatokhoz</button>
           </div>
           <div *ngIf="countInCar">
-            <button mat-button type="submit" (click)="gatherSellingPageInfo(countInCar, 'buy')">Tovább a vételi időpontokhoz</button>
+            <button mat-button type="submit" (click)="gatherSellingPageInfo(countInCar, 'buy')">Tovább a vételi adatokhoz</button>
           </div>
         </div>
       </div>

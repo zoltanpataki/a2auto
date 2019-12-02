@@ -14,7 +14,7 @@ public class WitnessAddress {
     private String city;
     private String address;
 
-    @OneToOne(mappedBy = "witnessaddress")
+    @OneToOne(mappedBy = "witnessAddress")
     private Witness witness;
 
     public WitnessAddress() {

@@ -1,10 +1,23 @@
 table {
-  width: 20%;
   fa {
     cursor: pointer;
     font-size: 150%;
   }
   .plus {
     color: deeppink;
+    font-size: 200%;
   }
+}
+
+.salesmanTable {
+  width: 20%;
+}
+
+.witnessTable {
+  width: 30%;
+}
+
+.header {
+  margin-bottom: 2%;
+  margin-top: 5%;
 }

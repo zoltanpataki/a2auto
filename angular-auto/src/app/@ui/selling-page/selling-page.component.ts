@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import * as jspdf from 'jspdf';
 
 import html2canvas from 'html2canvas';
@@ -7,13 +7,15 @@ import {Order} from "../../@core/models/order";
 import {Users} from "../../@core/models/users";
 import {Company} from "../../@core/models/company";
 import {UtilService} from "../../@core/services/util.service";
+import {Witness} from "../../@core/models/witness";
+import {HttpService} from "../../@core/services/http.service";
 
 @Component({
   selector: 'app-selling-page',
   templateUrl: './selling-page.component.html',
   styleUrls: ['./selling-page.component.scss']
 })
-export class SellingPageComponent implements OnInit {
+export class SellingPageComponent implements OnInit{
 
   private orderedCar: Car;
   private order: Order;
@@ -30,10 +32,15 @@ export class SellingPageComponent implements OnInit {
   private buyerCompany: Company;
   private sellerIndividual: Users;
   private buyerIndividual: Users;
+  private witness1: Witness;
+  private witness2: Witness;
 
-  constructor(private utilService: UtilService) { }
+  constructor(private utilService: UtilService, ) { }
 
   ngOnInit() {
+    if (sessionStorage.getItem('A2Auto') != null) {
+      this.utilService.a2Company = JSON.parse(sessionStorage.getItem('A2Auto'));
+    }
     if (sessionStorage.getItem('order') != null) {
       this.order = JSON.parse(sessionStorage.getItem('order'));
     }
@@ -43,6 +50,12 @@ export class SellingPageComponent implements OnInit {
     }
     if (sessionStorage.getItem('switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer') != null) {
       this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer = JSON.parse(sessionStorage.getItem('switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer'));
+    }
+    if (sessionStorage.getItem('witness1') != null) {
+      this.witness1 = JSON.parse(sessionStorage.getItem('witness1'));
+    }
+    if (sessionStorage.getItem('witness2') != null) {
+      this.witness2 = JSON.parse(sessionStorage.getItem('witness2'));
     }
     this.today = new Date();
     if (history.state.data) {
@@ -55,11 +68,15 @@ export class SellingPageComponent implements OnInit {
       this.pickedUser = history.state.data.pickedUser;
       this.pickedCompany = history.state.data.pickedCompany;
       this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer = history.state.data.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer;
+      this.witness1 = history.state.data.witness1;
+      this.witness2 = history.state.data.witness2;
       sessionStorage.setItem('clickedCarIndex', history.state.data.clickedCarIndex);
       sessionStorage.setItem('orderedCar', JSON.stringify(this.orderedCar));
       sessionStorage.setItem('order', JSON.stringify(this.order));
       sessionStorage.setItem('userSearchData', JSON.stringify(this.userSearchResult));
       sessionStorage.setItem('companySearchData', JSON.stringify(this.companySearchResult));
+      sessionStorage.setItem('witness1', JSON.stringify(this.witness1));
+      sessionStorage.setItem('witness2', JSON.stringify(this.witness2));
       if (this.indexOfPickedUser != null) {
         sessionStorage.setItem('indexOfPickedUser', JSON.stringify(this.indexOfPickedUser));
       }

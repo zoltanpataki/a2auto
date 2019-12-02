@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class WitnessControllerImpl implements WitnessController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WitnessControllerImpl.class);
-    
+
     private WitnessService witnessService;
 
     public WitnessControllerImpl(WitnessService witnessService) {

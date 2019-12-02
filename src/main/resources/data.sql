@@ -25,3 +25,9 @@ INSERT INTO inheritance_tax VALUES (4, 'XL', 750, 650, 850);
 
 INSERT INTO salesman VALUES (1, 'SOÓS GÁBOR');
 INSERT INTO salesman VALUES (2, 'VINCZ ANTAL');
+
+INSERT INTO witness_address VALUES (1, 'BAB U. 2.', 'BAG', '1234');
+INSERT INTO witness_address VALUES (2, 'PERC U. 1', 'BOBA', '5678');
+
+INSERT INTO witness VALUES (1, '123456AA', 'SOÓS GÁBOR', 1);
+INSERT INTO witness VALUES (2, '987654BB', 'VINCZ ANTAL', 2);

@@ -1,0 +1,48 @@
+<mat-dialog-content>
+  <h5>Add meg az új tanút!</h5>
+  <form #witnessForm=ngForm (ngSubmit)="saveNewWitness(witnessForm)" class="witnessForm">
+    <div>
+      <div class="inputContainer">
+        <div>
+          <mat-form-field class="example-full-width">
+            <label>
+              <input matInput placeholder="Név" ngModel name="name">
+            </label>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="example-full-width">
+            <label>
+              <input matInput placeholder="Irányítószám" ngModel name="zipcode">
+            </label>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="example-full-width">
+            <label>
+              <input matInput placeholder="Város" ngModel name="city">
+            </label>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="example-full-width">
+            <label>
+              <input matInput placeholder="Cím" ngModel name="address">
+            </label>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="example-full-width">
+            <label>
+              <input matInput placeholder="Személyi igazolvány szám" ngModel name="idCardNumber">
+            </label>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="saveButton">
+      <button type="button" mat-button (click)="close()"><fa name="times" ></fa></button>
+      <button mat-button>Hozzáad</button>
+    </div>
+  </form>
+</mat-dialog-content>

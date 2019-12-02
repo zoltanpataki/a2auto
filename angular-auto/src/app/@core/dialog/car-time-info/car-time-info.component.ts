@@ -1,6 +1,8 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {Car} from "../../models/car";
+import {UtilService} from "../../services/util.service";
+import {Witness} from "../../models/witness";
 
 @Component({
   selector: 'app-car-time-info',
@@ -15,9 +17,12 @@ export class CarTimeInfoComponent implements OnInit {
   public carHandoverTime = {};
   private clickedCarIndex: number;
   private selectedCars: Car[];
+  private witness1: Witness;
+  private witness2: Witness;
 
   constructor(private dialogRef: MatDialogRef<CarTimeInfoComponent>,
-              @Inject(MAT_DIALOG_DATA) public data,) {}
+              @Inject(MAT_DIALOG_DATA) public data,
+              private utilService: UtilService,) {}
 
   ngOnInit() {
     this.carData = this.data.car;
@@ -38,11 +43,18 @@ export class CarTimeInfoComponent implements OnInit {
     carHandover.setHours(this.carHandoverTime['hour']);
     carHandover.setMinutes(this.carHandoverTime['minute']);
     this.carData.carHandover = carHandover;
+    this.witness1 = form.value.witness1;
+    this.witness2 = form.value.witness2;
     this.closeWithData();
   }
 
   closeWithData() {
-    this.dialogRef.close(this.carData);
+    const closingData = {};
+    closingData['car'] = this.carData;
+    closingData['witness1'] = this.witness1;
+    closingData['witness2'] = this.witness2;
+
+    this.dialogRef.close(closingData);
   }
 
   public trackByFn(index, item) {

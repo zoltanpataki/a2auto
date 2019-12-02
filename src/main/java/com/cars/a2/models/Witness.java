@@ -14,7 +14,7 @@ public class Witness {
     private String idCardNumber;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "witness_id", referencedColumnName = "id")
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
     private WitnessAddress witnessAddress;
 
     public Witness() {

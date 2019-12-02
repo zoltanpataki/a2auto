@@ -38,6 +38,7 @@ import { CarTimeInfoComponent } from './@core/dialog/car-time-info/car-time-info
 import { SettingsComponent } from './@core/components/settings/settings.component';
 import {AngularFontAwesomeModule} from "angular-font-awesome";
 import { SalesmanComponent } from './@core/dialog/salesman/salesman.component';
+import { WitnessDialogComponent } from './@core/dialog/witness-dialog/witness-dialog.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { SalesmanComponent } from './@core/dialog/salesman/salesman.component';
     CarTimeInfoComponent,
     SettingsComponent,
     SalesmanComponent,
+    WitnessDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -85,6 +87,6 @@ import { SalesmanComponent } from './@core/dialog/salesman/salesman.component';
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [DialogComponent, WarningDialogComponent, CreditDialogComponent, CarTimeInfoComponent, SalesmanComponent]
+  entryComponents: [DialogComponent, WarningDialogComponent, CreditDialogComponent, CarTimeInfoComponent, SalesmanComponent, WitnessDialogComponent]
 })
 export class AppModule { }

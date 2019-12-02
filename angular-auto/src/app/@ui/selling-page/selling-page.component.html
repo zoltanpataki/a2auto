@@ -312,19 +312,25 @@
         <col width="20%">
         <col width="40%">
         <tr>
-          <td></td>
+          <td *ngIf="witness1 && witness1.name">{{witness1.name}}</td>
+          <td *ngIf="!witness1 || witness1 && !witness1.name"></td>
           <td class="middleColumn">Olvasható neve</td>
-          <td></td>
+          <td *ngIf="witness2">{{witness2.name}}</td>
+          <td *ngIf="!witness2 || witness2 && !witness2.name"></td>
         </tr>
         <tr>
-          <td></td>
+          <td *ngIf="witness1 && witness1.witnessAddress && witness1.witnessAddress.address && witness1.witnessAddress.zipcode && witness1.witnessAddress.city">{{witness1.witnessAddress.zipcode}}&#160;{{witness1.witnessAddress.city}}&#160;{{witness1.witnessAddress.address}}</td>
+          <td *ngIf="!witness1 || witness1 && !witness1.witnessAddress"></td>
           <td class="middleColumn">Lakcíme</td>
-          <td></td>
+          <td *ngIf="witness2 && witness2.witnessAddress && witness2.witnessAddress.address && witness2.witnessAddress.zipcode && witness2.witnessAddress.city">{{witness2.witnessAddress.zipcode}}&#160;{{witness2.witnessAddress.city}}&#160;{{witness2.witnessAddress.address}}</td>
+          <td *ngIf="!witness2 || witness2 && !witness2.address"></td>
         </tr>
         <tr>
-          <td></td>
+          <td *ngIf="witness1 && witness1.idCardNumber">{{witness1.idCardNumber}}</td>
+          <td *ngIf="!witness1 || witness1 && !witness1.idCardNumber"></td>
           <td class="middleColumn">Szem ig. száma</td>
-          <td></td>
+          <td *ngIf="witness2 && witness2.idCardNumber">{{witness2.idCardNumber}}</td>
+          <td *ngIf="!witness2 || witness2 && !witness2.idCardNumber"></td>
         </tr>
         <tr>
           <td></td>

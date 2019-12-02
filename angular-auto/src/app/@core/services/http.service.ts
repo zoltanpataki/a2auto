@@ -4,6 +4,7 @@ import {Observable} from "rxjs";
 import {Car} from "../models/car";
 import {Order} from "../models/order";
 import {Salesmen} from "../models/salesmen";
+import {Witness} from "../models/witness";
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -141,6 +142,24 @@ export class HttpService {
 
   public deleteSalesman(salesmanId: any): Observable<any> {
     const urlPostFix = `deleteSalesman/${salesmanId}`;
+    return this.http.delete(this.carServerUrl + urlPostFix, {
+      headers: httpOptions.headers,
+      responseType: 'text',
+    });
+  }
+
+  public saveWitness(witness: Witness): Observable<any> {
+    const urlPostFix = 'saveWitness';
+    return this.http.post(this.carServerUrl + urlPostFix, witness, httpOptions);
+  }
+
+  public getAllWitnesses(): Observable<any> {
+    const urlPostFix = 'getAllWitnesses';
+    return this.http.get(this.carServerUrl + urlPostFix, httpOptions);
+  }
+
+  public deleteWitness(witnessId: any): Observable<any> {
+    const urlPostFix = `deleteWitness/${witnessId}`;
     return this.http.delete(this.carServerUrl + urlPostFix, {
       headers: httpOptions.headers,
       responseType: 'text',

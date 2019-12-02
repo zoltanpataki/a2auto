@@ -20,6 +20,14 @@ export class AppComponent implements OnInit{
       sessionStorage.setItem('A2Auto', JSON.stringify(data[0]));
       this.utilService.a2Company = data[0];
     });
+
+    this.httpService.getAllSalesmen().subscribe(data => {
+      this.utilService.salesmen = data;
+    });
+
+    this.httpService.getAllWitnesses().subscribe(data => {
+      this.utilService.witnesses = data;
+    });
   }
 
 }

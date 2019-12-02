@@ -17,6 +17,7 @@ import {NavigationEnd, NavigationStart, Router} from "@angular/router";
 import {Order} from "../../models/order";
 import {Description} from "../../models/description";
 import {CarTimeInfoComponent} from "../../dialog/car-time-info/car-time-info.component";
+import {Witness} from "../../models/witness";
 
 @Component({
   selector: 'app-filter',
@@ -35,7 +36,6 @@ export class FilterComponent implements OnInit {
   private selectedCars = [];
   private selectedCarHeader = ['Márka', 'Modell', 'Rendszám'];
   public typeOfBuying = ['KÉSZPÉNZ', 'ÁTUTALÁS', 'HITEL'];
-  private carSalesmen = ['SOÓS GÁBOR', 'VINCZ ANTAL'];
   private noMatch = false;
   private selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate: boolean;
   private alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready: boolean;
@@ -480,13 +480,13 @@ export class FilterComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       if (result != null) {
-        this.updateCarOfTransaction(result);
+        this.updateCarOfTransaction(result.car);
         if (this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer) {
-          this.carOfTransaction = result;
-          this.prepareNavigationToOrderPageOrSellingPage(this.newOrder, this.carOfTransaction, '/sellingPage');
+          this.carOfTransaction = result.car;
+          this.prepareNavigationToOrderPageOrSellingPage(this.newOrder, this.carOfTransaction, result.witness1, result.witness2, '/sellingPage');
         } else {
-          this.countInCar = result;
-          this.prepareNavigationToOrderPageOrSellingPage(this.newOrder, this.countInCar, '/sellingPage');
+          this.countInCar = result.car;
+          this.prepareNavigationToOrderPageOrSellingPage(this.newOrder, this.countInCar, result.witness1, result.witness2, '/sellingPage');
         }
       }
     });
@@ -871,6 +871,8 @@ export class FilterComponent implements OnInit {
         sessionStorage.setItem('countInCar', JSON.stringify(this.countInCar));
         this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer = true;
       }
+    }, error => {
+      console.log(error);
     });
   }
 
@@ -908,7 +910,7 @@ export class FilterComponent implements OnInit {
         this.descriptionList);
 
       this.httpService.saveOrder(this.newOrder).subscribe(order => {
-        this.prepareNavigationToOrderPageOrSellingPage(order, car, '/orderPage');
+        this.prepareNavigationToOrderPageOrSellingPage(order, car, null, null, '/orderPage');
       });
     } else {
       this.newOrder.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready;
@@ -928,12 +930,12 @@ export class FilterComponent implements OnInit {
       this.newOrder.description = this.descriptionList;
       this.httpService.updateOrder(this.newOrder).subscribe(order => {
         console.log(order);
-        this.prepareNavigationToOrderPageOrSellingPage(<Order> order, car, '/orderPage');
+        this.prepareNavigationToOrderPageOrSellingPage(<Order> order, car, null, null, '/orderPage');
       });
     }
   }
 
-  private prepareNavigationToOrderPageOrSellingPage(order: Order, car: Car, orderOrSelling: string) {
+  private prepareNavigationToOrderPageOrSellingPage(order: Order, car: Car, witness1: Witness, witness2: Witness, orderOrSelling: string) {
     sessionStorage.setItem('order', JSON.stringify(this.newOrder));
     sessionStorage.setItem('orderedCar', JSON.stringify(car));
     this.router.navigate([orderOrSelling], {state: {data: {
@@ -947,6 +949,8 @@ export class FilterComponent implements OnInit {
           indexOfPickedCompany: this.indexOfPickedCompany,
           pickedCompany: this.pickedCompany,
           switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer: this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer,
+          witness1: witness1,
+          witness2: witness2,
         }}});
   }
 

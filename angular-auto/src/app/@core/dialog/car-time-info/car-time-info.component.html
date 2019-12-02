@@ -1,5 +1,5 @@
 <mat-dialog-content>
-  <h5>Add meg az eladáshoz kötődő időpontokat!</h5>
+  <h5>Add meg az eladáshoz kötődő adatokat!</h5>
   <form #carTimeInfoForm=ngForm (ngSubmit)="saveCarData(carTimeInfoForm)" class="carTimeInfoForm">
     <div class="dateContainer">
       <div class="leftSide">
@@ -19,6 +19,33 @@
             <mat-datepicker #carHandoverPicker></mat-datepicker>
           </mat-form-field>
           <ngb-timepicker [(ngModel)]="carHandoverTime" name="carHandoverTime"></ngb-timepicker>
+        </div>
+      </div>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="witnessContainer">
+      <div class="leftSide">
+        <div>
+          <mat-form-field class="example-full-width">
+            <mat-label>Tanú 1</mat-label>
+            <mat-select ngModel placeholder="Név" name="witness1">
+              <mat-option *ngFor="let witness of utilService.witnesses; trackBy: trackByFn" [value]="witness">
+                {{witness.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="rightSide">
+        <div>
+          <mat-form-field class="example-full-width">
+            <mat-label>Tanú 2</mat-label>
+            <mat-select ngModel placeholder="Név" name="witness2">
+              <mat-option *ngFor="let witness of utilService.witnesses; trackBy: trackByFn" [value]="witness">
+                {{witness.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </div>
     </div>
