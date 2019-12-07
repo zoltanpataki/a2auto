@@ -39,6 +39,8 @@ import { SettingsComponent } from './@core/components/settings/settings.componen
 import {AngularFontAwesomeModule} from "angular-font-awesome";
 import { SalesmanComponent } from './@core/dialog/salesman/salesman.component';
 import { WitnessDialogComponent } from './@core/dialog/witness-dialog/witness-dialog.component';
+import { WarrantPageComponent } from './@ui/warrant-page/warrant-page.component';
+import { WitnessPickerDialogComponent } from './@core/dialog/witness-picker-dialog/witness-picker-dialog.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +62,8 @@ import { WitnessDialogComponent } from './@core/dialog/witness-dialog/witness-di
     SettingsComponent,
     SalesmanComponent,
     WitnessDialogComponent,
+    WarrantPageComponent,
+    WitnessPickerDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -87,6 +91,6 @@ import { WitnessDialogComponent } from './@core/dialog/witness-dialog/witness-di
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [DialogComponent, WarningDialogComponent, CreditDialogComponent, CarTimeInfoComponent, SalesmanComponent, WitnessDialogComponent]
+  entryComponents: [DialogComponent, WarningDialogComponent, CreditDialogComponent, CarTimeInfoComponent, SalesmanComponent, WitnessDialogComponent, WitnessPickerDialogComponent]
 })
 export class AppModule { }

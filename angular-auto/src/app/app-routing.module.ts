@@ -9,6 +9,7 @@ import {OrderPageComponent} from "./@ui/order-page/order-page.component";
 import {SellingPageComponent} from "./@ui/selling-page/selling-page.component";
 import {GdprPageComponent} from "./@ui/gdpr-page/gdpr-page.component";
 import {SettingsComponent} from "./@core/components/settings/settings.component";
+import {WarrantPageComponent} from "./@ui/warrant-page/warrant-page.component";
 
 
 const routes: Routes = [
@@ -48,6 +49,10 @@ const routes: Routes = [
     path: 'settings',
     component: SettingsComponent
   },
+  {
+    path: 'warrantPage',
+    component: WarrantPageComponent
+  }
 ];
 
 @NgModule({

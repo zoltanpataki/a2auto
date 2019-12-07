@@ -410,13 +410,16 @@
         <h5>Összesítő</h5>
         <div class="summary">
           <div>
-            <button mat-button type="submit" (click)="navigateToOrderPage(car)">Megrendelőlap</button>
+            <button mat-button type="submit" (click)="navigateToOrderOrSellingOrWarrantPage(car, '/orderPage', null, null)">Megrendelőlap</button>
           </div>
           <div>
             <button mat-button type="submit" (click)="gatherSellingPageInfo(car, 'sell')">Tovább az eladási adatokhoz</button>
           </div>
           <div *ngIf="countInCar">
             <button mat-button type="submit" (click)="gatherSellingPageInfo(countInCar, 'buy')">Tovább a vételi adatokhoz</button>
+          </div>
+          <div>
+            <button mat-button type="submit" (click)="openWitnessPickerForWarrantPage()">Meghatalmazás</button>
           </div>
         </div>
       </div>

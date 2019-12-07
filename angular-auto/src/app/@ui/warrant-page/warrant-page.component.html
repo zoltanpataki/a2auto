@@ -1,0 +1,226 @@
+<div class="warrantContainer">
+
+  <div class="preTitle">
+    <div class="preTitleContainer">
+      <p>(Meghatalmazás okmányirodai ügyintézéshez)</p>
+    </div>
+  </div>
+  <div class="title">
+    <div>
+      <p>M E G H A T A L M A Z Á S</p>
+    </div>
+  </div>
+  <div *ngIf="warrantType == 'MAGÁNSZEMÉLY'" class="individual">
+    <div class="individualContainer">
+      <div class="dataLines" fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
+        <div fxFlex="20">
+          <p>Alulírott:&#160;&#160;</p>
+        </div>
+        <div fxFlex="35">
+          <p *ngIf="order && order.users && order.users.fullName">{{order.users.fullName}}</p>
+          <p *ngIf="!order || order && !order.users || order && order.users && !order.users.fullName"></p>
+        </div>
+        <div fxFlex="20">
+          <p>anyja neve:&#160;&#160;</p>
+        </div>
+        <div fxFlex="25">
+          <p *ngIf="order && order.users && order.users.nameOfMother">{{order.users.nameOfMother}}</p>
+          <p *ngIf="!order || order && !order.users || order && order.users && !order.users.nameOfMother"></p>
+        </div>
+      </div>
+      <div class="dataLines" fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
+        <div fxFlex="20">
+          <p>szül.hely és idő:&#160;&#160;</p>
+        </div>
+        <div fxFlex="35">
+          <p *ngIf="order && order.users && order.users.birthPlace && order.users.birthDate">{{order.users.birthPlace}},&#160; {{order.users.birthDate | date: 'yyyy-MM-dd'}}</p>
+          <p *ngIf="!order || order && !order.users || order && order.users && !order.users.birthPlace || order && order.users && !order.users.birthDate"></p>
+        </div>
+        <div fxFlex="20">
+          <p>szem. ig. sz.:&#160;&#160;</p>
+        </div>
+        <div fxFlex="25">
+          <p *ngIf="order && order.users && order.users.idCardNumber">{{order.users.idCardNumber}}</p>
+          <p *ngIf="!order || order && !order.users || order && order.users && !order.users.idCardNumber"></p>
+        </div>
+      </div>
+      <div class="dataLines" fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
+        <div fxFlex="60">
+          <p *ngIf="order && order.users && order.users.address">{{order.users.address}}</p>
+          <p *ngIf="!order || order && !order.users || order && order.users && !order.users.address"></p>
+        </div>
+        <div fxFlex="40">
+          <p>szám alatti lakos /vagy  jogi személy, ill.</p>
+        </div>
+      </div>
+      <div class="dataLines3">
+        <p>jogi személy nélküli gazdasági társaság képviselője/  <strong>(meghatalmazó)</strong></p>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="warrantType == 'CÉG'" class="corporate">
+    <div class="corporateContainer">
+      <div>
+        <p *ngIf="order && order.company && order.company.name">Cég név:&#160;&#160;{{order.company.name}}</p>
+        <p *ngIf="!order || order && !order.company || order && order.company && !order.company.name">Cég név:</p>
+      </div>
+      <div>
+        <p *ngIf="order && order.company && order.company.address && order.company.address.zipcode && order.company.address.city && order.company.address.address">Cím:&#160;&#160;{{order.company.address.zipcode}}&#160;{{order.company.address.city}},&#160;{{order.company.address.address}}</p>
+        <p *ngIf="!order || order && !order.company || order && order.company && !order.company.address || order && order.company && order.company.address && !order.company.address.zipcode || order && order.company && order.company.address && !order.company.address.city || order && order.company && order.company.address && !order.company.address.address">Cím:</p>
+      </div>
+      <div>
+        <p *ngIf="order && order.company && order.company.companyRegistrationNumber">Cégjegyzékszám:&#160;&#160; {{order.company.companyRegistrationNumber}}</p>
+        <p *ngIf="!order || order && !order.company || order && order.company && !order.company.companyRegistrationNumber">Cégjegyzékszám:</p>
+      </div>
+      <div class="dataLines">
+        <div>
+          <p *ngIf="order && order.company && order.company.representation">Képviselő név:&#160;&#160; {{order.company.representation}}</p>
+          <p *ngIf="!order || order && !order.company || order && order.company && !order.company.representation">Képviselő név:</p>
+        </div>
+        <div>
+          <p>jogi személy, ill. jogi személy nélküli gazdasági</p>
+        </div>
+      </div>
+      <div><p>társaság képviselője/  <strong>(meghatalmazó)</strong></p></div>
+    </div>
+  </div>
+  <div class="mainSubText">
+    <div>
+      <p><strong>m e g h a t a l m a z o m</strong></p>
+    </div>
+  </div>
+  <div class="individual">
+    <div class="individualContainer">
+      <div class="dataLines" fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
+        <div fxFlex="20">
+          <p>Alulírott:</p>
+        </div>
+        <div fxFlex="35">
+          <p></p>
+        </div>
+        <div fxFlex="20">
+          <p>anyja neve:</p>
+        </div>
+        <div fxFlex="25">
+          <p></p>
+        </div>
+      </div>
+      <div class="dataLines" fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
+        <div fxFlex="20">
+          <p>szül.hely és idő:</p>
+        </div>
+        <div fxFlex="35">
+          <p></p>
+        </div>
+        <div fxFlex="20">
+          <p>szem. ig. sz.:</p>
+        </div>
+        <div fxFlex="25">
+          <p></p>
+        </div>
+      </div>
+      <div class="dataLines" fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
+        <div fxFlex="60">
+          <p></p>
+        </div>
+        <div fxFlex="40">
+          <p>szám alatti lakos <strong>(meghatalmazottat),</strong></p>
+        </div>
+      </div>
+      <div class="dataLines" fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
+        <div fxFlex="20">
+          <p>hogy a &#160;&#160;</p>
+        </div>
+        <div fxFlex="30">
+          <p *ngIf="orderedCar && orderedCar.type">{{orderedCar.type}}</p>
+          <p *ngIf="!orderedCar || orderedCar && !orderedCar.type"></p>
+        </div>
+        <div fxFlex="20">
+          <p>típusú &#160;&#160;</p>
+        </div>
+        <div fxFlex="30">
+          <p *ngIf="orderedCar && orderedCar.bodyNumber">{{orderedCar.bodyNumber}}</p>
+          <p *ngIf="!orderedCar || orderedCar && !orderedCar.bodyNumber"></p>
+        </div>
+      </div>
+      <div class="dataLines" fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
+        <div fxFlex="20">
+          <p>alvázszámú &#160;&#160;</p>
+        </div>
+        <div fxFlex="20">
+          <p *ngIf="orderedCar && orderedCar.plateNumber">{{orderedCar.plateNumber}}</p>
+          <p *ngIf="!orderedCar || orderedCar && !orderedCar.plateNumber"></p>
+        </div>
+        <div fxFlex="60">
+          <p>rendszámú gépjármű okmányirodai ügyintézése (átírás, opció törlés,</p>
+        </div>
+      </div>
+      <div class="dataLines3" fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
+        <p>tulajdonjog váltás, stb) során</p>
+      </div>
+      <div class="dataLines3" fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
+        <p>helyettem és nevemben eljárjon. </p>
+      </div>
+    </div>
+  </div>
+  <div class="signatureAndWitness">
+    <div class="signatureAndWitnessContainer">
+      <div class="signatureBoxContainer">
+        <div class="signatureBox">
+          <p>Aláírások:</p>
+          <div class="signature">
+            <div class="upperLine">
+              <p><strong>meghatalmazó</strong></p>
+            </div>
+            <div class="upperLine">
+              <p><strong>meghatalmazott</strong></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="witnessTitle">
+        <p><strong>Tanúk:</strong></p>
+      </div>
+      <div class="dataLines">
+        <table>
+          <tr>
+            <td>Név:</td>
+            <td *ngIf="witness1 && witness1.name">{{witness1.name}}</td>
+            <td *ngIf="!witness1 || witness1 && !witness1.name"></td>
+            <td>Név:</td>
+            <td *ngIf="witness2 && witness2.name">{{witness2.name}}</td>
+            <td *ngIf="!witness2 || witness2 && !witness2.name"></td>
+          </tr>
+          <tr>
+            <td>Lakcím:</td>
+            <td *ngIf="witness1 && witness1.witnessAddress && witness1.witnessAddress.zipcode && witness1.witnessAddress.city && witness1.witnessAddress.address">{{witness1.witnessAddress.zipcode}}&#160;{{witness1.witnessAddress.city}},&#160;{{witness1.witnessAddress.address}}</td>
+            <td *ngIf="!witness1 || witness1 && !witness1.witnessAddress || witness1 && witness1.witnessAddress && !witness1.witnessAddress.zipcode || witness1 && witness1.witnessAddress && !witness1.witnessAddress.city || witness1 && witness1.witnessAddress && !witness1.witnessAddress.address"></td>
+            <td>Lakcím:</td>
+            <td *ngIf="witness2 && witness2.witnessAddress && witness2.witnessAddress.zipcode && witness2.witnessAddress.city && witness2.witnessAddress.address">{{witness2.witnessAddress.zipcode}}&#160;{{witness2.witnessAddress.city}},&#160;{{witness2.witnessAddress.address}}</td>
+            <td *ngIf="!witness2 || witness2 && !witness2.witnessAddress || witness2 && witness2.witnessAddress && !witness2.witnessAddress.zipcode || witness2 && witness2.witnessAddress && !witness2.witnessAddress.city || witness2 && witness2.witnessAddress && !witness2.witnessAddress.address"></td>
+          </tr>
+          <tr>
+            <td>Szem.ig.sz.:</td>
+            <td *ngIf="witness1 && witness1.idCardNumber">{{witness1.idCardNumber}}</td>
+            <td *ngIf="!witness1 || witness1 && !witness1.idCardNumber"></td>
+            <td>Szem.ig.sz.:</td>
+            <td *ngIf="witness2 && witness2.idCardNumber">{{witness2.idCardNumber}}</td>
+            <td *ngIf="!witness2 || witness2 && !witness2.idCardNumber"></td>
+          </tr>
+          <tr>
+            <td>Tanú aláírása:</td>
+            <td></td>
+            <td>Tanú aláírása:</td>
+            <td></td>
+          </tr>
+        </table>
+      </div>
+      <div class="date">
+        <p class="texts"><strong>Dátum:</strong> Székesfehérvár, {{today | date:'yyyy-MM-dd'}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="pdfButton">
+  <button (click)="captureScreen()" mat-button>PDF Generálás</button>
+</div>

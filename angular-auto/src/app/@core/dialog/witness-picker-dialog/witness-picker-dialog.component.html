@@ -1,0 +1,49 @@
+<form #witnessPickerForm=ngForm (ngSubmit)="saveWitnessPicker(witnessPickerForm)" class="witnessPickerForm">
+  <div class="witnessContainer">
+    <div class="leftSide">
+      <div>
+        <mat-form-field class="example-full-width">
+          <mat-label>Tanú 1</mat-label>
+          <mat-select ngModel placeholder="Név" name="witness1">
+            <mat-option *ngFor="let witness of utilService.witnesses; trackBy: trackByFn" [value]="witness">
+              {{witness.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="rightSide">
+      <div>
+        <mat-form-field class="example-full-width">
+          <mat-label>Tanú 2</mat-label>
+          <mat-select ngModel placeholder="Név" name="witness2">
+            <mat-option *ngFor="let witness of utilService.witnesses; trackBy: trackByFn" [value]="witness">
+              {{witness.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div>
+    <mat-form-field class="example-full-width">
+      <mat-label>Meghatalmazó</mat-label>
+      <mat-select ngModel placeholder="Magán/cég" name="warrantType">
+        <mat-option *ngFor="let type of warrantTypes; trackBy: trackByFn" [value]="type">
+          {{type}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-error *ngIf="missingWarrantType">A meghatalmazó típusa nem lett kiválasztva!</mat-error>
+  </div>
+  <div class="buttons">
+    <div class="saveButton">
+      <button mat-button>Tovább a meghatalmazáshoz</button>
+    </div>
+    <div>
+      <button type="button" class="mat-raised-button mat-accent" (click)="close()"><strong class="X">X</strong></button>
+    </div>
+  </div>
+</form>

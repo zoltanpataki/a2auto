@@ -1,0 +1,80 @@
+.preTitle {
+  display: flex;
+  justify-content: center;
+}
+
+.preTitleContainer {
+  width: 80%;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  font-size: 200%;
+  text-decoration: underline;
+  margin-bottom: 3%;
+}
+
+.individual, .corporate, .signatureAndWitness {
+  display: flex;
+  justify-content: center;
+}
+
+.individualContainer, .corporateContainer {
+  width: 80%;
+  flex-direction: column;
+}
+
+.signatureAndWitnessContainer {
+  width: 80%;
+}
+
+.dataLines {
+  display: flex;
+  justify-content: space-between;
+}
+
+.mainSubText {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2%;
+  margin-top: 2%;
+}
+
+table {
+  width: 100%;
+  margin-bottom: 3%;
+}
+
+.signature {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.upperLine {
+  border-top: 1px solid black;
+  padding-left: 5%;
+  padding-right: 5%;
+  padding-top: 1%;
+  margin-bottom: 1%;
+  min-width: 20%;
+}
+
+.signatureBoxContainer {
+  margin-bottom: 3%;
+  margin-top: 5%;
+}
+
+.witnessTitle {
+  text-decoration: underline;
+}
+
+p, td {
+  font-family: Lucida Console, Courier, monospace !important;
+}
+
+button {
+  margin-top: 3%;
+  background-color: deeppink;
+  color: white;
+}

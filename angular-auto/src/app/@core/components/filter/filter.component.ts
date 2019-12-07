@@ -18,6 +18,7 @@ import {Order} from "../../models/order";
 import {Description} from "../../models/description";
 import {CarTimeInfoComponent} from "../../dialog/car-time-info/car-time-info.component";
 import {Witness} from "../../models/witness";
+import {WitnessPickerDialogComponent} from "../../dialog/witness-picker-dialog/witness-picker-dialog.component";
 
 @Component({
   selector: 'app-filter',
@@ -67,7 +68,6 @@ export class FilterComponent implements OnInit {
   private indexOfPickedCompany: number;
   private creditData: Credit;
   private countInCar: Car;
-  private salesmanForm: FormGroup;
   private salesman: string;
   private newOrder: Order;
   private newUser: Users;
@@ -128,15 +128,6 @@ export class FilterComponent implements OnInit {
       this.downPaymentForm = this.formBuilder.group({
         downPayment: [this.downPayment],
         extra: [this.extra],
-      });
-    }
-    if (this.salesman == null) {
-      this.salesmanForm = this.formBuilder.group({
-        salesman: [null],
-      });
-    } else {
-      this.salesmanForm = this.formBuilder.group({
-        salesman: [this.salesman],
       });
     }
   }
@@ -483,11 +474,27 @@ export class FilterComponent implements OnInit {
         this.updateCarOfTransaction(result.car);
         if (this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer) {
           this.carOfTransaction = result.car;
-          this.prepareNavigationToOrderPageOrSellingPage(this.newOrder, this.carOfTransaction, result.witness1, result.witness2, '/sellingPage');
+          this.navigateToOrderOrSellingOrWarrantPage(this.carOfTransaction,'/sellingPage', result.witness1, result.witness2, null);
         } else {
           this.countInCar = result.car;
-          this.prepareNavigationToOrderPageOrSellingPage(this.newOrder, this.countInCar, result.witness1, result.witness2, '/sellingPage');
+          this.navigateToOrderOrSellingOrWarrantPage(this.countInCar,'/sellingPage', result.witness1, result.witness2, null);
         }
+      }
+    });
+  }
+
+  public openWitnessPickerModal(): void {
+    const witnessPickerDialogConfig = new MatDialogConfig();
+
+    witnessPickerDialogConfig.disableClose = true;
+    witnessPickerDialogConfig.width = '30%';
+
+    const dialogRef = this.dialog.open(WitnessPickerDialogComponent, witnessPickerDialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if (result != null) {
+        this.navigateToOrderOrSellingOrWarrantPage(this.carOfTransaction, '/warrantPage', result.witness1, result.witness2, result.warrantType);
       }
     });
   }
@@ -882,11 +889,7 @@ export class FilterComponent implements OnInit {
     this.setOrderProgressInSessionStorage(9);
   }
 
-  private navigateToOrderPage(car: Car) {
-    if (this.salesmanForm.value.salesman !== this.carOfTransaction.salesman) {
-      car.salesman = this.salesmanForm.value.salesman;
-      this.updateCarOfTransaction(car);
-    }
+  private navigateToOrderOrSellingOrWarrantPage(car: Car, targetRoute: string,  witness1: Witness, witness2: Witness, warrantType: string) {
     if (this.downPaymentForm.value.downPayment !== this.carOfTransaction.downPayment) {
       car.downPayment = this.downPaymentForm.value.downPayment;
       this.updateCarOfTransaction(car);
@@ -910,7 +913,7 @@ export class FilterComponent implements OnInit {
         this.descriptionList);
 
       this.httpService.saveOrder(this.newOrder).subscribe(order => {
-        this.prepareNavigationToOrderPageOrSellingPage(order, car, null, null, '/orderPage');
+        this.prepareNavigationToOrderPageOrSellingPageOrWarrantPage(order, car, witness1, witness2, targetRoute, warrantType);
       });
     } else {
       this.newOrder.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready;
@@ -930,15 +933,15 @@ export class FilterComponent implements OnInit {
       this.newOrder.description = this.descriptionList;
       this.httpService.updateOrder(this.newOrder).subscribe(order => {
         console.log(order);
-        this.prepareNavigationToOrderPageOrSellingPage(<Order> order, car, null, null, '/orderPage');
+        this.prepareNavigationToOrderPageOrSellingPageOrWarrantPage(<Order> order, car, witness1, witness2, targetRoute, warrantType);
       });
     }
   }
 
-  private prepareNavigationToOrderPageOrSellingPage(order: Order, car: Car, witness1: Witness, witness2: Witness, orderOrSelling: string) {
+  private prepareNavigationToOrderPageOrSellingPageOrWarrantPage(order: Order, car: Car, witness1: Witness, witness2: Witness, orderOrSellingOrWarrant: string, warrantType: string) {
     sessionStorage.setItem('order', JSON.stringify(this.newOrder));
     sessionStorage.setItem('orderedCar', JSON.stringify(car));
-    this.router.navigate([orderOrSelling], {state: {data: {
+    this.router.navigate([orderOrSellingOrWarrant], {state: {data: {
           order: order,
           orderedCar: car,
           clickedCarIndex: this.clickedCarIndex,
@@ -951,6 +954,7 @@ export class FilterComponent implements OnInit {
           switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer: this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer,
           witness1: witness1,
           witness2: witness2,
+          warrantType: warrantType,
         }}});
   }
 
@@ -966,4 +970,7 @@ export class FilterComponent implements OnInit {
         }}});
   }
 
+  private openWitnessPickerForWarrantPage() {
+    this.openWitnessPickerModal();
+  }
 }
