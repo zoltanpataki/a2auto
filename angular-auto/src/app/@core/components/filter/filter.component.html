@@ -407,10 +407,54 @@
       </div>
       <div *ngIf="orderProgress > 8 && clickedCarIndex == i">
         <mat-divider></mat-divider>
+        <div class="kiegTitle">
+          <div>
+            <h5>Kiegészítések</h5>
+          </div>
+          <div class="plusButton">
+            <button type="button" (click)="addNewDescriptionWithAmountRow(null)" class="miniFab" mat-mini-fab><i class="material-icons">add</i></button>
+          </div>
+        </div>
+        <div>
+          <form [formGroup]="descriptionForm" (submit)="saveDescriptions(descriptionForm)" class="descriptionForm">
+            <div class="descriptions" formArrayName="description" *ngFor="let singleDescription of descriptionForm.get('description').controls; let indexNum = index">
+              <div class="descriptions">
+                <mat-form-field class="example-full-width" [formGroupName]="indexNum">
+                  <label>
+                    <input matInput placeholder="Szöveg" formControlName="descriptionText">
+                  </label>
+                </mat-form-field>
+              </div>
+              <div class="descriptions">
+                <mat-form-field class="example-full-width" [formGroupName]="indexNum">
+                  <mat-select placeholder="Terhelt fél" formControlName="charged" [compareWith]="compareFn">
+                    <mat-option *ngFor="let item of chargedBehalf; trackBy: trackByFn" value="{{item}}">
+                      {{item}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="descriptions">
+                <mat-form-field class="example-full-width" [formGroupName]="indexNum">
+                  <label>
+                    <input type="number" matInput placeholder="Összeg" formControlName="amount">
+                  </label>
+                </mat-form-field>
+              </div>
+              <div><i class="material-icons deleteDesc" (click)="removeDescriptionWithAmountRow(indexNum)">highlight_off</i></div>
+            </div>
+            <div>
+              <button class="saveButton" mat-button type="submit">Tovább</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div *ngIf="orderProgress > 9 && clickedCarIndex == i">
+        <mat-divider></mat-divider>
         <h5>Összesítő</h5>
         <div class="summary">
           <div>
-            <button mat-button type="submit" (click)="navigateToOrderOrSellingOrWarrantPage(car, '/orderPage', null, null)">Megrendelőlap</button>
+            <button mat-button type="submit" (click)="navigateToOrderOrSellingOrWarrantPage(car, '/orderPage', null, null, null)">Megrendelőlap</button>
           </div>
           <div>
             <button mat-button type="submit" (click)="gatherSellingPageInfo(car, 'sell')">Tovább az eladási adatokhoz</button>

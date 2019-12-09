@@ -60,9 +60,14 @@
   cursor: pointer;
 }
 
-.delete {
+.delete, .deleteDesc {
   color: black;
   cursor: pointer;
+
+}
+
+.deleteDesc {
+  font-size: 200%;
 }
 
 ::ng-deep .mat-expansion-panel-header[aria-disabled=true] {
@@ -161,3 +166,17 @@ table {
   width: 100%;
 }
 
+.descriptions {
+  display: flex;
+  justify-content: space-between;
+  width: 70%;
+}
+
+.kiegTitle {
+  display: flex;
+  align-items: center;
+}
+
+.plusButton {
+  padding-left: 2%;
+}

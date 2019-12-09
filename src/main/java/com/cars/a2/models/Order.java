@@ -27,11 +27,18 @@ public class Order {
     @OneToMany(
             mappedBy = "order",
             cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.EAGER
+            orphanRemoval = true
     )
     @JsonManagedReference
     private List<Description> description = new ArrayList<>();
+
+    @OneToMany(
+            mappedBy = "order",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JsonManagedReference
+    private List<DescriptionWithAmount> descriptionsWithAmount = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "users", referencedColumnName = "id")
@@ -56,7 +63,7 @@ public class Order {
     public Order() {
     }
 
-    public Order(boolean alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready, boolean selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate, boolean wantInheritanceTaxCalculation, int inheritanceTax, boolean thereIsCountInCar, int downPayment, int extra, String selectedTypeOfBuying, CountInCarSupplement countInCarSupplement, Credit credit, Users users, Company company, Car countInCar, Long carId, List<Description> description) {
+    public Order(boolean alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready, boolean selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate, boolean wantInheritanceTaxCalculation, int inheritanceTax, boolean thereIsCountInCar, int downPayment, int extra, String selectedTypeOfBuying, CountInCarSupplement countInCarSupplement, Credit credit, Users users, Company company, Car countInCar, Long carId, List<Description> description, List<DescriptionWithAmount> descriptionsWithAmount) {
         this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready;
         this.selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate = selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate;
         this.wantInheritanceTaxCalculation = wantInheritanceTaxCalculation;
@@ -72,6 +79,7 @@ public class Order {
         this.countInCar = countInCar;
         this.carId = carId;
         this.description = description;
+        this.descriptionsWithAmount = descriptionsWithAmount;
     }
 
     public int getExtra() {
@@ -202,6 +210,14 @@ public class Order {
         this.description = description;
     }
 
+    public List<DescriptionWithAmount> getDescriptionsWithAmount() {
+        return descriptionsWithAmount;
+    }
+
+    public void setDescriptionsWithAmount(List<DescriptionWithAmount> descriptionsWithAmount) {
+        this.descriptionsWithAmount = descriptionsWithAmount;
+    }
+
     @Override
     public String toString() {
         return "Order{" +
@@ -216,6 +232,7 @@ public class Order {
                 ", selectedTypeOfBuying='" + selectedTypeOfBuying + '\'' +
                 ", carId=" + carId +
                 ", description=" + description +
+                ", descriptionsWithAmount=" + descriptionsWithAmount +
                 ", users=" + users +
                 ", company=" + company +
                 ", countInCarSupplement=" + countInCarSupplement +

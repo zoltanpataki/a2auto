@@ -4,6 +4,7 @@ import {CountInCarSupplement} from "./countInCarSupplement";
 import {Credit} from "./credit";
 import {Car} from "./car";
 import {Description} from "./description";
+import {DescriptionWithAmount} from "./descriptionWithAmount";
 
 export class Order {
   id: number;
@@ -22,10 +23,11 @@ export class Order {
   countInCar: Car;
   carId: number;
   description: Description[];
+  descriptionWithAmount: DescriptionWithAmount[];
 
 
 
-  constructor(id: number, alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready: boolean, selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate: boolean, wantInheritanceTaxCalculation: boolean, inheritanceTax: number, thereIsCountInCar: boolean, downPayment: number, extra: number, selectedTypeOfBuying: string, users: Users, company: Company, countInCarSupplement: CountInCarSupplement, credit: Credit, countInCar: Car, carId: number, description: Description[]) {
+  constructor(id: number, alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready: boolean, selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate: boolean, wantInheritanceTaxCalculation: boolean, inheritanceTax: number, thereIsCountInCar: boolean, downPayment: number, extra: number, selectedTypeOfBuying: string, users: Users, company: Company, countInCarSupplement: CountInCarSupplement, credit: Credit, countInCar: Car, carId: number, description: Description[], descriptionWithAmount: DescriptionWithAmount[]) {
     this.id = id;
     this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready;
     this.selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate = selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate;
@@ -42,6 +44,6 @@ export class Order {
     this.countInCar = countInCar;
     this.carId = carId;
     this.description = description;
-
+    this.descriptionWithAmount = descriptionWithAmount;
   }
 }
