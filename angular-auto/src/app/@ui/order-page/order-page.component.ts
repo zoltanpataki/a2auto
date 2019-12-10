@@ -26,6 +26,7 @@ export class OrderPageComponent implements OnInit {
   private pickedCompany: Company;
   private remainingPrice: number;
   private blankPage: boolean;
+  private extraAmountChargedForTheUser: number;
 
 
   constructor() { }
@@ -85,11 +86,24 @@ export class OrderPageComponent implements OnInit {
   private countRemainingPrice(order: Order, car: Car): number {
     const inheritance = order.inheritanceTax ? order.inheritanceTax : 0;
     const downPayment = order.downPayment ? order.downPayment : 0;
-    const extra = order.extra ? order.extra : 0;
     const carPrice = car.price;
     const countInCarPrice = order.countInCar ? order.countInCar.purchasingPrice : 0;
     const credit = order.credit ? order.credit.creditAmount : 0;
-    return (carPrice + inheritance + extra) - (downPayment + countInCarPrice + credit);
+    return (carPrice + inheritance + this.countAmountOfExtraCharge(order)) - (downPayment + countInCarPrice + credit);
+  }
+
+  private countAmountOfExtraCharge(order: Order): number {
+    if (order.descriptionsWithAmount != null) {
+      let result = 0;
+      order.descriptionsWithAmount.forEach(descriptionWithAmount => {
+        result += descriptionWithAmount.amount;
+      });
+      console.log(result);
+      this.extraAmountChargedForTheUser = result;
+      return result;
+    } else {
+      return 0;
+    }
   }
 
   public captureScreen() {

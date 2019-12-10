@@ -30,15 +30,15 @@ export class SettingsComponent implements OnInit {
               private httpService: HttpService) { }
 
   ngOnInit() {
-    this.salesmen.data = this.utilService.salesmen;
-    this.witnesses.data = this.utilService.witnesses;
-    // this.httpService.getAllSalesmen().subscribe(data => {
-    //   this.salesmen.data = this.utilService.salesmen;
-    // });
-    //
-    // this.httpService.getAllWitnesses().subscribe(data => {
-    //   this.witnesses.data = this.utilService.witnesses;
-    // });
+    this.httpService.getAllSalesmen().subscribe(data => {
+      this.salesmen.data = data;
+      this.utilService.salesmen = data;
+    });
+
+    this.httpService.getAllWitnesses().subscribe(data => {
+      this.witnesses.data = data;
+      this.utilService.witnesses = data;
+    });
   }
 
   private deleteSalesman(id: number) {

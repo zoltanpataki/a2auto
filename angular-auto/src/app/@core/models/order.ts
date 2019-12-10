@@ -23,11 +23,11 @@ export class Order {
   countInCar: Car;
   carId: number;
   description: Description[];
-  descriptionWithAmount: DescriptionWithAmount[];
+  descriptionsWithAmount: DescriptionWithAmount[];
 
 
 
-  constructor(id: number, alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready: boolean, selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate: boolean, wantInheritanceTaxCalculation: boolean, inheritanceTax: number, thereIsCountInCar: boolean, downPayment: number, extra: number, selectedTypeOfBuying: string, users: Users, company: Company, countInCarSupplement: CountInCarSupplement, credit: Credit, countInCar: Car, carId: number, description: Description[], descriptionWithAmount: DescriptionWithAmount[]) {
+  constructor(id: number, alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready: boolean, selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate: boolean, wantInheritanceTaxCalculation: boolean, inheritanceTax: number, thereIsCountInCar: boolean, downPayment: number, extra: number, selectedTypeOfBuying: string, users: Users, company: Company, countInCarSupplement: CountInCarSupplement, credit: Credit, countInCar: Car, carId: number, description: Description[], descriptionsWithAmount: DescriptionWithAmount[]) {
     this.id = id;
     this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready;
     this.selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate = selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate;
@@ -44,6 +44,6 @@ export class Order {
     this.countInCar = countInCar;
     this.carId = carId;
     this.description = description;
-    this.descriptionWithAmount = descriptionWithAmount;
+    this.descriptionsWithAmount = descriptionsWithAmount;
   }
 }

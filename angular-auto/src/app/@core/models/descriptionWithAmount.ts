@@ -1,10 +1,12 @@
 export class DescriptionWithAmount {
+  id: number;
   description: string;
   amount: number;
-  charged: boolean;
+  charged: string;
 
 
-  constructor(description: string, amount: number, charged: boolean) {
+  constructor(id: number, description: string, amount: number, charged: string) {
+    this.id = id;
     this.description = description;
     this.amount = amount;
     this.charged = charged;

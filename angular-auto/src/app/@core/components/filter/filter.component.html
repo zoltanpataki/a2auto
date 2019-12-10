@@ -427,20 +427,21 @@
               </div>
               <div class="descriptions">
                 <mat-form-field class="example-full-width" [formGroupName]="indexNum">
-                  <mat-select placeholder="Terhelt fél" formControlName="charged" [compareWith]="compareFn">
-                    <mat-option *ngFor="let item of chargedBehalf; trackBy: trackByFn" value="{{item}}">
+                  <mat-select placeholder="Terhelt fél" formControlName="charged">
+                    <mat-option *ngFor="let item of chargedBehalf; trackBy: trackByFn" value="{{item}}" (click)="item == 'AJÁNDÉK' && addToGiftIndexList(indexNum)">
                       {{item}}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
-              <div class="descriptions">
+              <div class="descriptions" *ngIf="!giftIndexList.includes(indexNum)">
                 <mat-form-field class="example-full-width" [formGroupName]="indexNum">
                   <label>
                     <input type="number" matInput placeholder="Összeg" formControlName="amount">
                   </label>
                 </mat-form-field>
               </div>
+              <div class="emptyDescriptionColumn" *ngIf="giftIndexList.includes(indexNum)"></div>
               <div><i class="material-icons deleteDesc" (click)="removeDescriptionWithAmountRow(indexNum)">highlight_off</i></div>
             </div>
             <div>

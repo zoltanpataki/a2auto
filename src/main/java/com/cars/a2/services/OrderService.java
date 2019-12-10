@@ -24,6 +24,7 @@ public class OrderService {
     }
 
     public ResponseEntity<Object> saveNewOrder(Order order) {
+        System.out.println(order.toString());
         try {
             orderRepository.save(order);
 

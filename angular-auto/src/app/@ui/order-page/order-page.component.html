@@ -105,8 +105,8 @@
           <p *ngIf="!order || order && !order.inheritanceTax" class="texts">Átírás/Ügyintézés:</p>
         </div>
         <div class="border">
-          <p *ngIf="order && order.extra" class="texts">Kiegészítők összege: {{order.extra}}</p>
-          <p *ngIf="!order || order && !order.extra" class="texts">Kiegészítők összege:</p>
+          <p *ngIf="extraAmountChargedForTheUser" class="texts">Kiegészítők összege: {{extraAmountChargedForTheUser}}</p>
+          <p *ngIf="!extraAmountChargedForTheUser" class="texts">Kiegészítők összege:</p>
         </div>
         <div class="silverCenter border">
           <p class="sectionLiner">Fizetve:</p>
@@ -239,8 +239,8 @@
         <div class="silverCenter border">
           <p class="sectionLiner">Kiegészítések:</p>
         </div>
-        <div *ngIf="order && order.description" class="extraCarInfo">
-          <p class="texts" *ngFor="let description of order.description">- {{description.description}}</p>
+        <div *ngIf="order && order.descriptionsWithAmount" class="extraCarInfo">
+          <p class="texts" *ngFor="let description of order.descriptionsWithAmount">- {{description.description}}&#160;-&#160;{{description.charged}}</p>
         </div>
       </div>
     </div>

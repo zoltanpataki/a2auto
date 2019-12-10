@@ -12,9 +12,9 @@ public class DescriptionWithAmount {
     private Long id;
     private String description;
     private int amount;
-    private boolean charge;
+    private String charged;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "order_id")
     @JsonBackReference
     private Order order;
@@ -22,10 +22,10 @@ public class DescriptionWithAmount {
     public DescriptionWithAmount() {
     }
 
-    public DescriptionWithAmount(String description, int amount, boolean charge) {
+    public DescriptionWithAmount(String description, int amount, String charged) {
         this.description = description;
         this.amount = amount;
-        this.charge = charge;
+        this.charged = charged;
     }
 
     public Long getId() {
@@ -52,11 +52,21 @@ public class DescriptionWithAmount {
         this.amount = amount;
     }
 
-    public boolean isCharge() {
-        return charge;
+    public String getCharged() {
+        return charged;
     }
 
-    public void setCharge(boolean charge) {
-        this.charge = charge;
+    public void setCharged(String charged) {
+        this.charged = charged;
+    }
+
+    @Override
+    public String toString() {
+        return "DescriptionWithAmount{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", amount=" + amount +
+                ", charged='" + charged + '\'' +
+                '}';
     }
 }

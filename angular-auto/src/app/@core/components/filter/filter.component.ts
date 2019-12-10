@@ -80,8 +80,7 @@ export class FilterComponent implements OnInit {
   private descriptions: FormArray;
   private listOfDescriptionsWithAmount: DescriptionWithAmount[] = [];
   private chargedBehalf = ['AJÁNDÉK', 'VEVŐ FIZETI'];
-  private compareFn: ((f1: any, f2: any) => boolean) | null = this.compareByValue;
-
+  private giftIndexList = [];
 
   constructor(private httpService: HttpService,
               private utilService: UtilService,
@@ -98,6 +97,7 @@ export class FilterComponent implements OnInit {
   }
 
   ngOnInit() {
+
     if (sessionStorage.getItem('selectedCars')) {
       this.selectedCars = JSON.parse(sessionStorage.getItem('selectedCars'));
     }
@@ -143,6 +143,16 @@ export class FilterComponent implements OnInit {
         downPayment: [this.downPayment],
         extra: [this.extra],
       });
+    }
+  }
+
+  private createFormGroupForDescriptionWithAmount() {
+    if (this.listOfDescriptionsWithAmount.length === 0) {
+      this.descriptionForm = this.formBuilder.group({
+        description: this.formBuilder.array([this.createDescriptionWithAmountRow(null)])
+      });
+    } else {
+      this.setDescriptionForm();
     }
   }
 
@@ -202,6 +212,9 @@ export class FilterComponent implements OnInit {
     if (sessionStorage.getItem('descriptionsWithAmount')) {
       this.listOfDescriptionsWithAmount = JSON.parse(sessionStorage.getItem('descriptionsWithAmount'));
     }
+    if (sessionStorage.getItem('giftIndexList')) {
+      this.giftIndexList = JSON.parse(sessionStorage.getItem('giftIndexList'));
+    }
     if (sessionStorage.getItem('selectedTypeOfBuying')) {
       this.selectedTypeOfBuying = sessionStorage.getItem('selectedTypeOfBuying');
     }
@@ -225,7 +238,8 @@ export class FilterComponent implements OnInit {
     sessionStorage.removeItem('thereIsCountInCar');
     sessionStorage.removeItem('downPayment');
     sessionStorage.removeItem('extra');
-    sessionStorage.removeItem('listOfDescriptions');
+    sessionStorage.removeItem('descriptionsWithAmount');
+    sessionStorage.removeItem('giftIndexList');
     sessionStorage.removeItem('selectedTypeOfBuying');
     sessionStorage.removeItem('salesman');
     sessionStorage.removeItem('countInCarSupplement');
@@ -255,7 +269,11 @@ export class FilterComponent implements OnInit {
     this.addCountInCar = null;
     this.downPayment = null;
     this.descriptionList = [];
+    this.description = null;
+    this.descriptions = null;
+    this.giftIndexList = [];
     this.listOfDescriptionsWithAmount = [];
+    this.createFormGroupForDescriptionWithAmount();
     this.extra = null;
     this.salesman = null;
     this.selectedTypeOfBuying = null;
@@ -351,6 +369,15 @@ export class FilterComponent implements OnInit {
     this.salesman = this.carOfTransaction.salesman;
     if (order.description != null) {
       this.descriptionList = order.description;
+    }
+    if (order.descriptionsWithAmount != null) {
+      this.listOfDescriptionsWithAmount = order.descriptionsWithAmount;
+      this.listOfDescriptionsWithAmount.forEach((descriptionWithAmount, index) => {
+        if (descriptionWithAmount.charged == 'AJÁNDÉK') {
+          this.giftIndexList.push(index);
+        }
+      });
+      this.setDescriptionForm();
     }
   }
 
@@ -912,7 +939,6 @@ export class FilterComponent implements OnInit {
   }
 
   private getCountInCarData(event: Car) {
-    console.log(event);
     this.countInCar = event;
     sessionStorage.setItem('countInCar', JSON.stringify(this.countInCar));
   }
@@ -944,17 +970,22 @@ export class FilterComponent implements OnInit {
   private submitHandOver(form: any, car: Car) {
     car.carHandover = form.value.handover;
     this.updateCarOfTransaction(car);
-    this.setOrderProgressInSessionStorage(10);
+    this.setOrderProgressInSessionStorage(9);
   }
 
   private saveDescriptions(descriptionForm: FormGroup) {
-    console.log(descriptionForm);
     descriptionForm.value.description.forEach(descriptionWithAmount => {
-      const charged = descriptionWithAmount.charged === 'AJÁNDÉK';
-      const description = new DescriptionWithAmount(descriptionWithAmount.description, descriptionWithAmount.amount, charged);
+      const descriptionAmount = descriptionWithAmount.charged === 'AJÁNDÉK' ? 0 : descriptionWithAmount.amount;
+      const description = new DescriptionWithAmount(null, descriptionWithAmount.descriptionText, descriptionAmount, descriptionWithAmount.charged);
       this.listOfDescriptionsWithAmount.push(description);
     });
     sessionStorage.setItem('descriptionsWithAmount', JSON.stringify(this.listOfDescriptionsWithAmount));
+    sessionStorage.setItem('giftIndexList', JSON.stringify(this.giftIndexList));
+    this.setOrderProgressInSessionStorage(10);
+  }
+
+  private addToGiftIndexList(index: number) {
+    this.giftIndexList.push(index);
   }
 
   private navigateToOrderOrSellingOrWarrantPage(car: Car, targetRoute: string,  witness1: Witness, witness2: Witness, warrantType: string) {
@@ -980,7 +1011,6 @@ export class FilterComponent implements OnInit {
         car.id,
         this.descriptionList,
         this.listOfDescriptionsWithAmount);
-
       this.httpService.saveOrder(this.newOrder).subscribe(order => {
         this.prepareNavigationToOrderPageOrSellingPageOrWarrantPage(order, car, witness1, witness2, targetRoute, warrantType);
       });
