@@ -1,61 +1,94 @@
 <mat-dialog-content>
   <h5>Add meg az eladáshoz kötődő adatokat!</h5>
-  <form #carTimeInfoForm=ngForm (ngSubmit)="saveCarData(carTimeInfoForm)" class="carTimeInfoForm">
-    <div class="dateContainer">
-      <div class="leftSide">
-        <div *ngFor="let item of fields1 | keyvalue:keepOriginalOrder; index as i; trackBy: trackByFn">
-          <mat-form-field class="example-full-width">
-            <input matInput [matDatepicker]="picker" placeholder="{{item.value}}" (ngModelChange)="changeAllDateFieldIfEmptyElseOnlyThisOne($event, item.key)" ngModel="{{carData[item.key] | date:'yyyy-MM-dd'}}" name="{{item.key}}">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
+  <div *ngIf="!remarkPartOpen">
+    <form #carTimeInfoForm=ngForm (ngSubmit)="saveCarData(carTimeInfoForm)" class="carTimeInfoForm">
+      <div class="dateContainer">
+        <div class="leftSide">
+          <div *ngFor="let item of fields1 | keyvalue:keepOriginalOrder; index as i; trackBy: trackByFn">
+            <mat-form-field class="example-full-width">
+              <input matInput [matDatepicker]="picker" placeholder="{{item.value}}" (ngModelChange)="changeAllDateFieldIfEmptyElseOnlyThisOne($event, item.key)" ngModel="{{carData[item.key] | date:'yyyy-MM-dd'}}" name="{{item.key}}">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="rightSide">
+          <div>
+            <mat-form-field class="example-full-width">
+              <input matInput [matDatepicker]="carHandoverPicker" placeholder="Autó átadásának időpontja" (ngModelChange)="changeAllDateFieldIfEmptyElseOnlyThisOne($event, 'carHandover')" ngModel="{{carData.carHandover | date:'yyyy-MM-dd'}}" name="carHandover">
+              <mat-datepicker-toggle matSuffix [for]="carHandoverPicker"></mat-datepicker-toggle>
+              <mat-datepicker #carHandoverPicker></mat-datepicker>
+            </mat-form-field>
+            <ngb-timepicker [(ngModel)]="carHandoverTime" name="carHandoverTime"></ngb-timepicker>
+          </div>
         </div>
       </div>
-      <div class="rightSide">
+      <mat-divider></mat-divider>
+      <div class="witnessContainer">
+        <div class="leftSide">
+          <div>
+            <mat-form-field class="example-full-width">
+              <mat-label>Tanú 1</mat-label>
+              <mat-select ngModel placeholder="Név" name="witness1">
+                <mat-option *ngFor="let witness of utilService.witnesses; trackBy: trackByFn" [value]="witness">
+                  {{witness.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="rightSide">
+          <div>
+            <mat-form-field class="example-full-width">
+              <mat-label>Tanú 2</mat-label>
+              <mat-select ngModel placeholder="Név" name="witness2">
+                <mat-option *ngFor="let witness of utilService.witnesses; trackBy: trackByFn" [value]="witness">
+                  {{witness.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="buttons">
+        <div class="saveButton">
+          <button mat-button>Tovább az adás-vételi megjegyzésekhez</button>
+        </div>
         <div>
-          <mat-form-field class="example-full-width">
-            <input matInput [matDatepicker]="carHandoverPicker" placeholder="Autó átadásának időpontja" (ngModelChange)="changeAllDateFieldIfEmptyElseOnlyThisOne($event, 'carHandover')" ngModel="{{carData.carHandover | date:'yyyy-MM-dd'}}" name="carHandover">
-            <mat-datepicker-toggle matSuffix [for]="carHandoverPicker"></mat-datepicker-toggle>
-            <mat-datepicker #carHandoverPicker></mat-datepicker>
-          </mat-form-field>
-          <ngb-timepicker [(ngModel)]="carHandoverTime" name="carHandoverTime"></ngb-timepicker>
+          <button type="button" class="mat-raised-button mat-accent" (click)="close()"><strong class="X">X</strong></button>
         </div>
       </div>
-    </div>
-    <mat-divider></mat-divider>
-    <div class="witnessContainer">
-      <div class="leftSide">
+    </form>
+  </div>
+  <div *ngIf="remarkPartOpen">
+    <form [formGroup]="remarkForm" (submit)="saveRemark(remarkForm)" class="remarkForm">
+      <div class="remarkContainer">
+        <div class="leftSide">
+          <div formArrayName="description" *ngFor="let remark of remarkForm.get('description').controls; let ind = index">
+            <div class="descriptions">
+              <div>
+                <mat-form-field class="example-full-width" [formGroupName]="ind">
+                  <label>
+                    <input matInput placeholder="Megjegyzés" formControlName="description">
+                  </label>
+                </mat-form-field>
+              </div>
+              <div><i class="material-icons delete" (click)="removeRemarkRow(ind)">clear</i></div>
+            </div>
+          </div>
+        </div>
+        <div class="rightSide">
+          <button type="button" (click)="addNewRemarkRow(null)" class="miniFab" mat-mini-fab><i class="material-icons">add</i></button>
+        </div>
+      </div>
+      <div class="buttons">
+        <div class="saveButton">
+          <button mat-button>Tovább az adás-vételi szerződéshez</button>
+        </div>
         <div>
-          <mat-form-field class="example-full-width">
-            <mat-label>Tanú 1</mat-label>
-            <mat-select ngModel placeholder="Név" name="witness1">
-              <mat-option *ngFor="let witness of utilService.witnesses; trackBy: trackByFn" [value]="witness">
-                {{witness.name}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+          <button type="button" class="mat-raised-button mat-accent" (click)="close()"><strong class="X">X</strong></button>
         </div>
       </div>
-      <div class="rightSide">
-        <div>
-          <mat-form-field class="example-full-width">
-            <mat-label>Tanú 2</mat-label>
-            <mat-select ngModel placeholder="Név" name="witness2">
-              <mat-option *ngFor="let witness of utilService.witnesses; trackBy: trackByFn" [value]="witness">
-                {{witness.name}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-      </div>
-    </div>
-    <div class="buttons">
-      <div class="saveButton">
-        <button mat-button>Tovább az adás-vételi szerződéshez</button>
-      </div>
-      <div>
-        <button type="button" class="mat-raised-button mat-accent" (click)="close()"><strong class="X">X</strong></button>
-      </div>
-    </div>
-  </form>
+    </form>
+  </div>
 </mat-dialog-content>

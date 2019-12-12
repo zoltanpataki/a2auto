@@ -3,6 +3,8 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {Car} from "../../models/car";
 import {UtilService} from "../../services/util.service";
 import {Witness} from "../../models/witness";
+import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
+import {Description} from "../../models/description";
 
 @Component({
   selector: 'app-car-time-info',
@@ -20,9 +22,15 @@ export class CarTimeInfoComponent implements OnInit {
   private witness1: Witness;
   private witness2: Witness;
 
+  private remarkPartOpen: boolean = false;
+  private remarkForm: FormGroup;
+  private description: FormArray;
+  private remarkList: Description[] = [];
+
   constructor(private dialogRef: MatDialogRef<CarTimeInfoComponent>,
               @Inject(MAT_DIALOG_DATA) public data,
-              private utilService: UtilService,) {}
+              private utilService: UtilService,
+              private formBuilder: FormBuilder,) {}
 
   ngOnInit() {
     this.carData = this.data.car;
@@ -31,7 +39,45 @@ export class CarTimeInfoComponent implements OnInit {
     const carHandoverDate: Date = new Date(this.carData.carHandover);
     this.carHandoverTime['hour'] = carHandoverDate.getHours();
     this.carHandoverTime['minute'] = carHandoverDate.getMinutes();
-    console.log(this.data);
+
+    if (this.remarkList.length === 0) {
+      this.remarkForm = this.formBuilder.group({
+        description: this.formBuilder.array([this.createRemarkRow(null)])
+      });
+    } else {
+      this.setRemarkForm();
+    }
+  }
+
+  private setRemarkForm() {
+    this.remarkForm = this.formBuilder.group({
+      description: this.formBuilder.array([]),
+    });
+    this.remarkList.forEach(remark => {
+      this.addNewRemarkRow(remark.description);
+    });
+  }
+
+  private addNewRemarkRow(description: string) {
+    this.description = this.remarkForm.get('description') as FormArray;
+    this.description.push(this.createRemarkRow(description));
+  }
+
+  private removeRemarkRow(index: number) {
+    this.description = this.remarkForm.get('description') as FormArray;
+    this.description.removeAt(index);
+  }
+
+  private createRemarkRow(remark: string) {
+    if (remark == null) {
+      return this.formBuilder.group({
+        description: [null],
+      });
+    } else {
+      return this.formBuilder.group({
+        description: [remark],
+      });
+    }
   }
 
   close() {
@@ -45,7 +91,13 @@ export class CarTimeInfoComponent implements OnInit {
     this.carData.carHandover = carHandover;
     this.witness1 = form.value.witness1;
     this.witness2 = form.value.witness2;
+    this.remarkPartOpen = true;
+  }
+
+  private saveRemark(form: FormGroup) {
+    this.remarkPartOpen = false;
     this.closeWithData();
+    console.log(form.value)
   }
 
   closeWithData() {

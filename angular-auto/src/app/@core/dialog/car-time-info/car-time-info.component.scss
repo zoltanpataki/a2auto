@@ -12,7 +12,13 @@ button {
   background-color: deeppink;
 }
 
-.buttons {
+.buttons, .remarkContainer, .descriptions {
   display: flex;
   justify-content: space-between;
+}
+
+.descriptions {
+  display: flex;
+  align-items: center;
+  width: 70%;
 }
