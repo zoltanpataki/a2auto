@@ -34,6 +34,7 @@ export class CarTimeInfoComponent implements OnInit {
 
   ngOnInit() {
     this.carData = this.data.car;
+    this.remarkList = this.data.order.description;
     this.clickedCarIndex = this.data.clickedCarIndex;
     this.selectedCars = this.data.selectedCars;
     const carHandoverDate: Date = new Date(this.carData.carHandover);
@@ -96,15 +97,21 @@ export class CarTimeInfoComponent implements OnInit {
 
   private saveRemark(form: FormGroup) {
     this.remarkPartOpen = false;
+    this.remarkList = [];
+    form.value.description.forEach(description => {
+      const newDescription = new Description(description.description);
+      this.remarkList.push(newDescription);
+    });
     this.closeWithData();
-    console.log(form.value)
   }
 
   closeWithData() {
+    console.log(this.remarkList);
     const closingData = {};
     closingData['car'] = this.carData;
     closingData['witness1'] = this.witness1;
     closingData['witness2'] = this.witness2;
+    closingData['remarkList'] = this.remarkList;
 
     this.dialogRef.close(closingData);
   }

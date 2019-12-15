@@ -116,7 +116,7 @@
           <p *ngIf="!orderedCar.downPayment" class="texts">Foglaló (Fizetve):</p>
         </div>
         <div class="border">
-          <p *ngIf="order && order.countInCarSupplement && order.countInCarSupplement.countInPrice" class="texts">Előleg: {{order.countInCarSupplement.countInPrice}}</p>
+          <p *ngIf="order && order.countInCarSupplement && order.countInCarSupplement.countInPrice" class="texts">Beszámítási érték: {{order.countInCarSupplement.countInPrice}}</p>
           <p *ngIf="!order || order && !order.countInCarSupplement || order.countInCarSupplement && !order.countInCarSupplement.countInPrice" class="texts">Előleg:</p>
         </div>
         <div class="border">

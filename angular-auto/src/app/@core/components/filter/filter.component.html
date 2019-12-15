@@ -309,23 +309,6 @@
                       </mat-form-field>
                     </div>
                   </div>
-                  <div class="middle">
-                    <div>
-                      <div formArrayName="description" *ngFor="let singleDescription of countInCarSupplementForm.get('description').controls; let ind = index">
-                        <div class="descriptions">
-                          <mat-form-field class="example-full-width" [formGroupName]="ind">
-                            <label>
-                              <input matInput placeholder="Kiegészítés" formControlName="description">
-                            </label>
-                          </mat-form-field>
-                          <div><i class="material-icons delete" (click)="removeDescriptionRow(ind)">clear</i></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="rightSide">
-                    <button type="button" (click)="addNewDescriptionRow(null)" class="miniFab" mat-mini-fab><i class="material-icons">add</i></button>
-                  </div>
                 </div>
               </div>
               <div>

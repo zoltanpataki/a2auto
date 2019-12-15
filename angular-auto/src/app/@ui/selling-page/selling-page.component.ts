@@ -8,7 +8,6 @@ import {Users} from "../../@core/models/users";
 import {Company} from "../../@core/models/company";
 import {UtilService} from "../../@core/services/util.service";
 import {Witness} from "../../@core/models/witness";
-import {HttpService} from "../../@core/services/http.service";
 
 @Component({
   selector: 'app-selling-page',

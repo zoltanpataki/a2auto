@@ -48,11 +48,11 @@ public class Order {
     @JoinColumn(name = "company", referencedColumnName = "id")
     private Company company;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "count_in_car_supplement_id", referencedColumnName = "id")
     private CountInCarSupplement countInCarSupplement;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "credit_order_id", referencedColumnName = "id")
     private Credit credit;
 

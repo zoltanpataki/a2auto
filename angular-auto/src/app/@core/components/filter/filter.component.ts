@@ -121,7 +121,6 @@ export class FilterComponent implements OnInit {
         previousLoan: [null],
         previousBank: [null],
         loanType: [null],
-        description: this.formBuilder.array([this.createDescriptionRow(null)]),
       });
     } else {
       this.setCountInCarSupplementForm(this.countInCarSupplement);
@@ -291,10 +290,6 @@ export class FilterComponent implements OnInit {
       previousLoan: [countInCarSupplement.previousLoan],
       previousBank: [countInCarSupplement.previousBank],
       loanType: [countInCarSupplement.loanType],
-      description: this.formBuilder.array([]),
-    });
-    this.descriptionList.forEach(description => {
-      this.addNewDescriptionRow(description.description);
     });
   }
 
@@ -381,13 +376,6 @@ export class FilterComponent implements OnInit {
     }
   }
 
-
-  private createDescriptionRow(description: string): FormGroup {
-    return this.formBuilder.group({
-      description: [description],
-    });
-  }
-
   private createDescriptionWithAmountRow(descriptionWithAmount: DescriptionWithAmount) {
     if (descriptionWithAmount == null) {
       return this.formBuilder.group({
@@ -412,16 +400,6 @@ export class FilterComponent implements OnInit {
   private removeDescriptionWithAmountRow(index: number) {
     this.descriptions = this.descriptionForm.get('description') as FormArray;
     this.descriptions.removeAt(index);
-  }
-
-  private addNewDescriptionRow(description: string) {
-    this.description = this.countInCarSupplementForm.get('description') as FormArray;
-    this.description.push(this.createDescriptionRow(description));
-  }
-
-  private removeDescriptionRow(index: number) {
-    this.description = this.countInCarSupplementForm.get('description') as FormArray;
-    this.description.removeAt(index);
   }
 
   public filterCars(form: any) {
@@ -543,6 +521,7 @@ export class FilterComponent implements OnInit {
 
     carTimeInfoDialogConfig.data = {
       car: car,
+      order: this.newOrder,
       clickedCarIndex: this.clickedCarIndex,
       selectedCars: this.selectedCars
     };
@@ -553,15 +532,29 @@ export class FilterComponent implements OnInit {
       console.log('The dialog was closed');
       if (result != null) {
         this.updateCarOfTransaction(result.car);
-        if (this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer) {
-          this.carOfTransaction = result.car;
-          this.navigateToOrderOrSellingOrWarrantPage(this.carOfTransaction,'/sellingPage', result.witness1, result.witness2, null);
+        if (result.remarkList != null) {
+          this.newOrder.description = result.remarkList;
+          this.descriptionList = result.remarkList;
+          sessionStorage.setItem('descriptionList', JSON.stringify(this.descriptionList));
+          this.httpService.updateOrder(this.newOrder).subscribe(order => {
+            sessionStorage.setItem('order', JSON.stringify(order));
+            this.evaluateCarOfContract(result);
+          });
         } else {
-          this.countInCar = result.car;
-          this.navigateToOrderOrSellingOrWarrantPage(this.countInCar,'/sellingPage', result.witness1, result.witness2, null);
+          this.evaluateCarOfContract(result);
         }
       }
     });
+  }
+
+  private evaluateCarOfContract(resultOfCarTimeInfoDialog: any) {
+    if (this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer) {
+      this.carOfTransaction = resultOfCarTimeInfoDialog.car;
+      this.navigateToOrderOrSellingOrWarrantPage(this.carOfTransaction,'/sellingPage', resultOfCarTimeInfoDialog.witness1, resultOfCarTimeInfoDialog.witness2, null);
+    } else {
+      this.countInCar = resultOfCarTimeInfoDialog.car;
+      this.navigateToOrderOrSellingOrWarrantPage(this.countInCar,'/sellingPage', resultOfCarTimeInfoDialog.witness1, resultOfCarTimeInfoDialog.witness2, null);
+    }
   }
 
   public openWitnessPickerModal(): void {
@@ -829,7 +822,6 @@ export class FilterComponent implements OnInit {
     this.selectedTypeOfBuying = type;
     this.carOfTransaction.typeOfBuying = type;
     this.httpService.updateCar(this.carOfTransaction).subscribe(data => {
-      console.log(data);
     });
     if (this.selectedTypeOfBuying === 'HITEL') {
       this.openCreditModal(car);
@@ -877,11 +869,6 @@ export class FilterComponent implements OnInit {
       form.value.previousLoan,
       form.value.previousBank,
       form.value.loanType);
-    form.value.description.forEach(description => {
-      this.descriptionList.push(new Description(description.description));
-    });
-    console.log(this.descriptionList);
-    sessionStorage.setItem('descriptionList', JSON.stringify(this.descriptionList));
     sessionStorage.setItem('countInCarSupplement', JSON.stringify(this.countInCarSupplement));
     this.setOrderProgressInSessionStorage(5);
   }
@@ -1030,8 +1017,8 @@ export class FilterComponent implements OnInit {
       this.newOrder.countInCar = this.countInCar;
       this.newOrder.carId = car.id;
       this.newOrder.description = this.descriptionList;
+      console.log(this.newOrder);
       this.httpService.updateOrder(this.newOrder).subscribe(order => {
-        console.log(order);
         this.prepareNavigationToOrderPageOrSellingPageOrWarrantPage(<Order> order, car, witness1, witness2, targetRoute, warrantType);
       });
     }
