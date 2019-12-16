@@ -40,11 +40,11 @@ public class Order {
     @JsonManagedReference
     private List<DescriptionWithAmount> descriptionsWithAmount = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @OneToOne(cascade = CascadeType.MERGE, orphanRemoval = true)
     @JoinColumn(name = "users", referencedColumnName = "id")
     private Users users;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @OneToOne(cascade = CascadeType.MERGE, orphanRemoval = true)
     @JoinColumn(name = "company", referencedColumnName = "id")
     private Company company;
 
@@ -56,7 +56,7 @@ public class Order {
     @JoinColumn(name = "credit_order_id", referencedColumnName = "id")
     private Credit credit;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @OneToOne(cascade = CascadeType.MERGE, orphanRemoval = true)
     @JoinColumn(name = "count_in_car", referencedColumnName = "id")
     private Car countInCar;
 

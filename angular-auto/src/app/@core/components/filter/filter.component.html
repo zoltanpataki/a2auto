@@ -320,7 +320,7 @@
       </div>
       <div *ngIf="orderProgress > 4">
         <mat-divider></mat-divider>
-        <h5>Foglaló + extra</h5>
+        <h5>Foglaló + előleg</h5>
         <form [formGroup]="downPaymentForm" (submit)="saveDownPaymentAmount(downPaymentForm, car)">
           <div>
             <mat-form-field class="example-full-width">
@@ -332,7 +332,7 @@
           <div>
             <mat-form-field class="example-full-width">
               <label>
-                <input matInput type="number" placeholder="Extrák összege" formControlName="extra" [(ngModel)]="extra">
+                <input matInput type="number" placeholder="Előleg összege" formControlName="extra" [(ngModel)]="extra">
               </label>
             </mat-form-field>
           </div>
@@ -411,7 +411,7 @@
               <div class="descriptions">
                 <mat-form-field class="example-full-width" [formGroupName]="indexNum">
                   <mat-select placeholder="Terhelt fél" formControlName="charged">
-                    <mat-option *ngFor="let item of chargedBehalf; trackBy: trackByFn" value="{{item}}" (click)="item == 'AJÁNDÉK' && addToGiftIndexList(indexNum)">
+                    <mat-option *ngFor="let item of chargedBehalf; trackBy: trackByFn" value="{{item}}" (click)="item == 'AJÁNDÉK' && addToGiftIndexList(indexNum) || item == 'VEVŐ FIZETI' && removeFromGiftIndexList(indexNum)">
                       {{item}}
                     </mat-option>
                   </mat-select>

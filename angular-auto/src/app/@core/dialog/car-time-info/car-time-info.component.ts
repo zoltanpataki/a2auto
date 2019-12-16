@@ -34,7 +34,9 @@ export class CarTimeInfoComponent implements OnInit {
 
   ngOnInit() {
     this.carData = this.data.car;
-    this.remarkList = this.data.order.description;
+    if (this.data.order != null) {
+      this.remarkList = this.data.order.description;
+    }
     this.clickedCarIndex = this.data.clickedCarIndex;
     this.selectedCars = this.data.selectedCars;
     const carHandoverDate: Date = new Date(this.carData.carHandover);

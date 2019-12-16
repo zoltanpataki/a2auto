@@ -117,7 +117,7 @@
         </div>
         <div class="border">
           <p *ngIf="order && order.countInCarSupplement && order.countInCarSupplement.countInPrice" class="texts">Beszámítási érték: {{order.countInCarSupplement.countInPrice}}</p>
-          <p *ngIf="!order || order && !order.countInCarSupplement || order.countInCarSupplement && !order.countInCarSupplement.countInPrice" class="texts">Előleg:</p>
+          <p *ngIf="!order || order && !order.countInCarSupplement || order.countInCarSupplement && !order.countInCarSupplement.countInPrice" class="texts">Beszámítási érték:</p>
         </div>
         <div class="border">
           <p *ngIf="order && order.credit && order.credit.creditAmount" class="subSectionLiner">Hitelösszeg: {{order.credit.creditAmount}}</p>
@@ -127,7 +127,8 @@
           <p class="sectionLiner">További befizetések:</p>
         </div>
         <div class="border">
-          <p class="texts">&nbsp;</p>
+          <p *ngIf="order && order.extra" class="texts">Előleg: {{order.extra}}</p>
+          <p *ngIf="!order || order && !order.extra" class="texts">Előleg:</p>
         </div>
         <div class="border">
           <p class="subSectionLiner">Maradék befizetendő: {{remainingPrice}}</p>
@@ -239,7 +240,7 @@
         <div class="silverCenter border">
           <p class="sectionLiner">Kiegészítések:</p>
         </div>
-        <div *ngIf="order && order.descriptionsWithAmount" class="extraCarInfo">
+        <div *ngIf="order && order.descriptionsWithAmount && order.descriptionsWithAmount.length > 0" class="extraCarInfo">
           <p class="texts" *ngFor="let description of order.descriptionsWithAmount">- {{description.description}}&#160;-&#160;{{description.charged}}</p>
         </div>
       </div>

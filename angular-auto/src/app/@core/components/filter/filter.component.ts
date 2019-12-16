@@ -533,16 +533,10 @@ export class FilterComponent implements OnInit {
       if (result != null) {
         this.updateCarOfTransaction(result.car);
         if (result.remarkList != null) {
-          this.newOrder.description = result.remarkList;
           this.descriptionList = result.remarkList;
           sessionStorage.setItem('descriptionList', JSON.stringify(this.descriptionList));
-          this.httpService.updateOrder(this.newOrder).subscribe(order => {
-            sessionStorage.setItem('order', JSON.stringify(order));
-            this.evaluateCarOfContract(result);
-          });
-        } else {
-          this.evaluateCarOfContract(result);
         }
+        this.evaluateCarOfContract(result);
       }
     });
   }
@@ -575,10 +569,6 @@ export class FilterComponent implements OnInit {
 
   public trackByFn(index, item) {
     return item.id; // unique id corresponding to the item
-  }
-
-  compareByValue(f1: any, f2: any) {
-    return f1 && f2 && f1.name === f2.name;
   }
 
   private filterUser(form: any) {
@@ -973,6 +963,10 @@ export class FilterComponent implements OnInit {
 
   private addToGiftIndexList(index: number) {
     this.giftIndexList.push(index);
+  }
+
+  private removeFromGiftIndexList(index: number) {
+    this.giftIndexList.splice(index, 1);
   }
 
   private navigateToOrderOrSellingOrWarrantPage(car: Car, targetRoute: string,  witness1: Witness, witness2: Witness, warrantType: string) {
