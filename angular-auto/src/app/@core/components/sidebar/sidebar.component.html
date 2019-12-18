@@ -1,38 +1,38 @@
 <nav>
   <ul>
     <li>
-      <a routerLink="" [class.activated]="currentUrl == '/'">
+      <a routerLink="" [class.activated]="currentUrl == '/'" matTooltip="Kezdő oldal">
         <fa name="home"></fa>
       </a>
     </li>
     <li>
-      <a routerLink="newCar" [class.activated]="currentUrl == '/newCar'">
+      <a routerLink="newCar" [class.activated]="currentUrl == '/newCar'" matTooltip="Új autó felvitele">
         <fa name="car"></fa>
       </a>
     </li>
     <li>
-      <a routerLink="newUser" [class.activated]="currentUrl == '/newUser'">
+      <a routerLink="newUser" [class.activated]="currentUrl == '/newUser'" matTooltip="Új magánszemély felvitele">
         <fa name="user"></fa>
       </a>
     </li>
     <li>
-      <a routerLink="newCompany" [class.activated]="currentUrl == '/newCompany'">
+      <a routerLink="newCompany" [class.activated]="currentUrl == '/newCompany'" matTooltip="Új cég felvitele">
         <fa name="industry"></fa>
       </a>
     </li>
     <li>
-      <a routerLink="filter" [class.activated]="currentUrl == '/filter'">
+      <a routerLink="filter" [class.activated]="currentUrl == '/filter'" matTooltip="Szűrők">
         <fa name="search"></fa>
       </a>
     </li>
     <li>
-      <a routerLink="settings" [class.activated]="currentUrl == '/settings'">
+      <a routerLink="settings" [class.activated]="currentUrl == '/settings'" matTooltip="Beállítások">
         <fa name="cog" animation="spin"></fa>
       </a>
     </li>
     <li>
-      <a routerLink="gdprPage" [class.activated]="currentUrl == '/gdprPage'">
-        <fa name="user_lock"></fa>
+      <a routerLink="gdprPage" [class.activated]="currentUrl == '/gdprPage'" matTooltip="GDPR dokumentum">
+        <fa name="lock"></fa>
       </a>
     </li>
   </ul>

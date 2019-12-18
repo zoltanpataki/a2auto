@@ -56,10 +56,7 @@ export class FilterComponent implements OnInit {
   private addCountInCar: string;
   private thereIsCountInCar: boolean;
   private countInCarSupplement: CountInCarSupplement;
-  private description: FormArray;
   private clickedCarIndex: number;
-  private downPaymentForm: FormGroup;
-  private downPayment: number;
   private extra: number;
   private userDisplayedColumns: string[] = ['name', 'city', 'taxNumber', 'symbol'];
   private companyDisplayedColumns: string[] = ['name', 'registrationNumber', 'representation', 'symbol'];
@@ -75,8 +72,12 @@ export class FilterComponent implements OnInit {
   private newCompany: Company;
   private descriptionList: Description[] = [];
   private switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer: boolean = true;
-
+  // Downpayment form variables
+  private downPaymentForm: FormGroup;
+  private downPayment: number;
+  // Description with amount form variables
   private descriptionForm: FormGroup;
+  private description: FormArray;
   private descriptions: FormArray;
   private listOfDescriptionsWithAmount: DescriptionWithAmount[] = [];
   private chargedBehalf = ['AJÁNDÉK', 'VEVŐ FIZETI'];
@@ -96,8 +97,19 @@ export class FilterComponent implements OnInit {
       });
   }
 
+  // Prepare formGroups and get the necessary data from sessionStorage
   ngOnInit() {
 
+    if (this.utilService.witnesses == null) {
+      this.httpService.getAllWitnesses().subscribe(data => {
+        this.utilService.witnesses = data;
+      });
+    }
+    if (this.utilService.salesmen == null) {
+      this.httpService.getAllSalesmen().subscribe(data => {
+        this.utilService.salesmen = data;
+      });
+    }
     if (sessionStorage.getItem('selectedCars')) {
       this.selectedCars = JSON.parse(sessionStorage.getItem('selectedCars'));
     }
@@ -145,15 +157,7 @@ export class FilterComponent implements OnInit {
     }
   }
 
-  private createFormGroupForDescriptionWithAmount() {
-    if (this.listOfDescriptionsWithAmount.length === 0) {
-      this.descriptionForm = this.formBuilder.group({
-        description: this.formBuilder.array([this.createDescriptionWithAmountRow(null)])
-      });
-    } else {
-      this.setDescriptionForm();
-    }
-  }
+  // Retrieve all the data after refresh
 
   private getDataFromSessionStorageAfterRefresh() {
     if (sessionStorage.getItem('orderProgress')) {
@@ -222,6 +226,8 @@ export class FilterComponent implements OnInit {
     }
   }
 
+  // Remove all the items from sessionStorage when other order or other route was clicked
+
   private removeItemsFromSessionStorage() {
     sessionStorage.removeItem('clickedCarIndex');
     sessionStorage.removeItem('order');
@@ -247,6 +253,8 @@ export class FilterComponent implements OnInit {
     sessionStorage.removeItem('orderedCar');
     sessionStorage.removeItem('descriptionList');
   }
+
+  // Sets the data to null when expansion order is collapsed
 
   private setDataToNull() {
     this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = null;
@@ -284,23 +292,7 @@ export class FilterComponent implements OnInit {
     this.removeItemsFromSessionStorage();
   }
 
-  private setCountInCarSupplementForm(countInCarSupplement: CountInCarSupplement) {
-    this.countInCarSupplementForm = this.formBuilder.group({
-      countInPrice: [countInCarSupplement.countInPrice],
-      previousLoan: [countInCarSupplement.previousLoan],
-      previousBank: [countInCarSupplement.previousBank],
-      loanType: [countInCarSupplement.loanType],
-    });
-  }
-
-  private setDescriptionForm() {
-    this.descriptionForm = this.formBuilder.group({
-      description: this.formBuilder.array([]),
-    });
-    this.listOfDescriptionsWithAmount.forEach(descriptionWithAmount => {
-      this.addNewDescriptionWithAmountRow(descriptionWithAmount);
-    });
-  }
+  // Sets variables regarding the order for the component
 
   private setFilterComponentVariablesAccordingToOrder(order: Order) {
     this.setOrderProgressInSessionStorage(10);
@@ -374,6 +366,36 @@ export class FilterComponent implements OnInit {
       });
       this.setDescriptionForm();
     }
+  }
+
+  // DescriptionForm
+
+  private createFormGroupForDescriptionWithAmount() {
+    if (this.listOfDescriptionsWithAmount.length === 0) {
+      this.descriptionForm = this.formBuilder.group({
+        description: this.formBuilder.array([this.createDescriptionWithAmountRow(null)])
+      });
+    } else {
+      this.setDescriptionForm();
+    }
+  }
+
+  private setDescriptionForm() {
+    this.descriptionForm = this.formBuilder.group({
+      description: this.formBuilder.array([]),
+    });
+    this.listOfDescriptionsWithAmount.forEach(descriptionWithAmount => {
+      this.addNewDescriptionWithAmountRow(descriptionWithAmount);
+    });
+  }
+
+  private setCountInCarSupplementForm(countInCarSupplement: CountInCarSupplement) {
+    this.countInCarSupplementForm = this.formBuilder.group({
+      countInPrice: [countInCarSupplement.countInPrice],
+      previousLoan: [countInCarSupplement.previousLoan],
+      previousBank: [countInCarSupplement.previousBank],
+      loanType: [countInCarSupplement.loanType],
+    });
   }
 
   private createDescriptionWithAmountRow(descriptionWithAmount: DescriptionWithAmount) {

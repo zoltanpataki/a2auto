@@ -1,6 +1,9 @@
 import {Component, OnInit} from '@angular/core';
+import { Select } from '@ngxs/store';
 import {HttpService} from "./@core/services/http.service";
 import {UtilService} from "./@core/services/util.service";
+import {LoaderState} from "./@core/services/loader.state";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-root',
@@ -8,11 +11,12 @@ import {UtilService} from "./@core/services/util.service";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit{
+  @Select(LoaderState.status)
+  public loadingStatus$: Observable<boolean>;
   title = 'angular-auto';
 
   constructor(private httpService: HttpService,
               private utilService: UtilService) {
-
   }
 
   ngOnInit(): void {

@@ -54,16 +54,16 @@
             {{car.plateNumber}}
           </mat-panel-title>
           <mat-panel-title class="buyButton" fxFlex="9">
-            <i class="material-icons" (click)="navigateToBlankOrderPage(car)">spellcheck</i>
+            <i class="material-icons" (click)="navigateToBlankOrderPage(car)" matTooltip="Üres megrendelőlap az autóhoz">spellcheck</i>
           </mat-panel-title>
           <mat-panel-title class="buyButton" fxFlex="9">
-            <i class="material-icons edit" (click)="openUpdateModal(car)">edit</i>
+            <i class="material-icons edit" (click)="openUpdateModal(car)" matTooltip="Autó szerkesztése">edit</i>
           </mat-panel-title>
           <mat-panel-title class="buyButton" fxFlex="8">
-            <i class="material-icons money" (click)="setAlreadyOrNewCustomerSelectorAndCarOfTransaction(car, i)">shopping_cart</i>
+            <i class="material-icons money" (click)="setAlreadyOrNewCustomerSelectorAndCarOfTransaction(car, i)" matTooltip="Autó megvásárlása">shopping_cart</i>
           </mat-panel-title>
           <mat-panel-title class="buyButton" fxFlex="8">
-            <i class="material-icons delete" (click)="openWarningModal(car.id)">clear</i>
+            <i class="material-icons delete" (click)="openWarningModal(car.id)" matTooltip="Autó végleges törlése">clear</i>
           </mat-panel-title>
         </div>
       </mat-expansion-panel-header>

@@ -13,7 +13,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {MatButtonModule} from "@angular/material/button";
 import {MatSelectModule} from "@angular/material/select";
 import {MatDatepickerModule} from "@angular/material/datepicker";
@@ -41,6 +41,12 @@ import { SalesmanComponent } from './@core/dialog/salesman/salesman.component';
 import { WitnessDialogComponent } from './@core/dialog/witness-dialog/witness-dialog.component';
 import { WarrantPageComponent } from './@ui/warrant-page/warrant-page.component';
 import { WitnessPickerDialogComponent } from './@core/dialog/witness-picker-dialog/witness-picker-dialog.component';
+import {MatTooltipModule} from "@angular/material/tooltip";
+import {NgxSpinnerModule} from "ngx-spinner";
+import { LoaderComponent } from './@core/components/loader/loader.component';
+import {NgxsModule} from "@ngxs/store";
+import {LoaderInterceptor} from "./@core/services/loader.service";
+import {LoaderState} from "./@core/services/loader.state";
 
 @NgModule({
   declarations: [
@@ -64,6 +70,7 @@ import { WitnessPickerDialogComponent } from './@core/dialog/witness-picker-dial
     WitnessDialogComponent,
     WarrantPageComponent,
     WitnessPickerDialogComponent,
+    LoaderComponent,
   ],
   imports: [
     BrowserModule,
@@ -88,8 +95,11 @@ import { WitnessPickerDialogComponent } from './@core/dialog/witness-picker-dial
     MatTableModule,
     FlexModule,
     AngularFontAwesomeModule,
+    MatTooltipModule,
+    NgxSpinnerModule,
+    NgxsModule.forRoot([LoaderState]),
   ],
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },],
   bootstrap: [AppComponent],
   entryComponents: [DialogComponent, WarningDialogComponent, CreditDialogComponent, CarTimeInfoComponent, SalesmanComponent, WitnessDialogComponent, WitnessPickerDialogComponent]
 })
