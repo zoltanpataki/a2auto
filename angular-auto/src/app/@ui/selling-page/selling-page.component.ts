@@ -33,6 +33,9 @@ export class SellingPageComponent implements OnInit{
   private buyerIndividual: Users;
   private witness1: Witness;
   private witness2: Witness;
+  private a2Representation: string;
+  private sellerCompanyRepresentation: string;
+  private buyerCompanyRepresentation: string;
 
   constructor(private utilService: UtilService, ) { }
 
@@ -56,6 +59,9 @@ export class SellingPageComponent implements OnInit{
     if (sessionStorage.getItem('witness2') != null) {
       this.witness2 = JSON.parse(sessionStorage.getItem('witness2'));
     }
+    if (sessionStorage.getItem('a2Representation') != null) {
+      this.a2Representation = sessionStorage.getItem('a2Representation');
+    }
     this.today = new Date();
     if (history.state.data) {
       this.order = history.state.data.order;
@@ -69,6 +75,7 @@ export class SellingPageComponent implements OnInit{
       this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer = history.state.data.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer;
       this.witness1 = history.state.data.witness1;
       this.witness2 = history.state.data.witness2;
+      this.a2Representation = history.state.data.a2Representation;
       sessionStorage.setItem('clickedCarIndex', history.state.data.clickedCarIndex);
       sessionStorage.setItem('orderedCar', JSON.stringify(this.orderedCar));
       sessionStorage.setItem('order', JSON.stringify(this.order));
@@ -76,6 +83,7 @@ export class SellingPageComponent implements OnInit{
       sessionStorage.setItem('companySearchData', JSON.stringify(this.companySearchResult));
       sessionStorage.setItem('witness1', JSON.stringify(this.witness1));
       sessionStorage.setItem('witness2', JSON.stringify(this.witness2));
+      sessionStorage.setItem('a2Representation', this.a2Representation);
       if (this.indexOfPickedUser != null) {
         sessionStorage.setItem('indexOfPickedUser', JSON.stringify(this.indexOfPickedUser));
       }
@@ -125,6 +133,7 @@ export class SellingPageComponent implements OnInit{
   private setUserData(order: Order) {
     if (this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer) {
       this.sellerCompany = this.utilService.a2Company;
+      this.sellerCompanyRepresentation = this.a2Representation;
       if (order.users != null) {
         this.buyerIndividual = order.users;
       } else if (order.company != null) {
@@ -132,6 +141,7 @@ export class SellingPageComponent implements OnInit{
       }
     } else {
       this.buyerCompany = this.utilService.a2Company;
+      this.buyerCompanyRepresentation = this.a2Representation;
       if (order.users != null) {
         this.sellerIndividual = order.users;
       } else if (order.company != null) {

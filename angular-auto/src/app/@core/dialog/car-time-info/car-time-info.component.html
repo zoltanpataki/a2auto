@@ -50,6 +50,19 @@
           </div>
         </div>
       </div>
+      <mat-divider></mat-divider>
+      <div class="representationContainer">
+        <div>
+          <mat-form-field class="example-full-width">
+            <mat-label>A2 Képviselő</mat-label>
+            <mat-select ngModel placeholder="Név" name="representation">
+              <mat-option *ngFor="let representation of listOfA2Representation; trackBy: trackByFn" [value]="representation">
+                {{representation}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
       <div class="buttons">
         <div class="saveButton">
           <button mat-button>Tovább az adás-vételi megjegyzésekhez</button>

@@ -1,0 +1,54 @@
+.mainContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.innerContainer {
+  width: 80%;
+}
+
+.barcodePic, .praventoPic, .title, .subtitle {
+  display: flex;
+  justify-content: center;
+}
+
+.title, .subtitle{
+  flex-direction: column;
+  text-align: center;
+}
+
+.tableHeader p {
+  margin-bottom: 0;
+}
+
+.firstTableContainer, .secondTableContainer, .thirdTableContainer, .fourthTableContainer {
+  margin-bottom: 2%;
+}
+
+.firstTable, .secondTable, .thirdTable, .fourthTable {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.firstTableFirstRow, .secondTableFirstRow, .thirdTableFirstRow, .fourthTableFirstRow {
+  border: 1px solid black;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.firstTableFirstRow td, .secondTableFirstRow td, .thirdTableFirstRow td, .fourthTableFirstRow td {
+  border: 1px solid black;
+}
+
+.firstTableMiddleRow, .secondTableMiddleRow, .thirdTableMiddleRow, .fourthTableMiddleRow {
+  border: 1px solid black;
+  border-top: 0;
+  margin-top: 0;
+  padding-top: 0;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+.firstTableMiddleRow td, .secondTableMiddleRow td, .thirdTableMiddleRow td, .fourthTableMiddleRow td {
+  border: 1px solid black;
+  border-top: 0;
+}

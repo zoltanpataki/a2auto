@@ -22,3 +22,12 @@ button {
   align-items: center;
   width: 70%;
 }
+
+.witnessContainer, .representationContainer {
+  margin-top: 2%;
+}
+
+.representationContainer {
+  display: flex;
+  justify-content: center;
+}

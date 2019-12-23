@@ -21,6 +21,8 @@ export class CarTimeInfoComponent implements OnInit {
   private selectedCars: Car[];
   private witness1: Witness;
   private witness2: Witness;
+  private listOfA2Representation = ['SOÓS GÁBOR', 'VINCZ ANTAL'];
+  private pickedRepresentation: string;
 
   private remarkPartOpen: boolean = false;
   private remarkForm: FormGroup;
@@ -94,6 +96,7 @@ export class CarTimeInfoComponent implements OnInit {
     this.carData.carHandover = carHandover;
     this.witness1 = form.value.witness1;
     this.witness2 = form.value.witness2;
+    this.pickedRepresentation = form.value.representation;
     this.remarkPartOpen = true;
   }
 
@@ -101,9 +104,12 @@ export class CarTimeInfoComponent implements OnInit {
     this.remarkPartOpen = false;
     this.remarkList = [];
     form.value.description.forEach(description => {
-      const newDescription = new Description(description.description);
-      this.remarkList.push(newDescription);
+      if (description.description != null) {
+        const newDescription = new Description(description.description);
+        this.remarkList.push(newDescription);
+      }
     });
+    console.log(this.remarkList);
     this.closeWithData();
   }
 
@@ -113,6 +119,7 @@ export class CarTimeInfoComponent implements OnInit {
     closingData['car'] = this.carData;
     closingData['witness1'] = this.witness1;
     closingData['witness2'] = this.witness2;
+    closingData['representation'] = this.pickedRepresentation;
     closingData['remarkList'] = this.remarkList;
 
     this.dialogRef.close(closingData);

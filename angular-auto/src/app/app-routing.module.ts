@@ -10,6 +10,7 @@ import {SellingPageComponent} from "./@ui/selling-page/selling-page.component";
 import {GdprPageComponent} from "./@ui/gdpr-page/gdpr-page.component";
 import {SettingsComponent} from "./@core/components/settings/settings.component";
 import {WarrantPageComponent} from "./@ui/warrant-page/warrant-page.component";
+import {InsurancePageComponent} from "./@ui/insurance-page/insurance-page.component";
 
 
 const routes: Routes = [
@@ -52,6 +53,10 @@ const routes: Routes = [
   {
     path: 'warrantPage',
     component: WarrantPageComponent
+  },
+  {
+    path: 'insurance',
+    component: InsurancePageComponent
   }
 ];
 

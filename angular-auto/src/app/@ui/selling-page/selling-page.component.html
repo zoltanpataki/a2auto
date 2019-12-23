@@ -133,11 +133,11 @@
           <td *ngIf="!buyerCompany || buyerCompany && !buyerCompany.companyRegistrationNumber"></td>
         </tr>
         <tr>
-          <td *ngIf="sellerCompany && sellerCompany.representation">&#160;{{sellerCompany.representation}}</td>
-          <td *ngIf="!sellerCompany || sellerCompany && !sellerCompany.representation"></td>
+          <td *ngIf="sellerCompany && sellerCompanyRepresentation">&#160;{{sellerCompanyRepresentation}}</td>
+          <td *ngIf="!sellerCompany || sellerCompany && !sellerCompanyRepresentation"></td>
           <td class="middleColumn">Képviselőjének családi és utóneve</td>
-          <td *ngIf="buyerCompany && buyerCompany.representation">&#160;{{buyerCompany.representation}}</td>
-          <td *ngIf="!buyerCompany || buyerCompany && !buyerCompany.representation"></td>
+          <td *ngIf="buyerCompany && buyerCompanyRepresentation">&#160;{{buyerCompanyRepresentation}}</td>
+          <td *ngIf="!buyerCompany || buyerCompany && !buyerCompanyRepresentation"></td>
         </tr>
       </table>
     </div>
@@ -185,7 +185,7 @@
             <div class="lawPartText"><p>-{{description.description}}</p></div>
           </div>
         </div>
-        <div *ngIf="!order || order && !order.description">
+        <div *ngIf="!order || order && !order.description || order && order.description.length == 0">
           <p class="lawPartText">Megjegyzés:...........................................................................................................................................................................................................</p>
           <p class="lawPartText">................................................................................................................................................................................................................................</p>
           <p class="lawPartText">................................................................................................................................................................................................................................</p>

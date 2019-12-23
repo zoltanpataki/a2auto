@@ -47,6 +47,7 @@ import { LoaderComponent } from './@core/components/loader/loader.component';
 import {NgxsModule} from "@ngxs/store";
 import {LoaderInterceptor} from "./@core/services/loader.service";
 import {LoaderState} from "./@core/services/loader.state";
+import { InsurancePageComponent } from './@ui/insurance-page/insurance-page.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import {LoaderState} from "./@core/services/loader.state";
     WarrantPageComponent,
     WitnessPickerDialogComponent,
     LoaderComponent,
+    InsurancePageComponent,
   ],
   imports: [
     BrowserModule,
