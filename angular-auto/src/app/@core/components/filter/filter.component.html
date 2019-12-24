@@ -244,10 +244,10 @@
         <div class="inheritanceTax">
           <div class="inheritanceTaxLeftSide">
             <div>
-              <mat-checkbox #inhtax (change)="setInheritanceTaxCheckboxValue('wantCalculation', car, inhtax.checked)" [checked]="askForInheritanceTaxCalculation === 'wantCalculation'">Kérek átírási költség számítását</mat-checkbox>
+              <mat-checkbox #inhtax (change)="setInheritanceTaxCheckboxValue('wantCalculation', car, inhtax.checked)" [checked]="askForInheritanceTaxCalculation === 'wantCalculation'">Kérek átírási költség számítást</mat-checkbox>
             </div>
             <div>
-              <mat-checkbox #noinhtax (change)="setInheritanceTaxCheckboxValue('dontWantCalculation', car, noinhtax.checked)" [checked]="askForInheritanceTaxCalculation === 'dontWantCalculation'">Nem kérek átírási költség számítását</mat-checkbox>
+              <mat-checkbox #noinhtax (change)="setInheritanceTaxCheckboxValue('dontWantCalculation', car, noinhtax.checked)" [checked]="askForInheritanceTaxCalculation === 'dontWantCalculation'">Nem kérek átírási költség számítást</mat-checkbox>
             </div>
           </div>
           <div class="inheritanceTaxRightSide" *ngIf="inheritanceTax">
@@ -271,7 +271,7 @@
                  [carData] = countInCar
         ></app-car>
       </div>
-      <div *ngIf="orderProgress > 3 && thereIsCountInCar">
+      <div *ngIf="orderProgress > 3 && thereIsCountInCar && clickedCarIndex == i">
         <mat-divider></mat-divider>
         <div class="countInCarSupplement-container">
           <form [formGroup]="countInCarSupplementForm" (submit)="saveCountInCarSupplement(countInCarSupplementForm)" class="countInCarSupplementForm">
@@ -438,19 +438,19 @@
         <h5>Összesítő</h5>
         <div class="summary">
           <div>
-            <button mat-button type="submit" (click)="navigateToOrderOrSellingOrWarrantPage(car, '/orderPage', null, null, null)">Megrendelőlap</button>
+            <button mat-button type="submit" (click)="navigateToOrderOrSellingOrWarrantOrInsurancePage(car, car.id, '/orderPage', null, null, null, null)">Megrendelőlap</button>
           </div>
           <div>
-            <button mat-button type="submit" (click)="gatherSellingPageInfo(car, 'sell')">Tovább az eladási adatokhoz</button>
+            <button mat-button type="submit" (click)="gatherSellingPageInfo(car, car.id, 'sell')">Tovább az eladási adatokhoz</button>
           </div>
           <div *ngIf="countInCar">
-            <button mat-button type="submit" (click)="gatherSellingPageInfo(countInCar, 'buy')">Tovább a vételi adatokhoz</button>
+            <button mat-button type="submit" (click)="gatherSellingPageInfo(countInCar, car.id,  'buy')">Tovább a vételi adatokhoz</button>
           </div>
           <div>
             <button mat-button type="submit" (click)="openWitnessPickerForWarrantPage()">Meghatalmazás</button>
           </div>
-          <div>
-            <button mat-button type="submit" (click)="navigateToInsurancePage()">Biztosítás</button>
+          <div *ngIf="countInCar">
+            <button mat-button type="submit" (click)="navigateToInsurancePage(car)">Biztosítás</button>
           </div>
         </div>
       </div>

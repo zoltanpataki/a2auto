@@ -48,6 +48,7 @@ import {NgxsModule} from "@ngxs/store";
 import {LoaderInterceptor} from "./@core/services/loader.service";
 import {LoaderState} from "./@core/services/loader.state";
 import { InsurancePageComponent } from './@ui/insurance-page/insurance-page.component';
+import {environment} from "../environments/environment";
 
 @NgModule({
   declarations: [
@@ -99,7 +100,7 @@ import { InsurancePageComponent } from './@ui/insurance-page/insurance-page.comp
     AngularFontAwesomeModule,
     MatTooltipModule,
     NgxSpinnerModule,
-    NgxsModule.forRoot([LoaderState]),
+    NgxsModule.forRoot([LoaderState], { developmentMode: !environment.production }),
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },],
   bootstrap: [AppComponent],

@@ -33,8 +33,8 @@ public class Users {
     private String taxNumber;
     private String healthcareNumber;
 
-    @OneToOne(mappedBy = "users")
-    private Order order;
+    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true, mappedBy = "users")
+    private List<Order> order = new ArrayList<>();
 
     public Users() {
     }

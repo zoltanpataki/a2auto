@@ -1,7 +1,9 @@
 package com.cars.a2.services;
 
 import com.cars.a2.exceptions.ConnectionTemporarilyLostException;
+import com.cars.a2.exceptions.EntityFailedToSaveException;
 import com.cars.a2.exceptions.EntityNotFoundException;
+import com.cars.a2.models.Company;
 import com.cars.a2.models.Utility;
 import com.cars.a2.repositories.UtilityRepository;
 import org.slf4j.Logger;
@@ -29,6 +31,16 @@ public class UtilityService {
         } catch (Exception e) {
             logger.info(e.getMessage());
             throw new ConnectionTemporarilyLostException("Couldn't get utility at the moment!");
+        }
+    }
+
+    public ResponseEntity<Object> saveUtility(Utility utility) {
+        try {
+            utilityRepository.save(utility);
+            return new ResponseEntity<>(utility, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+            throw new EntityFailedToSaveException("Utility couldn't be saved!");
         }
     }
 }

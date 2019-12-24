@@ -16,7 +16,7 @@ export class AppComponent implements OnInit{
   title = 'angular-auto';
 
   constructor(private httpService: HttpService,
-              private utilService: UtilService) {
+              private utilService: UtilService,) {
   }
 
   ngOnInit(): void {

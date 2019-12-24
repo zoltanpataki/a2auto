@@ -45,6 +45,16 @@ public class CarService {
         }
     }
 
+    public ResponseEntity<Object> getSingleCarById(long id) {
+        try {
+            Car car= carRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Car is not found by carId!"));;
+            return new ResponseEntity<>(car, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+            throw new ConnectionTemporarilyLostException("Couldn't get the car at the moment!");
+        }
+    }
+
     public ResponseEntity<Object> getSingleCar(String filter, String filterType) {
         switch (filterType) {
             case "plateNumber":
@@ -80,7 +90,6 @@ public class CarService {
 
     public ResponseEntity<Object> deleteCar(long id) {
         try {
-            System.out.println(id);
             carRepository.deleteById(id);
             return new ResponseEntity<>("Car is deleted!", HttpStatus.OK);
         } catch (Exception e) {

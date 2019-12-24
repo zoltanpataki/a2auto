@@ -37,7 +37,7 @@ public class OrderService {
 
     public ResponseEntity<Object> getSingleOrder(Long carId) {
         try {
-            Order orderByCarId = orderRepository.findByCarId(carId).orElseThrow(() -> new EntityNotFoundException("Order is not found by carId!"));
+            Order orderByCarId = orderRepository.findByCarId(carId).orElseThrow(() -> new EntityNotFoundException("Order is not found by id!"));
             return new ResponseEntity<>(orderByCarId, HttpStatus.OK);
         } catch (Exception e) {
             throw new EntityNotFoundException("Order is not found by carId!");

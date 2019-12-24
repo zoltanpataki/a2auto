@@ -18,6 +18,9 @@ nav {
       }
       a:hover {
         background-color: deeppink;
+        .cog:hover {
+          animation: spin;
+        }
       }
 
       .activated {

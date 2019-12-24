@@ -1,6 +1,7 @@
 package com.cars.a2.controllers;
 
 import com.cars.a2.controllers.apis.UtilityController;
+import com.cars.a2.models.Utility;
 import com.cars.a2.services.UtilityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,5 +24,10 @@ public class UtilityControllerImpl implements UtilityController {
     @Override
     public ResponseEntity<Object> getUtility(String name) {
         return utilityService.getUtility(name);
+    }
+
+    @Override
+    public ResponseEntity<Object> saveUtility(Utility utility) {
+        return utilityService.saveUtility(utility);
     }
 }

@@ -252,6 +252,7 @@ export class FilterComponent implements OnInit {
     sessionStorage.removeItem('inheritanceTax');
     sessionStorage.removeItem('orderedCar');
     sessionStorage.removeItem('descriptionList');
+    sessionStorage.removeItem('insuranceOfferNumber');
   }
 
   // Sets the data to null when expansion order is collapsed
@@ -535,7 +536,7 @@ export class FilterComponent implements OnInit {
     });
   }
 
-  public openCarTimeInfoDialog(car: Car) {
+  public openCarTimeInfoDialog(car: Car, orderedCarId: number) {
     const carTimeInfoDialogConfig = new MatDialogConfig();
 
     carTimeInfoDialogConfig.disableClose = true;
@@ -558,18 +559,18 @@ export class FilterComponent implements OnInit {
           this.descriptionList = result.remarkList;
           sessionStorage.setItem('descriptionList', JSON.stringify(this.descriptionList));
         }
-        this.evaluateCarOfContract(result);
+        this.evaluateCarOfContract(result, orderedCarId);
       }
     });
   }
 
-  private evaluateCarOfContract(resultOfCarTimeInfoDialog: any) {
+  private evaluateCarOfContract(resultOfCarTimeInfoDialog: any, orderedCarId: number) {
     if (this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer) {
       this.carOfTransaction = resultOfCarTimeInfoDialog.car;
-      this.navigateToOrderOrSellingOrWarrantPage(this.carOfTransaction,'/sellingPage', resultOfCarTimeInfoDialog.witness1, resultOfCarTimeInfoDialog.witness2, null, resultOfCarTimeInfoDialog.representation);
+      this.navigateToOrderOrSellingOrWarrantOrInsurancePage(this.carOfTransaction, orderedCarId, '/sellingPage', resultOfCarTimeInfoDialog.witness1, resultOfCarTimeInfoDialog.witness2, null, resultOfCarTimeInfoDialog.representation);
     } else {
       this.countInCar = resultOfCarTimeInfoDialog.car;
-      this.navigateToOrderOrSellingOrWarrantPage(this.countInCar,'/sellingPage', resultOfCarTimeInfoDialog.witness1, resultOfCarTimeInfoDialog.witness2, null, resultOfCarTimeInfoDialog.representation);
+      this.navigateToOrderOrSellingOrWarrantOrInsurancePage(this.countInCar, orderedCarId, '/sellingPage', resultOfCarTimeInfoDialog.witness1, resultOfCarTimeInfoDialog.witness2, null, resultOfCarTimeInfoDialog.representation);
     }
   }
 
@@ -584,7 +585,7 @@ export class FilterComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       if (result != null) {
-        this.navigateToOrderOrSellingOrWarrantPage(this.carOfTransaction, '/warrantPage', result.witness1, result.witness2, result.warrantType, null);
+        this.navigateToOrderOrSellingOrWarrantOrInsurancePage(this.carOfTransaction, this.carOfTransaction.id, '/warrantPage', result.witness1, result.witness2, result.warrantType, null);
       }
     });
   }
@@ -959,7 +960,6 @@ export class FilterComponent implements OnInit {
       } else {
         this.countInCar = data;
         sessionStorage.setItem('countInCar', JSON.stringify(this.countInCar));
-        this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer = true;
       }
     }, error => {
       console.log(error);
@@ -975,8 +975,10 @@ export class FilterComponent implements OnInit {
   private saveDescriptions(descriptionForm: FormGroup) {
     descriptionForm.value.description.forEach(descriptionWithAmount => {
       const descriptionAmount = descriptionWithAmount.charged === 'AJÁNDÉK' ? 0 : descriptionWithAmount.amount;
-      const description = new DescriptionWithAmount(null, descriptionWithAmount.descriptionText, descriptionAmount, descriptionWithAmount.charged);
-      this.listOfDescriptionsWithAmount.push(description);
+      if (descriptionWithAmount.descriptionText != null && descriptionWithAmount.charged != null) {
+        const description = new DescriptionWithAmount(null, descriptionWithAmount.descriptionText, descriptionAmount, descriptionWithAmount.charged);
+        this.listOfDescriptionsWithAmount.push(description);
+      }
     });
     sessionStorage.setItem('descriptionsWithAmount', JSON.stringify(this.listOfDescriptionsWithAmount));
     sessionStorage.setItem('giftIndexList', JSON.stringify(this.giftIndexList));
@@ -991,7 +993,7 @@ export class FilterComponent implements OnInit {
     this.giftIndexList.splice(index, 1);
   }
 
-  private navigateToOrderOrSellingOrWarrantPage(car: Car, targetRoute: string,  witness1: Witness, witness2: Witness, warrantType: string, a2Representation: string) {
+  private navigateToOrderOrSellingOrWarrantOrInsurancePage(car: Car, orderedCarId: number, targetRoute: string,  witness1: Witness, witness2: Witness, warrantType: string, a2Representation: string) {
     if (this.downPaymentForm.value.downPayment !== this.carOfTransaction.downPayment) {
       car.downPayment = this.downPaymentForm.value.downPayment;
       this.updateCarOfTransaction(car);
@@ -1011,11 +1013,11 @@ export class FilterComponent implements OnInit {
         this.countInCarSupplement,
         this.creditData,
         this.countInCar,
-        car.id,
+        orderedCarId,
         this.descriptionList,
         this.listOfDescriptionsWithAmount);
       this.httpService.saveOrder(this.newOrder).subscribe(order => {
-        this.prepareNavigationToOrderPageOrSellingPageOrWarrantPage(order, car, witness1, witness2, targetRoute, warrantType, a2Representation);
+        this.prepareNavigationToOrderPageOrSellingPageOrWarrantPageOrInsurancePage(order, car, witness1, witness2, targetRoute, warrantType, a2Representation);
       });
     } else {
       this.newOrder.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready;
@@ -1031,16 +1033,16 @@ export class FilterComponent implements OnInit {
       this.newOrder.countInCarSupplement = this.countInCarSupplement;
       this.newOrder.credit = this.creditData;
       this.newOrder.countInCar = this.countInCar;
-      this.newOrder.carId = car.id;
+      this.newOrder.carId = orderedCarId;
       this.newOrder.description = this.descriptionList;
       console.log(this.newOrder);
       this.httpService.updateOrder(this.newOrder).subscribe(order => {
-        this.prepareNavigationToOrderPageOrSellingPageOrWarrantPage(<Order> order, car, witness1, witness2, targetRoute, warrantType, a2Representation);
+        this.prepareNavigationToOrderPageOrSellingPageOrWarrantPageOrInsurancePage(<Order> order, car, witness1, witness2, targetRoute, warrantType, a2Representation);
       });
     }
   }
 
-  private prepareNavigationToOrderPageOrSellingPageOrWarrantPage(order: Order, car: Car, witness1: Witness, witness2: Witness, orderOrSellingOrWarrant: string, warrantType: string, a2Representation: string) {
+  private prepareNavigationToOrderPageOrSellingPageOrWarrantPageOrInsurancePage(order: Order, car: Car, witness1: Witness, witness2: Witness, orderOrSellingOrWarrant: string, warrantType: string, a2Representation: string) {
     sessionStorage.setItem('order', JSON.stringify(this.newOrder));
     sessionStorage.setItem('orderedCar', JSON.stringify(car));
     this.router.navigate([orderOrSellingOrWarrant], {state: {data: {
@@ -1061,9 +1063,9 @@ export class FilterComponent implements OnInit {
         }}});
   }
 
-  private gatherSellingPageInfo(car: Car, sellOrBuy: string) {
+  private gatherSellingPageInfo(car: Car, orderedCarId: number, sellOrBuy: string) {
     this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer = sellOrBuy === 'sell';
-    this.openCarTimeInfoDialog(car);
+    this.openCarTimeInfoDialog(car, orderedCarId);
   }
 
   private navigateToBlankOrderPage(car: Car) {
@@ -1073,8 +1075,8 @@ export class FilterComponent implements OnInit {
         }}});
   }
 
-  private navigateToInsurancePage() {
-    this.router.navigate(['/insurance']);
+  private navigateToInsurancePage(car: Car) {
+    this.navigateToOrderOrSellingOrWarrantOrInsurancePage(car, car.id, '/insurance', null, null, null, null);
   }
 
   private openWitnessPickerForWarrantPage() {

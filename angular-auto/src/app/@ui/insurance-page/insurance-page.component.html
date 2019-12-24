@@ -37,8 +37,8 @@
     <div class="firstTableContainer">
       <table class="firstTable firstTableFirstRow">
         <tr>
-          <td width="50%">Szerződő neve: </td>
-          <td width="25%">Szerződő típusa: </td>
+          <td width="50%">Szerződő neve: <strong>A2 AUTÓCENTRUM KFT.</strong></td>
+          <td width="25%">Szerződő típusa: <strong>Jogi személy</strong> </td>
           <td width="25%">Állampolgársága: </td>
         </tr>
       </table>
@@ -56,24 +56,24 @@
       </table>
       <table class="firstTable firstTableMiddleRow">
         <tr>
-          <td width="50%">Szerződő címe: </td>
+          <td width="50%">Szerződő címe: <strong>8000 Székesfehérvár Budai út 388.</strong></td>
           <td width="50%">Jogosítvány megszerzésének éve: </td>
         </tr>
       </table>
       <table class="firstTable firstTableMiddleRow">
         <tr>
-          <td width="100%">Szerződő levelezési címe: </td>
+          <td width="100%">Szerződő levelezési címe: <strong>U.a.</strong></td>
         </tr>
       </table>
       <table class="firstTable firstTableMiddleRow">
         <tr>
-          <td width="50%">Adószám: </td>
+          <td width="50%">Adószám: <strong>14950496-2-07</strong></td>
           <td width="50%">Telefonszám: </td>
         </tr>
       </table>
       <table class="firstTable firstTableMiddleRow">
         <tr>
-          <td width="50%">Cégjegyzékszám: </td>
+          <td width="50%">Cégjegyzékszám: <strong>07-09-017350</strong></td>
           <td width="50%">Azonosító okmány típusa és száma: </td>
         </tr>
       </table>
@@ -150,14 +150,14 @@
       <table class="thirdTable thirdTableFirstRow">
         <tr>
           <td width="40%">Alapdíj(A0): </td>
-          <td width="30%">Bonus/Malus fokozat: </td>
-          <td width="30%">Terméktípus: </td>
+          <td width="30%">Bonus/Malus fokozat: <strong>A0</strong></td>
+          <td width="30%">Terméktípus: KGFB</td>
         </tr>
       </table>
       <table class="thirdTable thirdTableMiddleRow">
         <tr>
           <td width="40%">Kockázatviselés kezdete: </td>
-          <td width="30%">Kockázatviselés vége: </td>
+          <td width="30%">Kockázatviselés vége: <strong>határozatlan</strong></td>
           <td width="30%">Előző szerz. megszűnés oka: </td>
         </tr>
       </table>
@@ -204,8 +204,8 @@
     <div class="fourthTableContainer">
       <table class="fourthTable fourthTableFirstRow">
         <tr>
-          <td width="25%">Díjfizetés gyakorisága: </td>
-          <td width="25%">Díjfizetés módja: </td>
+          <td width="25%">Díjfizetés gyakorisága: <strong>éves</strong></td>
+          <td width="25%">Díjfizetés módja: <strong>CSEKK</strong></td>
           <td width="25%">Gyakoriság szerinti díj: Ft</td>
           <td width="25%">Első időszaki díj: Ft</td>
         </tr>
@@ -218,14 +218,14 @@
       </table>
       <table class="fourthTable fourthTableMiddleRow">
         <tr>
-          <td width="30%">Halasztott díjfizetés: </td>
+          <td width="30%">Halasztott díjfizetés: <strong>Igen</strong></td>
           <td width="30%">Halasztott (első) díj esedékessége: </td>
           <td width="30%">Halasztott (első) díj befizetés határideje: </td>
         </tr>
       </table>
       <table class="fourthTable fourthTableMiddleRow">
         <tr>
-          <td width="50%">Fizetett díjelőleg: </td>
+          <td width="50%">Fizetett díjelőleg: <strong>0 Ft</strong></td>
           <td width="50%">Csekk sorszám: </td>
         </tr>
       </table>
@@ -241,7 +241,7 @@
       <p>Tudomásul veszem, hogy a befizetett összegből a díjak a következő sorrendben kerülhetnek levonásra: 1. baleseti adó, 2. fedezetlen időszak díja, 3. biztosítási díj.</p>
     </div>
     <div class="date">
-      <p>Kelt.: Győr, 2019.10.25</p>
+      <p>Kelt: Székesfehérvár, {{today | date:'yyyy-MM-dd'}}</p>
     </div>
     <div class="signature">
       <img src="assets/alairas.png" style="width:150px;height:90px;">
@@ -252,4 +252,7 @@
       <div>PRAEVENTIO Biztosítási Alkusz Kft. </div>
     </div>
   </div>
+</div>
+<div>
+  <button (click)="captureScreen()" mat-button>PDF Generálás</button>
 </div>

@@ -52,6 +52,11 @@ export class HttpService {
     return this.http.post(this.carServerUrl + urlPostFix, company, httpOptions);
   }
 
+  public saveUtility(utility: any): Observable<any> {
+    const urlPostFix = 'saveUtility';
+    return this.http.post(this.carServerUrl + urlPostFix, utility, httpOptions);
+  }
+
   public saveOrder(order: any): Observable<any> {
     const urlPostFix = 'saveOrder';
     return this.http.post(this.carServerUrl + urlPostFix, order, httpOptions);
@@ -93,6 +98,11 @@ export class HttpService {
       headers: httpOptions.headers,
       params: params
     })
+  }
+
+  public getSingleCarById(id: string): Observable<any> {
+    const urlPostFix = `getSingleCarById/${id}`;
+    return this.http.get(this.carServerUrl + urlPostFix, httpOptions);
   }
 
   public getOrder(carId: number): Observable<any> {

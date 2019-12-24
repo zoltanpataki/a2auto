@@ -17,6 +17,9 @@ public interface CarsController {
     @GetMapping("/getSingleCar")
     ResponseEntity<Object> getSingleCar(@RequestParam String filter, @RequestParam String filterType);
 
+    @GetMapping("/getSingleCarById/{id}")
+    ResponseEntity<Object> getSingleCarById(@PathVariable long id);
+
     @PutMapping("/updateCar")
     ResponseEntity<Object> updateCar(@RequestBody Car car);
 

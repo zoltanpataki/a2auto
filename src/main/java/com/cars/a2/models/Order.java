@@ -40,8 +40,7 @@ public class Order {
     @JsonManagedReference
     private List<DescriptionWithAmount> descriptionsWithAmount = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.MERGE, orphanRemoval = true)
-    @JoinColumn(name = "users", referencedColumnName = "id")
+    @ManyToOne
     private Users users;
 
     @OneToOne(cascade = CascadeType.MERGE, orphanRemoval = true)

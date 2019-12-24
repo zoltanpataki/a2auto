@@ -114,7 +114,6 @@ export class CarTimeInfoComponent implements OnInit {
   }
 
   closeWithData() {
-    console.log(this.remarkList);
     const closingData = {};
     closingData['car'] = this.carData;
     closingData['witness1'] = this.witness1;

@@ -38,6 +38,11 @@ public class CarsControllerImpl implements CarsController {
     }
 
     @Override
+    public ResponseEntity<Object> getSingleCarById(long id) {
+        return carService.getSingleCarById(id);
+    }
+
+    @Override
     public ResponseEntity<Object> updateCar(Car car) {
         return carService.updateCar(car);
     }
