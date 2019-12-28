@@ -26,11 +26,14 @@ export class InsurancePageComponent implements OnInit {
   private indexOfPickedCompany: number;
   private pickedUser: Users;
   private pickedCompany: Company;
+  private insurancePrice: number;
+  private insuredCar: Car;
 
   constructor(private httpService: HttpService,) { }
 
   ngOnInit() {
     this.today = new Date();
+    this.insurancePrice = this.randomIntFromInterval(20000, 35000);
     if (sessionStorage.getItem('order') != null) {
       this.order = JSON.parse(sessionStorage.getItem('order'));
     }
@@ -63,6 +66,13 @@ export class InsurancePageComponent implements OnInit {
       if (this.pickedCompany != null) {
         sessionStorage.setItem('pickedCompany', JSON.stringify(this.pickedCompany));
       }
+      if (this.order && this.order.countInCar) {
+        this.insuredCar = this.order.countInCar;
+        sessionStorage.setItem('insuredCar', JSON.stringify(this.insuredCar));
+      } else {
+        this.insuredCar = history.state.data.insuredCar;
+        sessionStorage.setItem('insuredCar', JSON.stringify(this.insuredCar));
+      }
     } else {
       this.order = JSON.parse(sessionStorage.getItem('order'));
       this.orderedCar = JSON.parse(sessionStorage.getItem('orderedCar'));
@@ -87,6 +97,10 @@ export class InsurancePageComponent implements OnInit {
         }
       });
     }
+  }
+
+  private randomIntFromInterval(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
   public captureScreen() {

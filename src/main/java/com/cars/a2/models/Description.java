@@ -11,6 +11,7 @@ public class Description {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String description;
+    private String type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
@@ -20,8 +21,17 @@ public class Description {
     public Description() {
     }
 
-    public Description(String description) {
+    public Description(String description, String type) {
         this.description = description;
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public Long getId() {
@@ -46,6 +56,8 @@ public class Description {
         return "Description{" +
                 "id=" + id +
                 ", description='" + description + '\'' +
+                ", type='" + type + '\'' +
+                ", order=" + order +
                 '}';
     }
 }

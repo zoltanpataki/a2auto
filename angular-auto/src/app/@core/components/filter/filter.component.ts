@@ -99,7 +99,6 @@ export class FilterComponent implements OnInit {
 
   // Prepare formGroups and get the necessary data from sessionStorage
   ngOnInit() {
-
     if (this.utilService.witnesses == null) {
       this.httpService.getAllWitnesses().subscribe(data => {
         this.utilService.witnesses = data;
@@ -536,7 +535,7 @@ export class FilterComponent implements OnInit {
     });
   }
 
-  public openCarTimeInfoDialog(car: Car, orderedCarId: number) {
+  public openCarTimeInfoDialog(car: Car, orderedCarId: number, sellOrBuy: string) {
     const carTimeInfoDialogConfig = new MatDialogConfig();
 
     carTimeInfoDialogConfig.disableClose = true;
@@ -545,6 +544,7 @@ export class FilterComponent implements OnInit {
     carTimeInfoDialogConfig.data = {
       car: car,
       order: this.newOrder,
+      sellOrBuy: sellOrBuy,
       clickedCarIndex: this.clickedCarIndex,
       selectedCars: this.selectedCars
     };
@@ -556,12 +556,28 @@ export class FilterComponent implements OnInit {
       if (result != null) {
         this.updateCarOfTransaction(result.car);
         if (result.remarkList != null) {
-          this.descriptionList = result.remarkList;
+          this.reOrderDescriptionList(result, sellOrBuy);
           sessionStorage.setItem('descriptionList', JSON.stringify(this.descriptionList));
         }
         this.evaluateCarOfContract(result, orderedCarId);
       }
     });
+  }
+
+  private reOrderDescriptionList(result: any, sellOrBuy: string) {
+    const newDescriptionList = [];
+    const remarkList = result.remarkList;
+    if (this.newOrder) {
+      this.newOrder.description.forEach(description => {
+        if (sellOrBuy === 'sell' && description.type === 'buy') {
+          newDescriptionList.push(description);
+        } else if (sellOrBuy === 'buy' && description.type === 'sell') {
+          newDescriptionList.push(description);
+        }
+      });
+    }
+    newDescriptionList.push(...remarkList);
+    this.descriptionList = newDescriptionList;
   }
 
   private evaluateCarOfContract(resultOfCarTimeInfoDialog: any, orderedCarId: number) {
@@ -998,6 +1014,7 @@ export class FilterComponent implements OnInit {
       car.downPayment = this.downPaymentForm.value.downPayment;
       this.updateCarOfTransaction(car);
     }
+    console.log(this.descriptionList);
     if (this.newOrder == null) {
       this.newOrder = new Order(null,
         this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready,
@@ -1065,7 +1082,7 @@ export class FilterComponent implements OnInit {
 
   private gatherSellingPageInfo(car: Car, orderedCarId: number, sellOrBuy: string) {
     this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer = sellOrBuy === 'sell';
-    this.openCarTimeInfoDialog(car, orderedCarId);
+    this.openCarTimeInfoDialog(car, orderedCarId, sellOrBuy);
   }
 
   private navigateToBlankOrderPage(car: Car) {

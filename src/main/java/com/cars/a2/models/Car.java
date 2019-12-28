@@ -47,6 +47,8 @@ public class Car {
     private String carOrTruck;
     private String salesman;
     private String insuranceNumber;
+    private int weight;
+    private int maxWeightAllowed;
 
     @OneToOne(mappedBy = "countInCar")
     private Order order;
@@ -54,7 +56,7 @@ public class Car {
     public Car() {
     }
 
-    public Car(Users user, Company company, String name, String type, String color, String plateNumber, String specification, String bodyNumber, String engineNumber, int capacity, int vintage, int mileage, Date motExpiry, int price, int purchasingPrice, int cost, String costDescriptions, Date dateOfArrival, Date dateOfLeaving, String typeOfBuying, int inheritanceTax, int downPayment, int payedAmount, int kwh, String carRegistry, Date documentsHandover, Date dueOfContract, Date carHandover, Date dateOfContract, boolean sold, String carOrTruck, String salesman, String insuranceNumber) {
+    public Car(Users user, Company company, String name, String type, String color, String plateNumber, String specification, String bodyNumber, String engineNumber, int capacity, int vintage, int mileage, Date motExpiry, int price, int purchasingPrice, int cost, String costDescriptions, Date dateOfArrival, Date dateOfLeaving, String typeOfBuying, int inheritanceTax, int downPayment, int payedAmount, int kwh, String carRegistry, Date documentsHandover, Date dueOfContract, Date carHandover, Date dateOfContract, boolean sold, String carOrTruck, String salesman, String insuranceNumber, int weight, int maxWeightAllowed) {
         this.company = company;
         this.user =user;
         this.name = name;
@@ -88,6 +90,24 @@ public class Car {
         this.carOrTruck = carOrTruck;
         this.salesman = salesman;
         this.insuranceNumber = insuranceNumber;
+        this.weight = weight;
+        this.maxWeightAllowed = maxWeightAllowed;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public int getMaxWeightAllowed() {
+        return maxWeightAllowed;
+    }
+
+    public void setMaxWeightAllowed(int maxWeightAllowed) {
+        this.maxWeightAllowed = maxWeightAllowed;
     }
 
     public String getInsuranceNumber() {
@@ -399,6 +419,8 @@ public class Car {
                 ", carOrTruck='" + carOrTruck + '\'' +
                 ", salesman='" + salesman + '\'' +
                 ", insuranceNumber='" + insuranceNumber + '\'' +
+                ", weight=" + weight +
+                ", maxWeightAllowed=" + maxWeightAllowed +
                 ", order=" + order +
                 '}';
     }

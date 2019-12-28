@@ -32,6 +32,13 @@
             </label>
           </mat-form-field>
         </div>
+        <div *ngFor="let item of fieldRelatedToWeight | keyvalue:keepOriginalOrder; trackBy: trackByFn">
+          <mat-form-field class="example-full-width">
+            <label>
+              <input type="number" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput placeholder="{{item.value}}" ngModel="{{carData[item.key]}}" name="{{item.key}}">
+            </label>
+          </mat-form-field>
+        </div>
       </div>
       <div class="middle">
         <div>

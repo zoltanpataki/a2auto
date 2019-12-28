@@ -182,7 +182,7 @@
         <div *ngIf="order && order.description">
           <div><p>Megjegyzés:</p></div>
           <div *ngFor="let description of order.description">
-            <div class="lawPartText"><p>-{{description.description}}</p></div>
+            <div *ngIf="switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer && description.type == 'sell' || !switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer && description.type == 'buy'" class="lawPartText"><p>-{{description.description}}</p></div>
           </div>
         </div>
         <div *ngIf="!order || order && !order.description || order && order.description.length == 0">

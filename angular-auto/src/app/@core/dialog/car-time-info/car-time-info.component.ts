@@ -28,6 +28,7 @@ export class CarTimeInfoComponent implements OnInit {
   private remarkForm: FormGroup;
   private description: FormArray;
   private remarkList: Description[] = [];
+  private sellOrBuy: string;
 
   constructor(private dialogRef: MatDialogRef<CarTimeInfoComponent>,
               @Inject(MAT_DIALOG_DATA) public data,
@@ -35,9 +36,16 @@ export class CarTimeInfoComponent implements OnInit {
               private formBuilder: FormBuilder,) {}
 
   ngOnInit() {
+    this.sellOrBuy = this.data.sellOrBuy;
     this.carData = this.data.car;
     if (this.data.order != null) {
-      this.remarkList = this.data.order.description;
+      const sellOrBuyRemarkList = [];
+      this.data.order.description.forEach(description => {
+        if (description.type === this.sellOrBuy) {
+          sellOrBuyRemarkList.push(description);
+        }
+      });
+      this.remarkList = sellOrBuyRemarkList;
     }
     this.clickedCarIndex = this.data.clickedCarIndex;
     this.selectedCars = this.data.selectedCars;
@@ -105,7 +113,7 @@ export class CarTimeInfoComponent implements OnInit {
     this.remarkList = [];
     form.value.description.forEach(description => {
       if (description.description != null) {
-        const newDescription = new Description(description.description);
+        const newDescription = new Description(description.description, this.sellOrBuy);
         this.remarkList.push(newDescription);
       }
     });
