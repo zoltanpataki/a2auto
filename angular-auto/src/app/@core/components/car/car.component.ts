@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Car} from "../../models/car";
 import {HttpService} from "../../services/http.service";
 import {UtilService} from "../../services/util.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-car',
@@ -24,14 +25,19 @@ export class CarComponent implements OnInit {
   public keepOriginalOrder = (a, b) => a.key;
   public carHandoverTime = {};
   private emptyDate: any;
+  private showInsuranceButton: boolean = false;
 
   public typeOfBuying = ['KÉSZPÉNZ', 'ÁTUTALÁS', 'HITEL'];
   public carOrTruck = ['SZEMÉLYGÉPJÁRMŰ', 'TEHERGÉPJÁRMŰ'];
 
   constructor(private httpService: HttpService,
-              private utilService: UtilService,) { }
+              private utilService: UtilService,
+              private router: Router) { }
 
   public ngOnInit() {
+    if (this.router.url === '/newCar') {
+      this.showInsuranceButton = true;
+    }
     if (this.carData == null) {
       this.carData = new Car(null, null,null,null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     } else {
@@ -93,6 +99,16 @@ export class CarComponent implements OnInit {
       return  new Car(null, form.value.name, form.value.type, form.value.color, form.value.plateNumber, form.value.specification, form.value.bodyNumber, form.value.engineNumber, form.value.capacity, form.value.vintage, form.value.mileage, form.value.motExpiry, form.value.price, form.value.purchasingPrice, form.value.cost, form.value.costDescription, form.value.dateOfArrival, form.value.dateOfLeaving, form.value.typeOfBuying, form.value.inheritanceTax, form.value.downPayment, form.value.payedAmount, form.value.kwh, form.value.carRegistry, form.value.documentsHandover, form.value.dueOfContract, form.value.carHandover, form.value.dateOfContract, false, form.value.carOrTruck, form.value.salesman, null, form.value.weight, form.value.maxWeightAllowed);
 
     }
+  }
+
+  private navigateToInsurancePage(form: any) {
+    const carForInsurance = new Car(null, form.value.name, form.value.type, form.value.color, form.value.plateNumber, form.value.specification, form.value.bodyNumber, form.value.engineNumber, form.value.capacity, form.value.vintage, form.value.mileage, form.value.motExpiry, form.value.price, form.value.purchasingPrice, form.value.cost, form.value.costDescription, form.value.dateOfArrival, form.value.dateOfLeaving, form.value.typeOfBuying, form.value.inheritanceTax, form.value.downPayment, form.value.payedAmount, form.value.kwh, form.value.carRegistry, form.value.documentsHandover, form.value.dueOfContract, form.value.carHandover, form.value.dateOfContract, false, form.value.carOrTruck, form.value.salesman, null, form.value.weight, form.value.maxWeightAllowed)
+    this.httpService.saveCar(carForInsurance).subscribe(data => {
+      console.log(data);
+      this.router.navigate(['/insurance'], {state: {data: {
+            insuredCar: carForInsurance,
+          }}});
+    });
   }
 
   public trackByFn(index, item) {

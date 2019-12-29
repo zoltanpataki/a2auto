@@ -108,8 +108,13 @@
         </div>
       </div>
     </div>
-    <div class="saveButton">
-      <button mat-button>Mentés</button>
+    <div class="buttons">
+      <div class="saveButton">
+        <button mat-button>Mentés</button>
+      </div>
+      <div *ngIf="showInsuranceButton" class="saveButton">
+        <button type="button" mat-button (click)="navigateToInsurancePage(carForm)">Biztosítás</button>
+      </div>
     </div>
   </form>
 </div>

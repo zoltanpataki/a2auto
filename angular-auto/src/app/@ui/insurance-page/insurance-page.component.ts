@@ -80,22 +80,36 @@ export class InsurancePageComponent implements OnInit {
     if (sessionStorage.getItem('insuranceOfferNumber') != null) {
       this.insuranceOfferNumber = Number(sessionStorage.getItem('insuranceOfferNumber'));
     } else {
-      this.httpService.getSingleCarById(this.order.countInCar.id.toString()).subscribe(data => {
-        if (data.insuranceNumber == null) {
-          this.httpService.getUtility('insuranceOfferNumber').subscribe(data => {
-            this.insuranceOfferNumber = Number(data.value) + 1;
-            const insuranceUtilityObject = new Utility(data.id, data.name, this.insuranceOfferNumber.toString());
-            sessionStorage.setItem('insuranceOfferNumber', this.insuranceOfferNumber.toString());
-            this.httpService.saveUtility(insuranceUtilityObject).subscribe(data => {
-              this.order.countInCar.insuranceNumber = this.insuranceOfferNumber.toString();
-              this.httpService.updateCar(this.order.countInCar).subscribe(data => {
-                this.order.countInCar = data;
-                sessionStorage.setItem('order', JSON.stringify(this.order));
+      if (this.order != null) {
+        this.httpService.getSingleCarById(this.order.countInCar.id.toString()).subscribe(data => {
+          if (data.insuranceNumber == null) {
+            this.httpService.getUtility('insuranceOfferNumber').subscribe(data => {
+              this.insuranceOfferNumber = Number(data.value) + 1;
+              const insuranceUtilityObject = new Utility(data.id, data.name, this.insuranceOfferNumber.toString());
+              sessionStorage.setItem('insuranceOfferNumber', this.insuranceOfferNumber.toString());
+              this.httpService.saveUtility(insuranceUtilityObject).subscribe(data => {
+                this.order.countInCar.insuranceNumber = this.insuranceOfferNumber.toString();
+                this.httpService.updateCar(this.order.countInCar).subscribe(data => {
+                  this.order.countInCar = data;
+                  sessionStorage.setItem('order', JSON.stringify(this.order));
+                });
               });
             });
+          }
+        });
+      } else {
+        this.httpService.getUtility('insuranceOfferNumber').subscribe(data => {
+          this.insuranceOfferNumber = Number(data.value) + 1;
+          const insuranceUtilityObject = new Utility(data.id, data.name, this.insuranceOfferNumber.toString());
+          sessionStorage.setItem('insuranceOfferNumber', this.insuranceOfferNumber.toString());
+          this.httpService.saveUtility(insuranceUtilityObject).subscribe(data => {
+            this.insuredCar.insuranceNumber = this.insuranceOfferNumber.toString();
+            this.httpService.updateCar(this.insuredCar).subscribe(data => {
+              this.insuredCar = data;
+            });
           });
-        }
-      });
+        });
+      }
     }
   }
 

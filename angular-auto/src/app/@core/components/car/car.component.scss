@@ -23,3 +23,8 @@ mat-form-field {
 button:focus {
   outline: none;
 }
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+}
