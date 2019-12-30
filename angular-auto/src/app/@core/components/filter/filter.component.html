@@ -395,7 +395,7 @@
             <h5>Kiegészítések</h5>
           </div>
           <div class="plusButton">
-            <button type="button" (click)="addNewDescriptionWithAmountRow(null)" class="miniFab" mat-mini-fab><i class="material-icons">add</i></button>
+            <button matTooltip="Új kiegészítés" type="button" (click)="addNewDescriptionWithAmountRow(null)" class="miniFab" mat-mini-fab><i class="material-icons">add</i></button>
           </div>
         </div>
         <div>
@@ -425,7 +425,7 @@
                 </mat-form-field>
               </div>
               <div class="emptyDescriptionColumn" *ngIf="giftIndexList.includes(indexNum)"></div>
-              <div><i class="material-icons deleteDesc" (click)="removeDescriptionWithAmountRow(indexNum)">highlight_off</i></div>
+              <div><i matTooltip="Kiegészítés törlése" class="material-icons deleteDesc" (click)="removeDescriptionWithAmountRow(indexNum)">highlight_off</i></div>
             </div>
             <div>
               <button class="saveButton" mat-button type="submit">Tovább</button>

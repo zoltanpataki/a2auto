@@ -117,7 +117,6 @@ export class CarTimeInfoComponent implements OnInit {
         this.remarkList.push(newDescription);
       }
     });
-    console.log(this.remarkList);
     this.closeWithData();
   }
 

@@ -1014,7 +1014,6 @@ export class FilterComponent implements OnInit {
       car.downPayment = this.downPaymentForm.value.downPayment;
       this.updateCarOfTransaction(car);
     }
-    console.log(this.descriptionList);
     if (this.newOrder == null) {
       this.newOrder = new Order(null,
         this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready,
@@ -1052,7 +1051,6 @@ export class FilterComponent implements OnInit {
       this.newOrder.countInCar = this.countInCar;
       this.newOrder.carId = orderedCarId;
       this.newOrder.description = this.descriptionList;
-      console.log(this.newOrder);
       this.httpService.updateOrder(this.newOrder).subscribe(order => {
         this.prepareNavigationToOrderPageOrSellingPageOrWarrantPageOrInsurancePage(<Order> order, car, witness1, witness2, targetRoute, warrantType, a2Representation);
       });
