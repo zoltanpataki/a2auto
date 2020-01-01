@@ -14,7 +14,7 @@ import {Description} from "../../models/description";
 export class CarTimeInfoComponent implements OnInit {
 
   private carData: Car;
-  public fields1 = {dateOfLeaving: 'Eladás dátuma', documentsHandover: 'Dokumentumok átadásának időpontja', dateOfContract : 'Szerződés szerinti teljesítés időpontja'};
+  public fields1 = {dueOfContract: 'Eladás dátuma', documentsHandover: 'Dokumentumok átadásának időpontja', dateOfContract : 'Szerződés szerinti teljesítés időpontja'};
   public keepOriginalOrder = (a, b) => a.key;
   public carHandoverTime = {};
   private clickedCarIndex: number;
@@ -60,6 +60,7 @@ export class CarTimeInfoComponent implements OnInit {
     } else {
       this.setRemarkForm();
     }
+    this.initiateDatesWithToday();
   }
 
   private setRemarkForm() {
@@ -133,6 +134,17 @@ export class CarTimeInfoComponent implements OnInit {
 
   public trackByFn(index, item) {
     return item.id; // unique id corresponding to the item
+  }
+
+  private initiateDatesWithToday() {
+    if (this.carData.dateOfContract == null && this.carData.dueOfContract == null) {
+      this.carData.carHandover = new Date();
+      this.carData.dueOfContract = new Date();
+      this.carData.dateOfArrival = new Date();
+      this.carData.dateOfLeaving = new Date();
+      this.carData.documentsHandover = new Date();
+      this.carData.dateOfContract = new Date();
+    }
   }
 
   private changeAllDateFieldIfEmptyElseOnlyThisOne(dateString: string, item: string) {

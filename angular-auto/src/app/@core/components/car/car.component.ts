@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Car} from "../../models/car";
 import {HttpService} from "../../services/http.service";
 import {UtilService} from "../../services/util.service";
-import {Router} from "@angular/router";
+import {NavigationEnd, Router} from "@angular/router";
 
 @Component({
   selector: 'app-car',
@@ -32,7 +32,17 @@ export class CarComponent implements OnInit {
 
   constructor(private httpService: HttpService,
               private utilService: UtilService,
-              private router: Router) { }
+              private router: Router) {
+    router.events
+      .subscribe((event: NavigationEnd) => {
+        if (event.url !== '/newUser') {
+          sessionStorage.removeItem('newUser');
+        }
+        if (event.url !== '/newCompany') {
+          sessionStorage.removeItem('newCompany');
+        }
+      });
+  }
 
   public ngOnInit() {
     if (this.router.url === '/newCar') {

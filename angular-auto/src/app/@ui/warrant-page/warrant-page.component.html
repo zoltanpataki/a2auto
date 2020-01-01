@@ -2,7 +2,13 @@
 
   <div class="preTitle">
     <div class="preTitleContainer">
-      <p>(Meghatalmazás okmányirodai ügyintézéshez)</p>
+      <div>
+        <p>(Meghatalmazás okmányirodai ügyintézéshez)</p>
+      </div>
+      <div>
+        <p *ngIf="order && order.users && order.users.personNumber">{{order.users.personNumber | slice:-4}}</p>
+        <p *ngIf="!order || order && !order.users || order && order.users && !order.users.personNumber"></p>
+      </div>
     </div>
   </div>
   <div class="title">

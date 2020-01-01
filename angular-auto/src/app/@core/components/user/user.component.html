@@ -7,7 +7,7 @@
           <div *ngFor="let item of fieldsOne | keyvalue:keepOriginalOrder; trackBy: trackByFn">
             <mat-form-field class="example-full-width">
               <label>
-                <input matInput placeholder="{{item.value}}" ngModel="{{userData[item.key]}}" name="{{item.key}}">
+                <input matInput placeholder="{{item.value}}" (ngModelChange)="itemChanged(userForm)" ngModel="{{userData[item.key]}}" name="{{item.key}}">
               </label>
             </mat-form-field>
           </div>
@@ -15,7 +15,7 @@
         <div class="middle">
           <div>
             <mat-form-field class="example-full-width">
-              <input matInput [matDatepicker]="birthPicker" placeholder="Születésnap" ngModel="{{userData[birthDate] | date:'yyyy-MM-dd'}}" name="birthDate">
+              <input matInput [matDatepicker]="birthPicker" placeholder="Születésnap" (ngModelChange)="itemChanged(userForm)" ngModel="{{userData.birthDate | date:'yyyy-MM-dd'}}" name="birthDate">
               <mat-datepicker-toggle matSuffix [for]="birthPicker"></mat-datepicker-toggle>
               <mat-datepicker #birthPicker></mat-datepicker>
             </mat-form-field>
@@ -23,7 +23,7 @@
           <div *ngFor="let item of fieldsTwo | keyvalue:keepOriginalOrder; trackBy: trackByFn">
             <mat-form-field class="example-full-width">
               <label>
-                <input matInput placeholder="{{item.value}}" ngModel="{{userData[item.key]}}" name="{{item.key}}">
+                <input matInput placeholder="{{item.value}}" (ngModelChange)="itemChanged(userForm)" ngModel="{{userData[item.key]}}" name="{{item.key}}">
               </label>
             </mat-form-field>
           </div>
@@ -32,13 +32,13 @@
           <div *ngFor="let item of fieldsThree | keyvalue:keepOriginalOrder; trackBy: trackByFn">
             <mat-form-field class="example-full-width">
               <label>
-                <input matInput placeholder="{{item.value}}" ngModel="{{userData[item.key]}}" name="{{item.key}}">
+                <input matInput placeholder="{{item.value}}" (ngModelChange)="itemChanged(userForm)" ngModel="{{userData[item.key]}}" name="{{item.key}}">
               </label>
             </mat-form-field>
           </div>
           <div *ngFor="let item of fieldsFour | keyvalue:keepOriginalOrder; index as i; trackBy: trackByFn">
             <mat-form-field class="example-full-width">
-              <input matInput [matDatepicker]="picker" placeholder="{{item.value}}" ngModel="{{userData[item.key] | date:'yyyy-MM-dd'}}" name="{{item.key}}">
+              <input matInput [matDatepicker]="picker" placeholder="{{item.value}}" (ngModelChange)="itemChanged(userForm)" ngModel="{{userData[item.key] | date:'yyyy-MM-dd'}}" name="{{item.key}}">
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
@@ -47,7 +47,7 @@
       </div>
     </div>
     <div class="saveButton">
-      <button mat-fab><i class="material-icons">save</i></button>
+      <button mat-button>Mentés</button>
     </div>
   </form>
 </div>

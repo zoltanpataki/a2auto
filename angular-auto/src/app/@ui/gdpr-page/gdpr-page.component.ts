@@ -4,6 +4,7 @@ import {HttpService} from "../../@core/services/http.service";
 import * as jspdf from 'jspdf';
 
 import html2canvas from 'html2canvas';
+import {NavigationEnd, Router} from "@angular/router";
 
 @Component({
   selector: 'app-gdpr-page',
@@ -16,7 +17,20 @@ export class GdprPageComponent implements OnInit {
   private AutocentrumAddress: string;
   private today: Date;
 
-  constructor(private httpService: HttpService) {
+  constructor(private httpService: HttpService,
+              private router: Router,) {
+    router.events
+      .subscribe((event: NavigationEnd) => {
+        if (event.url !== '/newUser') {
+          sessionStorage.removeItem('newUser');
+        }
+        if (event.url !== '/newCar') {
+          sessionStorage.removeItem('newCar');
+        }
+        if (event.url !== '/newCompany') {
+          sessionStorage.removeItem('newCompany');
+        }
+      });
   }
 
   ngOnInit() {

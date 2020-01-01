@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {NavigationEnd, Router} from "@angular/router";
 
 @Component({
   selector: 'app-landing',
@@ -7,7 +8,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LandingComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router) {
+    router.events
+      .subscribe((event: NavigationEnd) => {
+        if (event.url !== '/newUser') {
+          sessionStorage.removeItem('newUser');
+        }
+        if (event.url !== '/newCar') {
+          sessionStorage.removeItem('newCar');
+        }
+        if (event.url !== '/newCompany') {
+          sessionStorage.removeItem('newCompany');
+        }
+      });
+  }
 
   ngOnInit() {
   }

@@ -98,6 +98,15 @@ export class FilterComponent implements OnInit {
           sessionStorage.removeItem('blankPage');
           sessionStorage.removeItem('insuredCar');
         }
+        if (event.url !== '/newUser') {
+          sessionStorage.removeItem('newUser');
+        }
+        if (event.url !== '/newCar') {
+          sessionStorage.removeItem('newCar');
+        }
+        if (event.url !== '/newCompany') {
+          sessionStorage.removeItem('newCompany');
+        }
       });
   }
 

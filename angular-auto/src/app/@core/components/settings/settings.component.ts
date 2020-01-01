@@ -8,6 +8,7 @@ import {Salesmen} from "../../models/salesmen";
 import {Witness} from "../../models/witness";
 import {WitnessAddress} from "../../models/witnessAddress";
 import {WitnessDialogComponent} from "../../dialog/witness-dialog/witness-dialog.component";
+import {NavigationEnd, Router} from "@angular/router";
 
 
 @Component({
@@ -27,7 +28,21 @@ export class SettingsComponent implements OnInit {
   constructor(private dialog: MatDialog,
               private changeDetectorRefs: ChangeDetectorRef,
               private utilService: UtilService,
-              private httpService: HttpService) { }
+              private httpService: HttpService,
+              private router: Router) {
+    router.events
+      .subscribe((event: NavigationEnd) => {
+        if (event.url !== '/newUser') {
+          sessionStorage.removeItem('newUser');
+        }
+        if (event.url !== '/newCar') {
+          sessionStorage.removeItem('newCar');
+        }
+        if (event.url !== '/newCompany') {
+          sessionStorage.removeItem('newCompany');
+        }
+      });
+  }
 
   ngOnInit() {
     this.httpService.getAllSalesmen().subscribe(data => {

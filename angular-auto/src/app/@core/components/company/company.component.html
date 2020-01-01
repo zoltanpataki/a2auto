@@ -4,10 +4,17 @@
     <div>
       <div class="inputContainer">
         <div class="leftSide">
+          <div>
+            <mat-form-field class="example-full-width">
+              <label>
+                <input matInput placeholder="Cégnév" (ngModelChange)="itemChanged(companyForm)" ngModel="{{companyData.name}}" name="name">
+              </label>
+            </mat-form-field>
+          </div>
           <div *ngFor="let item of fields | keyvalue:keepOriginalOrder; trackBy: trackByFn">
             <mat-form-field class="example-full-width">
               <label>
-                <input matInput placeholder="{{item.value}}" ngModel="{{companyData[item.key]}}" name="{{item.key}}">
+                <input matInput placeholder="{{item.value}}" (ngModelChange)="itemChanged(companyForm)" ngModel="{{companyData.address[item.key]}}" name="{{item.key}}">
               </label>
             </mat-form-field>
           </div>
@@ -16,7 +23,7 @@
           <div *ngFor="let item of fields2 | keyvalue:keepOriginalOrder; trackBy: trackByFn">
             <mat-form-field class="example-full-width">
               <label>
-                <input matInput placeholder="{{item.value}}" ngModel="{{companyData[item.key]}}" name="{{item.key}}">
+                <input matInput placeholder="{{item.value}}" (ngModelChange)="itemChanged(companyForm)" ngModel="{{companyData[item.key]}}" name="{{item.key}}">
               </label>
             </mat-form-field>
           </div>
