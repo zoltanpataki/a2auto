@@ -1,4 +1,4 @@
-<div class="warrantContainer">
+<div class="warrantContainer" id="warrantContainer">
 
   <div class="preTitle">
     <div class="preTitleContainer">
@@ -17,14 +17,14 @@
           <p>Alulírott:&#160;&#160;</p>
         </div>
         <div fxFlex="35">
-          <p *ngIf="order && order.users && order.users.fullName">{{order.users.fullName}}</p>
+          <p *ngIf="order && order.users && order.users.fullName"><strong>{{order.users.fullName}}</strong></p>
           <p *ngIf="!order || order && !order.users || order && order.users && !order.users.fullName"></p>
         </div>
         <div fxFlex="20">
           <p>anyja neve:&#160;&#160;</p>
         </div>
         <div fxFlex="25">
-          <p *ngIf="order && order.users && order.users.nameOfMother">{{order.users.nameOfMother}}</p>
+          <p *ngIf="order && order.users && order.users.nameOfMother"><strong>{{order.users.nameOfMother}}</strong></p>
           <p *ngIf="!order || order && !order.users || order && order.users && !order.users.nameOfMother"></p>
         </div>
       </div>
@@ -33,20 +33,20 @@
           <p>szül.hely és idő:&#160;&#160;</p>
         </div>
         <div fxFlex="35">
-          <p *ngIf="order && order.users && order.users.birthPlace && order.users.birthDate">{{order.users.birthPlace}},&#160; {{order.users.birthDate | date: 'yyyy-MM-dd'}}</p>
+          <p *ngIf="order && order.users && order.users.birthPlace && order.users.birthDate"><strong>{{order.users.birthPlace}},&#160; {{order.users.birthDate | date: 'yyyy-MM-dd'}}</strong></p>
           <p *ngIf="!order || order && !order.users || order && order.users && !order.users.birthPlace || order && order.users && !order.users.birthDate"></p>
         </div>
         <div fxFlex="20">
           <p>szem. ig. sz.:&#160;&#160;</p>
         </div>
         <div fxFlex="25">
-          <p *ngIf="order && order.users && order.users.idCardNumber">{{order.users.idCardNumber}}</p>
+          <p *ngIf="order && order.users && order.users.idCardNumber"><strong>{{order.users.idCardNumber}}</strong></p>
           <p *ngIf="!order || order && !order.users || order && order.users && !order.users.idCardNumber"></p>
         </div>
       </div>
       <div class="dataLines" fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
         <div fxFlex="60">
-          <p *ngIf="order && order.users && order.users.address">{{order.users.address}}</p>
+          <p *ngIf="order && order.users && order.users.address"><strong>{{order.users.address}}</strong></p>
           <p *ngIf="!order || order && !order.users || order && order.users && !order.users.address"></p>
         </div>
         <div fxFlex="40">
@@ -61,20 +61,20 @@
   <div *ngIf="warrantType == 'CÉG'" class="corporate">
     <div class="corporateContainer">
       <div>
-        <p *ngIf="order && order.company && order.company.name">Cég név:&#160;&#160;{{order.company.name}}</p>
+        <p *ngIf="order && order.company && order.company.name">Cég név:&#160;&#160;<strong>{{order.company.name}}</strong></p>
         <p *ngIf="!order || order && !order.company || order && order.company && !order.company.name">Cég név:</p>
       </div>
       <div>
-        <p *ngIf="order && order.company && order.company.address && order.company.address.zipcode && order.company.address.city && order.company.address.address">Cím:&#160;&#160;{{order.company.address.zipcode}}&#160;{{order.company.address.city}},&#160;{{order.company.address.address}}</p>
+        <p *ngIf="order && order.company && order.company.address && order.company.address.zipcode && order.company.address.city && order.company.address.address">Cím:&#160;&#160;<strong>{{order.company.address.zipcode}}&#160;{{order.company.address.city}},&#160;{{order.company.address.address}}</strong></p>
         <p *ngIf="!order || order && !order.company || order && order.company && !order.company.address || order && order.company && order.company.address && !order.company.address.zipcode || order && order.company && order.company.address && !order.company.address.city || order && order.company && order.company.address && !order.company.address.address">Cím:</p>
       </div>
       <div>
-        <p *ngIf="order && order.company && order.company.companyRegistrationNumber">Cégjegyzékszám:&#160;&#160; {{order.company.companyRegistrationNumber}}</p>
+        <p *ngIf="order && order.company && order.company.companyRegistrationNumber">Cégjegyzékszám:&#160;&#160; <strong>{{order.company.companyRegistrationNumber}}</strong></p>
         <p *ngIf="!order || order && !order.company || order && order.company && !order.company.companyRegistrationNumber">Cégjegyzékszám:</p>
       </div>
       <div class="dataLines">
         <div>
-          <p *ngIf="order && order.company && order.company.representation">Képviselő név:&#160;&#160; {{order.company.representation}}</p>
+          <p *ngIf="order && order.company && order.company.representation">Képviselő név:&#160;&#160; <strong>{{order.company.representation}}</strong></p>
           <p *ngIf="!order || order && !order.company || order && order.company && !order.company.representation">Képviselő név:</p>
         </div>
         <div>
@@ -132,14 +132,14 @@
           <p>hogy a &#160;&#160;</p>
         </div>
         <div fxFlex="30">
-          <p *ngIf="orderedCar && orderedCar.type">{{orderedCar.type}}</p>
+          <p *ngIf="orderedCar && orderedCar.type"><strong>{{orderedCar.type}}</strong></p>
           <p *ngIf="!orderedCar || orderedCar && !orderedCar.type"></p>
         </div>
         <div fxFlex="20">
           <p>típusú &#160;&#160;</p>
         </div>
         <div fxFlex="30">
-          <p *ngIf="orderedCar && orderedCar.bodyNumber">{{orderedCar.bodyNumber}}</p>
+          <p *ngIf="orderedCar && orderedCar.bodyNumber"><strong>{{orderedCar.bodyNumber}}</strong></p>
           <p *ngIf="!orderedCar || orderedCar && !orderedCar.bodyNumber"></p>
         </div>
       </div>
@@ -148,7 +148,7 @@
           <p>alvázszámú &#160;&#160;</p>
         </div>
         <div fxFlex="20">
-          <p *ngIf="orderedCar && orderedCar.plateNumber">{{orderedCar.plateNumber}}</p>
+          <p *ngIf="orderedCar && orderedCar.plateNumber"><strong>{{orderedCar.plateNumber}}</strong></p>
           <p *ngIf="!orderedCar || orderedCar && !orderedCar.plateNumber"></p>
         </div>
         <div fxFlex="60">
@@ -185,26 +185,26 @@
         <table>
           <tr>
             <td>Név:</td>
-            <td *ngIf="witness1 && witness1.name">{{witness1.name}}</td>
+            <td *ngIf="witness1 && witness1.name"><strong>{{witness1.name}}</strong></td>
             <td *ngIf="!witness1 || witness1 && !witness1.name"></td>
             <td>Név:</td>
-            <td *ngIf="witness2 && witness2.name">{{witness2.name}}</td>
+            <td *ngIf="witness2 && witness2.name"><strong>{{witness2.name}}</strong></td>
             <td *ngIf="!witness2 || witness2 && !witness2.name"></td>
           </tr>
           <tr>
             <td>Lakcím:</td>
-            <td *ngIf="witness1 && witness1.witnessAddress && witness1.witnessAddress.zipcode && witness1.witnessAddress.city && witness1.witnessAddress.address">{{witness1.witnessAddress.zipcode}}&#160;{{witness1.witnessAddress.city}},&#160;{{witness1.witnessAddress.address}}</td>
+            <td *ngIf="witness1 && witness1.witnessAddress && witness1.witnessAddress.zipcode && witness1.witnessAddress.city && witness1.witnessAddress.address"><strong>{{witness1.witnessAddress.zipcode}}&#160;{{witness1.witnessAddress.city}},&#160;{{witness1.witnessAddress.address}}</strong></td>
             <td *ngIf="!witness1 || witness1 && !witness1.witnessAddress || witness1 && witness1.witnessAddress && !witness1.witnessAddress.zipcode || witness1 && witness1.witnessAddress && !witness1.witnessAddress.city || witness1 && witness1.witnessAddress && !witness1.witnessAddress.address"></td>
             <td>Lakcím:</td>
-            <td *ngIf="witness2 && witness2.witnessAddress && witness2.witnessAddress.zipcode && witness2.witnessAddress.city && witness2.witnessAddress.address">{{witness2.witnessAddress.zipcode}}&#160;{{witness2.witnessAddress.city}},&#160;{{witness2.witnessAddress.address}}</td>
+            <td *ngIf="witness2 && witness2.witnessAddress && witness2.witnessAddress.zipcode && witness2.witnessAddress.city && witness2.witnessAddress.address"><strong>{{witness2.witnessAddress.zipcode}}&#160;{{witness2.witnessAddress.city}},&#160;{{witness2.witnessAddress.address}}</strong></td>
             <td *ngIf="!witness2 || witness2 && !witness2.witnessAddress || witness2 && witness2.witnessAddress && !witness2.witnessAddress.zipcode || witness2 && witness2.witnessAddress && !witness2.witnessAddress.city || witness2 && witness2.witnessAddress && !witness2.witnessAddress.address"></td>
           </tr>
           <tr>
             <td>Szem.ig.sz.:</td>
-            <td *ngIf="witness1 && witness1.idCardNumber">{{witness1.idCardNumber}}</td>
+            <td *ngIf="witness1 && witness1.idCardNumber"><strong>{{witness1.idCardNumber}}</strong></td>
             <td *ngIf="!witness1 || witness1 && !witness1.idCardNumber"></td>
             <td>Szem.ig.sz.:</td>
-            <td *ngIf="witness2 && witness2.idCardNumber">{{witness2.idCardNumber}}</td>
+            <td *ngIf="witness2 && witness2.idCardNumber"><strong>{{witness2.idCardNumber}}</strong></td>
             <td *ngIf="!witness2 || witness2 && !witness2.idCardNumber"></td>
           </tr>
           <tr>

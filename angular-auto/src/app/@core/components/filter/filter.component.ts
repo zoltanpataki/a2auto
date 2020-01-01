@@ -94,6 +94,10 @@ export class FilterComponent implements OnInit {
         if (event.url !== event.urlAfterRedirects && event.url !== '/filter') {
           this.removeItemsFromSessionStorage();
         }
+        if (event.url === '/filter' && sessionStorage.getItem('blankPage') != null) {
+          sessionStorage.removeItem('blankPage');
+          sessionStorage.removeItem('insuredCar');
+        }
       });
   }
 
@@ -751,9 +755,12 @@ export class FilterComponent implements OnInit {
 
     this.httpService.getUtility(stringCapacity).subscribe(utility => {
       this.httpService.getChargeForInheritanceTax(stringKw, stringAge).subscribe(chargeForInheritanceTax => {
-        this.inheritanceTax = Number(utility.value) + (chargeForInheritanceTax * car.kwh);
-        sessionStorage.setItem('inheritanceTax', this.inheritanceTax.toString());
-        this.setOrderProgressInSessionStorage(3);
+        this.httpService.getUtility('carRegistry').subscribe(carReg => {
+          const carRegistry = Number(carReg.value);
+          this.inheritanceTax = Number(utility.value) + (chargeForInheritanceTax * car.kwh) + carRegistry;
+          sessionStorage.setItem('inheritanceTax', this.inheritanceTax.toString());
+          this.setOrderProgressInSessionStorage(3);
+        });
       });
     });
   }
@@ -989,8 +996,12 @@ export class FilterComponent implements OnInit {
   }
 
   private saveDescriptions(descriptionForm: FormGroup) {
+    this.listOfDescriptionsWithAmount = [];
+    console.log(this.listOfDescriptionsWithAmount);
+    console.log(descriptionForm.value.description);
     descriptionForm.value.description.forEach(descriptionWithAmount => {
       const descriptionAmount = descriptionWithAmount.charged === 'AJÁNDÉK' ? 0 : descriptionWithAmount.amount;
+      console.log(descriptionWithAmount);
       if (descriptionWithAmount.descriptionText != null && descriptionWithAmount.charged != null) {
         const description = new DescriptionWithAmount(null, descriptionWithAmount.descriptionText, descriptionAmount, descriptionWithAmount.charged);
         this.listOfDescriptionsWithAmount.push(description);
@@ -1051,6 +1062,7 @@ export class FilterComponent implements OnInit {
       this.newOrder.countInCar = this.countInCar;
       this.newOrder.carId = orderedCarId;
       this.newOrder.description = this.descriptionList;
+      this.newOrder.descriptionsWithAmount = this.listOfDescriptionsWithAmount;
       this.httpService.updateOrder(this.newOrder).subscribe(order => {
         this.prepareNavigationToOrderPageOrSellingPageOrWarrantPageOrInsurancePage(<Order> order, car, witness1, witness2, targetRoute, warrantType, a2Representation);
       });

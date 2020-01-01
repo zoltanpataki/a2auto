@@ -86,7 +86,7 @@ export class WarrantPageComponent implements OnInit {
   }
 
   public captureScreen() {
-    var data = document.getElementById('gdprContainer');
+    var data = document.getElementById('warrantContainer');
     html2canvas(data).then(canvas => {
       // Few necessary setting options
       var imgWidth = 208;
@@ -98,7 +98,7 @@ export class WarrantPageComponent implements OnInit {
       let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF
       var position = 0;
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
-      pdf.save('GDPR.pdf'); // Generated PDF
+      pdf.save('warrant.pdf'); // Generated PDF
     });
   }
 

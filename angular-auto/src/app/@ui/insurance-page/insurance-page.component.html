@@ -1,4 +1,4 @@
-<div class="mainContainer">
+<div class="mainContainer" id="insuranceContainer">
   <div class="innerContainer">
     <div class="aegonPic">
       <img src="assets/aegon.png" style="width:130px;height:50px;">
@@ -26,7 +26,7 @@
     </div>
     <div class="subtitle">
       <div>
-        <p><strong>Ajánlatszám: </strong>&#160; </p>
+        <p><strong>Ajánlatszám: </strong>&#160; <strong>{{insuranceOfferNumber}}</strong></p>
         <p><strong>Márkakereskedő neve, címe: A2 Autócentrum Kft Kft., 8000 SZÉKESFEHÉRVÁR, Budai út 388.</strong></p>
         <p><strong>Márkakereskedő (Dealer) kódja: </strong></p>
       </div>
@@ -163,7 +163,7 @@
     <div class="thirdTableContainer">
       <table class="thirdTable thirdTableFirstRow">
         <tr>
-          <td width="40%">Alapdíj(A0): <strong>{{insurancePrice}}</strong></td>
+          <td width="40%">Alapdíj(A0): <strong>{{insurancePrice | number: '2.'}} Ft</strong></td>
           <td width="30%">Bonus/Malus fokozat: <strong>A0</strong></td>
           <td width="30%">Terméktípus: KGFB</td>
         </tr>
@@ -233,10 +233,11 @@
       </table>
       <table class="fourthTable fourthTableMiddleRow">
         <tr>
-          <td width="30%">Halasztott díjfizetés: <strong>Igen</strong></td>
+          <td width="20%">Halasztott díjfizetés: <strong>Igen</strong></td>
           <td *ngIf="insuredCar && insuredCar.dateOfArrival" width="30%">Halasztott (első) díj esedékessége: <strong>{{insuredCar.dateOfArrival | date: 'yyyy-MM-dd'}}</strong></td>
           <td *ngIf="!insuredCar || insuredCar && !insuredCar.dateOfArrival" width="30%">Halasztott (első) díj esedékessége: </td>
-          <td width="30%">Halasztott (első) díj befizetés határideje: </td>
+          <td *ngIf="insuredCar && insuredCar.dateOfArrival" width="40%">Halasztott (első) díj befizetés határideje: <strong>{{insuranceDateExpiry | date: 'yyyy-MM-dd'}}</strong></td>
+          <td *ngIf="!insuredCar || insuredCar && !insuredCar.dateOfArrival" width="40%">Halasztott (első) díj befizetés határideje: </td>
         </tr>
       </table>
       <table class="fourthTable fourthTableMiddleRow">

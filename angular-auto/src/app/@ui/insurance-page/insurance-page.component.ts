@@ -28,6 +28,7 @@ export class InsurancePageComponent implements OnInit {
   private pickedCompany: Company;
   private insurancePrice: number;
   private insuredCar: Car;
+  private insuranceDateExpiry: Date;
 
   constructor(private httpService: HttpService,) { }
 
@@ -39,6 +40,9 @@ export class InsurancePageComponent implements OnInit {
     }
     if (sessionStorage.getItem('orderedCar') != null) {
       this.orderedCar = JSON.parse(sessionStorage.getItem('orderedCar'));
+    }
+    if (sessionStorage.getItem('insuredCar') != null) {
+      this.insuredCar = JSON.parse(sessionStorage.getItem('insuredCar'));
     }
     if (history.state.data) {
       this.order = history.state.data.order;
@@ -95,6 +99,8 @@ export class InsurancePageComponent implements OnInit {
                 });
               });
             });
+          } else {
+            this.insuranceOfferNumber = data.insuranceNumber;
           }
         });
       } else {
@@ -111,14 +117,23 @@ export class InsurancePageComponent implements OnInit {
         });
       }
     }
+    if (this.insuredCar != null) {
+      this.determineInsuranceDateExpiry();
+    }
   }
 
   private randomIntFromInterval(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
+  private determineInsuranceDateExpiry() {
+    const date = new Date(this.insuredCar.dateOfArrival);
+    date.setDate(date.getDate() + 30);
+    this.insuranceDateExpiry = date;
+  }
+
   public captureScreen() {
-    var data = document.getElementById('gdprContainer');
+    var data = document.getElementById('insuranceContainer');
     html2canvas(data).then(canvas => {
       // Few necessary setting options
       var imgWidth = 208;
@@ -130,7 +145,7 @@ export class InsurancePageComponent implements OnInit {
       let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF
       var position = 0;
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
-      pdf.save('GDPR.pdf'); // Generated PDF
+      pdf.save('insurance.pdf'); // Generated PDF
     });
   }
 
