@@ -60,6 +60,7 @@ export class CompanyComponent implements OnInit {
       console.log(data);
       this.orderProgress.emit('saved');
       this.newCompany.emit(data);
+      this.utilService.openSnackBar('A társaság sikeresen mentve!', 'Szuper :)');
     }, error => {
       this.orderProgress.emit('unsaved');
       this.utilService.openSnackBar('A társaságot nem sikerült menteni!', 'Hiba :(');

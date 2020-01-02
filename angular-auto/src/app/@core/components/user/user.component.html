@@ -1,5 +1,5 @@
 <div class="user-container">
-  <form #userForm=ngForm (ngSubmit)="saveUser(userForm)" class="form userForm">
+  <form #userForm=ngForm (ngSubmit)="saveUser(userForm)" class="form userForm" (keydown.enter)="$event.preventDefault()">
     <h5>Új vásárló adatai</h5>
     <div>
       <div class="inputContainer">

@@ -32,6 +32,7 @@ public class Users {
     private String dueTimeOfDrivingLicence;
     private String taxNumber;
     private String healthcareNumber;
+    private String nationality;
 
     @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true, mappedBy = "users")
     private List<Order> order = new ArrayList<>();
@@ -39,7 +40,7 @@ public class Users {
     public Users() {
     }
 
-    public Users(String fullName, String birthName, String zipCode, String city, String address, String birthPlace, String phoneNumber, String email, String nameOfMother, Date birthDate, String personNumber, String idCardNumber, String dueTimeOfIdCard, String drivingLicenceNumber, String dueTimeOfDrivingLicence, String taxNumber, String healthcareNumber) {
+    public Users(String fullName, String birthName, String zipCode, String city, String address, String birthPlace, String phoneNumber, String email, String nameOfMother, Date birthDate, String personNumber, String idCardNumber, String dueTimeOfIdCard, String drivingLicenceNumber, String dueTimeOfDrivingLicence, String taxNumber, String healthcareNumber, String nationality) {
         this.fullName = fullName;
         this.birthName = birthName;
         this.zipCode = zipCode;
@@ -57,6 +58,15 @@ public class Users {
         this.dueTimeOfDrivingLicence = dueTimeOfDrivingLicence;
         this.taxNumber = taxNumber;
         this.healthcareNumber = healthcareNumber;
+        this.nationality = nationality;
+    }
+
+    public String getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
     }
 
     public String getAddress() {
@@ -225,6 +235,7 @@ public class Users {
                 ", dueTimeOfDrivingLicence='" + dueTimeOfDrivingLicence + '\'' +
                 ", taxNumber='" + taxNumber + '\'' +
                 ", healthcareNumber='" + healthcareNumber + '\'' +
+                ", nationality='" + nationality + '\'' +
                 ", order=" + order +
                 '}';
     }
