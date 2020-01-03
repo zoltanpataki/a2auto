@@ -3,6 +3,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {Credit} from "../../models/credit";
 import {Car} from "../../models/car";
 import {CountInCarSupplement} from "../../models/countInCarSupplement";
+import {Order} from "../../models/order";
 
 @Component({
   selector: 'app-credit-dialog',
@@ -19,7 +20,7 @@ export class CreditDialogComponent implements OnInit {
 
   ngOnInit() {
     if (this.data.credit == null) {
-      this.countCreditAmount(this.data.car, this.data.countInCarSupplement, this.data.downPayment, this.data.extra, this.data.inheritanceTax);
+      this.countCreditAmount(this.data.car, this.data.countInCarSupplement, this.data.downPayment, this.data.extra);
       this.credit = new Credit(null, null, null, this.creditAmount, null, null);
     } else {
       console.log(this.data);
@@ -40,12 +41,11 @@ export class CreditDialogComponent implements OnInit {
     this.closeWithData()
   }
 
-  private countCreditAmount(car: Car, countInCarSupplement: CountInCarSupplement, downPayment: number, extra: number, inheritanceTax: number) {
-    const countInPrice = countInCarSupplement == null ? 0 : countInCarSupplement.countInPrice;
-    const downPaymentAmount = downPayment == null ? 0 : downPayment;
-    const extraAmount = extra == null ? 0 : extra;
-    const inheritanceTaxAmount = inheritanceTax == null ? 0 : inheritanceTax;
-    this.creditAmount = (car.price + extraAmount + inheritanceTaxAmount) - (countInPrice + downPaymentAmount);
+  private countCreditAmount(car: Car, countInCarSupplement: CountInCarSupplement, downPayment: number, extra: number) {
+    const countInPrice = countInCarSupplement && countInCarSupplement.countInPrice ? countInCarSupplement.countInPrice : 0;
+    const downPaymentAmount = downPayment ? downPayment : 0;
+    const extraAmount = extra ? extra : 0;
+    this.creditAmount = (car.price) - (countInPrice + downPaymentAmount + extraAmount);
   }
 
 }

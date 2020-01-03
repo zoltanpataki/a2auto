@@ -78,16 +78,18 @@
           <td *ngIf="!buyerIndividual || buyerIndividual && !buyerIndividual.idCardNumber"></td>
         </tr>
         <tr>
-          <td *ngIf="sellerIndividual && sellerIndividual.address">&#160;{{sellerIndividual.address}}</td>
-          <td *ngIf="!sellerIndividual || sellerIndividual && !sellerIndividual.address"></td>
+          <td *ngIf="sellerIndividual && sellerIndividual.zipCode && sellerIndividual.city && sellerIndividual.address">&#160;{{sellerIndividual.zipCode}}&#160;{{sellerIndividual.city}}&#160;{{sellerIndividual.address}}</td>
+          <td *ngIf="!sellerIndividual || sellerIndividual && !sellerIndividual.zipCode || sellerIndividual && !sellerIndividual.city || sellerIndividual && !sellerIndividual.address"></td>
           <td class="middleColumn">Lakcíme</td>
-          <td *ngIf="buyerIndividual && buyerIndividual.address">&#160;{{buyerIndividual.address}}</td>
-          <td *ngIf="!buyerIndividual || buyerIndividual && !buyerIndividual.address"></td>
+          <td *ngIf="buyerIndividual && buyerIndividual.zipCode && buyerIndividual.city && buyerIndividual.address">&#160;{{buyerIndividual.zipCode}}&#160;{{buyerIndividual.city}}&#160;{{buyerIndividual.address}}</td>
+          <td *ngIf="!buyerIndividual || buyerIndividual && !buyerIndividual.zipCode || buyerIndividual && !buyerIndividual.city || buyerIndividual && !buyerIndividual.address"></td>
         </tr>
         <tr>
-          <td></td>
+          <td *ngIf="sellerIndividual && sellerIndividual.nationality">&#160;{{sellerIndividual.nationality}}</td>
+          <td *ngIf="!sellerIndividual || sellerIndividual && !sellerIndividual.nationality"></td>
           <td class="middleColumn">Állampolgársága/hontalansága/</td>
-          <td></td>
+          <td *ngIf="buyerIndividual && buyerIndividual.nationality">&#160;{{buyerIndividual.nationality}}</td>
+          <td *ngIf="!buyerIndividual || buyerIndividual && !buyerIndividual.nationality"></td>
         </tr>
       </table>
     </div>

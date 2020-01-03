@@ -87,9 +87,10 @@ export class OrderPageComponent implements OnInit {
     const inheritance = order.inheritanceTax ? order.inheritanceTax : 0;
     const downPayment = order.downPayment ? order.downPayment : 0;
     const carPrice = car.price;
-    const countInCarPrice = order.countInCar ? order.countInCar.purchasingPrice : 0;
+    const countInCarPrice = order.countInCarSupplement ? order.countInCarSupplement.countInPrice : 0;
     const credit = order.credit ? order.credit.creditAmount : 0;
-    return (carPrice + inheritance + this.countAmountOfExtraCharge(order)) - (downPayment + countInCarPrice + credit);
+    const extra = order.extra ? order.extra : 0;
+    return (carPrice + inheritance + this.countAmountOfExtraCharge(order)) - (downPayment + countInCarPrice + credit + extra);
   }
 
   private countAmountOfExtraCharge(order: Order): number {
@@ -98,7 +99,6 @@ export class OrderPageComponent implements OnInit {
       order.descriptionsWithAmount.forEach(descriptionWithAmount => {
         result += descriptionWithAmount.amount;
       });
-      console.log(result);
       this.extraAmountChargedForTheUser = result;
       return result;
     } else {

@@ -13,7 +13,7 @@ import {MatTableDataSource} from "@angular/material/table";
 import {Users} from "../../models/users";
 import {Credit} from "../../models/credit";
 import {Company} from "../../models/company";
-import {NavigationEnd, NavigationStart, Router} from "@angular/router";
+import {NavigationEnd, Router} from "@angular/router";
 import {Order} from "../../models/order";
 import {Description} from "../../models/description";
 import {CarTimeInfoComponent} from "../../dialog/car-time-info/car-time-info.component";
@@ -140,12 +140,7 @@ export class FilterComponent implements OnInit {
       this.getDataFromSessionStorageAfterRefresh();
     }
     if (this.countInCarSupplement == null) {
-      this.countInCarSupplementForm = this.formBuilder.group({
-        countInPrice: [null],
-        previousLoan: [null],
-        previousBank: [null],
-        loanType: [null],
-      });
+      this.createEmptyCarSupplementForm();
     } else {
       this.setCountInCarSupplementForm(this.countInCarSupplement);
     }
@@ -294,6 +289,7 @@ export class FilterComponent implements OnInit {
     this.giftIndexList = [];
     this.listOfDescriptionsWithAmount = [];
     this.createFormGroupForDescriptionWithAmount();
+    this.createEmptyCarSupplementForm();
     this.extra = null;
     this.salesman = null;
     this.selectedTypeOfBuying = null;
@@ -408,6 +404,15 @@ export class FilterComponent implements OnInit {
       previousLoan: [countInCarSupplement.previousLoan],
       previousBank: [countInCarSupplement.previousBank],
       loanType: [countInCarSupplement.loanType],
+    });
+  }
+
+  private createEmptyCarSupplementForm() {
+    this.countInCarSupplementForm = this.formBuilder.group({
+      countInPrice: [null],
+      previousLoan: [null],
+      previousBank: [null],
+      loanType: [null],
     });
   }
 
@@ -534,7 +539,6 @@ export class FilterComponent implements OnInit {
       downPayment: this.downPayment,
       extra: this.extra,
       credit: this.creditData,
-      inheritanceTax: this.inheritanceTax,
     };
 
     const dialogRef = this.dialog.open(CreditDialogComponent, creditDialogConfig);
@@ -745,7 +749,7 @@ export class FilterComponent implements OnInit {
     if (carAge < 4) {
       stringAge = 'young';
     } else if (carAge > 3 && carAge < 9) {
-      stringAge = 'mediumAge';
+      stringAge = 'mediumAged';
     } else if (carAge > 8) {
       stringAge = 'old';
     }
@@ -871,7 +875,7 @@ export class FilterComponent implements OnInit {
     if (this.selectedTypeOfBuying === 'HITEL') {
       this.openCreditModal(car);
     }
-    this.setOrderProgressInSessionStorage(7);
+    this.setOrderProgressInSessionStorage(10);
     sessionStorage.setItem('selectedTypeOfBuying', this.selectedTypeOfBuying);
   }
 
@@ -949,7 +953,8 @@ export class FilterComponent implements OnInit {
       pickedUserFromDataTable.drivingLicenceNumber,
       pickedUserFromDataTable.dueTimeOfDrivingLicence,
       pickedUserFromDataTable.taxNumber,
-      pickedUserFromDataTable.healthcareNumber);
+      pickedUserFromDataTable.healthcareNumber,
+      pickedUserFromDataTable.nationality);
     sessionStorage.setItem('pickedUser', JSON.stringify(this.pickedUser));
     sessionStorage.setItem('indexOfPickedUser', this.indexOfPickedUser.toString());
   }
@@ -979,7 +984,7 @@ export class FilterComponent implements OnInit {
     this.salesman = salesman;
     car.salesman = this.salesman;
     this.updateCarOfTransaction(car);
-    this.setOrderProgressInSessionStorage(8);
+    this.setOrderProgressInSessionStorage(7);
     sessionStorage.setItem('salesman', this.salesman);
   }
 
@@ -1001,16 +1006,13 @@ export class FilterComponent implements OnInit {
   private submitHandOver(form: any, car: Car) {
     car.carHandover = form.value.handover;
     this.updateCarOfTransaction(car);
-    this.setOrderProgressInSessionStorage(9);
+    this.setOrderProgressInSessionStorage(8);
   }
 
   private saveDescriptions(descriptionForm: FormGroup) {
     this.listOfDescriptionsWithAmount = [];
-    console.log(this.listOfDescriptionsWithAmount);
-    console.log(descriptionForm.value.description);
     descriptionForm.value.description.forEach(descriptionWithAmount => {
       const descriptionAmount = descriptionWithAmount.charged === 'AJÁNDÉK' ? 0 : descriptionWithAmount.amount;
-      console.log(descriptionWithAmount);
       if (descriptionWithAmount.descriptionText != null && descriptionWithAmount.charged != null) {
         const description = new DescriptionWithAmount(null, descriptionWithAmount.descriptionText, descriptionAmount, descriptionWithAmount.charged);
         this.listOfDescriptionsWithAmount.push(description);
@@ -1018,7 +1020,7 @@ export class FilterComponent implements OnInit {
     });
     sessionStorage.setItem('descriptionsWithAmount', JSON.stringify(this.listOfDescriptionsWithAmount));
     sessionStorage.setItem('giftIndexList', JSON.stringify(this.giftIndexList));
-    this.setOrderProgressInSessionStorage(10);
+    this.setOrderProgressInSessionStorage(9);
   }
 
   private addToGiftIndexList(index: number) {

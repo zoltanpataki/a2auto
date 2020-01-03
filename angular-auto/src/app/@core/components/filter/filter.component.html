@@ -343,24 +343,6 @@
       </div>
       <div *ngIf="orderProgress > 5 && clickedCarIndex == i">
         <mat-divider></mat-divider>
-        <div class="typeOfBuying">
-          <div>
-            <mat-form-field class="example-full-width">
-              <mat-label>Vásárlás típusa</mat-label>
-              <mat-select [(ngModel)]="selectedTypeOfBuying" (ngModelChange)="selectTypeOfBuying($event, car)" name="typeOfBuying">
-                <mat-option *ngFor="let type of typeOfBuying; trackBy: trackByFn" [value]="type">
-                  {{type}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <div>
-            <i *ngIf="selectedTypeOfBuying == 'HITEL'" class="material-icons editTypeOfBuying " (click)="openCreditModal(car)">edit</i>
-          </div>
-        </div>
-      </div>
-      <div *ngIf="orderProgress > 6 && clickedCarIndex == i">
-        <mat-divider></mat-divider>
           <div>
             <mat-form-field class="example-full-width">
               <mat-label>Értékesítő</mat-label>
@@ -372,7 +354,7 @@
             </mat-form-field>
           </div>
       </div>
-      <div *ngIf="orderProgress > 7 && clickedCarIndex == i">
+      <div *ngIf="orderProgress > 6 && clickedCarIndex == i">
         <mat-divider></mat-divider>
         <h5>Várható átadás</h5>
         <form #handOverForm=ngForm (ngSubmit)="submitHandOver(handOverForm, car)" class="form handOverForm">
@@ -388,7 +370,7 @@
           </div>
         </form>
       </div>
-      <div *ngIf="orderProgress > 8 && clickedCarIndex == i">
+      <div *ngIf="orderProgress > 7 && clickedCarIndex == i">
         <mat-divider></mat-divider>
         <div class="kiegTitle">
           <div>
@@ -431,6 +413,24 @@
               <button class="saveButton" mat-button type="submit">Tovább</button>
             </div>
           </form>
+        </div>
+      </div>
+      <div *ngIf="orderProgress > 8 && clickedCarIndex == i">
+        <mat-divider></mat-divider>
+        <div class="typeOfBuying">
+          <div>
+            <mat-form-field class="example-full-width">
+              <mat-label>Vásárlás típusa</mat-label>
+              <mat-select [(ngModel)]="selectedTypeOfBuying" (ngModelChange)="selectTypeOfBuying($event, car)" name="typeOfBuying">
+                <mat-option *ngFor="let type of typeOfBuying; trackBy: trackByFn" [value]="type">
+                  {{type}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div>
+            <i *ngIf="selectedTypeOfBuying == 'HITEL'" class="material-icons editTypeOfBuying " (click)="openCreditModal(car)">edit</i>
+          </div>
         </div>
       </div>
       <div *ngIf="orderProgress > 9 && clickedCarIndex == i">

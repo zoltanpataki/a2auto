@@ -136,6 +136,7 @@ export class SellingPageComponent implements OnInit{
       this.sellerCompanyRepresentation = this.a2Representation;
       if (order.users != null) {
         this.buyerIndividual = order.users;
+        console.log(this.buyerIndividual);
       } else if (order.company != null) {
         this.buyerCompany = order.company;
       }

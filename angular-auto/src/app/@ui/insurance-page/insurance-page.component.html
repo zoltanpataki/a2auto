@@ -97,38 +97,38 @@
         <tr>
           <td *ngIf="insuredCar && insuredCar.plateNumber" width="30%">Rendszám: <strong>{{insuredCar.plateNumber}}</strong></td>
           <td *ngIf="!insuredCar || insuredCar && !insuredCar.plateNumber" width="30%">Rendszám: </td>
-          <td *ngIf="insuredCar && insuredCar.carOrTruck" width="40%">Gépjármű fajtája: {{insuredCar.carOrTruck}}</td>
+          <td *ngIf="insuredCar && insuredCar.carOrTruck" width="40%">Gépjármű fajtája: <strong>{{insuredCar.carOrTruck}}</strong></td>
           <td *ngIf="!insuredCar || insuredCar && !insuredCar.carOrTruck" width="40%">Gépjármű fajtája: </td>
-          <td *ngIf="insuredCar && insuredCar.bodyNumber" width="30%">Alvázszám: {{insuredCar.bodyNumber}}</td>
+          <td *ngIf="insuredCar && insuredCar.bodyNumber" width="30%">Alvázszám: <strong>{{insuredCar.bodyNumber}}</strong></td>
           <td *ngIf="!insuredCar || insuredCar && !insuredCar.bodyNumber" width="30%">Alvázszám: </td>
         </tr>
       </table>
       <table class="secondTable secondTableMiddleRow">
         <tr>
-          <td *ngIf="insuredCar && insuredCar.name" width="30%">Gyártmány: {{insuredCar.name}}</td>
+          <td *ngIf="insuredCar && insuredCar.name" width="30%">Gyártmány: <strong>{{insuredCar.name}}</strong></td>
           <td *ngIf="!insuredCar || insuredCar && !insuredCar.name" width="30%">Gyártmány: </td>
-          <td *ngIf="insuredCar && insuredCar.type" width="40%">Típus: {{insuredCar.type}}</td>
+          <td *ngIf="insuredCar && insuredCar.type" width="40%">Típus: <strong>{{insuredCar.type}}</strong></td>
           <td *ngIf="!insuredCar || insuredCar && !insuredCar.type" width="40%">Típus: </td>
-          <td *ngIf="insuredCar && insuredCar.engineNumber" width="30%">Motorszám: {{insuredCar.engineNumber}}</td>
+          <td *ngIf="insuredCar && insuredCar.engineNumber" width="30%">Motorszám: <strong>{{insuredCar.engineNumber}}</strong></td>
           <td *ngIf="!insuredCar || insuredCar && !insuredCar.engineNumber" width="30%">Motorszám: </td>
         </tr>
       </table>
       <table class="secondTable secondTableMiddleRow">
         <tr>
-          <td *ngIf="insuredCar && insuredCar.capacity" width="30%">Hengerűrtartalom(ccm): {{insuredCar.capacity}}</td>
+          <td *ngIf="insuredCar && insuredCar.capacity" width="30%">Hengerűrtartalom(ccm): <strong>{{insuredCar.capacity}}</strong></td>
           <td *ngIf="!insuredCar || insuredCar && !insuredCar.capacity" width="30%">Hengerűrtartalom(ccm): </td>
-          <td *ngIf="insuredCar && insuredCar.kwh" width="40%">Teljesítmény(kW): {{insuredCar.kwh}}</td>
+          <td *ngIf="insuredCar && insuredCar.kwh" width="40%">Teljesítmény(kW): <strong>{{insuredCar.kwh}}</strong></td>
           <td *ngIf="!insuredCar || insuredCar && !insuredCar.kwh" width="40%">Teljesítmény(kW): </td>
           <td width="30%">Szállítható személyek száma(fő): <strong>5</strong></td>
         </tr>
       </table>
       <table class="secondTable secondTableMiddleRow">
         <tr>
-          <td *ngIf="insuredCar && insuredCar.carRegistry" width="30%">Forgalmi eng. szám: {{insuredCar.carRegistry}}</td>
+          <td *ngIf="insuredCar && insuredCar.carRegistry" width="30%">Forgalmi eng. szám: <strong>{{insuredCar.carRegistry}</strong>}</td>
           <td *ngIf="!insuredCar || insuredCar && !insuredCar.carRegistry" width="30%">Forgalmi eng. szám: </td>
-          <td *ngIf="insuredCar && insuredCar.weight" width="40%">Saját tömeg(kg): {{insuredCar.weight}}</td>
+          <td *ngIf="insuredCar && insuredCar.weight" width="40%">Saját tömeg(kg): <strong>{{insuredCar.weight}}</strong></td>
           <td *ngIf="!insuredCar || insuredCar && !insuredCar.weight" width="40%">Saját tömeg(kg): </td>
-          <td *ngIf="insuredCar && insuredCar.maxWeightAllowed" width="30%">Megengedett legnagyobb össztömeg(kg): {{insuredCar.maxWeightAllowed}}</td>
+          <td *ngIf="insuredCar && insuredCar.maxWeightAllowed" width="30%">Megengedett legnagyobb össztömeg(kg): <strong>{{insuredCar.maxWeightAllowed}}</strong></td>
           <td *ngIf="!insuredCar || insuredCar && !insuredCar.maxWeightAllowed" width="30%">Megengedett legnagyobb össztömeg(kg): </td>
         </tr>
       </table>
@@ -152,7 +152,8 @@
       <table class="secondTable secondTableMiddleRow">
         <tr>
           <td width="30%">Teherbírás(kg): </td>
-          <td width="40%">Üzemanyag típusa: benzin</td>
+          <td *ngIf="insuredCar && insuredCar.fuelType" width="40%">Üzemanyag típusa: <strong>{{insuredCar.fuelType}}</strong></td>
+          <td *ngIf="!insuredCar || insuredCar && !insuredCar.fuelType" width="40%">Üzemanyag típusa:</td>
           <td width="30%">Ajtók száma: 5</td>
         </tr>
       </table>
