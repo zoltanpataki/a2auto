@@ -52,8 +52,8 @@
       </div>
       <div class="dataLines" fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
         <div fxFlex="60">
-          <p *ngIf="order && order.users && order.users.address"><strong>{{order.users.address}}</strong></p>
-          <p *ngIf="!order || order && !order.users || order && order.users && !order.users.address"></p>
+          <p *ngIf="order && order.users && order.users.zipCode && order.users.city && order.users.address"><strong>{{order.users.zipCode}}&#160;{{order.users.city}}&#160;{{order.users.address}}&#160;</strong></p>
+          <p *ngIf="!order || order && !order.users || order && order.users && !order.users.zipCode || order && order.users && !order.users.city || order && order.users && !order.users.address"></p>
         </div>
         <div fxFlex="40">
           <p>szám alatti lakos /vagy  jogi személy, ill.</p>

@@ -3,9 +3,7 @@ import {Car} from "../../models/car";
 import {HttpService} from "../../services/http.service";
 import {UtilService} from "../../services/util.service";
 import {NavigationEnd, Router} from "@angular/router";
-import {Company} from "../../models/company";
-import {Address} from "../../models/address";
-import {error} from "util";
+import {filter} from "rxjs/operators";
 
 @Component({
   selector: 'app-car',
@@ -20,6 +18,8 @@ export class CarComponent implements OnInit {
   public orderProgress: EventEmitter<any> = new EventEmitter<any>();
   @Output()
   public countInCar: EventEmitter<any> = new EventEmitter<any>();
+  @Output()
+  public updatedCar: EventEmitter<any> = new EventEmitter<any>();
   public fieldsOneFirstHalf = {type: 'Autó típusa', name: 'Modell', color: 'Szín'};
   public fieldsOneSecondHalf = {specification: 'Felszereltség', bodyNumber: 'Alvázszám', engineNumber: 'Motorszám', carRegistry: 'Forgalmi engedély száma'};
   public fieldTwo = {vintage: 'Évjárat', mileage: 'Futott km', price: 'Vételár', purchasingPrice: 'Beszerzési ár', cost: 'Költség', inheritanceTax: 'Átírási illeték', downPayment: 'Foglaló', payedAmount: 'Befizetett összeg', kwh: 'Teljesítmény'};
@@ -37,12 +37,16 @@ export class CarComponent implements OnInit {
               private utilService: UtilService,
               private router: Router) {
     router.events
+      .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
         if (event.url !== '/newUser') {
           sessionStorage.removeItem('newUser');
         }
         if (event.url !== '/newCompany') {
           sessionStorage.removeItem('newCompany');
+        }
+        if (event.url !== '/filter' && event.url !== '/orderPage' && event.url !== 'sellingPage' && event.url !== '/warrantPage' && event.url !== '/insurancePage') {
+          this.utilService.removeItemsFromSessionStorage();
         }
       });
   }
@@ -69,8 +73,10 @@ export class CarComponent implements OnInit {
     } else if (this.utilService.carUpdate){
       this.setValidPlateNumber();
       this.httpService.updateCar(this.createNewCarObject(form)).subscribe(data => {
-          console.log(data);
           this.utilService.openSnackBar('Az autó adatai sikeresen frissültek!', 'Szuper :)');
+          const updatedCar = new Car(data.id, data.name, data.type, data.color, data.plateNumber, data.specification, data. bodyNumber, data.engineNumber, Number(data.capacity), Number(data.vintage), Number(data.mileage), new Date(data.motExpiry), Number(data.price), Number(data.purchasingPrice), Number(data.cost), data.costDescriptions, new Date(data.dateOfArrival), new Date(data.dateOfLeaving), data.typeOfBuying, Number(data.inheritanceTax), Number(data.downPayment), Number(data.payedAmount), Number(data.kwh), data.carRegistry, new Date(data.documentsHandover), new Date(data.dueOfContract), new Date(data.carHandover), new Date(data.dateOfContract), Boolean(JSON.parse(data.sold)), data.carOrTruck, data.salesman, data.insuranceNumber, Number(data.weight), Number(data.maxWeightAllowed), data.fuelType);
+          this.updatedCar.emit(updatedCar);
+          this.utilService.carUpdate = false;
         }, error1 => {
           this.utilService.openSnackBar('Sajnos nem sikerült frissíteni az autó adatait!', 'Hiba :(');
         }
@@ -146,7 +152,6 @@ export class CarComponent implements OnInit {
   }
 
   private itemChanged(form: any) {
-    console.log(form.value);
     const car = new Car(null, form.value.name, form.value.type, form.value.color, form.value.plateNumber, form.value.specification, form.value.bodyNumber, form.value.engineNumber, form.value.capacity, form.value.vintage, form.value.mileage, form.value.motExpiry, form.value.price, form.value.purchasingPrice, form.value.cost, form.value.costDescription, form.value.dateOfArrival, form.value.dateOfLeaving, form.value.typeOfBuying, form.value.inheritanceTax, form.value.downPayment, form.value.payedAmount, form.value.kwh, form.value.carRegistry, form.value.documentsHandover, form.value.dueOfContract, form.value.carHandover, form.value.dateOfContract, false, form.value.carOrTruck, form.value.salesman, null, form.value.weight, form.value.maxWeightAllowed, form.value.fuelType);
     sessionStorage.setItem('newCar', JSON.stringify(car));
   }

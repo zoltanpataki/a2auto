@@ -9,6 +9,7 @@ import {Witness} from "../../models/witness";
 import {WitnessAddress} from "../../models/witnessAddress";
 import {WitnessDialogComponent} from "../../dialog/witness-dialog/witness-dialog.component";
 import {NavigationEnd, Router} from "@angular/router";
+import {filter} from "rxjs/operators";
 
 
 @Component({
@@ -31,6 +32,7 @@ export class SettingsComponent implements OnInit {
               private httpService: HttpService,
               private router: Router) {
     router.events
+      .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
         if (event.url !== '/newUser') {
           sessionStorage.removeItem('newUser');
@@ -40,6 +42,9 @@ export class SettingsComponent implements OnInit {
         }
         if (event.url !== '/newCompany') {
           sessionStorage.removeItem('newCompany');
+        }
+        if (event.url !== '/filter' && event.url !== '/orderPage' && event.url !== 'sellingPage' && event.url !== '/warrantPage' && event.url !== '/insurancePage') {
+          this.utilService.removeItemsFromSessionStorage();
         }
       });
   }

@@ -3,6 +3,7 @@ import {HttpService} from "../../services/http.service";
 import {Users} from "../../models/users";
 import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 import {UtilService} from "../../services/util.service";
+import {filter} from "rxjs/operators";
 
 @Component({
   selector: 'app-user',
@@ -32,12 +33,16 @@ export class UserComponent implements OnInit {
       this.currentUrl = window.location.pathname;
     });
     router.events
+      .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
         if (event.url !== '/newCar') {
           sessionStorage.removeItem('newCar');
         }
         if (event.url !== '/newCompany') {
           sessionStorage.removeItem('newCompany');
+        }
+        if (event.url !== '/filter' && event.url !== '/orderPage' && event.url !== 'sellingPage' && event.url !== '/warrantPage' && event.url !== '/insurancePage') {
+          this.utilService.removeItemsFromSessionStorage();
         }
       });
   }

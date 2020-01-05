@@ -22,4 +22,8 @@ export class DialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  private saveUpdatedCar(updatedCar: Event) {
+    this.dialogRef.close(updatedCar);
+  }
+
 }

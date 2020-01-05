@@ -508,6 +508,9 @@ export class FilterComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
+      this.carOfTransaction = result;
+      this.selectedCars[this.clickedCarIndex] = this.carOfTransaction;
+      sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
     });
   }
 

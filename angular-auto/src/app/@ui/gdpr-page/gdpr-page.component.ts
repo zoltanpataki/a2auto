@@ -5,6 +5,8 @@ import * as jspdf from 'jspdf';
 
 import html2canvas from 'html2canvas';
 import {NavigationEnd, Router} from "@angular/router";
+import {UtilService} from "../../@core/services/util.service";
+import {filter} from "rxjs/operators";
 
 @Component({
   selector: 'app-gdpr-page',
@@ -18,8 +20,10 @@ export class GdprPageComponent implements OnInit {
   private today: Date;
 
   constructor(private httpService: HttpService,
-              private router: Router,) {
+              private router: Router,
+              private utilService: UtilService,) {
     router.events
+      .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
         if (event.url !== '/newUser') {
           sessionStorage.removeItem('newUser');
@@ -29,6 +33,9 @@ export class GdprPageComponent implements OnInit {
         }
         if (event.url !== '/newCompany') {
           sessionStorage.removeItem('newCompany');
+        }
+        if (event.url !== '/filter' && event.url !== '/orderPage' && event.url !== 'sellingPage' && event.url !== '/warrantPage' && event.url !== '/insurancePage') {
+          this.utilService.removeItemsFromSessionStorage();
         }
       });
   }

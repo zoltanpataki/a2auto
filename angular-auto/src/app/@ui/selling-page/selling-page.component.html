@@ -57,6 +57,13 @@
           <td *ngIf="!buyerIndividual || buyerIndividual && !buyerIndividual.fullName"></td>
         </tr>
         <tr>
+          <td *ngIf="sellerIndividual && sellerIndividual.birthName">&#160;{{sellerIndividual.birthName}}</td>
+          <td *ngIf="!sellerIndividual || sellerIndividual && !sellerIndividual.birthName"></td>
+          <td class="middleColumn">Születési neve</td>
+          <td *ngIf="buyerIndividual && buyerIndividual.birthName">&#160;{{buyerIndividual.birthName}}</td>
+          <td *ngIf="!buyerIndividual || buyerIndividual && !buyerIndividual.birthName"></td>
+        </tr>
+        <tr>
           <td *ngIf="sellerIndividual && sellerIndividual.birthPlace && sellerIndividual.birthDate">&#160;{{sellerIndividual.birthPlace}}&#160;{{sellerIndividual.birthDate | date: "yyyy-MM-dd"}}</td>
           <td *ngIf="!sellerIndividual || sellerIndividual && !sellerIndividual.birthPlace || sellerIndividual && !sellerIndividual.birthDate"></td>
           <td class="middleColumn">Születési helye, ideje</td>
