@@ -443,6 +443,7 @@ export class FilterComponent implements OnInit {
   }
 
   public filterCars(form: any) {
+    this.clearSelectedCars();
     if (form.value.plateNumber && form.value.plateNumber.length < 6) {
       this.utilService.validPlateNumber = false;
     } else {

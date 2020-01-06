@@ -1,7 +1,7 @@
 <div>
   <mat-form-field>
     <mat-label>Szűrési feltétel</mat-label>
-    <mat-select (click)="clearSelectedCars()" [(ngModel)]="selectedFilter" name="filter">
+    <mat-select [(ngModel)]="selectedFilter" name="filter">
       <mat-option *ngFor="let filter of filters; trackBy: trackByFn" [value]="filter">
         {{filter.viewValue}}
       </mat-option>

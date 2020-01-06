@@ -4,7 +4,6 @@ import {HttpService} from "./@core/services/http.service";
 import {UtilService} from "./@core/services/util.service";
 import {LoaderState} from "./@core/services/loader.state";
 import {Observable} from "rxjs";
-import {NavigationEnd, Router} from "@angular/router";
 
 @Component({
   selector: 'app-root',

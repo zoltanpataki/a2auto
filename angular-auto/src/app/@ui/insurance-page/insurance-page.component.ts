@@ -73,9 +73,11 @@ export class InsurancePageComponent implements OnInit {
       if (this.order && this.order.countInCar) {
         this.insuredCar = this.order.countInCar;
         sessionStorage.setItem('insuredCar', JSON.stringify(this.insuredCar));
+        sessionStorage.setItem('newCar', JSON.stringify(this.insuredCar));
       } else {
         this.insuredCar = history.state.data.insuredCar;
         sessionStorage.setItem('insuredCar', JSON.stringify(this.insuredCar));
+        sessionStorage.setItem('newCar', JSON.stringify(this.insuredCar));
       }
     } else {
       this.order = JSON.parse(sessionStorage.getItem('order'));

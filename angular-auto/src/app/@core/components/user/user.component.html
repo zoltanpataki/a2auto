@@ -15,7 +15,7 @@
         <div class="middle">
           <div>
             <mat-form-field class="example-full-width">
-              <input matInput [matDatepicker]="birthPicker" placeholder="Születésnap" (ngModelChange)="itemChanged(userForm)" ngModel="{{userData.birthDate | date:'yyyy-MM-dd'}}" name="birthDate">
+              <input matInput [matDatepicker]="birthPicker" placeholder="Születési dátum" (ngModelChange)="itemChanged(userForm)" ngModel="{{userData.birthDate | date:'yyyy-MM-dd'}}" name="birthDate">
               <mat-datepicker-toggle matSuffix [for]="birthPicker"></mat-datepicker-toggle>
               <mat-datepicker #birthPicker></mat-datepicker>
             </mat-form-field>

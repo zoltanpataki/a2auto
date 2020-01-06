@@ -21,9 +21,30 @@ export class CarComponent implements OnInit {
   @Output()
   public updatedCar: EventEmitter<any> = new EventEmitter<any>();
   public fieldsOneFirstHalf = {type: 'Autó típusa', name: 'Modell', color: 'Szín'};
-  public fieldsOneSecondHalf = {specification: 'Felszereltség', bodyNumber: 'Alvázszám', engineNumber: 'Motorszám', carRegistry: 'Forgalmi engedély száma'};
-  public fieldTwo = {vintage: 'Évjárat', mileage: 'Futott km', price: 'Vételár', purchasingPrice: 'Beszerzési ár', cost: 'Költség', inheritanceTax: 'Átírási illeték', downPayment: 'Foglaló', payedAmount: 'Befizetett összeg', kwh: 'Teljesítmény'};
-  public fieldFour = {dateOfArrival: 'Vétel dátuma', dateOfLeaving: 'Eladás dátuma', documentsHandover: 'Dokumentumok átadásának időpontja', dateOfContract : 'Szerződés szerinti teljesítés időpontja', dueOfContract: 'Szerződés lejárata'};
+  public fieldsOneSecondHalf = {
+    specification: 'Felszereltség',
+    bodyNumber: 'Alvázszám',
+    engineNumber: 'Motorszám',
+    carRegistry: 'Forgalmi engedély száma'
+  };
+  public fieldTwo = {
+    vintage: 'Évjárat',
+    mileage: 'Futott km',
+    price: 'Vételár',
+    purchasingPrice: 'Beszerzési ár',
+    cost: 'Költség',
+    inheritanceTax: 'Átírási illeték',
+    downPayment: 'Foglaló',
+    payedAmount: 'Befizetett összeg',
+    kwh: 'Teljesítmény'
+  };
+  public fieldFour = {
+    dateOfArrival: 'Vétel dátuma',
+    dateOfLeaving: 'Eladás dátuma',
+    documentsHandover: 'Dokumentumok átadásának időpontja',
+    dateOfContract: 'Szerződés szerinti teljesítés időpontja',
+    dueOfContract: 'Szerződés lejárata'
+  };
   public fieldRelatedToWeight = {weight: 'Saját tömeg', maxWeightAllowed: 'Megengedett legnagyobb össztömeg'};
   public keepOriginalOrder = (a, b) => a.key;
   public carHandoverTime = {};
@@ -59,7 +80,7 @@ export class CarComponent implements OnInit {
       this.showInsuranceButton = true;
     }
     if (this.carData == null) {
-      this.carData = new Car(null, null,null,null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+      this.carData = new Car(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     } else {
       const carHandoverDate: Date = new Date(this.carData.carHandover);
       this.carHandoverTime['hour'] = carHandoverDate.getHours();
@@ -70,20 +91,21 @@ export class CarComponent implements OnInit {
   public saveCar(form: any) {
     if (form.value.plateNumber.length < 6) {
       this.utilService.validPlateNumber = false;
-    } else if (this.utilService.carUpdate){
+    } else if (this.utilService.carUpdate) {
       this.setValidPlateNumber();
       this.httpService.updateCar(this.createNewCarObject(form)).subscribe(data => {
           this.utilService.openSnackBar('Az autó adatai sikeresen frissültek!', 'Szuper :)');
-          const updatedCar = new Car(data.id, data.name, data.type, data.color, data.plateNumber, data.specification, data. bodyNumber, data.engineNumber, Number(data.capacity), Number(data.vintage), Number(data.mileage), new Date(data.motExpiry), Number(data.price), Number(data.purchasingPrice), Number(data.cost), data.costDescriptions, new Date(data.dateOfArrival), new Date(data.dateOfLeaving), data.typeOfBuying, Number(data.inheritanceTax), Number(data.downPayment), Number(data.payedAmount), Number(data.kwh), data.carRegistry, new Date(data.documentsHandover), new Date(data.dueOfContract), new Date(data.carHandover), new Date(data.dateOfContract), Boolean(JSON.parse(data.sold)), data.carOrTruck, data.salesman, data.insuranceNumber, Number(data.weight), Number(data.maxWeightAllowed), data.fuelType);
+          const updatedCar = new Car(data.id, data.name, data.type, data.color, data.plateNumber, data.specification, data.bodyNumber, data.engineNumber, Number(data.capacity), Number(data.vintage), Number(data.mileage), new Date(data.motExpiry), Number(data.price), Number(data.purchasingPrice), Number(data.cost), data.costDescriptions, new Date(data.dateOfArrival), new Date(data.dateOfLeaving), data.typeOfBuying, Number(data.inheritanceTax), Number(data.downPayment), Number(data.payedAmount), Number(data.kwh), data.carRegistry, new Date(data.documentsHandover), new Date(data.dueOfContract), new Date(data.carHandover), new Date(data.dateOfContract), Boolean(JSON.parse(data.sold)), data.carOrTruck, data.salesman, data.insuranceNumber, Number(data.weight), Number(data.maxWeightAllowed), data.fuelType);
           this.updatedCar.emit(updatedCar);
           this.utilService.carUpdate = false;
         }, error1 => {
           this.utilService.openSnackBar('Sajnos nem sikerült frissíteni az autó adatait!', 'Hiba :(');
         }
-      )} else {
+      )
+    } else {
       this.setValidPlateNumber();
       this.httpService.saveCar(this.createNewCarObject(form)).subscribe(data => {
-          const newCar = new Car(data.id, data.name, data.type, data.color, data.plateNumber, data.specification, data. bodyNumber, data.engineNumber, Number(data.capacity), Number(data.vintage), Number(data.mileage), new Date(data.motExpiry), Number(data.price), Number(data.purchasingPrice), Number(data.cost), data.costDescriptions, new Date(data.dateOfArrival), new Date(data.dateOfLeaving), data.typeOfBuying, Number(data.inheritanceTax), Number(data.downPayment), Number(data.payedAmount), Number(data.kwh), data.carRegistry, new Date(data.documentsHandover), new Date(data.dueOfContract), new Date(data.carHandover), new Date(data.dateOfContract), Boolean(JSON.parse(data.sold)), data.carOrTruck, data.salesman, data.insuranceNumber, Number(data.weight), Number(data.maxWeightAllowed), data.fuelType);
+          const newCar = new Car(data.id, data.name, data.type, data.color, data.plateNumber, data.specification, data.bodyNumber, data.engineNumber, Number(data.capacity), Number(data.vintage), Number(data.mileage), new Date(data.motExpiry), Number(data.price), Number(data.purchasingPrice), Number(data.cost), data.costDescriptions, new Date(data.dateOfArrival), new Date(data.dateOfLeaving), data.typeOfBuying, Number(data.inheritanceTax), Number(data.downPayment), Number(data.payedAmount), Number(data.kwh), data.carRegistry, new Date(data.documentsHandover), new Date(data.dueOfContract), new Date(data.carHandover), new Date(data.dateOfContract), Boolean(JSON.parse(data.sold)), data.carOrTruck, data.salesman, data.insuranceNumber, Number(data.weight), Number(data.maxWeightAllowed), data.fuelType);
           if (newCar.motExpiry.getFullYear() === new Date(0).getFullYear()) {
             newCar.motExpiry = null;
           }
@@ -111,7 +133,8 @@ export class CarComponent implements OnInit {
         }, error => {
           this.utilService.openSnackBar('Az adatbáziskapcsolat váratlanul megszakadt!', 'Hiba :(');
         }
-      )}
+      )
+    }
   }
 
   private setValidPlateNumber() {
@@ -125,25 +148,54 @@ export class CarComponent implements OnInit {
     return carHandoverWithTime;
   }
 
-  public createNewCarObject(form: any): Car {
-    let carHandoverWithTime = null;
-    if (form.value.carHandover != null) {
-      carHandoverWithTime = this.addTimeToCarHandoverDate(new Date(form.value.carHandover));
-    }
-    if (this.utilService.carUpdate) {
-      return  new Car(this.carData.id, form.value.name, form.value.type, form.value.color, form.value.plateNumber, form.value.specification, form.value.bodyNumber, form.value.engineNumber, form.value.capacity, form.value.vintage, form.value.mileage, form.value.motExpiry, form.value.price, form.value.purchasingPrice, form.value.cost, form.value.costDescription, form.value.dateOfArrival, form.value.dateOfLeaving, form.value.typeOfBuying, form.value.inheritanceTax, form.value.downPayment, form.value.payedAmount, form.value.kwh, form.value.carRegistry, form.value.documentsHandover, form.value.dueOfContract, carHandoverWithTime, form.value.dateOfContract, false, form.value.carOrTruck, form.value.salesman, null, form.value.weight, form.value.maxWeightAllowed, form.value.fuelType);
-    } else {
-      return  new Car(null, form.value.name, form.value.type, form.value.color, form.value.plateNumber, form.value.specification, form.value.bodyNumber, form.value.engineNumber, form.value.capacity, form.value.vintage, form.value.mileage, form.value.motExpiry, form.value.price, form.value.purchasingPrice, form.value.cost, form.value.costDescription, form.value.dateOfArrival, form.value.dateOfLeaving, form.value.typeOfBuying, form.value.inheritanceTax, form.value.downPayment, form.value.payedAmount, form.value.kwh, form.value.carRegistry, form.value.documentsHandover, form.value.dueOfContract, carHandoverWithTime, form.value.dateOfContract, false, form.value.carOrTruck, form.value.salesman, null, form.value.weight, form.value.maxWeightAllowed, form.value.fuelType);
+  private nullCheckOnCarHandoverTime(carHandover: any): Date {
+    return carHandover != null ? this.addTimeToCarHandoverDate(new Date(carHandover)) : null;
+  }
 
+  public createNewCarObject(form: any): Car {
+    if (this.utilService.carUpdate) {
+      return this.createCarObjectWithId(form, this.transformToCapitalData(form), this.nullCheckOnCarHandoverTime(form.value.carHandover));
+    } else {
+      return this.createCarObjectNoId(form, this.transformToCapitalData(form), this.nullCheckOnCarHandoverTime(form.value.carHandover));
     }
   }
 
+  private transformToCapitalData(form: any): Object {
+    const capitalObject = {};
+    capitalObject['capitalName'] = form.value.name.toUpperCase();
+    capitalObject['capitalType'] = form.value.type.toUpperCase();
+    capitalObject['capitalColor'] = form.value.color.toUpperCase();
+    capitalObject['capitalPlateNumber'] = form.value.plateNumber.toUpperCase();
+    capitalObject['capitalSpecification'] = form.value.specification.toUpperCase();
+    capitalObject['capitalBodyNumber'] = form.value.bodyNumber.toUpperCase();
+    capitalObject['capitalEngineNumber'] = form.value.engineNumber.toUpperCase();
+    capitalObject['capitalCostDescriptions'] = form.value.costDescriptions.toUpperCase();
+    capitalObject['capitalTypeOfBuying'] = form.value.typeOfBuying != null ? form.value.typeOfBuying.toUpperCase(): null;
+    capitalObject['capitalCarRegistry'] = form.value.carRegistry.toUpperCase();
+    capitalObject['capitalCarOrTruck'] = form.value.carOrTruck != null ? form.value.carOrTruck.toUpperCase(): null;
+    capitalObject['capitalSalesman'] = form.value.salesman.toUpperCase();
+    capitalObject['capitalFuelType'] = form.value.fuelType != null ? form.value.fuelType.toUpperCase(): null;
+    return capitalObject;
+  }
+
+  private createCarObjectWithId(form: any, capitalData: Object, carHandoverWithTime: Date): Car {
+    return new Car(this.carData.id, capitalData['capitalName'], capitalData['capitalType'], capitalData['capitalColor'], capitalData['capitalPlateNumber'], capitalData['capitalSpecification'], capitalData['capitalBodyNumber'], capitalData['capitalEngineNumber'], form.value.capacity, form.value.vintage, form.value.mileage, form.value.motExpiry, form.value.price, form.value.purchasingPrice, form.value.cost, capitalData['capitalCostDescriptions'], form.value.dateOfArrival, form.value.dateOfLeaving, capitalData['capitalTypeOfBuying'], form.value.inheritanceTax, form.value.downPayment, form.value.payedAmount, form.value.kwh, capitalData['capitalCarRegistry'], form.value.documentsHandover, form.value.dueOfContract, carHandoverWithTime, form.value.dateOfContract, false, capitalData['capitalCarOrTruck'], capitalData['capitalSalesman'], null, form.value.weight, form.value.maxWeightAllowed, capitalData['capitalFuelType']);
+  }
+
+  private createCarObjectNoId(form: any, capitalData: Object, carHandoverWithTime: Date) {
+    return new Car(null, capitalData['capitalName'], capitalData['capitalType'], capitalData['capitalColor'], capitalData['capitalPlateNumber'], capitalData['capitalSpecification'], capitalData['capitalBodyNumber'], capitalData['capitalEngineNumber'], form.value.capacity, form.value.vintage, form.value.mileage, form.value.motExpiry, form.value.price, form.value.purchasingPrice, form.value.cost, capitalData['capitalCostDescriptions'], form.value.dateOfArrival, form.value.dateOfLeaving, capitalData['capitalTypeOfBuying'], form.value.inheritanceTax, form.value.downPayment, form.value.payedAmount, form.value.kwh, capitalData['capitalCarRegistry'], form.value.documentsHandover, form.value.dueOfContract, carHandoverWithTime, form.value.dateOfContract, false, capitalData['capitalCarOrTruck'], capitalData['capitalSalesman'], null, form.value.weight, form.value.maxWeightAllowed, capitalData['capitalFuelType']);
+  }
+
   private navigateToInsurancePage(form: any) {
-    const carForInsurance = new Car(null, form.value.name, form.value.type, form.value.color, form.value.plateNumber, form.value.specification, form.value.bodyNumber, form.value.engineNumber, form.value.capacity, form.value.vintage, form.value.mileage, form.value.motExpiry, form.value.price, form.value.purchasingPrice, form.value.cost, form.value.costDescription, form.value.dateOfArrival, form.value.dateOfLeaving, form.value.typeOfBuying, form.value.inheritanceTax, form.value.downPayment, form.value.payedAmount, form.value.kwh, form.value.carRegistry, form.value.documentsHandover, form.value.dueOfContract, form.value.carHandover, form.value.dateOfContract, false, form.value.carOrTruck, form.value.salesman, null, form.value.weight, form.value.maxWeightAllowed, form.value.fuelType);
-    this.httpService.saveCar(carForInsurance).subscribe(data => {
-      this.router.navigate(['/insurance'], {state: {data: {
+    const carForInsurance = this.createCarObjectNoId(form, this.transformToCapitalData(form), this.nullCheckOnCarHandoverTime(form.value.carHandover));
+      this.httpService.saveCar(carForInsurance).subscribe(data => {
+      this.router.navigate(['/insurance'], {
+        state: {
+          data: {
             insuredCar: carForInsurance,
-          }}});
+          }
+        }
+      });
     });
   }
 
@@ -152,7 +204,8 @@ export class CarComponent implements OnInit {
   }
 
   private itemChanged(form: any) {
-    const car = new Car(null, form.value.name, form.value.type, form.value.color, form.value.plateNumber, form.value.specification, form.value.bodyNumber, form.value.engineNumber, form.value.capacity, form.value.vintage, form.value.mileage, form.value.motExpiry, form.value.price, form.value.purchasingPrice, form.value.cost, form.value.costDescription, form.value.dateOfArrival, form.value.dateOfLeaving, form.value.typeOfBuying, form.value.inheritanceTax, form.value.downPayment, form.value.payedAmount, form.value.kwh, form.value.carRegistry, form.value.documentsHandover, form.value.dueOfContract, form.value.carHandover, form.value.dateOfContract, false, form.value.carOrTruck, form.value.salesman, null, form.value.weight, form.value.maxWeightAllowed, form.value.fuelType);
+    const car = this.createCarObjectNoId(form, this.transformToCapitalData(form), this.nullCheckOnCarHandoverTime(form.value.carHandover));
+    console.log(car);
     sessionStorage.setItem('newCar', JSON.stringify(car));
   }
 

@@ -123,10 +123,10 @@
         <button mat-button>Mentés</button>
       </div>
       <div *ngIf="showInsuranceButton" class="saveButton">
-        <button type="button" mat-button (click)="navigateToInsurancePage(carForm)">Biztosítás</button>
+        <button type="button" mat-button (click)="navigateToInsurancePage(carForm)">Biztosítás generálása</button>
       </div>
       <div class="saveButton">
-        <button type="button" mat-button (click)="makeTheFormBlank()">Új autó</button>
+        <button *ngIf="showInsuranceButton" type="button" mat-button (click)="makeTheFormBlank()">Új autó</button>
       </div>
     </div>
   </form>
