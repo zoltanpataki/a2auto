@@ -313,7 +313,7 @@
                   </div>
                 </div>
               </div>
-              <div>
+              <div *ngIf="orderProgress == 4">
                 <button class="saveButton" mat-button type="submit">Tovább</button>
               </div>
             </div>
@@ -327,18 +327,18 @@
           <div>
             <mat-form-field class="example-full-width">
               <label>
-                <input matInput type="number" placeholder="Foglaló összege" formControlName="downPayment" [(ngModel)]="downPayment">
+                <input matInput type="number" placeholder="Foglaló összege" formControlName="downPayment" (ngModelChange)="saveChangedDownPayment(downPaymentForm)">
               </label>
             </mat-form-field>
           </div>
           <div>
             <mat-form-field class="example-full-width">
               <label>
-                <input matInput type="number" placeholder="Előleg összege" formControlName="extra" [(ngModel)]="extra">
+                <input matInput type="number" placeholder="Előleg összege" formControlName="extra" (ngModelChange)="saveChangedExtra(downPaymentForm)">
               </label>
             </mat-form-field>
           </div>
-          <div>
+          <div *ngIf="orderProgress == 5">
             <button class="saveButton" mat-button type="submit">Tovább</button>
           </div>
         </form>
@@ -362,12 +362,12 @@
         <form #handOverForm=ngForm (ngSubmit)="submitHandOver(handOverForm, car)" class="form handOverForm">
           <div>
             <mat-form-field class="example-full-width">
-              <input matInput [matDatepicker]="handOverPicker" placeholder="Dátum" ngModel="{{carOfTransaction.carHandover | date:'yyyy-MM-dd'}}" name="handover">
+              <input matInput [matDatepicker]="handOverPicker" (ngModelChange)="updateCarWithHandoverDate(handOverForm, car)" placeholder="Dátum" ngModel="{{carOfTransaction.carHandover | date:'yyyy-MM-dd'}}" name="handover">
               <mat-datepicker-toggle matSuffix [for]="handOverPicker"></mat-datepicker-toggle>
               <mat-datepicker #handOverPicker></mat-datepicker>
             </mat-form-field>
           </div>
-          <div>
+          <div *ngIf="orderProgress == 7">
             <button *ngIf="!newOrder" class="saveButton" mat-button>Tovább</button>
           </div>
         </form>
@@ -411,7 +411,7 @@
               <div class="emptyDescriptionColumn" *ngIf="giftIndexList.includes(indexNum)"></div>
               <div><i matTooltip="Kiegészítés törlése" class="material-icons deleteDesc" (click)="removeDescriptionWithAmountRow(indexNum)">highlight_off</i></div>
             </div>
-            <div>
+            <div *ngIf="orderProgress == 8">
               <button class="saveButton" mat-button type="submit">Tovább</button>
             </div>
           </form>
@@ -440,19 +440,19 @@
         <h5>Összesítő</h5>
         <div class="summary">
           <div>
-            <button mat-button type="submit" (click)="navigateToOrderOrSellingOrWarrantOrInsurancePage(car, car.id, '/orderPage', null, null, null, null)">Megrendelőlap</button>
+            <button mat-button type="submit" (click)="navigateToOrderOrSellingOrWarrantOrInsurancePage(car, car.id, '/orderPage', null, null, null, null, descriptionForm, countInCarSupplementForm)">Megrendelőlap</button>
           </div>
           <div>
-            <button mat-button type="submit" (click)="gatherSellingPageInfo(car, car.id, 'sell')">Tovább az eladási adatokhoz</button>
+            <button mat-button type="submit" (click)="gatherSellingPageInfo(car, car.id, 'sell', descriptionForm, countInCarSupplementForm)">Tovább az eladási adatokhoz</button>
           </div>
           <div *ngIf="countInCar">
-            <button mat-button type="submit" (click)="gatherSellingPageInfo(countInCar, car.id,  'buy')">Tovább a vételi adatokhoz</button>
+            <button mat-button type="submit" (click)="gatherSellingPageInfo(countInCar, car.id,  'buy', descriptionForm, countInCarSupplementForm)">Tovább a vételi adatokhoz</button>
           </div>
           <div>
-            <button mat-button type="submit" (click)="openWitnessPickerForWarrantPage()">Meghatalmazás</button>
+            <button mat-button type="submit" (click)="openWitnessPickerForWarrantPage(descriptionForm, countInCarSupplementForm)">Meghatalmazás</button>
           </div>
           <div *ngIf="countInCar">
-            <button mat-button type="submit" (click)="navigateToInsurancePage(car)">Biztosítás</button>
+            <button mat-button type="submit" (click)="navigateToInsurancePage(car, descriptionForm, countInCarSupplementForm)">Biztosítás</button>
           </div>
         </div>
       </div>

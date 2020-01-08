@@ -152,10 +152,7 @@ export class FilterComponent implements OnInit {
       this.setDescriptionForm();
     }
     if (this.downPayment == null) {
-      this.downPaymentForm = this.formBuilder.group({
-        downPayment: [null],
-        extra: [null],
-      });
+      this.createEmptyDownPaymentForm();
     } else {
       this.downPaymentForm = this.formBuilder.group({
         downPayment: [this.downPayment],
@@ -283,6 +280,7 @@ export class FilterComponent implements OnInit {
     this.thereIsCountInCar = null;
     this.addCountInCar = null;
     this.downPayment = null;
+    this.createEmptyDownPaymentForm();
     this.descriptionList = [];
     this.description = null;
     this.descriptions = null;
@@ -413,6 +411,13 @@ export class FilterComponent implements OnInit {
       previousLoan: [null],
       previousBank: [null],
       loanType: [null],
+    });
+  }
+
+  private createEmptyDownPaymentForm() {
+    this.downPaymentForm = this.formBuilder.group({
+      downPayment: [null],
+      extra: [null],
     });
   }
 
@@ -563,7 +568,7 @@ export class FilterComponent implements OnInit {
     });
   }
 
-  public openCarTimeInfoDialog(car: Car, orderedCarId: number, sellOrBuy: string) {
+  public openCarTimeInfoDialog(car: Car, orderedCarId: number, sellOrBuy: string, descriptionForm: FormGroup, countInCarSupplementForm: FormGroup) {
     const carTimeInfoDialogConfig = new MatDialogConfig();
 
     carTimeInfoDialogConfig.disableClose = true;
@@ -587,7 +592,7 @@ export class FilterComponent implements OnInit {
           this.reOrderDescriptionList(result, sellOrBuy);
           sessionStorage.setItem('descriptionList', JSON.stringify(this.descriptionList));
         }
-        this.evaluateCarOfContract(result, orderedCarId);
+        this.evaluateCarOfContract(result, orderedCarId, descriptionForm, countInCarSupplementForm);
       }
     });
   }
@@ -608,17 +613,17 @@ export class FilterComponent implements OnInit {
     this.descriptionList = newDescriptionList;
   }
 
-  private evaluateCarOfContract(resultOfCarTimeInfoDialog: any, orderedCarId: number) {
+  private evaluateCarOfContract(resultOfCarTimeInfoDialog: any, orderedCarId: number, descriptionForm: FormGroup, countInCarSupplementForm: FormGroup) {
     if (this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer) {
       this.carOfTransaction = resultOfCarTimeInfoDialog.car;
-      this.navigateToOrderOrSellingOrWarrantOrInsurancePage(this.carOfTransaction, orderedCarId, '/sellingPage', resultOfCarTimeInfoDialog.witness1, resultOfCarTimeInfoDialog.witness2, null, resultOfCarTimeInfoDialog.representation);
+      this.navigateToOrderOrSellingOrWarrantOrInsurancePage(this.carOfTransaction, orderedCarId, '/sellingPage', resultOfCarTimeInfoDialog.witness1, resultOfCarTimeInfoDialog.witness2, null, resultOfCarTimeInfoDialog.representation, descriptionForm, countInCarSupplementForm);
     } else {
       this.countInCar = resultOfCarTimeInfoDialog.car;
-      this.navigateToOrderOrSellingOrWarrantOrInsurancePage(this.countInCar, orderedCarId, '/sellingPage', resultOfCarTimeInfoDialog.witness1, resultOfCarTimeInfoDialog.witness2, null, resultOfCarTimeInfoDialog.representation);
+      this.navigateToOrderOrSellingOrWarrantOrInsurancePage(this.countInCar, orderedCarId, '/sellingPage', resultOfCarTimeInfoDialog.witness1, resultOfCarTimeInfoDialog.witness2, null, resultOfCarTimeInfoDialog.representation, descriptionForm, countInCarSupplementForm);
     }
   }
 
-  public openWitnessPickerModal(): void {
+  public openWitnessPickerModal(descriptionForm: FormGroup, countInCarSupplementForm: FormGroup): void {
     const witnessPickerDialogConfig = new MatDialogConfig();
 
     witnessPickerDialogConfig.disableClose = true;
@@ -629,7 +634,7 @@ export class FilterComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       if (result != null) {
-        this.navigateToOrderOrSellingOrWarrantOrInsurancePage(this.carOfTransaction, this.carOfTransaction.id, '/warrantPage', result.witness1, result.witness2, result.warrantType, null);
+        this.navigateToOrderOrSellingOrWarrantOrInsurancePage(this.carOfTransaction, this.carOfTransaction.id, '/warrantPage', result.witness1, result.witness2, result.warrantType, null, descriptionForm, countInCarSupplementForm);
       }
     });
   }
@@ -1015,9 +1020,23 @@ export class FilterComponent implements OnInit {
   }
 
   private submitHandOver(form: any, car: Car) {
+    this.updateCarWithHandoverDate(form, car);
+    this.setOrderProgressInSessionStorage(8);
+  }
+
+  private updateCarWithHandoverDate(form: any, car: Car) {
     car.carHandover = form.value.handover;
     this.updateCarOfTransaction(car);
-    this.setOrderProgressInSessionStorage(8);
+  }
+
+  private saveChangedDownPayment(form: FormGroup) {
+    this.downPayment = form.value.downPayment;
+    sessionStorage.setItem('downPayment', this.downPayment.toString());
+  }
+
+  private saveChangedExtra(form: FormGroup) {
+    this.extra = form.value.extra;
+    sessionStorage.setItem('extra', this.extra.toString());
   }
 
   private saveDescriptions(descriptionForm: FormGroup) {
@@ -1042,11 +1061,13 @@ export class FilterComponent implements OnInit {
     this.giftIndexList.splice(index, 1);
   }
 
-  private navigateToOrderOrSellingOrWarrantOrInsurancePage(car: Car, orderedCarId: number, targetRoute: string,  witness1: Witness, witness2: Witness, warrantType: string, a2Representation: string) {
-    if (this.downPaymentForm.value.downPayment !== this.carOfTransaction.downPayment) {
-      car.downPayment = this.downPaymentForm.value.downPayment;
+  private navigateToOrderOrSellingOrWarrantOrInsurancePage(car: Car, orderedCarId: number, targetRoute: string,  witness1: Witness, witness2: Witness, warrantType: string, a2Representation: string, descriptionForm: FormGroup, countInCarSupplementForm: FormGroup) {
+    if (this.downPayment != null) {
+      car.downPayment = this.downPayment;
       this.updateCarOfTransaction(car);
     }
+    this.saveDescriptions(descriptionForm);
+    this.saveCountInCarSupplement(countInCarSupplementForm);
     if (this.newOrder == null) {
       this.newOrder = new Order(null,
         this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready,
@@ -1112,9 +1133,9 @@ export class FilterComponent implements OnInit {
         }}});
   }
 
-  private gatherSellingPageInfo(car: Car, orderedCarId: number, sellOrBuy: string) {
+  private gatherSellingPageInfo(car: Car, orderedCarId: number, sellOrBuy: string, descriptionForm: FormGroup, countInCarSupplementForm: FormGroup) {
     this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer = sellOrBuy === 'sell';
-    this.openCarTimeInfoDialog(car, orderedCarId, sellOrBuy);
+    this.openCarTimeInfoDialog(car, orderedCarId, sellOrBuy, descriptionForm, countInCarSupplementForm);
   }
 
   private navigateToBlankOrderPage(car: Car) {
@@ -1124,11 +1145,11 @@ export class FilterComponent implements OnInit {
         }}});
   }
 
-  private navigateToInsurancePage(car: Car) {
-    this.navigateToOrderOrSellingOrWarrantOrInsurancePage(car, car.id, '/insurance', null, null, null, null);
+  private navigateToInsurancePage(car: Car, descriptionForm: FormGroup, countInCarSupplementForm: FormGroup) {
+    this.navigateToOrderOrSellingOrWarrantOrInsurancePage(car, car.id, '/insurance', null, null, null, null, descriptionForm, countInCarSupplementForm);
   }
 
-  private openWitnessPickerForWarrantPage() {
-    this.openWitnessPickerModal();
+  private openWitnessPickerForWarrantPage(descriptionForm: FormGroup, countInCarSupplementForm: FormGroup) {
+    this.openWitnessPickerModal(descriptionForm, countInCarSupplementForm);
   }
 }
