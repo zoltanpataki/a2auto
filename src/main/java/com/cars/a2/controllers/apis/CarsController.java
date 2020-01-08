@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public interface CarsController {
 
-    @GetMapping("/getAllCars")
-    ResponseEntity<Object> getAllCars();
+    @GetMapping("/getAllCars/{allOrSold}")
+    ResponseEntity<Object> getAllCars(@PathVariable String allOrSold);
 
     @PostMapping("/saveCar")
     ResponseEntity<Object> saveCar(@RequestBody Car car);

@@ -1,7 +1,6 @@
 <mat-dialog-content>
   <app-car (updatedCar)="saveUpdatedCar($event)" [carData]="carData"></app-car>
+  <div class="x-button">
+    <button class="mat-raised-button mat-accent" (click)="close()"><strong class="X">X</strong></button>
+  </div>
 </mat-dialog-content>
-
-<mat-dialog-actions>
-  <button class="mat-raised-button mat-accent" (click)="close()"><strong class="X">X</strong></button>
-</mat-dialog-actions>

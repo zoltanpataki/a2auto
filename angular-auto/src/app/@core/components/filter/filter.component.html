@@ -16,7 +16,8 @@
           <input matInput placeholder="Itt kereshetsz (max 6 karakter)" maxlength="6" minlength="6" ngModel name="plateNumber">
         </label>
       </mat-form-field>
-      <mat-error *ngIf="!utilService.validPlateNumber">A rendszam hossza 6 karakter kell legyen</mat-error>
+      <mat-error *ngIf="!utilService.validPlateNumber">A rendszám hossza 6 karakter kell legyen</mat-error>
+      <mat-error *ngIf="utilService.emptySearchField">Üresen hagyott keresőmező</mat-error>
     </div>
     <div *ngIf="selectedFilter.value == 'name' || selectedFilter.value == 'type'">
       <mat-form-field class="example-full-width">
@@ -24,6 +25,7 @@
           <input matInput placeholder="Itt kereshetsz ({{selectedFilter.viewValue}})" ngModel name="{{selectedFilter.value}}">
         </label>
       </mat-form-field>
+      <mat-error *ngIf="utilService.emptySearchField">Üresen hagyott keresőmező</mat-error>
     </div>
     <button mat-button>Keresés</button>
   </form>

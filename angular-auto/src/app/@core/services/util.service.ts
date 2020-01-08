@@ -10,6 +10,7 @@ import {Witness} from "../models/witness";
 export class UtilService {
 
   public validPlateNumber = true;
+  public emptySearchField = false;
   public carUpdate = false;
   public a2Company: Company;
   public salesmen: Salesmen[];

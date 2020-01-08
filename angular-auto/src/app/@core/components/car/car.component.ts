@@ -205,7 +205,6 @@ export class CarComponent implements OnInit {
 
   private itemChanged(form: any) {
     const car = this.createCarObjectNoId(form, this.transformToCapitalData(form), this.nullCheckOnCarHandoverTime(form.value.carHandover));
-    console.log(car);
     sessionStorage.setItem('newCar', JSON.stringify(car));
   }
 

@@ -29,7 +29,7 @@ import {DescriptionWithAmount} from "../../models/descriptionWithAmount";
 export class FilterComponent implements OnInit {
 
   private countInCarSupplementForm: FormGroup;
-  private filters = [{viewValue: 'Modell', value: 'name'}, {viewValue: 'Rendszám', value: 'plateNumber'}, {viewValue: 'Márka', value: 'type'}, {viewValue: 'Összes', value: 'all'}];
+  private filters = [{viewValue: 'Modell', value: 'name'}, {viewValue: 'Rendszám', value: 'plateNumber'}, {viewValue: 'Márka', value: 'type'}, {viewValue: 'Összes', value: 'all'}, {viewValue: 'Eladott', value: 'sold'}];
   private userFilters = [{viewValue: 'Név', value: 'name'}, {viewValue: 'Város', value: 'city'}];
   private selectedFilter: SelectedFilter;
   private selectedUserFilter: SelectedFilter;
@@ -444,12 +444,16 @@ export class FilterComponent implements OnInit {
 
   public filterCars(form: any) {
     this.clearSelectedCars();
-    if (form.value.plateNumber && form.value.plateNumber.length < 6) {
+    if (form.value.plateNumber && form.value.plateNumber.length < 6 ) {
       this.utilService.validPlateNumber = false;
+      this.utilService.emptySearchField = false;
+    } else if (this.selectedFilter.value === 'name' && form.value.name.length === 0 || this.selectedFilter.value === 'type' && form.value.type.length === 0 || this.selectedFilter.value === 'plateNumber' && form.value.plateNumber.length === 0) {
+      this.utilService.emptySearchField = true;
     } else {
       sessionStorage.clear();
       let formValue = null;
       this.utilService.validPlateNumber = true;
+      this.utilService.emptySearchField = false;
       switch (Object.keys(form.value)[0]) {
         case 'name': {
           formValue = form.value.name.toUpperCase();
@@ -465,7 +469,7 @@ export class FilterComponent implements OnInit {
         }
       }
 
-      if (this.selectedFilter.value !== 'all') {
+      if (this.selectedFilter.value !== 'all' && this.selectedFilter.value !== 'sold') {
         this.httpService.getSingleCar(formValue, this.selectedFilter.value).subscribe(data => {
           if (!data) {
             this.noMatch = true;
@@ -488,7 +492,7 @@ export class FilterComponent implements OnInit {
           }
         });
       } else {
-        this.httpService.getAllCars().subscribe(data => {
+        this.httpService.getAllCars(this.selectedFilter.value).subscribe(data => {
           this.selectedCars = data;
           sessionStorage.setItem('selectedCars', JSON.stringify(data));
         })
@@ -509,6 +513,9 @@ export class FilterComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
+      if (result == null) {
+        sessionStorage.removeItem('newCar');
+      }
       this.carOfTransaction = result;
       this.selectedCars[this.clickedCarIndex] = this.carOfTransaction;
       sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));

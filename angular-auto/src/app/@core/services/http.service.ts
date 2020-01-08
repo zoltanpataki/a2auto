@@ -84,8 +84,8 @@ export class HttpService {
     });
   }
 
-  public getAllCars(): Observable<any> {
-    const urlPostFix = 'getAllCars';
+  public getAllCars(allOrSold: string): Observable<any> {
+    const urlPostFix = `getAllCars/${allOrSold}`;
     return this.http.get(this.carServerUrl + urlPostFix, httpOptions);
   }
 

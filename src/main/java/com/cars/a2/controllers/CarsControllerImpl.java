@@ -23,8 +23,8 @@ public class CarsControllerImpl implements CarsController {
 
 
     @Override
-    public ResponseEntity<Object> getAllCars() {
-        return carService.getAllCars();
+    public ResponseEntity<Object> getAllCars(String allOrSold) {
+        return carService.getAllCars(allOrSold);
     }
 
     @Override
