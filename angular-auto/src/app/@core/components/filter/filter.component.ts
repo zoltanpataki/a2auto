@@ -154,10 +154,7 @@ export class FilterComponent implements OnInit {
     if (this.downPayment == null) {
       this.createEmptyDownPaymentForm();
     } else {
-      this.downPaymentForm = this.formBuilder.group({
-        downPayment: [this.downPayment],
-        extra: [this.extra],
-      });
+      this.createDownPaymentFormWithData(this.downPayment, this.extra);
     }
   }
 
@@ -182,8 +179,14 @@ export class FilterComponent implements OnInit {
     if (sessionStorage.getItem('pickedUser')) {
       this.pickedUser = JSON.parse(sessionStorage.getItem('pickedUser'));
     }
+    if (sessionStorage.getItem('newUserDuringSell')) {
+      this.newUser = JSON.parse(sessionStorage.getItem('newUserDuringSell'));
+    }
     if (sessionStorage.getItem('pickedCompany')) {
       this.pickedCompany = JSON.parse(sessionStorage.getItem('pickedCompany'));
+    }
+    if (sessionStorage.getItem('newCompanyDuringSell')) {
+      this.newCompany = JSON.parse(sessionStorage.getItem('newCompanyDuringSell'));
     }
     if (sessionStorage.getItem('alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready')) {
       this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = JSON.parse(sessionStorage.getItem('alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready'));
@@ -228,6 +231,10 @@ export class FilterComponent implements OnInit {
     if (sessionStorage.getItem('salesman')) {
       this.salesman = sessionStorage.getItem('salesman');
     }
+    if (sessionStorage.getItem('inheritanceTax')) {
+      this.inheritanceTax = Number(sessionStorage.getItem('inheritanceTax'));
+    }
+
   }
 
   // Remove all the items from sessionStorage when other order or other route was clicked
@@ -257,6 +264,8 @@ export class FilterComponent implements OnInit {
     sessionStorage.removeItem('orderedCar');
     sessionStorage.removeItem('descriptionList');
     sessionStorage.removeItem('insuranceOfferNumber');
+    sessionStorage.removeItem('newUserDuringSell');
+    sessionStorage.removeItem('newCompanyDuringSell');
   }
 
   // Sets the data to null when expansion order is collapsed
@@ -269,8 +278,10 @@ export class FilterComponent implements OnInit {
     this.userSearchResult.data = null;
     this.companySearchResult.data = null;
     this.pickedUser = null;
+    this.newUser = null;
     this.indexOfPickedUser = null;
     this.pickedCompany = null;
+    this.newCompany = null;
     this.indexOfPickedCompany = null;
     this.selectedUserFilter = null;
     this.selectedCompanyFilter = null;
@@ -355,8 +366,31 @@ export class FilterComponent implements OnInit {
     if (order.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready) {
       if (order.selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate) {
         this.newUser = order.users;
+        sessionStorage.setItem('newUserDuringSell', JSON.stringify(this.newUser));
       } else {
         this.newCompany = order.company;
+        sessionStorage.setItem('newCompanyDuringSell', JSON.stringify(this.newCompany));
+      }
+    } else {
+      if (order.users != null) {
+        let userList: Users[] = [];
+        userList.push(order.users);
+        this.userSearchResult.data = userList;
+        sessionStorage.setItem('userSearchData', JSON.stringify(userList));
+        this.indexOfPickedUser = 0;
+        sessionStorage.setItem('indexOfPickedUser', this.indexOfPickedUser.toString());
+        this.pickedUser = order.users;
+        sessionStorage.setItem('pickedUser', JSON.stringify(this.pickedUser));
+      }
+      if (order.company != null) {
+        let companyList: Company[] = [];
+        companyList.push(order.company);
+        this.companySearchResult.data = companyList;
+        sessionStorage.setItem('companySearchData', JSON.stringify(companyList));
+        this.indexOfPickedCompany = 0;
+        sessionStorage.setItem('indexOfPickedCompany', this.indexOfPickedCompany.toString());
+        this.pickedCompany = order.company;
+        sessionStorage.setItem('pickedCompany', JSON.stringify(this.pickedCompany));
       }
     }
     this.selectedTypeOfBuying = order.selectedTypeOfBuying;
@@ -418,6 +452,13 @@ export class FilterComponent implements OnInit {
     this.downPaymentForm = this.formBuilder.group({
       downPayment: [null],
       extra: [null],
+    });
+  }
+
+  private createDownPaymentFormWithData(downPayment: number, extra: number) {
+    this.downPaymentForm = this.formBuilder.group({
+      downPayment: [downPayment],
+      extra: [extra],
     });
   }
 
@@ -846,26 +887,7 @@ export class FilterComponent implements OnInit {
     if (this.countInCarSupplement) {
       this.setCountInCarSupplementForm(this.countInCarSupplement);
     }
-    if (order.users != null) {
-      let userList: Users[] = [];
-      userList.push(order.users);
-      this.userSearchResult.data = userList;
-      sessionStorage.setItem('userSearchData', JSON.stringify(userList));
-      this.indexOfPickedUser = 0;
-      sessionStorage.setItem('indexOfPickedUser', this.indexOfPickedUser.toString());
-      this.pickedUser = order.users;
-      sessionStorage.setItem('pickedUser', JSON.stringify(this.pickedUser));
-    }
-    if (order.company != null) {
-      let companyList: Company[] = [];
-      companyList.push(order.company);
-      this.companySearchResult.data = companyList;
-      sessionStorage.setItem('companySearchData', JSON.stringify(companyList));
-      this.indexOfPickedCompany = 0;
-      sessionStorage.setItem('indexOfPickedCompany', this.indexOfPickedCompany.toString());
-      this.pickedCompany = order.company;
-      sessionStorage.setItem('pickedCompany', JSON.stringify(this.pickedCompany));
-    }
+    this.createDownPaymentFormWithData(this.downPayment, this.extra);
     this.carOfTransaction = car;
   }
 
@@ -915,11 +937,13 @@ export class FilterComponent implements OnInit {
   }
 
   private addNewUserToOrder(event: Users) {
-    this.pickedUser = event;
+    this.newUser = event;
+    sessionStorage.setItem('newUserDuringSell', JSON.stringify(this.newUser));
   }
 
   private addNewCompanyToOrder(event: Company) {
-    this.pickedCompany = event;
+    this.newCompany = event;
+    sessionStorage.setItem('newCompanyDuringSell', JSON.stringify(this.newCompany));
   }
 
   private orderOnProgressWithCar(event: string) {
@@ -1031,12 +1055,16 @@ export class FilterComponent implements OnInit {
 
   private saveChangedDownPayment(form: FormGroup) {
     this.downPayment = form.value.downPayment;
-    sessionStorage.setItem('downPayment', this.downPayment.toString());
+    if (this.downPayment != null) {
+      sessionStorage.setItem('downPayment', this.downPayment.toString());
+    }
   }
 
   private saveChangedExtra(form: FormGroup) {
     this.extra = form.value.extra;
-    sessionStorage.setItem('extra', this.extra.toString());
+    if (this.extra != null) {
+      sessionStorage.setItem('extra', this.extra.toString());
+    }
   }
 
   private saveDescriptions(descriptionForm: FormGroup) {
@@ -1068,6 +1096,17 @@ export class FilterComponent implements OnInit {
     }
     this.saveDescriptions(descriptionForm);
     this.saveCountInCarSupplement(countInCarSupplementForm);
+    let userForOrder;
+    let companyForOrder;
+    if (this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready && this.newUser !=null) {
+      userForOrder = this.newUser;
+    } else if (this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready && this.newCompany !=null) {
+      companyForOrder = this.newCompany;
+    } else if (!this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready && this.pickedUser !=null) {
+      userForOrder = this.pickedUser;
+    } else if (!this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready && this.pickedCompany !=null) {
+      companyForOrder = this.pickedCompany;
+    }
     if (this.newOrder == null) {
       this.newOrder = new Order(null,
         this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready,
@@ -1078,8 +1117,8 @@ export class FilterComponent implements OnInit {
         this.downPayment,
         this.extra,
         this.selectedTypeOfBuying,
-        this.pickedUser,
-        this.pickedCompany,
+        userForOrder,
+        companyForOrder,
         this.countInCarSupplement,
         this.creditData,
         this.countInCar,
@@ -1098,14 +1137,15 @@ export class FilterComponent implements OnInit {
       this.newOrder.downPayment = this.downPayment;
       this.newOrder.extra = this.extra;
       this.newOrder.selectedTypeOfBuying = this.selectedTypeOfBuying;
-      this.newOrder.users = this.pickedUser;
-      this.newOrder.company = this.pickedCompany;
+      this.newOrder.users = userForOrder;
+      this.newOrder.company = companyForOrder;
       this.newOrder.countInCarSupplement = this.countInCarSupplement;
       this.newOrder.credit = this.creditData;
       this.newOrder.countInCar = this.countInCar;
       this.newOrder.carId = orderedCarId;
       this.newOrder.description = this.descriptionList;
       this.newOrder.descriptionsWithAmount = this.listOfDescriptionsWithAmount;
+      console.log(this.newOrder);
       this.httpService.updateOrder(this.newOrder).subscribe(order => {
         this.prepareNavigationToOrderPageOrSellingPageOrWarrantPageOrInsurancePage(<Order> order, car, witness1, witness2, targetRoute, warrantType, a2Representation);
       });

@@ -114,7 +114,7 @@ export class CarTimeInfoComponent implements OnInit {
     this.remarkList = [];
     form.value.description.forEach(description => {
       if (description.description != null) {
-        const newDescription = new Description(description.description, this.sellOrBuy);
+        const newDescription = new Description(null, description.description, this.sellOrBuy);
         this.remarkList.push(newDescription);
       }
     });
