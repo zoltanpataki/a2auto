@@ -80,7 +80,7 @@ export class CarComponent implements OnInit {
       this.showInsuranceButton = true;
     }
     if (this.carData == null) {
-      this.carData = new Car(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+      this.carData = new Car(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, false, null, null, null, null, null, null);
     } else {
       const carHandoverDate: Date = new Date(this.carData.carHandover);
       this.carHandoverTime['hour'] = carHandoverDate.getHours();
@@ -93,48 +93,66 @@ export class CarComponent implements OnInit {
       this.utilService.validPlateNumber = false;
     } else if (this.utilService.carUpdate) {
       this.setValidPlateNumber();
-      this.httpService.updateCar(this.createNewCarObject(form)).subscribe(data => {
-          this.utilService.openSnackBar('Az autó adatai sikeresen frissültek!', 'Szuper :)');
-          const updatedCar = new Car(data.id, data.name, data.type, data.color, data.plateNumber, data.specification, data.bodyNumber, data.engineNumber, Number(data.capacity), Number(data.vintage), Number(data.mileage), new Date(data.motExpiry), Number(data.price), Number(data.purchasingPrice), Number(data.cost), data.costDescriptions, new Date(data.dateOfArrival), new Date(data.dateOfLeaving), data.typeOfBuying, Number(data.inheritanceTax), Number(data.downPayment), Number(data.payedAmount), Number(data.kwh), data.carRegistry, new Date(data.documentsHandover), new Date(data.dueOfContract), new Date(data.carHandover), new Date(data.dateOfContract), Boolean(JSON.parse(data.sold)), data.carOrTruck, data.salesman, data.insuranceNumber, Number(data.weight), Number(data.maxWeightAllowed), data.fuelType);
-          this.updatedCar.emit(updatedCar);
-          this.utilService.carUpdate = false;
-        }, error1 => {
-          this.utilService.openSnackBar('Sajnos nem sikerült frissíteni az autó adatait!', 'Hiba :(');
-        }
-      )
+      this.updateCar(form);
     } else {
       this.setValidPlateNumber();
-      this.httpService.saveCar(this.createNewCarObject(form)).subscribe(data => {
-          const newCar = new Car(data.id, data.name, data.type, data.color, data.plateNumber, data.specification, data.bodyNumber, data.engineNumber, Number(data.capacity), Number(data.vintage), Number(data.mileage), new Date(data.motExpiry), Number(data.price), Number(data.purchasingPrice), Number(data.cost), data.costDescriptions, new Date(data.dateOfArrival), new Date(data.dateOfLeaving), data.typeOfBuying, Number(data.inheritanceTax), Number(data.downPayment), Number(data.payedAmount), Number(data.kwh), data.carRegistry, new Date(data.documentsHandover), new Date(data.dueOfContract), new Date(data.carHandover), new Date(data.dateOfContract), Boolean(JSON.parse(data.sold)), data.carOrTruck, data.salesman, data.insuranceNumber, Number(data.weight), Number(data.maxWeightAllowed), data.fuelType);
-          if (newCar.motExpiry.getFullYear() === new Date(0).getFullYear()) {
-            newCar.motExpiry = null;
-          }
-          if (newCar.dateOfArrival.getFullYear() === new Date(0).getFullYear()) {
-            newCar.dateOfArrival = null;
-          }
-          if (newCar.dateOfLeaving.getFullYear() === new Date(0).getFullYear()) {
-            newCar.dateOfLeaving = null;
-          }
-          if (newCar.dateOfContract.getFullYear() === new Date(0).getFullYear()) {
-            newCar.dateOfContract = null;
-          }
-          if (newCar.dueOfContract.getFullYear() === new Date(0).getFullYear()) {
-            newCar.dueOfContract = null;
-          }
-          if (newCar.documentsHandover.getFullYear() === new Date(0).getFullYear()) {
-            newCar.documentsHandover = null;
-          }
-          if (newCar.carHandover.getFullYear() === new Date(0).getFullYear()) {
-            newCar.carHandover = null;
-          }
-          this.orderProgress.emit('saved');
-          this.countInCar.emit(newCar);
-          this.utilService.openSnackBar('Az autót sikerült elmenteni!', 'Szuper :)');
-        }, error => {
-          this.utilService.openSnackBar('Az adatbáziskapcsolat váratlanul megszakadt!', 'Hiba :(');
-        }
-      )
+      this.checkIfCarExistsAlreadyWithTheGivenPlateNumberAndActAccordingly(form);
     }
+  }
+
+  private checkIfCarExistsAlreadyWithTheGivenPlateNumberAndActAccordingly(form: any) {
+    this.httpService.getSingleCar(form.value.plateNumber.toUpperCase(), 'plateNumber').subscribe(data => {
+      console.log(data);
+      if (data == null) {
+        this.httpService.saveCar(this.createNewCarObject(form)).subscribe(data => {
+            const newCar = new Car(data.id, data.name, data.type, data.color, data.plateNumber, data.specification, data.bodyNumber, data.engineNumber, Number(data.capacity), Number(data.vintage), Number(data.mileage), new Date(data.motExpiry), Number(data.price), Number(data.purchasingPrice), Number(data.cost), data.costDescriptions, new Date(data.dateOfArrival), new Date(data.dateOfLeaving), data.typeOfBuying, Number(data.inheritanceTax), Number(data.downPayment), Number(data.payedAmount), Number(data.kwh), data.carRegistry, new Date(data.documentsHandover), new Date(data.dueOfContract), new Date(data.carHandover), new Date(data.dateOfContract), false, data.carOrTruck, data.salesman, data.insuranceNumber, Number(data.weight), Number(data.maxWeightAllowed), data.fuelType);
+            if (newCar.motExpiry.getFullYear() === new Date(0).getFullYear()) {
+              newCar.motExpiry = null;
+            }
+            if (newCar.dateOfArrival.getFullYear() === new Date(0).getFullYear()) {
+              newCar.dateOfArrival = null;
+            }
+            if (newCar.dateOfLeaving.getFullYear() === new Date(0).getFullYear()) {
+              newCar.dateOfLeaving = null;
+            }
+            if (newCar.dateOfContract.getFullYear() === new Date(0).getFullYear()) {
+              newCar.dateOfContract = null;
+            }
+            if (newCar.dueOfContract.getFullYear() === new Date(0).getFullYear()) {
+              newCar.dueOfContract = null;
+            }
+            if (newCar.documentsHandover.getFullYear() === new Date(0).getFullYear()) {
+              newCar.documentsHandover = null;
+            }
+            if (newCar.carHandover.getFullYear() === new Date(0).getFullYear()) {
+              newCar.carHandover = null;
+            }
+            this.orderProgress.emit('saved');
+            this.countInCar.emit(newCar);
+            this.utilService.openSnackBar('Az autót sikerült elmenteni!', 'Szuper :)');
+          }, error => {
+            this.utilService.openSnackBar('Az adatbáziskapcsolat váratlanul megszakadt!', 'Hiba :(');
+          }
+        )
+      } else {
+        this.updateCar(form);
+      }
+    }, error => {
+      console.log(error);
+      this.utilService.carUpdate = false;
+    });
+  }
+
+  private updateCar(form: any) {
+    this.httpService.updateCar(this.createNewCarObject(form)).subscribe(data => {
+        this.utilService.openSnackBar('Az autó adatai sikeresen frissültek!', 'Szuper :)');
+        const updatedCar = new Car(data.id, data.name, data.type, data.color, data.plateNumber, data.specification, data.bodyNumber, data.engineNumber, Number(data.capacity), Number(data.vintage), Number(data.mileage), new Date(data.motExpiry), Number(data.price), Number(data.purchasingPrice), Number(data.cost), data.costDescriptions, new Date(data.dateOfArrival), new Date(data.dateOfLeaving), data.typeOfBuying, Number(data.inheritanceTax), Number(data.downPayment), Number(data.payedAmount), Number(data.kwh), data.carRegistry, new Date(data.documentsHandover), new Date(data.dueOfContract), new Date(data.carHandover), new Date(data.dateOfContract), false, data.carOrTruck, data.salesman, data.insuranceNumber, Number(data.weight), Number(data.maxWeightAllowed), data.fuelType);
+        this.updatedCar.emit(updatedCar);
+        this.utilService.carUpdate = false;
+      }, error1 => {
+        this.utilService.openSnackBar('Sajnos nem sikerült frissíteni az autó adatait!', 'Hiba :(');
+      }
+    )
   }
 
   private setValidPlateNumber() {

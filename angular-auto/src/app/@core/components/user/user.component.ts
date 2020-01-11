@@ -18,10 +18,30 @@ export class UserComponent implements OnInit {
   public orderProgress: EventEmitter<any> = new EventEmitter<any>();
   @Output()
   public newUser: EventEmitter<any> = new EventEmitter<any>();
-  public fieldsOne = {fullName: 'Teljes Név', birthName: 'Születéskori Név', zipCode: 'Irányítószám', city: 'Város', address: 'Lakcím', phoneNumber: 'Telefonszám'};
-  public fieldsTwo = {birthPlace: 'Születési hely', email: 'E-mail', nameOfMother: 'Anyja neve', idCardNumber: 'Személyi igazolvány szám', drivingLicenceNumber: 'Vezetői engedély száma'};
-  public fieldsThree = {nationality: 'Állampolgárság', personNumber: 'Személyi szám', taxNumber: 'Adószám', healthCareNumber: 'TAJ szám'};
-  public fieldsFour = {dueTimeOfDrivingLicence: 'Vezetői engedély lejárata', dueTimeOfIdCard: 'Személyi igazolvány lejárata'};
+  public fieldsOne = {
+    fullName: 'Teljes Név',
+    birthName: 'Születéskori Név',
+    zipCode: 'Irányítószám',
+    city: 'Város',
+    address: 'Lakcím',
+    phoneNumber: 'Telefonszám'
+  };
+  public fieldsTwo = {
+    birthPlace: 'Születési hely',
+    email: 'E-mail',
+    nameOfMother: 'Anyja neve',
+    idCardNumber: 'Személyi igazolvány szám',
+    drivingLicenceNumber: 'Vezetői engedély száma'
+  };
+  public fieldsThree = {
+    nationality: 'Állampolgárság',
+    personNumber: 'Személyi szám',
+    taxNumber: 'Adószám',
+  };
+  public fieldsFour = {
+    dueTimeOfDrivingLicence: 'Vezetői engedély megszerzése',
+    dueTimeOfIdCard: 'Személyi igazolvány lejárata'
+  };
   public keepOriginalOrder = (a, b) => a.key;
   private currentUrl;
 

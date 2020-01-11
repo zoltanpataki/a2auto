@@ -103,8 +103,8 @@ export class CarTimeInfoComponent implements OnInit {
     carHandover.setHours(this.carHandoverTime['hour']);
     carHandover.setMinutes(this.carHandoverTime['minute']);
     this.carData.carHandover = carHandover;
-    this.witness1 = form.value.witness1;
-    this.witness2 = form.value.witness2;
+    this.witness1 = form.value.witness1.name === 'Egyik sem' ? null : form.value.witness1;
+    this.witness2 = form.value.witness2.name === 'Egyik sem' ? null : form.value.witness2;
     this.pickedRepresentation = form.value.representation;
     this.remarkPartOpen = true;
   }

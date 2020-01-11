@@ -115,6 +115,7 @@ export class FilterComponent implements OnInit {
     if (this.utilService.witnesses == null) {
       this.httpService.getAllWitnesses().subscribe(data => {
         this.utilService.witnesses = data;
+        this.utilService.witnesses.push(this.utilService.createBlankWitnessToUtilServiceWitnessList());
       });
     }
     if (this.utilService.salesmen == null) {
@@ -234,7 +235,9 @@ export class FilterComponent implements OnInit {
     if (sessionStorage.getItem('inheritanceTax')) {
       this.inheritanceTax = Number(sessionStorage.getItem('inheritanceTax'));
     }
-
+    if (sessionStorage.getItem('credit')) {
+      this.creditData = JSON.parse(sessionStorage.getItem('credit'));
+    }
   }
 
   // Remove all the items from sessionStorage when other order or other route was clicked
@@ -266,6 +269,7 @@ export class FilterComponent implements OnInit {
     sessionStorage.removeItem('insuranceOfferNumber');
     sessionStorage.removeItem('newUserDuringSell');
     sessionStorage.removeItem('newCompanyDuringSell');
+    sessionStorage.removeItem('credit');
   }
 
   // Sets the data to null when expansion order is collapsed
@@ -308,6 +312,7 @@ export class FilterComponent implements OnInit {
     this.countInCarSupplement = null;
     this.setOrderProgressInSessionStorage(0);
     this.removeItemsFromSessionStorage();
+    this.creditData = null;
   }
 
   // Sets variables regarding the order for the component
@@ -911,7 +916,7 @@ export class FilterComponent implements OnInit {
     this.httpService.updateCar(this.carOfTransaction).subscribe(data => {
     });
     if (this.selectedTypeOfBuying === 'HITEL') {
-      this.openCreditModal(car);
+      this.openCreditModal(this.carOfTransaction);
     }
     this.setOrderProgressInSessionStorage(10);
     sessionStorage.setItem('selectedTypeOfBuying', this.selectedTypeOfBuying);
@@ -1145,7 +1150,6 @@ export class FilterComponent implements OnInit {
       this.newOrder.carId = orderedCarId;
       this.newOrder.description = this.descriptionList;
       this.newOrder.descriptionsWithAmount = this.listOfDescriptionsWithAmount;
-      console.log(this.newOrder);
       this.httpService.updateOrder(this.newOrder).subscribe(order => {
         this.prepareNavigationToOrderPageOrSellingPageOrWarrantPageOrInsurancePage(<Order> order, car, witness1, witness2, targetRoute, warrantType, a2Representation);
       });

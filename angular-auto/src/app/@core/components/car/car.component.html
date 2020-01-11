@@ -43,7 +43,7 @@
       <div class="middle">
         <div>
           <mat-form-field class="example-full-width">
-            <input matInput [matDatepicker]="motExpiryPicker" placeholder="Műszaki vizsga lejárata" (ngModelChange)="itemChanged(carForm)" [ngModelOptions]="{updateOn: 'blur'}" ngModel="{{carData.motExpiry | date:'yyyy-MM-dd'}}" name="motExpiry">
+            <input matInput [matDatepicker]="motExpiryPicker" placeholder="Műszaki vizsga érvényessége" (ngModelChange)="itemChanged(carForm)" [ngModelOptions]="{updateOn: 'blur'}" ngModel="{{carData.motExpiry | date:'yyyy-MM-dd'}}" name="motExpiry">
             <mat-datepicker-toggle matSuffix [for]="motExpiryPicker"></mat-datepicker-toggle>
             <mat-datepicker #motExpiryPicker></mat-datepicker>
           </mat-form-field>

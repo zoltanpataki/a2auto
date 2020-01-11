@@ -58,6 +58,7 @@ export class SettingsComponent implements OnInit {
     this.httpService.getAllWitnesses().subscribe(data => {
       this.witnesses.data = data;
       this.utilService.witnesses = data;
+      this.utilService.witnesses.push(this.utilService.createBlankWitnessToUtilServiceWitnessList());
     });
   }
 

@@ -1,3 +1,9 @@
 .mat-button {
   background-color: deeppink;
+  color: white;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
 }

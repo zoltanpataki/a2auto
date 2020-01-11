@@ -10,21 +10,21 @@
     <div class="carGrid">
       <table>
         <tr>
-          <td *ngIf="orderedCar.plateNumber">&#160;Forgalmi rendszám:&#160; {{orderedCar.plateNumber}}</td>
+          <td *ngIf="orderedCar.plateNumber">&#160;Forgalmi rendszám:&#160; <strong>{{orderedCar.plateNumber}}</strong></td>
           <td *ngIf="!orderedCar.plateNumber">&#160;Forgalmi rendszám:</td>
-          <td *ngIf="orderedCar.name && orderedCar.type">&#160;Jármű gyártmánya, típusa: &#160;{{orderedCar.name}}&#160;{{orderedCar.type}}</td>
+          <td *ngIf="orderedCar.name && orderedCar.type">&#160;Jármű gyártmánya, típusa: &#160;<strong>{{orderedCar.name}}&#160;{{orderedCar.type}}</strong></td>
           <td *ngIf="!orderedCar.name || !orderedCar.type">&#160;Jármű gyártmánya, típusa:</td>
         </tr>
         <tr>
-          <td *ngIf="orderedCar.bodyNumber">&#160;Alvázszám: &#160;{{orderedCar.bodyNumber}}</td>
+          <td *ngIf="orderedCar.bodyNumber">&#160;Alvázszám: &#160;<strong>{{orderedCar.bodyNumber}}</strong></td>
           <td *ngIf="!orderedCar.bodyNumber">&#160;Alvázszám:</td>
-          <td *ngIf="orderedCar.carRegistry">&#160;Forgalmi engedély szám: &#160;{{orderedCar.carRegistry}}</td>
+          <td *ngIf="orderedCar.carRegistry">&#160;Forgalmi engedély szám: &#160;<strong>{{orderedCar.carRegistry}}</strong></td>
           <td *ngIf="!orderedCar.carRegistry">&#160;Forgalmi engedély szám:</td>
         </tr>
         <tr>
-          <td *ngIf="orderedCar.engineNumber">&#160;Motorszám: &#160;{{orderedCar.engineNumber}}</td>
+          <td *ngIf="orderedCar.engineNumber">&#160;Motorszám: &#160;<strong>{{orderedCar.engineNumber}}</strong></td>
           <td *ngIf="!orderedCar.engineNumber">&#160;Motorszám:</td>
-          <td *ngIf="orderedCar.carRegistry">&#160;Törzskönyv szám: &#160;{{orderedCar.carRegistry}}</td>
+          <td *ngIf="orderedCar.carRegistry">&#160;Törzskönyv szám: &#160;<strong>{{orderedCar.carRegistry}}</strong></td>
           <td *ngIf="!orderedCar.carRegistry">&#160;Törzskönyv szám:</td>
         </tr>
       </table>
@@ -50,52 +50,52 @@
         <col width="20%">
         <col width="40%">
         <tr>
-          <td *ngIf="sellerIndividual && sellerIndividual.fullName">&#160;{{sellerIndividual.fullName}}</td>
+          <td *ngIf="sellerIndividual && sellerIndividual.fullName">&#160;<strong>{{sellerIndividual.fullName}}</strong></td>
           <td *ngIf="!sellerIndividual || sellerIndividual && !sellerIndividual.fullName"></td>
           <td class="middleColumn">Családi és utóneve</td>
-          <td *ngIf="buyerIndividual && buyerIndividual.fullName">&#160;{{buyerIndividual.fullName}}</td>
+          <td *ngIf="buyerIndividual && buyerIndividual.fullName">&#160;<strong>{{buyerIndividual.fullName}}</strong></td>
           <td *ngIf="!buyerIndividual || buyerIndividual && !buyerIndividual.fullName"></td>
         </tr>
         <tr>
-          <td *ngIf="sellerIndividual && sellerIndividual.birthName">&#160;{{sellerIndividual.birthName}}</td>
+          <td *ngIf="sellerIndividual && sellerIndividual.birthName">&#160;<strong>{{sellerIndividual.birthName}}</strong></td>
           <td *ngIf="!sellerIndividual || sellerIndividual && !sellerIndividual.birthName"></td>
           <td class="middleColumn">Születési neve</td>
-          <td *ngIf="buyerIndividual && buyerIndividual.birthName">&#160;{{buyerIndividual.birthName}}</td>
+          <td *ngIf="buyerIndividual && buyerIndividual.birthName">&#160;<strong>{{buyerIndividual.birthName}}</strong></td>
           <td *ngIf="!buyerIndividual || buyerIndividual && !buyerIndividual.birthName"></td>
         </tr>
         <tr>
-          <td *ngIf="sellerIndividual && sellerIndividual.birthPlace && sellerIndividual.birthDate">&#160;{{sellerIndividual.birthPlace}}&#160;{{sellerIndividual.birthDate | date: "yyyy-MM-dd"}}</td>
+          <td *ngIf="sellerIndividual && sellerIndividual.birthPlace && sellerIndividual.birthDate">&#160;<strong>{{sellerIndividual.birthPlace}}&#160;{{sellerIndividual.birthDate | date: "yyyy-MM-dd"}}</strong></td>
           <td *ngIf="!sellerIndividual || sellerIndividual && !sellerIndividual.birthPlace || sellerIndividual && !sellerIndividual.birthDate"></td>
           <td class="middleColumn">Születési helye, ideje</td>
-          <td *ngIf="buyerIndividual && buyerIndividual.birthPlace && buyerIndividual.birthDate">&#160;{{buyerIndividual.birthPlace}}&#160;{{buyerIndividual.birthDate | date: "yyyy-MM-dd"}}</td>
+          <td *ngIf="buyerIndividual && buyerIndividual.birthPlace && buyerIndividual.birthDate">&#160;<strong>{{buyerIndividual.birthPlace}}&#160;{{buyerIndividual.birthDate | date: "yyyy-MM-dd"}}</strong></td>
           <td *ngIf="!buyerIndividual || buyerIndividual && !buyerIndividual.birthPlace || buyerIndividual && !buyerIndividual.birthDate"></td>
         </tr>
         <tr>
-          <td *ngIf="sellerIndividual && sellerIndividual.nameOfMother">&#160;{{sellerIndividual.nameOfMother}}</td>
+          <td *ngIf="sellerIndividual && sellerIndividual.nameOfMother">&#160;<strong>{{sellerIndividual.nameOfMother}}</strong></td>
           <td *ngIf="!sellerIndividual || sellerIndividual && !sellerIndividual.nameOfMother"></td>
           <td class="middleColumn">Anyja születési családi és utóneve</td>
-          <td *ngIf="buyerIndividual && buyerIndividual.nameOfMother">&#160;{{buyerIndividual.nameOfMother}}</td>
+          <td *ngIf="buyerIndividual && buyerIndividual.nameOfMother">&#160;<strong>{{buyerIndividual.nameOfMother}}</strong></td>
           <td *ngIf="!buyerIndividual || buyerIndividual && !buyerIndividual.nameOfMother"></td>
         </tr>
         <tr>
-          <td *ngIf="sellerIndividual && sellerIndividual.idCardNumber">&#160;{{sellerIndividual.idCardNumber}}</td>
+          <td *ngIf="sellerIndividual && sellerIndividual.idCardNumber">&#160;<strong>{{sellerIndividual.idCardNumber}}</strong></td>
           <td *ngIf="!sellerIndividual || sellerIndividual && !sellerIndividual.idCardNumber"></td>
           <td class="middleColumn">Személyazonosságát igazoló okirat száma és típusa</td>
-          <td *ngIf="buyerIndividual && buyerIndividual.idCardNumber">&#160;{{buyerIndividual.idCardNumber}}</td>
+          <td *ngIf="buyerIndividual && buyerIndividual.idCardNumber">&#160;<strong>{{buyerIndividual.idCardNumber}}</strong></td>
           <td *ngIf="!buyerIndividual || buyerIndividual && !buyerIndividual.idCardNumber"></td>
         </tr>
         <tr>
-          <td *ngIf="sellerIndividual && sellerIndividual.zipCode && sellerIndividual.city && sellerIndividual.address">&#160;{{sellerIndividual.zipCode}}&#160;{{sellerIndividual.city}}&#160;{{sellerIndividual.address}}</td>
+          <td *ngIf="sellerIndividual && sellerIndividual.zipCode && sellerIndividual.city && sellerIndividual.address">&#160;<strong>{{sellerIndividual.zipCode}}&#160;{{sellerIndividual.city}}&#160;{{sellerIndividual.address}}</strong></td>
           <td *ngIf="!sellerIndividual || sellerIndividual && !sellerIndividual.zipCode || sellerIndividual && !sellerIndividual.city || sellerIndividual && !sellerIndividual.address"></td>
           <td class="middleColumn">Lakcíme</td>
-          <td *ngIf="buyerIndividual && buyerIndividual.zipCode && buyerIndividual.city && buyerIndividual.address">&#160;{{buyerIndividual.zipCode}}&#160;{{buyerIndividual.city}}&#160;{{buyerIndividual.address}}</td>
+          <td *ngIf="buyerIndividual && buyerIndividual.zipCode && buyerIndividual.city && buyerIndividual.address">&#160;<strong>{{buyerIndividual.zipCode}}&#160;{{buyerIndividual.city}}&#160;{{buyerIndividual.address}}</strong></td>
           <td *ngIf="!buyerIndividual || buyerIndividual && !buyerIndividual.zipCode || buyerIndividual && !buyerIndividual.city || buyerIndividual && !buyerIndividual.address"></td>
         </tr>
         <tr>
-          <td *ngIf="sellerIndividual && sellerIndividual.nationality">&#160;{{sellerIndividual.nationality}}</td>
+          <td *ngIf="sellerIndividual && sellerIndividual.nationality">&#160;<strong>{{sellerIndividual.nationality}}</strong></td>
           <td *ngIf="!sellerIndividual || sellerIndividual && !sellerIndividual.nationality"></td>
           <td class="middleColumn">Állampolgársága/hontalansága/</td>
-          <td *ngIf="buyerIndividual && buyerIndividual.nationality">&#160;{{buyerIndividual.nationality}}</td>
+          <td *ngIf="buyerIndividual && buyerIndividual.nationality">&#160;<strong>{{buyerIndividual.nationality}}</strong></td>
           <td *ngIf="!buyerIndividual || buyerIndividual && !buyerIndividual.nationality"></td>
         </tr>
       </table>
@@ -121,31 +121,31 @@
         <col width="20%">
         <col width="40%">
         <tr>
-          <td *ngIf="sellerCompany && sellerCompany.name">&#160;{{sellerCompany.name}}</td>
+          <td *ngIf="sellerCompany && sellerCompany.name">&#160;<strong>{{sellerCompany.name}}</strong></td>
           <td *ngIf="!sellerCompany || sellerCompany && !sellerCompany.name"></td>
           <td class="middleColumn">Neve</td>
-          <td *ngIf="buyerCompany && buyerCompany.name">&#160;{{buyerCompany.name}}</td>
+          <td *ngIf="buyerCompany && buyerCompany.name">&#160;<strong>{{buyerCompany.name}}</strong></td>
           <td *ngIf="!buyerCompany || buyerCompany && !buyerCompany.name"></td>
         </tr>
         <tr>
-          <td *ngIf="sellerCompany && sellerCompany.address.zipcode && sellerCompany.address.city && sellerCompany.address.address">&#160;{{sellerCompany.address.zipcode}}&#160;{{sellerCompany.address.city}}&#160;{{sellerCompany.address.address}}</td>
+          <td *ngIf="sellerCompany && sellerCompany.address.zipcode && sellerCompany.address.city && sellerCompany.address.address">&#160;<strong>{{sellerCompany.address.zipcode}}&#160;{{sellerCompany.address.city}}&#160;{{sellerCompany.address.address}}</strong></td>
           <td *ngIf="!sellerCompany || sellerCompany && !sellerCompany.address.zipcode || sellerCompany && !sellerCompany.address.city || sellerCompany && !sellerCompany.address.address"></td>
           <td class="middleColumn">Székhelye / telephelye címe</td>
-          <td *ngIf="buyerCompany && buyerCompany.address.zipcode && buyerCompany.address.city && buyerCompany.address.address">&#160;{{buyerCompany.address.zipcode}}&#160;{{buyerCompany.address.city}}&#160;{{buyerCompany.address.address}}</td>
+          <td *ngIf="buyerCompany && buyerCompany.address.zipcode && buyerCompany.address.city && buyerCompany.address.address">&#160;<strong>{{buyerCompany.address.zipcode}}&#160;{{buyerCompany.address.city}}&#160;{{buyerCompany.address.address}}</strong></td>
           <td *ngIf="!buyerCompany || buyerCompany && !buyerCompany.address.zipcode || buyerCompany && !buyerCompany.address.city || buyerCompany && !buyerCompany.address.address"></td>
         </tr>
         <tr>
-          <td *ngIf="sellerCompany && sellerCompany.companyRegistrationNumber">&#160;{{sellerCompany.companyRegistrationNumber}}</td>
+          <td *ngIf="sellerCompany && sellerCompany.companyRegistrationNumber">&#160;<strong>{{sellerCompany.companyRegistrationNumber}}</strong></td>
           <td *ngIf="!sellerCompany || sellerCompany && !sellerCompany.companyRegistrationNumber"></td>
           <td class="middleColumn">Cégjegyzékszám / nyilvántart. szám.</td>
-          <td *ngIf="buyerCompany && buyerCompany.companyRegistrationNumber">&#160;{{buyerCompany.companyRegistrationNumber}}</td>
+          <td *ngIf="buyerCompany && buyerCompany.companyRegistrationNumber">&#160;<strong>{{buyerCompany.companyRegistrationNumber}}</strong></td>
           <td *ngIf="!buyerCompany || buyerCompany && !buyerCompany.companyRegistrationNumber"></td>
         </tr>
         <tr>
-          <td *ngIf="sellerCompany && sellerCompanyRepresentation">&#160;{{sellerCompanyRepresentation}}</td>
+          <td *ngIf="sellerCompany && sellerCompanyRepresentation">&#160;<strong>{{sellerCompanyRepresentation}}</strong></td>
           <td *ngIf="!sellerCompany || sellerCompany && !sellerCompanyRepresentation"></td>
           <td class="middleColumn">Képviselőjének családi és utóneve</td>
-          <td *ngIf="buyerCompany && buyerCompanyRepresentation">&#160;{{buyerCompanyRepresentation}}</td>
+          <td *ngIf="buyerCompany && buyerCompanyRepresentation">&#160;<strong>{{buyerCompanyRepresentation}}</strong></td>
           <td *ngIf="!buyerCompany || buyerCompany && !buyerCompanyRepresentation"></td>
         </tr>
       </table>
@@ -225,15 +225,15 @@
           <p>Az okmányok átadása- átvétele: </p>
         </div>
         <div fxFlex="15">
-          <p *ngIf="orderedCar.documentsHandover">év: &#160;{{orderedCar.documentsHandover | date: 'yyyy'}}</p>
+          <p *ngIf="orderedCar.documentsHandover">év: &#160;<strong>{{orderedCar.documentsHandover | date: 'yyyy'}}</strong></p>
           <p *ngIf="!orderedCar.documentsHandover">év:</p>
         </div>
         <div fxFlex="30">
-          <p *ngIf="orderedCar.documentsHandover">hó: &#160;{{orderedCar.documentsHandover | date: 'MM'}}</p>
+          <p *ngIf="orderedCar.documentsHandover">hó: &#160;<strong>{{orderedCar.documentsHandover | date: 'MM'}}</strong></p>
           <p *ngIf="!orderedCar.documentsHandover">hó:</p>
         </div>
         <div fxFlex="25">
-          <p *ngIf="orderedCar.documentsHandover">nap: &#160;{{orderedCar.documentsHandover | date: 'dd'}}</p>
+          <p *ngIf="orderedCar.documentsHandover">nap: &#160;<strong>{{orderedCar.documentsHandover | date: 'dd'}}</strong></p>
           <p *ngIf="!orderedCar.documentsHandover">nap:</p>
         </div>
       </div>
@@ -242,15 +242,15 @@
           <p>A tulajdonjog hatálybalépésének napja:</p>
         </div>
         <div fxFlex="15">
-          <p *ngIf="orderedCar.dueOfContract">év: &#160;{{orderedCar.dueOfContract | date: 'yyyy'}}</p>
+          <p *ngIf="orderedCar.dueOfContract">év: &#160;<strong>{{orderedCar.dueOfContract | date: 'yyyy'}}</strong></p>
           <p *ngIf="!orderedCar.dueOfContract">év:</p>
         </div>
         <div fxFlex="30">
-          <p *ngIf="orderedCar.dueOfContract">hó: &#160;{{orderedCar.dueOfContract | date: 'MM'}}</p>
+          <p *ngIf="orderedCar.dueOfContract">hó: &#160;<strong>{{orderedCar.dueOfContract | date: 'MM'}}</strong></p>
           <p *ngIf="!orderedCar.dueOfContract">hó:</p>
         </div>
         <div fxFlex="25">
-          <p *ngIf="orderedCar.dueOfContract">nap: &#160;{{orderedCar.dueOfContract | date: 'dd'}}</p>
+          <p *ngIf="orderedCar.dueOfContract">nap: &#160;<strong>{{orderedCar.dueOfContract | date: 'dd'}}</strong></p>
           <p *ngIf="!orderedCar.dueOfContract">nap:</p>
         </div>
       </div>
@@ -259,23 +259,23 @@
           <p>A jármű a vevő birtokába kerül:</p>
         </div>
         <div fxFlex="15">
-          <p *ngIf="orderedCar.carHandover">év: &#160;{{orderedCar.carHandover | date: 'yyyy'}}</p>
+          <p *ngIf="orderedCar.carHandover">év: &#160;<strong>{{orderedCar.carHandover | date: 'yyyy'}}</strong></p>
           <p *ngIf="!orderedCar.carHandover">év:</p>
         </div>
         <div fxFlex="30">
-          <p *ngIf="orderedCar.carHandover">hó: &#160;{{orderedCar.carHandover | date: 'MM'}}</p>
+          <p *ngIf="orderedCar.carHandover">hó: &#160;<strong>{{orderedCar.carHandover | date: 'MM'}}</strong></p>
           <p *ngIf="!orderedCar.carHandover">hó:</p>
         </div>
         <div fxFlex="9">
-          <p *ngIf="orderedCar.carHandover">nap: &#160;{{orderedCar.carHandover | date: 'dd'}}</p>
+          <p *ngIf="orderedCar.carHandover">nap: &#160;<strong>{{orderedCar.carHandover | date: 'dd'}}</strong></p>
           <p *ngIf="!orderedCar.carHandover">nap:</p>
         </div>
         <div fxFlex="8">
-          <p *ngIf="carHandoverTime">óra: &#160;{{carHandoverTime['hour']}}</p>
+          <p *ngIf="carHandoverTime">óra: &#160;<strong>{{carHandoverTime['hour']}}</strong></p>
           <p *ngIf="!carHandoverTime">óra:</p>
         </div>
         <div fxFlex="8">
-          <p *ngIf="carHandoverTime">perc: &#160;{{carHandoverTime['minute']}}</p>
+          <p *ngIf="carHandoverTime">perc: &#160;<strong>{{carHandoverTime['minute']}}</strong></p>
           <p *ngIf="!carHandoverTime">perc:</p>
         </div>
       </div>
@@ -284,15 +284,15 @@
           <p>Az adásvételi szerződés kelte:</p>
         </div>
         <div fxFlex="15">
-          <p *ngIf="orderedCar.dateOfContract">év: &#160;{{orderedCar.dateOfContract | date: 'yyyy'}}</p>
+          <p *ngIf="orderedCar.dateOfContract">év: &#160;<strong>{{orderedCar.dateOfContract | date: 'yyyy'}}</strong></p>
           <p *ngIf="!orderedCar.dateOfContract">év:</p>
         </div>
         <div fxFlex="30">
-          <p *ngIf="orderedCar.dateOfContract">hó: &#160;{{orderedCar.dateOfContract | date: 'MM'}}</p>
+          <p *ngIf="orderedCar.dateOfContract">hó: &#160;<strong>{{orderedCar.dateOfContract | date: 'MM'}}</strong></p>
           <p *ngIf="!orderedCar.dateOfContract">hó:</p>
         </div>
         <div fxFlex="25">
-          <p *ngIf="orderedCar.dateOfContract">nap: &#160;{{orderedCar.dateOfContract | date: 'dd'}}</p>
+          <p *ngIf="orderedCar.dateOfContract">nap: &#160;<strong>{{orderedCar.dateOfContract | date: 'dd'}}</strong></p>
           <p *ngIf="!orderedCar.dateOfContract">nap:</p>
         </div>
       </div>
@@ -301,7 +301,7 @@
           <p>A birtokba vételkor a kilométer számláló műszer által jelzett érték (kilométer-óra állás) </p>
         </div>
         <div fxFlex="30">
-          <p *ngIf="orderedCar.mileage">km: &#160;{{orderedCar.mileage}}</p>
+          <p *ngIf="orderedCar.mileage">km: &#160;<strong>{{orderedCar.mileage}}</strong></p>
           <p *ngIf="!orderedCar.mileage">km:</p>
         </div>
       </div>
@@ -343,24 +343,24 @@
         <col width="20%">
         <col width="40%">
         <tr>
-          <td *ngIf="witness1 && witness1.name">&#160;{{witness1.name}}</td>
+          <td *ngIf="witness1 && witness1.name">&#160;<strong>{{witness1.name}}</strong></td>
           <td *ngIf="!witness1 || witness1 && !witness1.name"></td>
           <td class="middleColumn">Olvasható neve</td>
-          <td *ngIf="witness2">&#160;{{witness2.name}}</td>
+          <td *ngIf="witness2">&#160;<strong>{{witness2.name}}</strong></td>
           <td *ngIf="!witness2 || witness2 && !witness2.name"></td>
         </tr>
         <tr>
-          <td *ngIf="witness1 && witness1.witnessAddress && witness1.witnessAddress.address && witness1.witnessAddress.zipcode && witness1.witnessAddress.city">&#160;{{witness1.witnessAddress.zipcode}}&#160;{{witness1.witnessAddress.city}}&#160;{{witness1.witnessAddress.address}}</td>
+          <td *ngIf="witness1 && witness1.witnessAddress && witness1.witnessAddress.address && witness1.witnessAddress.zipcode && witness1.witnessAddress.city">&#160;<strong>{{witness1.witnessAddress.zipcode}}&#160;{{witness1.witnessAddress.city}}&#160;{{witness1.witnessAddress.address}}</strong></td>
           <td *ngIf="!witness1 || witness1 && !witness1.witnessAddress"></td>
           <td class="middleColumn">Lakcíme</td>
-          <td *ngIf="witness2 && witness2.witnessAddress && witness2.witnessAddress.address && witness2.witnessAddress.zipcode && witness2.witnessAddress.city">&#160;{{witness2.witnessAddress.zipcode}}&#160;{{witness2.witnessAddress.city}}&#160;{{witness2.witnessAddress.address}}</td>
+          <td *ngIf="witness2 && witness2.witnessAddress && witness2.witnessAddress.address && witness2.witnessAddress.zipcode && witness2.witnessAddress.city">&#160;<strong>{{witness2.witnessAddress.zipcode}}&#160;{{witness2.witnessAddress.city}}&#160;{{witness2.witnessAddress.address}}</strong></td>
           <td *ngIf="!witness2 || witness2 && !witness2.witnessAddress"></td>
         </tr>
         <tr>
-          <td *ngIf="witness1 && witness1.idCardNumber">&#160;{{witness1.idCardNumber}}</td>
+          <td *ngIf="witness1 && witness1.idCardNumber">&#160;<strong>{{witness1.idCardNumber}}</strong></td>
           <td *ngIf="!witness1 || witness1 && !witness1.idCardNumber"></td>
           <td class="middleColumn">Szem ig. száma</td>
-          <td *ngIf="witness2 && witness2.idCardNumber">&#160;{{witness2.idCardNumber}}</td>
+          <td *ngIf="witness2 && witness2.idCardNumber">&#160;<strong>{{witness2.idCardNumber}}</strong></td>
           <td *ngIf="!witness2 || witness2 && !witness2.idCardNumber"></td>
         </tr>
         <tr>

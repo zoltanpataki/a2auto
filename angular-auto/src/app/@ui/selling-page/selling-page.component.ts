@@ -8,6 +8,7 @@ import {Users} from "../../@core/models/users";
 import {Company} from "../../@core/models/company";
 import {UtilService} from "../../@core/services/util.service";
 import {Witness} from "../../@core/models/witness";
+import {HttpService} from "../../@core/services/http.service";
 
 @Component({
   selector: 'app-selling-page',
@@ -37,7 +38,8 @@ export class SellingPageComponent implements OnInit{
   private sellerCompanyRepresentation: string;
   private buyerCompanyRepresentation: string;
 
-  constructor(private utilService: UtilService, ) { }
+  constructor(private utilService: UtilService,
+              private httpService: HttpService,) { }
 
   ngOnInit() {
     if (sessionStorage.getItem('A2Auto') != null) {
@@ -105,6 +107,9 @@ export class SellingPageComponent implements OnInit{
       this.orderedCar = JSON.parse(sessionStorage.getItem('orderedCar'));
     }
     this.setUserData(this.order);
+    if (this.orderedCar && !this.orderedCar.sold) {
+      this.setStateOfCarToSold(this.orderedCar);
+    }
   }
 
   public captureScreen() {
@@ -121,6 +126,16 @@ export class SellingPageComponent implements OnInit{
       var position = 0;
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
       pdf.save('selling.pdf'); // Generated PDF
+    });
+  }
+
+  private setStateOfCarToSold(car:Car) {
+    car.sold = true;
+    this.httpService.updateCar(car).subscribe(data => {
+      console.log(data);
+      this.utilService.openSnackBar('Az autó eladott státuszba került!', 'Szuper :)');
+    }, error => {
+      this.utilService.openSnackBar('Sajnos nem sikerült az autót eladott státuszba helyezni!', 'Hiba :(');
     });
   }
 

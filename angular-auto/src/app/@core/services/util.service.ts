@@ -55,5 +55,11 @@ export class UtilService {
     sessionStorage.removeItem('warrantType');
     sessionStorage.removeItem('witness1');
     sessionStorage.removeItem('witness2');
+    sessionStorage.removeItem('newUserDuringSell');
+    sessionStorage.removeItem('newCompanyDuringSell');
+  }
+
+  public createBlankWitnessToUtilServiceWitnessList(): Witness {
+    return new Witness(null, null, null, 'Egyik sem');
   }
 }

@@ -4,6 +4,7 @@ import {HttpService} from "./@core/services/http.service";
 import {UtilService} from "./@core/services/util.service";
 import {LoaderState} from "./@core/services/loader.state";
 import {Observable} from "rxjs";
+import {Witness} from "./@core/models/witness";
 
 @Component({
   selector: 'app-root',
@@ -31,7 +32,10 @@ export class AppComponent implements OnInit{
 
     this.httpService.getAllWitnesses().subscribe(data => {
       this.utilService.witnesses = data;
+      this.utilService.witnesses.push(this.utilService.createBlankWitnessToUtilServiceWitnessList());
     });
   }
+
+
 
 }
