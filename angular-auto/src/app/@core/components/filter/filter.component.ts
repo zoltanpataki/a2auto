@@ -129,6 +129,9 @@ export class FilterComponent implements OnInit {
     if (sessionStorage.getItem('clickedCarIndex')) {
       this.clickedCarIndex = Number(sessionStorage.getItem('clickedCarIndex'));
       this.carOfTransaction = this.selectedCars[this.clickedCarIndex];
+      if (new Date(this.carOfTransaction.carHandover).getFullYear() === new Date(0).getFullYear()) {
+        this.carOfTransaction.carHandover = null;
+      }
     }
     if (sessionStorage.getItem('order')) {
       const order = JSON.parse(sessionStorage.getItem('order'));
@@ -943,11 +946,15 @@ export class FilterComponent implements OnInit {
 
   private addNewUserToOrder(event: Users) {
     this.newUser = event;
+    this.carOfTransaction.nameOfBuyer = this.newUser.fullName;
+    this.updateCarOfTransaction(this.carOfTransaction);
     sessionStorage.setItem('newUserDuringSell', JSON.stringify(this.newUser));
   }
 
   private addNewCompanyToOrder(event: Company) {
     this.newCompany = event;
+    this.carOfTransaction.nameOfBuyer = this.newCompany.name;
+    this.updateCarOfTransaction(this.carOfTransaction);
     sessionStorage.setItem('newCompanyDuringSell', JSON.stringify(this.newCompany));
   }
 
@@ -1002,6 +1009,8 @@ export class FilterComponent implements OnInit {
       pickedUserFromDataTable.nationality);
     sessionStorage.setItem('pickedUser', JSON.stringify(this.pickedUser));
     sessionStorage.setItem('indexOfPickedUser', this.indexOfPickedUser.toString());
+    this.carOfTransaction.nameOfBuyer = this.pickedUser.fullName;
+    this.updateCarOfTransaction(this.carOfTransaction);
   }
 
   private pickCompany(index: number) {
@@ -1018,6 +1027,8 @@ export class FilterComponent implements OnInit {
       pickedCompanyFromDataTable.email);
     sessionStorage.setItem('pickedCompany', JSON.stringify(this.pickedCompany));
     sessionStorage.setItem('indexOfPickedCompany', this.indexOfPickedCompany.toString());
+    this.carOfTransaction.nameOfBuyer = this.pickedCompany.name;
+    this.updateCarOfTransaction(this.carOfTransaction);
   }
 
   private getCountInCarData(event: Car) {

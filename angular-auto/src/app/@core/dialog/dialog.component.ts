@@ -12,6 +12,7 @@ export class DialogComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public carData) { }
 
   ngOnInit() {
+    console.log(this.carData);
   }
 
   save() {

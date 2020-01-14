@@ -50,6 +50,7 @@ public class Car {
     private int weight;
     private int maxWeightAllowed;
     private String fuelType;
+    private String nameOfBuyer;
 
     @OneToOne(mappedBy = "countInCar", cascade = CascadeType.REMOVE)
     private Order order;
@@ -57,7 +58,7 @@ public class Car {
     public Car() {
     }
 
-    public Car(Users user, Company company, String name, String type, String color, String plateNumber, String specification, String bodyNumber, String engineNumber, int capacity, int vintage, int mileage, Date motExpiry, int price, int purchasingPrice, int cost, String costDescriptions, Date dateOfArrival, Date dateOfLeaving, String typeOfBuying, int inheritanceTax, int downPayment, int payedAmount, int kwh, String carRegistry, Date documentsHandover, Date dueOfContract, Date carHandover, Date dateOfContract, boolean sold, String carOrTruck, String salesman, String insuranceNumber, int weight, int maxWeightAllowed, String fuelType) {
+    public Car(Users user, Company company, String name, String type, String color, String plateNumber, String specification, String bodyNumber, String engineNumber, int capacity, int vintage, int mileage, Date motExpiry, int price, int purchasingPrice, int cost, String costDescriptions, Date dateOfArrival, Date dateOfLeaving, String typeOfBuying, int inheritanceTax, int downPayment, int payedAmount, int kwh, String carRegistry, Date documentsHandover, Date dueOfContract, Date carHandover, Date dateOfContract, boolean sold, String carOrTruck, String salesman, String insuranceNumber, int weight, int maxWeightAllowed, String fuelType, String nameOfBuyer) {
         this.company = company;
         this.user =user;
         this.name = name;
@@ -94,6 +95,15 @@ public class Car {
         this.weight = weight;
         this.maxWeightAllowed = maxWeightAllowed;
         this.fuelType = fuelType;
+        this.nameOfBuyer = nameOfBuyer;
+    }
+
+    public String getNameOfBuyer() {
+        return nameOfBuyer;
+    }
+
+    public void setNameOfBuyer(String nameOfBuyer) {
+        this.nameOfBuyer = nameOfBuyer;
     }
 
     public String getFuelType() {
@@ -432,6 +442,7 @@ public class Car {
                 ", weight=" + weight +
                 ", maxWeightAllowed=" + maxWeightAllowed +
                 ", fuelType=" + fuelType +
+                ", nameOfBuyer=" + nameOfBuyer +
                 ", order=" + order +
                 '}';
     }

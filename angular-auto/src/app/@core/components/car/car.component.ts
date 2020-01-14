@@ -31,19 +31,19 @@ export class CarComponent implements OnInit {
     vintage: 'Évjárat',
     mileage: 'Futott km',
     price: 'Vételár',
-    purchasingPrice: 'Beszerzési ár',
-    cost: 'Költség',
-    inheritanceTax: 'Átírási illeték',
-    downPayment: 'Foglaló',
-    payedAmount: 'Befizetett összeg',
+    // purchasingPrice: 'Beszerzési ár',
+    // cost: 'Költség',
+    // inheritanceTax: 'Átírási illeték',
+    // downPayment: 'Foglaló',
+    // payedAmount: 'Befizetett összeg',
     kwh: 'Teljesítmény'
   };
   public fieldFour = {
     dateOfArrival: 'Vétel dátuma',
-    dateOfLeaving: 'Eladás dátuma',
-    documentsHandover: 'Dokumentumok átadásának időpontja',
-    dateOfContract: 'Szerződés szerinti teljesítés időpontja',
-    dueOfContract: 'Szerződés lejárata'
+    // dateOfLeaving: 'Eladás dátuma',
+    // documentsHandover: 'Dokumentumok átadásának időpontja',
+    // dateOfContract: 'Szerződés szerinti teljesítés időpontja',
+    // dueOfContract: 'Szerződés lejárata'
   };
   public fieldRelatedToWeight = {weight: 'Saját tömeg', maxWeightAllowed: 'Megengedett legnagyobb össztömeg'};
   public keepOriginalOrder = (a, b) => a.key;
@@ -80,7 +80,7 @@ export class CarComponent implements OnInit {
       this.showInsuranceButton = true;
     }
     if (this.carData == null) {
-      this.carData = new Car(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, false, null, null, null, null, null, null);
+      this.carData = new Car(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, false, null, null, null, null, null, null, null);
     } else {
       const carHandoverDate: Date = new Date(this.carData.carHandover);
       this.carHandoverTime['hour'] = carHandoverDate.getHours();
@@ -105,7 +105,7 @@ export class CarComponent implements OnInit {
       console.log(data);
       if (data == null) {
         this.httpService.saveCar(this.createNewCarObject(form)).subscribe(data => {
-            const newCar = new Car(data.id, data.name, data.type, data.color, data.plateNumber, data.specification, data.bodyNumber, data.engineNumber, Number(data.capacity), Number(data.vintage), Number(data.mileage), new Date(data.motExpiry), Number(data.price), Number(data.purchasingPrice), Number(data.cost), data.costDescriptions, new Date(data.dateOfArrival), new Date(data.dateOfLeaving), data.typeOfBuying, Number(data.inheritanceTax), Number(data.downPayment), Number(data.payedAmount), Number(data.kwh), data.carRegistry, new Date(data.documentsHandover), new Date(data.dueOfContract), new Date(data.carHandover), new Date(data.dateOfContract), false, data.carOrTruck, data.salesman, data.insuranceNumber, Number(data.weight), Number(data.maxWeightAllowed), data.fuelType);
+            const newCar = new Car(data.id, data.name, data.type, data.color, data.plateNumber, data.specification, data.bodyNumber, data.engineNumber, Number(data.capacity), Number(data.vintage), Number(data.mileage), new Date(data.motExpiry), Number(data.price), Number(data.purchasingPrice), Number(data.cost), data.costDescriptions, new Date(data.dateOfArrival), new Date(data.dateOfLeaving), data.typeOfBuying, Number(data.inheritanceTax), Number(data.downPayment), Number(data.payedAmount), Number(data.kwh), data.carRegistry, new Date(data.documentsHandover), new Date(data.dueOfContract), new Date(data.carHandover), new Date(data.dateOfContract), false, data.carOrTruck, data.salesman, data.insuranceNumber, Number(data.weight), Number(data.maxWeightAllowed), data.fuelType, data.nameOfBuyer);
             if (newCar.motExpiry.getFullYear() === new Date(0).getFullYear()) {
               newCar.motExpiry = null;
             }
@@ -146,7 +146,7 @@ export class CarComponent implements OnInit {
   private updateCar(form: any) {
     this.httpService.updateCar(this.createNewCarObject(form)).subscribe(data => {
         this.utilService.openSnackBar('Az autó adatai sikeresen frissültek!', 'Szuper :)');
-        const updatedCar = new Car(data.id, data.name, data.type, data.color, data.plateNumber, data.specification, data.bodyNumber, data.engineNumber, Number(data.capacity), Number(data.vintage), Number(data.mileage), new Date(data.motExpiry), Number(data.price), Number(data.purchasingPrice), Number(data.cost), data.costDescriptions, new Date(data.dateOfArrival), new Date(data.dateOfLeaving), data.typeOfBuying, Number(data.inheritanceTax), Number(data.downPayment), Number(data.payedAmount), Number(data.kwh), data.carRegistry, new Date(data.documentsHandover), new Date(data.dueOfContract), new Date(data.carHandover), new Date(data.dateOfContract), false, data.carOrTruck, data.salesman, data.insuranceNumber, Number(data.weight), Number(data.maxWeightAllowed), data.fuelType);
+        const updatedCar = new Car(data.id, data.name, data.type, data.color, data.plateNumber, data.specification, data.bodyNumber, data.engineNumber, Number(data.capacity), Number(data.vintage), Number(data.mileage), new Date(data.motExpiry), Number(data.price), Number(data.purchasingPrice), Number(data.cost), data.costDescriptions, new Date(data.dateOfArrival), new Date(data.dateOfLeaving), data.typeOfBuying, Number(data.inheritanceTax), Number(data.downPayment), Number(data.payedAmount), Number(data.kwh), data.carRegistry, new Date(data.documentsHandover), new Date(data.dueOfContract), new Date(data.carHandover), new Date(data.dateOfContract), false, data.carOrTruck, data.salesman, data.insuranceNumber, Number(data.weight), Number(data.maxWeightAllowed), data.fuelType, null);
         this.updatedCar.emit(updatedCar);
         this.utilService.carUpdate = false;
       }, error1 => {
@@ -172,9 +172,10 @@ export class CarComponent implements OnInit {
 
   public createNewCarObject(form: any): Car {
     if (this.utilService.carUpdate) {
-      return this.createCarObjectWithId(form, this.transformToCapitalData(form), this.nullCheckOnCarHandoverTime(form.value.carHandover));
+      console.log('Frissitesben');
+      return this.createCarObjectWithId(form, this.transformToCapitalData(form));
     } else {
-      return this.createCarObjectNoId(form, this.transformToCapitalData(form), this.nullCheckOnCarHandoverTime(form.value.carHandover));
+      return this.createCarObjectNoId(form, this.transformToCapitalData(form));
     }
   }
 
@@ -188,24 +189,100 @@ export class CarComponent implements OnInit {
     capitalObject['capitalBodyNumber'] = form.value.bodyNumber.toUpperCase();
     capitalObject['capitalEngineNumber'] = form.value.engineNumber.toUpperCase();
     capitalObject['capitalCostDescriptions'] = form.value.costDescriptions.toUpperCase();
-    capitalObject['capitalTypeOfBuying'] = form.value.typeOfBuying != null ? form.value.typeOfBuying.toUpperCase(): null;
+    // capitalObject['capitalTypeOfBuying'] = form.value.typeOfBuying != null ? form.value.typeOfBuying.toUpperCase(): null;
     capitalObject['capitalCarRegistry'] = form.value.carRegistry.toUpperCase();
     capitalObject['capitalCarOrTruck'] = form.value.carOrTruck != null ? form.value.carOrTruck.toUpperCase(): null;
-    capitalObject['capitalSalesman'] = form.value.salesman.toUpperCase();
+    // capitalObject['capitalSalesman'] = form.value.salesman != null ? form.value.salesman.toUpperCase() : null;
     capitalObject['capitalFuelType'] = form.value.fuelType != null ? form.value.fuelType.toUpperCase(): null;
     return capitalObject;
   }
 
-  private createCarObjectWithId(form: any, capitalData: Object, carHandoverWithTime: Date): Car {
-    return new Car(this.carData.id, capitalData['capitalName'], capitalData['capitalType'], capitalData['capitalColor'], capitalData['capitalPlateNumber'], capitalData['capitalSpecification'], capitalData['capitalBodyNumber'], capitalData['capitalEngineNumber'], form.value.capacity, form.value.vintage, form.value.mileage, form.value.motExpiry, form.value.price, form.value.purchasingPrice, form.value.cost, capitalData['capitalCostDescriptions'], form.value.dateOfArrival, form.value.dateOfLeaving, capitalData['capitalTypeOfBuying'], form.value.inheritanceTax, form.value.downPayment, form.value.payedAmount, form.value.kwh, capitalData['capitalCarRegistry'], form.value.documentsHandover, form.value.dueOfContract, carHandoverWithTime, form.value.dateOfContract, false, capitalData['capitalCarOrTruck'], capitalData['capitalSalesman'], null, form.value.weight, form.value.maxWeightAllowed, capitalData['capitalFuelType']);
+  private createCarObjectWithId(form: any, capitalData: Object): Car {
+    const isSold = this.carData.sold != false;
+    const insuranceNumber = this.carData.insuranceNumber != null ? this.carData.insuranceNumber : null;
+    const nameOfBuyer = this.carData.nameOfBuyer != null ? this.carData.nameOfBuyer : null;
+    console.log('Ez az id ' + this.carData.id);
+    return new Car(
+      this.carData.id,
+      capitalData['capitalName'],
+      capitalData['capitalType'],
+      capitalData['capitalColor'],
+      capitalData['capitalPlateNumber'],
+      capitalData['capitalSpecification'],
+      capitalData['capitalBodyNumber'],
+      capitalData['capitalEngineNumber'],
+      form.value.capacity,
+      form.value.vintage,
+      form.value.mileage,
+      form.value.motExpiry,
+      form.value.price,
+      this.carData.purchasingPrice,
+      this.carData.cost,
+      capitalData['capitalCostDescriptions'],
+      form.value.dateOfArrival,
+      this.carData.dateOfLeaving,
+      this.carData.typeOfBuying,
+      this.carData.inheritanceTax,
+      this.carData.downPayment,
+      this.carData.payedAmount,
+      form.value.kwh,
+      capitalData['capitalCarRegistry'],
+      this.carData.documentsHandover,
+      this.carData.dueOfContract,
+      this.carData.carHandover,
+      this.carData.dateOfContract,
+      isSold,
+      capitalData['capitalCarOrTruck'],
+      this.carData.salesman,
+      insuranceNumber,
+      form.value.weight,
+      form.value.maxWeightAllowed,
+      capitalData['capitalFuelType'],
+      nameOfBuyer);
   }
 
-  private createCarObjectNoId(form: any, capitalData: Object, carHandoverWithTime: Date) {
-    return new Car(null, capitalData['capitalName'], capitalData['capitalType'], capitalData['capitalColor'], capitalData['capitalPlateNumber'], capitalData['capitalSpecification'], capitalData['capitalBodyNumber'], capitalData['capitalEngineNumber'], form.value.capacity, form.value.vintage, form.value.mileage, form.value.motExpiry, form.value.price, form.value.purchasingPrice, form.value.cost, capitalData['capitalCostDescriptions'], form.value.dateOfArrival, form.value.dateOfLeaving, capitalData['capitalTypeOfBuying'], form.value.inheritanceTax, form.value.downPayment, form.value.payedAmount, form.value.kwh, capitalData['capitalCarRegistry'], form.value.documentsHandover, form.value.dueOfContract, carHandoverWithTime, form.value.dateOfContract, false, capitalData['capitalCarOrTruck'], capitalData['capitalSalesman'], null, form.value.weight, form.value.maxWeightAllowed, capitalData['capitalFuelType']);
+  private createCarObjectNoId(form: any, capitalData: Object) {
+    return new Car(
+      null,
+      capitalData['capitalName'],
+      capitalData['capitalType'],
+      capitalData['capitalColor'],
+      capitalData['capitalPlateNumber'],
+      capitalData['capitalSpecification'],
+      capitalData['capitalBodyNumber'],
+      capitalData['capitalEngineNumber'],
+      form.value.capacity,
+      form.value.vintage,
+      form.value.mileage,
+      form.value.motExpiry,
+      form.value.price,
+      null,
+      null,
+      capitalData['capitalCostDescriptions'],
+      form.value.dateOfArrival,
+      null,
+      null,
+      null,
+      null,
+      null,
+      form.value.kwh,
+      capitalData['capitalCarRegistry'],
+      null,
+      null,
+      null,
+      null,
+      false,
+      capitalData['capitalCarOrTruck'],
+      null,
+      null,
+      form.value.weight,
+      form.value.maxWeightAllowed,
+      capitalData['capitalFuelType'],
+      null);
   }
 
   private navigateToInsurancePage(form: any) {
-    const carForInsurance = this.createCarObjectNoId(form, this.transformToCapitalData(form), this.nullCheckOnCarHandoverTime(form.value.carHandover));
+    const carForInsurance = this.createCarObjectNoId(form, this.transformToCapitalData(form));
       this.httpService.saveCar(carForInsurance).subscribe(data => {
       this.router.navigate(['/insurance'], {
         state: {
@@ -223,7 +300,7 @@ export class CarComponent implements OnInit {
 
   private itemChanged(form: any) {
     console.log(form.value);
-    const car = this.createCarObjectNoId(form, this.transformToCapitalData(form), this.nullCheckOnCarHandoverTime(form.value.carHandover));
+    const car = this.createCarObjectNoId(form, this.transformToCapitalData(form));
     sessionStorage.setItem('newCar', JSON.stringify(car));
   }
 

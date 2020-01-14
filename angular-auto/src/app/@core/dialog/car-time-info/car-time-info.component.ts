@@ -136,9 +136,28 @@ export class CarTimeInfoComponent implements OnInit {
     return item.id; // unique id corresponding to the item
   }
 
+  private setDatesToNull() {
+    if (new Date(this.carData.dateOfLeaving).getFullYear() === new Date(0).getFullYear()) {
+      this.carData.dateOfLeaving = null;
+    }
+    if (new Date(this.carData.dateOfContract).getFullYear() === new Date(0).getFullYear()) {
+      this.carData.dateOfContract = null;
+    }
+    if (new Date(this.carData.dueOfContract).getFullYear() === new Date(0).getFullYear()) {
+      this.carData.dueOfContract = null;
+    }
+    if (new Date(this.carData.documentsHandover).getFullYear() === new Date(0).getFullYear()) {
+      this.carData.documentsHandover = null;
+    }
+    if (new Date(this.carData.carHandover).getFullYear() === new Date(0).getFullYear()) {
+      this.carData.carHandover = null;
+    }
+  }
+
   private initiateDatesWithToday() {
+    this.setDatesToNull();
     if (this.carData.dateOfContract == null && this.carData.dueOfContract == null) {
-      this.carData.carHandover = new Date();
+      this.carData.carHandover = this.carData.carHandover == null ? new Date() : this.carData.carHandover;
       this.carData.dueOfContract = new Date();
       this.carData.dateOfArrival = new Date();
       this.carData.dateOfLeaving = new Date();
