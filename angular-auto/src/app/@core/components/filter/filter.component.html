@@ -1,12 +1,17 @@
-<div>
-  <mat-form-field>
-    <mat-label>Szűrési feltétel</mat-label>
-    <mat-select [(ngModel)]="selectedFilter" name="filter">
-      <mat-option *ngFor="let filter of filters; trackBy: trackByFn" [value]="filter">
-        {{filter.viewValue}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+<div class="filterRow">
+  <div>
+    <mat-form-field>
+      <mat-label>Szűrési feltétel</mat-label>
+      <mat-select [(ngModel)]="selectedFilter" name="filter">
+        <mat-option *ngFor="let filter of filters; trackBy: trackByFn" [value]="filter">
+          {{filter.viewValue}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="databaseIcon">
+    <fa name="download" (click)="getAllCars()" matTooltip="Összes autó letöltése"></fa>
+  </div>
 </div>
 <div *ngIf="selectedFilter">
   <form #filterForm=ngForm (ngSubmit)="filterCars(filterForm)" class="form filterForm">
@@ -34,37 +39,43 @@
   <mat-accordion>
     <mat-card>
       <div class="selectedCarHeaders" fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
-        <mat-panel-title fxFlex="22" *ngFor="let header of selectedCarHeader; trackBy: trackByFn">
+        <mat-panel-title fxFlex="15" *ngFor="let header of selectedCarHeader; trackBy: trackByFn">
           <strong>{{header}}</strong>
         </mat-panel-title>
-        <mat-panel-title fxFlex="9"></mat-panel-title>
-        <mat-panel-title fxFlex="9"></mat-panel-title>
-        <mat-panel-title fxFlex="8"></mat-panel-title>
-        <mat-panel-title fxFlex="8"></mat-panel-title>
+        <mat-panel-title fxFlex="7"></mat-panel-title>
+        <mat-panel-title fxFlex="6"></mat-panel-title>
+        <mat-panel-title fxFlex="6"></mat-panel-title>
+        <mat-panel-title fxFlex="6"></mat-panel-title>
       </div>
     </mat-card>
     <mat-expansion-panel [disabled]="true" #mep="matExpansionPanel" [expanded]="i == clickedCarIndex" hideToggle *ngFor="let car of selectedCars; index as i; trackBy: trackByFn">
       <mat-expansion-panel-header>
         <div fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
-          <mat-panel-title fxFlex="22">
+          <mat-panel-title fxFlex="15">
             {{car.type}}
           </mat-panel-title>
-          <mat-panel-title fxFlex="22">
+          <mat-panel-title fxFlex="15">
             {{car.name}}
           </mat-panel-title>
-          <mat-panel-title fxFlex="22">
+          <mat-panel-title fxFlex="15">
             {{car.plateNumber}}
           </mat-panel-title>
-          <mat-panel-title class="buyButton" fxFlex="9">
+          <mat-panel-title fxFlex="15">
+            {{car.nameOfBuyer}}
+          </mat-panel-title>
+          <mat-panel-title fxFlex="15">
+            {{car.dateOfLeaving | date:'yyyy-MM-dd'}}
+          </mat-panel-title>
+          <mat-panel-title class="buyButton" fxFlex="7">
             <i class="material-icons" (click)="navigateToBlankOrderPage(car)" matTooltip="Üres megrendelőlap az autóhoz">spellcheck</i>
           </mat-panel-title>
-          <mat-panel-title class="buyButton" fxFlex="9">
+          <mat-panel-title class="buyButton" fxFlex="6">
             <i class="material-icons edit" (click)="openUpdateModal(car)" matTooltip="Autó szerkesztése">edit</i>
           </mat-panel-title>
-          <mat-panel-title class="buyButton" fxFlex="8">
+          <mat-panel-title class="buyButton" fxFlex="6">
             <i class="material-icons money" (click)="setAlreadyOrNewCustomerSelectorAndCarOfTransaction(car, i)" matTooltip="Autó megvásárlása">shopping_cart</i>
           </mat-panel-title>
-          <mat-panel-title class="buyButton" fxFlex="8">
+          <mat-panel-title class="buyButton" fxFlex="6">
             <i class="material-icons delete" (click)="openWarningModal(car.id)" matTooltip="Autó végleges törlése">clear</i>
           </mat-panel-title>
         </div>

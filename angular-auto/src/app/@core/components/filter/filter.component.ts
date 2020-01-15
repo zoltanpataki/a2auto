@@ -36,7 +36,7 @@ export class FilterComponent implements OnInit {
   private companyFilters = [{viewValue: 'Név', value: 'name'}, {viewValue: 'Cégjegyzékszám', value: 'companyRegistrationNumber'}];
   private selectedCompanyFilter: SelectedFilter;
   private selectedCars = [];
-  private selectedCarHeader = ['Márka', 'Modell', 'Rendszám'];
+  private selectedCarHeader = ['Márka', 'Modell', 'Rendszám', 'Vevő', 'Vásárlás dátuma'];
   public typeOfBuying = ['KÉSZPÉNZ', 'ÁTUTALÁS', 'HITEL'];
   private noMatch = false;
   private selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate: boolean;
@@ -273,6 +273,7 @@ export class FilterComponent implements OnInit {
     sessionStorage.removeItem('newUserDuringSell');
     sessionStorage.removeItem('newCompanyDuringSell');
     sessionStorage.removeItem('credit');
+    sessionStorage.removeItem('a2representation');
   }
 
   // Sets the data to null when expansion order is collapsed
@@ -549,9 +550,17 @@ export class FilterComponent implements OnInit {
         this.httpService.getAllCars(this.selectedFilter.value).subscribe(data => {
           this.selectedCars = data;
           sessionStorage.setItem('selectedCars', JSON.stringify(data));
-        })
+        });
       }
     }
+  }
+
+  public getAllCars() {
+    this.clearSelectedCars();
+    this.httpService.getAllCars('all').subscribe(data => {
+      this.selectedCars = data;
+      sessionStorage.setItem('selectedCars', JSON.stringify(data));
+    });
   }
 
   public openUpdateModal(car: Car): void {
