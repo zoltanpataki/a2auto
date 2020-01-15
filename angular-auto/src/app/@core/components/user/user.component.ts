@@ -4,6 +4,16 @@ import {Users} from "../../models/users";
 import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 import {UtilService} from "../../services/util.service";
 import {filter} from "rxjs/operators";
+import {FormControl, FormGroupDirective, NgForm, Validators} from "@angular/forms";
+import {ErrorStateMatcher} from "@angular/material/core";
+
+/** Error when invalid control is dirty, touched, or submitted. */
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  }
+}
 
 @Component({
   selector: 'app-user',
@@ -11,6 +21,12 @@ import {filter} from "rxjs/operators";
   styleUrls: ['./user.component.scss']
 })
 export class UserComponent implements OnInit {
+
+  emailFormControl = new FormControl('', [
+    Validators.email,
+  ]);
+
+  matcher = new MyErrorStateMatcher();
 
   @Input('userData')
   public userData: Users;
@@ -28,7 +44,6 @@ export class UserComponent implements OnInit {
   };
   public fieldsTwo = {
     birthPlace: 'Születési hely',
-    email: 'E-mail',
     nameOfMother: 'Anyja neve',
     idCardNumber: 'Személyi igazolvány szám',
     drivingLicenceNumber: 'Vezetői engedély száma'
@@ -81,16 +96,18 @@ export class UserComponent implements OnInit {
   }
 
   public saveUser(form: any) {
-    const user = new Users(null, form.value.fullName, form.value.birthName, form.value.zipCode, form.value.city, form.value.address, form.value.birthPlace, form.value.phoneNumber, form.value.email, form.value.nameOfMother, form.value.birthDate, form.value.personNumber, form.value.idCardNumber, form.value.dueTimeOfIdCard, form.value.drivingLicenceNumber, form.value.dueTimeOfDrivingLicence, form.value.taxNumber, form.value.healthCareNumber, form.value.nationality);
-    this.httpService.saveUser(user).subscribe(data => {
-      console.log(data);
-      this.orderProgress.emit('saved');
-      this.newUser.emit(data);
-      this.utilService.openSnackBar('A felhasználó sikeresen mentve!', 'Szuper :)');
-    }, error => {
-      this.orderProgress.emit('unsaved');
-      this.utilService.openSnackBar('A felhasználót nem sikerült menteni!', 'Hiba :(');
-    });
+    if (!this.emailFormControl.hasError('email')) {
+      const user = new Users(null, form.value.fullName, form.value.birthName, form.value.zipCode, form.value.city, form.value.address, form.value.birthPlace, form.value.phoneNumber, form.value.email, form.value.nameOfMother, form.value.birthDate, form.value.personNumber, form.value.idCardNumber, form.value.dueTimeOfIdCard, form.value.drivingLicenceNumber, form.value.dueTimeOfDrivingLicence, form.value.taxNumber, form.value.healthCareNumber, form.value.nationality);
+      this.httpService.saveUser(user).subscribe(data => {
+        console.log(data);
+        this.orderProgress.emit('saved');
+        this.newUser.emit(data);
+        this.utilService.openSnackBar('A felhasználó sikeresen mentve!', 'Szuper :)');
+      }, error => {
+        this.orderProgress.emit('unsaved');
+        this.utilService.openSnackBar('A felhasználót nem sikerült menteni!', 'Hiba :(');
+      });
+    }
   }
 
   private itemChanged(form: any) {

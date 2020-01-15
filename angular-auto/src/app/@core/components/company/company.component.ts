@@ -5,6 +5,16 @@ import {UtilService} from "../../services/util.service";
 import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 import {Address} from "../../models/address";
 import {filter} from "rxjs/operators";
+import {FormControl, FormGroupDirective, NgForm, Validators} from "@angular/forms";
+import {ErrorStateMatcher} from "@angular/material/core";
+
+/** Error when invalid control is dirty, touched, or submitted. */
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  }
+}
 
 @Component({
   selector: 'app-company',
@@ -13,6 +23,12 @@ import {filter} from "rxjs/operators";
 })
 export class CompanyComponent implements OnInit {
 
+  emailFormControl = new FormControl('', [
+    Validators.email,
+  ]);
+
+  matcher = new MyErrorStateMatcher();
+
   @Input('companyData')
   public companyData: Company;
   @Output()
@@ -20,7 +36,7 @@ export class CompanyComponent implements OnInit {
   @Output()
   public newCompany: EventEmitter<any> = new EventEmitter<any>();
   public fields = {country: 'Ország', zipcode: 'Irányítószám', city: 'Város', address: 'Cím'};
-  public fields2 = {companyRegistrationNumber: 'Cégjegyzékszám', representation: 'Képviselő', taxNumber: 'Adószám', phoneNumber: 'Telefonszám', email: 'E-mail cím'};
+  public fields2 = {companyRegistrationNumber: 'Cégjegyzékszám', representation: 'Képviselő', taxNumber: 'Adószám', phoneNumber: 'Telefonszám'};
   public keepOriginalOrder = (a, b) => a.key;
   private currentUrl;
 
@@ -60,16 +76,18 @@ export class CompanyComponent implements OnInit {
   }
 
   public saveCompany(form: any) {
-    const company = new Company(null, form.value.name, new Address(null, form.value.zipcode, form.value.country, form.value.city, form.value.address), form.value.companyRegistrationNumber, form.value.representation, form.value.taxNumber, form.value.phoneNumber, form.value.email);
-    this.httpService.saveCompany(company).subscribe(data => {
-      console.log(data);
-      this.orderProgress.emit('saved');
-      this.newCompany.emit(data);
-      this.utilService.openSnackBar('A társaság sikeresen mentve!', 'Szuper :)');
-    }, error => {
-      this.orderProgress.emit('unsaved');
-      this.utilService.openSnackBar('A társaságot nem sikerült menteni!', 'Hiba :(');
-    });
+    if (!this.emailFormControl.hasError('email')) {
+      const company = new Company(null, form.value.name, new Address(null, form.value.zipcode, form.value.country, form.value.city, form.value.address), form.value.companyRegistrationNumber, form.value.representation, form.value.taxNumber, form.value.phoneNumber, form.value.email);
+      this.httpService.saveCompany(company).subscribe(data => {
+        console.log(data);
+        this.orderProgress.emit('saved');
+        this.newCompany.emit(data);
+        this.utilService.openSnackBar('A társaság sikeresen mentve!', 'Szuper :)');
+      }, error => {
+        this.orderProgress.emit('unsaved');
+        this.utilService.openSnackBar('A társaságot nem sikerült menteni!', 'Hiba :(');
+      });
+    }
   }
 
   private itemChanged(form: any) {

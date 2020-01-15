@@ -20,6 +20,17 @@
               <mat-datepicker #birthPicker></mat-datepicker>
             </mat-form-field>
           </div>
+          <div>
+            <mat-form-field class="example-full-width">
+              <label>
+                <input matInput [formControl]="emailFormControl"
+                       [errorStateMatcher]="matcher" placeholder="E-mail" (ngModelChange)="itemChanged(userForm)" ngModel="{{userData.email}}" name="email">
+                <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+                  Kérlek adj meg megfelelő e-mail címet :)
+                </mat-error>
+              </label>
+            </mat-form-field>
+          </div>
           <div *ngFor="let item of fieldsTwo | keyvalue:keepOriginalOrder; trackBy: trackByFn">
             <mat-form-field class="example-full-width">
               <label>
