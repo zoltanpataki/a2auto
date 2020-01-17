@@ -4,6 +4,10 @@ import {HttpService} from "../../services/http.service";
 import {UtilService} from "../../services/util.service";
 import {NavigationEnd, Router} from "@angular/router";
 import {filter} from "rxjs/operators";
+import {FormGroup} from "@angular/forms";
+import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
+import {CarTimeInfoComponent} from "../../dialog/car-time-info/car-time-info.component";
+import {InstantBuyingDialogComponent} from "../../dialog/instant-buying-dialog/instant-buying-dialog.component";
 
 @Component({
   selector: 'app-car',
@@ -56,6 +60,7 @@ export class CarComponent implements OnInit {
 
   constructor(private httpService: HttpService,
               private utilService: UtilService,
+              private dialog: MatDialog,
               private router: Router) {
     router.events
       .pipe(filter(e => e instanceof NavigationEnd))
@@ -98,6 +103,30 @@ export class CarComponent implements OnInit {
       this.setValidPlateNumber();
       this.checkIfCarExistsAlreadyWithTheGivenPlateNumberAndActAccordingly(form);
     }
+  }
+
+  public openInstantBuyingDialog(car: Car) {
+    const instantBuyingDialogConfig = new MatDialogConfig();
+
+    instantBuyingDialogConfig.disableClose = true;
+    instantBuyingDialogConfig.width = '50%';
+
+    instantBuyingDialogConfig.data = {
+      car: car,
+    };
+
+    const dialogRef = this.dialog.open(InstantBuyingDialogComponent, instantBuyingDialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      console.log(result);
+
+    });
+  }
+
+  private openDialog(carForm: any) {
+    const carForBuying = this.createCarObjectNoId(carForm, this.transformToCapitalData(carForm));
+    this.openInstantBuyingDialog(carForBuying);
   }
 
   private checkIfCarExistsAlreadyWithTheGivenPlateNumberAndActAccordingly(form: any) {

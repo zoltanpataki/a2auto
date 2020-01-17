@@ -49,6 +49,7 @@ import {LoaderInterceptor} from "./@core/services/loader.service";
 import {LoaderState} from "./@core/services/loader.state";
 import { InsurancePageComponent } from './@ui/insurance-page/insurance-page.component';
 import {environment} from "../environments/environment";
+import { InstantBuyingDialogComponent } from './@core/dialog/instant-buying-dialog/instant-buying-dialog.component';
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import {environment} from "../environments/environment";
     WitnessPickerDialogComponent,
     LoaderComponent,
     InsurancePageComponent,
+    InstantBuyingDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -104,6 +106,6 @@ import {environment} from "../environments/environment";
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },],
   bootstrap: [AppComponent],
-  entryComponents: [DialogComponent, WarningDialogComponent, CreditDialogComponent, CarTimeInfoComponent, SalesmanComponent, WitnessDialogComponent, WitnessPickerDialogComponent]
+  entryComponents: [DialogComponent, InstantBuyingDialogComponent, WarningDialogComponent, CreditDialogComponent, CarTimeInfoComponent, SalesmanComponent, WitnessDialogComponent, WitnessPickerDialogComponent]
 })
 export class AppModule { }

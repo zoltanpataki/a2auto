@@ -39,6 +39,7 @@ export class CompanyComponent implements OnInit {
   public fields2 = {companyRegistrationNumber: 'Cégjegyzékszám', representation: 'Képviselő', taxNumber: 'Adószám', phoneNumber: 'Telefonszám'};
   public keepOriginalOrder = (a, b) => a.key;
   private currentUrl;
+  private isCompleteAddress: boolean = true;
 
   constructor(private httpService: HttpService,
               private utilService: UtilService,
@@ -76,7 +77,8 @@ export class CompanyComponent implements OnInit {
   }
 
   public saveCompany(form: any) {
-    if (!this.emailFormControl.hasError('email')) {
+    if (!this.emailFormControl.hasError('email') && this.nullCheckOnAddress(form)) {
+      this.isCompleteAddress = true;
       const company = new Company(null, form.value.name, new Address(null, form.value.zipcode, form.value.country, form.value.city, form.value.address), form.value.companyRegistrationNumber, form.value.representation, form.value.taxNumber, form.value.phoneNumber, form.value.email);
       this.httpService.saveCompany(company).subscribe(data => {
         console.log(data);
@@ -87,7 +89,17 @@ export class CompanyComponent implements OnInit {
         this.orderProgress.emit('unsaved');
         this.utilService.openSnackBar('A társaságot nem sikerült menteni!', 'Hiba :(');
       });
+    } else if (!this.nullCheckOnAddress(form)) {
+      this.isCompleteAddress = false;
     }
+  }
+
+  private nullCheckOnAddress(form: any): boolean {
+    let nullCounter = 0;
+    nullCounter = form.value.zipcode == null || form.value.zipcode.length === 0 ? nullCounter += 1 : nullCounter -= 1;
+    nullCounter = form.value.city == null || form.value.city.length === 0 ? nullCounter += 1 : nullCounter -= 1;
+    nullCounter = form.value.address == null || form.value.address.length === 0 ? nullCounter += 1 : nullCounter -= 1;
+    return Math.abs(nullCounter) === 3;
   }
 
   private itemChanged(form: any) {

@@ -59,6 +59,7 @@ export class UserComponent implements OnInit {
   };
   public keepOriginalOrder = (a, b) => a.key;
   private currentUrl;
+  private isCompleteAddress: boolean = true;
 
   constructor(private httpService: HttpService,
               private utilService: UtilService,
@@ -96,7 +97,8 @@ export class UserComponent implements OnInit {
   }
 
   public saveUser(form: any) {
-    if (!this.emailFormControl.hasError('email')) {
+    if (!this.emailFormControl.hasError('email') && this.nullCheckOnAddress(form)) {
+      this.isCompleteAddress = true;
       const user = new Users(null, form.value.fullName, form.value.birthName, form.value.zipCode, form.value.city, form.value.address, form.value.birthPlace, form.value.phoneNumber, form.value.email, form.value.nameOfMother, form.value.birthDate, form.value.personNumber, form.value.idCardNumber, form.value.dueTimeOfIdCard, form.value.drivingLicenceNumber, form.value.dueTimeOfDrivingLicence, form.value.taxNumber, form.value.healthCareNumber, form.value.nationality);
       this.httpService.saveUser(user).subscribe(data => {
         console.log(data);
@@ -107,7 +109,17 @@ export class UserComponent implements OnInit {
         this.orderProgress.emit('unsaved');
         this.utilService.openSnackBar('A felhasználót nem sikerült menteni!', 'Hiba :(');
       });
+    } else if (!this.nullCheckOnAddress(form)) {
+      this.isCompleteAddress = false;
     }
+  }
+
+  private nullCheckOnAddress(form: any): boolean {
+    let nullCounter = 0;
+    nullCounter = form.value.zipcode == null || form.value.zipcode.length === 0 ? nullCounter += 1 : nullCounter -= 1;
+    nullCounter = form.value.city == null || form.value.city.length === 0 ? nullCounter += 1 : nullCounter -= 1;
+    nullCounter = form.value.address == null || form.value.address.length === 0 ? nullCounter += 1 : nullCounter -= 1;
+    return Math.abs(nullCounter) === 3;
   }
 
   private itemChanged(form: any) {

@@ -1,0 +1,37 @@
+.dateContainer, .witnessContainer {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+h5 {
+  margin-bottom: 5%;
+}
+
+button {
+  color: white;
+  background-color: deeppink;
+}
+
+button:focus {
+  outline: none;
+}
+
+.buttons, .remarkContainer, .descriptions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.descriptions {
+  display: flex;
+  align-items: center;
+  width: 70%;
+}
+
+.witnessContainer, .representationContainer {
+  margin-top: 2%;
+}
+
+.representationContainer {
+  display: flex;
+  justify-content: center;
+}
