@@ -120,6 +120,15 @@ export class CarComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       console.log(result);
+      this.router.navigate(['/sellingPage'], {state: {data: {
+            orderedCar: result.car,
+            pickedUser: result.user,
+            pickedCompany: result.company,
+            switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer: false,
+            witness1: result.witness1,
+            witness2: result.witness2,
+            a2Representation: result.representation
+          }}});
 
     });
   }

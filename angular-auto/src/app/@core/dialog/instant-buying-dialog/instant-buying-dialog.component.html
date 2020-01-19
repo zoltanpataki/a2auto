@@ -1,6 +1,6 @@
 <mat-dialog-content>
   <h5>Add meg az eladáshoz kötődő adatokat!</h5>
-  <div *ngIf="!remarkPartOpen">
+  <div *ngIf="!remarkPartOpen && !userPartOpen">
     <form #carTimeInfoForm=ngForm (ngSubmit)="saveCarData(carTimeInfoForm)" class="carTimeInfoForm">
       <div class="dateContainer">
         <div class="leftSide">
@@ -92,6 +92,45 @@
         </div>
         <div class="rightSide">
           <button type="button" (click)="addNewRemarkRow(null)" class="miniFab" mat-mini-fab><i class="material-icons">add</i></button>
+        </div>
+      </div>
+      <div class="buttons">
+        <div class="saveButton">
+          <button mat-button>Tovább az ügyféladatok megadásához</button>
+        </div>
+        <div>
+          <button type="button" class="mat-raised-button mat-accent" (click)="close()"><strong class="X">X</strong></button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div *ngIf="userPartOpen">
+    <form #userForm=ngForm (ngSubmit)="saveUser(userForm)" class="form userForm" (keydown.enter)="$event.preventDefault()">
+      <div class="userContainer">
+        <div>
+          <div *ngFor="let item of fields | keyvalue:keepOriginalOrder; trackBy: trackByFn">
+            <mat-form-field class="example-full-width">
+              <label>
+                <input matInput placeholder="{{item.value}}" [ngModelOptions]="{updateOn: 'blur'}" ngModel="{{userData[item.key]}}" name="{{item.key}}">
+              </label>
+            </mat-form-field>
+          </div>
+        </div>
+        <div>
+          <div>
+            <mat-form-field class="example-full-width">
+              <input matInput [matDatepicker]="birthPicker" placeholder="Születési dátum" [ngModelOptions]="{updateOn: 'blur'}" ngModel="{{userData.birthDate | date:'yyyy-MM-dd'}}" name="birthDate">
+              <mat-datepicker-toggle matSuffix [for]="birthPicker"></mat-datepicker-toggle>
+              <mat-datepicker #birthPicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div *ngFor="let item of fieldsTwo | keyvalue:keepOriginalOrder; trackBy: trackByFn">
+            <mat-form-field class="example-full-width">
+              <label>
+                <input matInput placeholder="{{item.value}}" [ngModelOptions]="{updateOn: 'blur'}" ngModel="{{userData[item.key]}}" name="{{item.key}}">
+              </label>
+            </mat-form-field>
+          </div>
         </div>
       </div>
       <div class="buttons">

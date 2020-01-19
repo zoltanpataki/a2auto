@@ -100,8 +100,12 @@ export class CarTimeInfoComponent implements OnInit {
 
   private saveCarData(form: any) {
     const carHandover = new Date(this.carData.carHandover);
-    carHandover.setHours(this.carHandoverTime['hour']);
-    carHandover.setMinutes(this.carHandoverTime['minute']);
+    if (this.carHandoverTime['hour'] != null) {
+      carHandover.setHours(this.carHandoverTime['hour']);
+    }
+    if (this.carHandoverTime['minute'] != null) {
+      carHandover.setHours(this.carHandoverTime['minute']);
+    }
     this.carData.carHandover = carHandover;
     this.witness1 = form.value.witness1.name === 'Egyik sem' ? null : form.value.witness1;
     this.witness2 = form.value.witness2.name === 'Egyik sem' ? null : form.value.witness2;

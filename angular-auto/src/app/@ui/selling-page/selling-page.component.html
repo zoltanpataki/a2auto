@@ -10,8 +10,8 @@
     <div class="carGrid">
       <table>
         <tr>
-          <td *ngIf="orderedCar.plateNumber">&#160;Forgalmi rendszám:&#160; <strong>{{orderedCar.plateNumber}}</strong></td>
-          <td *ngIf="!orderedCar.plateNumber">&#160;Forgalmi rendszám:</td>
+          <td *ngIf="orderedCar && orderedCar.plateNumber">&#160;Forgalmi rendszám:&#160; <strong>{{orderedCar.plateNumber}}</strong></td>
+          <td *ngIf="!orderedCar || orderedCar && !orderedCar.plateNumber">&#160;Forgalmi rendszám:</td>
           <td *ngIf="orderedCar.name && orderedCar.type">&#160;Jármű gyártmánya, típusa: &#160;<strong>{{orderedCar.name}}&#160;{{orderedCar.type}}</strong></td>
           <td *ngIf="!orderedCar.name || !orderedCar.type">&#160;Jármű gyártmánya, típusa:</td>
         </tr>

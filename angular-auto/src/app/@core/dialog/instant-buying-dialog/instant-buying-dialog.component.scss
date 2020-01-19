@@ -27,11 +27,16 @@ button:focus {
   width: 70%;
 }
 
-.witnessContainer, .representationContainer {
+.witnessContainer, .representationContainer, .userContainer {
   margin-top: 2%;
 }
 
 .representationContainer {
   display: flex;
   justify-content: center;
+}
+
+.userContainer {
+  display: flex;
+  justify-content: space-between;
 }

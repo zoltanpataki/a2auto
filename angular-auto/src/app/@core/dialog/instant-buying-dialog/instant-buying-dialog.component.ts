@@ -5,6 +5,7 @@ import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
 import {Description} from "../../models/description";
 import {Witness} from "../../models/witness";
 import {UtilService} from "../../services/util.service";
+import {Users} from "../../models/users";
 
 @Component({
   selector: 'app-instant-buying-dialog',
@@ -13,9 +14,9 @@ import {UtilService} from "../../services/util.service";
 })
 export class InstantBuyingDialogComponent implements OnInit {
 
-  private closingData: {};
   private carData : Car;
   private remarkPartOpen: boolean = false;
+  private userPartOpen: boolean = false;
   private remarkForm: FormGroup;
   private description: FormArray;
   private remarkList: Description[] = [];
@@ -26,6 +27,22 @@ export class InstantBuyingDialogComponent implements OnInit {
   private witness2: Witness;
   private listOfA2Representation = ['SOÓS GÁBOR', 'VINCZ ANTAL'];
   private pickedRepresentation: string;
+  public fields = {
+    fullName: 'Teljes Név',
+    birthName: 'Születéskori Név',
+    zipCode: 'Irányítószám',
+    city: 'Város',
+    address: 'Lakcím',
+  };
+
+  public fieldsTwo = {
+    birthPlace: 'Születési hely',
+    nameOfMother: 'Anyja neve',
+    idCardNumber: 'Személyi igazolvány szám',
+    nationality: 'Állampolgárság',
+  };
+
+  private userData: Users;
 
   constructor(private dialogRef: MatDialogRef<InstantBuyingDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data,
@@ -33,7 +50,10 @@ export class InstantBuyingDialogComponent implements OnInit {
               private formBuilder: FormBuilder,) { }
 
   ngOnInit() {
-    this.carData = this.data;
+    if (this.userData == null) {
+      this.userData = new Users(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+    }
+    this.carData = this.data.car;
     this.setRemarkForm();
     this.initiateDatesWithToday();
   }
@@ -77,14 +97,14 @@ export class InstantBuyingDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  closeWithData() {
-    this.dialogRef.close(this.closingData);
-  }
-
   private saveCarData(form: any) {
     const carHandover = new Date(this.carData.carHandover);
-    carHandover.setHours(this.carHandoverTime['hour']);
-    carHandover.setMinutes(this.carHandoverTime['minute']);
+    if (this.carHandoverTime['hour'] != null) {
+      carHandover.setHours(this.carHandoverTime['hour']);
+    }
+    if (this.carHandoverTime['minute'] != null) {
+      carHandover.setHours(this.carHandoverTime['minute']);
+    }
     this.carData.carHandover = carHandover;
     this.witness1 = form.value.witness1.name === 'Egyik sem' ? null : form.value.witness1;
     this.witness2 = form.value.witness2.name === 'Egyik sem' ? null : form.value.witness2;
@@ -101,7 +121,7 @@ export class InstantBuyingDialogComponent implements OnInit {
         this.remarkList.push(newDescription);
       }
     });
-    this.closeWithData();
+    this.userPartOpen = true;
   }
 
   public trackByFn(index, item) {
@@ -150,6 +170,32 @@ export class InstantBuyingDialogComponent implements OnInit {
       this.carData.documentsHandover = new Date(date);
       this.carData.dateOfContract = new Date(date);
     }
+  }
+
+  private saveUser(form: any) {
+    this.userData.fullName = form.value.fullname;
+    this.userData.birthName = form.value.birthName;
+    this.userData.zipCode = form.value.zipCode;
+    this.userData.city = form.value.city;
+    this.userData.address = form.value.address;
+    this.userData.birthPlace = form.value.birthPlace;
+    this.userData.nameOfMother = form.value.nameOfMother;
+    this.userData.idCardNumber = form.value.idCardNumber;
+    this.userData.nationality = form.value.nationality;
+    this.userData.birthDate = form.value.birthDate;
+    this.createClosingData();
+  }
+
+  private createClosingData() {
+    const closingData = {};
+    closingData['car'] = this.carData;
+    closingData['user'] = this.userData;
+    closingData['witness1'] = this.witness1;
+    closingData['witness2'] = this.witness2;
+    closingData['representation'] = this.pickedRepresentation;
+    closingData['remarkList'] = this.remarkList;
+
+    this.dialogRef.close(closingData);
   }
 
 }

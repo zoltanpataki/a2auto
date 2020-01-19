@@ -158,10 +158,14 @@ export class SellingPageComponent implements OnInit{
     } else {
       this.buyerCompany = this.utilService.a2Company;
       this.buyerCompanyRepresentation = this.a2Representation;
-      if (order.users != null) {
+      if (order != null && order.users != null) {
         this.sellerIndividual = order.users;
-      } else if (order.company != null) {
+      } else if (order != null && order.company != null) {
         this.sellerCompany = order.company;
+      } else if (this.pickedUser != null) {
+        this.sellerIndividual = this.pickedUser;
+      } else if (this.pickedCompany != null) {
+        this.sellerCompany = this.pickedCompany;
       }
     }
   }
