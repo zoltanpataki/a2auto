@@ -40,6 +40,7 @@ export class CarTimeInfoComponent implements OnInit {
     this.carData = this.data.car;
     if (this.data.order != null) {
       const sellOrBuyRemarkList = [];
+      console.log(this.data.order.description);
       this.data.order.description.forEach(description => {
         if (description.type === this.sellOrBuy) {
           sellOrBuyRemarkList.push(description);
@@ -68,13 +69,13 @@ export class CarTimeInfoComponent implements OnInit {
       description: this.formBuilder.array([]),
     });
     this.remarkList.forEach(remark => {
-      this.addNewRemarkRow(remark.description);
+      this.addNewRemarkRow(remark);
     });
   }
 
-  private addNewRemarkRow(description: string) {
+  private addNewRemarkRow(remark: Description) {
     this.description = this.remarkForm.get('description') as FormArray;
-    this.description.push(this.createRemarkRow(description));
+    this.description.push(this.createRemarkRow(remark));
   }
 
   private removeRemarkRow(index: number) {
@@ -82,14 +83,18 @@ export class CarTimeInfoComponent implements OnInit {
     this.description.removeAt(index);
   }
 
-  private createRemarkRow(remark: string) {
+  private createRemarkRow(remark: Description) {
     if (remark == null) {
       return this.formBuilder.group({
+        id: [null],
         description: [null],
+        type: [null]
       });
     } else {
       return this.formBuilder.group({
-        description: [remark],
+        id: [remark.id],
+        description: [remark.description],
+        type: [remark.type]
       });
     }
   }
@@ -100,11 +105,12 @@ export class CarTimeInfoComponent implements OnInit {
 
   private saveCarData(form: any) {
     const carHandover = new Date(this.carData.carHandover);
-    if (this.carHandoverTime['hour'] != null) {
-      carHandover.setHours(this.carHandoverTime['hour']);
-    }
-    if (this.carHandoverTime['minute'] != null) {
-      carHandover.setHours(this.carHandoverTime['minute']);
+    if (this.carHandoverTime['hour'] != null && this.carHandoverTime['minute'] != null) {
+      carHandover.setHours(this.carHandoverTime['hour'], this.carHandoverTime['minute'], 0, 0);
+    } else if (this.carHandoverTime['hour'] != null && this.carHandoverTime['minute'] == null) {
+      carHandover.setHours(this.carHandoverTime['hour'], 0, 0, 0);
+    } else if (this.carHandoverTime['hour'] == null && this.carHandoverTime['minute'] != null) {
+      carHandover.setHours(0, this.carHandoverTime['minute'], 0, 0);
     }
     this.carData.carHandover = carHandover;
     this.witness1 = form.value.witness1.name === 'Egyik sem' ? null : form.value.witness1;
@@ -118,7 +124,7 @@ export class CarTimeInfoComponent implements OnInit {
     this.remarkList = [];
     form.value.description.forEach(description => {
       if (description.description != null) {
-        const newDescription = new Description(null, description.description, this.sellOrBuy);
+        const newDescription = new Description(description.id, description.description, this.sellOrBuy);
         this.remarkList.push(newDescription);
       }
     });

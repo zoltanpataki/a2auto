@@ -37,6 +37,7 @@ export class SellingPageComponent implements OnInit{
   private a2Representation: string;
   private sellerCompanyRepresentation: string;
   private buyerCompanyRepresentation: string;
+  private remarkList;
 
   constructor(private utilService: UtilService,
               private httpService: HttpService,) { }
@@ -61,12 +62,25 @@ export class SellingPageComponent implements OnInit{
     if (sessionStorage.getItem('witness2') != null) {
       this.witness2 = JSON.parse(sessionStorage.getItem('witness2'));
     }
+    if (sessionStorage.getItem('remarkList') != null) {
+      this.remarkList = JSON.parse(sessionStorage.getItem('remarkList'));
+    }
     if (sessionStorage.getItem('a2Representation') != null) {
       this.a2Representation = sessionStorage.getItem('a2Representation');
+    }
+    if (sessionStorage.getItem('pickedUser') != null) {
+      this.pickedUser = JSON.parse(sessionStorage.getItem('pickedUser'));
+    }
+    if (sessionStorage.getItem('pickedCompany') != null) {
+      this.pickedCompany = JSON.parse(sessionStorage.getItem('pickedCompany'));
     }
     this.today = new Date();
     if (history.state.data) {
       this.order = history.state.data.order;
+      this.remarkList = history.state.data.remarkList;
+      if (this.remarkList != null) {
+        this.order = new Order(null, null, null, null, null, null, null, null, null, null,null, null, null, null, null,this.remarkList, null);
+      }
       this.orderedCar = history.state.data.orderedCar;
       this.userSearchResult = history.state.data.userSearchResult;
       this.companySearchResult = history.state.data.companySearchResult;
@@ -78,6 +92,7 @@ export class SellingPageComponent implements OnInit{
       this.witness1 = history.state.data.witness1;
       this.witness2 = history.state.data.witness2;
       this.a2Representation = history.state.data.a2Representation;
+
       sessionStorage.setItem('clickedCarIndex', history.state.data.clickedCarIndex);
       sessionStorage.setItem('orderedCar', JSON.stringify(this.orderedCar));
       sessionStorage.setItem('order', JSON.stringify(this.order));
@@ -107,7 +122,7 @@ export class SellingPageComponent implements OnInit{
       this.orderedCar = JSON.parse(sessionStorage.getItem('orderedCar'));
     }
     this.setUserData(this.order);
-    if (this.orderedCar && !this.orderedCar.sold) {
+    if (this.orderedCar && !this.orderedCar.sold && this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer) {
       this.setStateOfCarToSold(this.orderedCar);
     }
   }

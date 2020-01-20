@@ -98,7 +98,7 @@ export class CarComponent implements OnInit {
       this.utilService.validPlateNumber = false;
     } else if (this.utilService.carUpdate) {
       this.setValidPlateNumber();
-      this.updateCar(form);
+      this.updateCar(form, this.carData.id);
     } else {
       this.setValidPlateNumber();
       this.checkIfCarExistsAlreadyWithTheGivenPlateNumberAndActAccordingly(form);
@@ -119,16 +119,18 @@ export class CarComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      console.log(result);
-      this.router.navigate(['/sellingPage'], {state: {data: {
-            orderedCar: result.car,
-            pickedUser: result.user,
-            pickedCompany: result.company,
-            switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer: false,
-            witness1: result.witness1,
-            witness2: result.witness2,
-            a2Representation: result.representation
-          }}});
+      if (result != null) {
+        this.router.navigate(['/sellingPage'], {state: {data: {
+              orderedCar: result.car,
+              pickedUser: result.user,
+              pickedCompany: result.company,
+              switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer: false,
+              witness1: result.witness1,
+              witness2: result.witness2,
+              a2Representation: result.representation,
+              remarkList: result.remarkList
+            }}});
+      }
 
     });
   }
@@ -142,7 +144,7 @@ export class CarComponent implements OnInit {
     this.httpService.getSingleCar(form.value.plateNumber.toUpperCase(), 'plateNumber').subscribe(data => {
       console.log(data);
       if (data == null) {
-        this.httpService.saveCar(this.createNewCarObject(form)).subscribe(data => {
+        this.httpService.saveCar(this.createNewCarObject(form, null)).subscribe(data => {
             const newCar = new Car(data.id, data.name, data.type, data.color, data.plateNumber, data.specification, data.bodyNumber, data.engineNumber, Number(data.capacity), Number(data.vintage), Number(data.mileage), new Date(data.motExpiry), Number(data.price), Number(data.purchasingPrice), Number(data.cost), data.costDescriptions, new Date(data.dateOfArrival), new Date(data.dateOfLeaving), data.typeOfBuying, Number(data.inheritanceTax), Number(data.downPayment), Number(data.payedAmount), Number(data.kwh), data.carRegistry, new Date(data.documentsHandover), new Date(data.dueOfContract), new Date(data.carHandover), new Date(data.dateOfContract), false, data.carOrTruck, data.salesman, data.insuranceNumber, Number(data.weight), Number(data.maxWeightAllowed), data.fuelType, data.nameOfBuyer);
             if (newCar.motExpiry.getFullYear() === new Date(0).getFullYear()) {
               newCar.motExpiry = null;
@@ -173,7 +175,8 @@ export class CarComponent implements OnInit {
           }
         )
       } else {
-        this.updateCar(form);
+        this.utilService.carUpdate = true;
+        this.updateCar(form, data.id);
       }
     }, error => {
       console.log(error);
@@ -181,11 +184,13 @@ export class CarComponent implements OnInit {
     });
   }
 
-  private updateCar(form: any) {
-    this.httpService.updateCar(this.createNewCarObject(form)).subscribe(data => {
+  private updateCar(form: any, carId: any) {
+    this.httpService.updateCar(this.createNewCarObject(form, carId)).subscribe(data => {
         this.utilService.openSnackBar('Az autó adatai sikeresen frissültek!', 'Szuper :)');
         const updatedCar = new Car(data.id, data.name, data.type, data.color, data.plateNumber, data.specification, data.bodyNumber, data.engineNumber, Number(data.capacity), Number(data.vintage), Number(data.mileage), new Date(data.motExpiry), Number(data.price), Number(data.purchasingPrice), Number(data.cost), data.costDescriptions, new Date(data.dateOfArrival), new Date(data.dateOfLeaving), data.typeOfBuying, Number(data.inheritanceTax), Number(data.downPayment), Number(data.payedAmount), Number(data.kwh), data.carRegistry, new Date(data.documentsHandover), new Date(data.dueOfContract), new Date(data.carHandover), new Date(data.dateOfContract), false, data.carOrTruck, data.salesman, data.insuranceNumber, Number(data.weight), Number(data.maxWeightAllowed), data.fuelType, null);
-        this.updatedCar.emit(updatedCar);
+        if (this.router.url === "/filter") {
+          this.updatedCar.emit(updatedCar);
+        }
         this.utilService.carUpdate = false;
       }, error1 => {
         this.utilService.openSnackBar('Sajnos nem sikerült frissíteni az autó adatait!', 'Hiba :(');
@@ -208,10 +213,10 @@ export class CarComponent implements OnInit {
     return carHandover != null ? this.addTimeToCarHandoverDate(new Date(carHandover)) : null;
   }
 
-  public createNewCarObject(form: any): Car {
+  public createNewCarObject(form: any, carId: any): Car {
     if (this.utilService.carUpdate) {
       console.log('Frissitesben');
-      return this.createCarObjectWithId(form, this.transformToCapitalData(form));
+      return this.createCarObjectWithId(form, this.transformToCapitalData(form), carId);
     } else {
       return this.createCarObjectNoId(form, this.transformToCapitalData(form));
     }
@@ -235,13 +240,13 @@ export class CarComponent implements OnInit {
     return capitalObject;
   }
 
-  private createCarObjectWithId(form: any, capitalData: Object): Car {
+  private createCarObjectWithId(form: any, capitalData: Object, carId: any): Car {
     const isSold = this.carData.sold != false;
     const insuranceNumber = this.carData.insuranceNumber != null ? this.carData.insuranceNumber : null;
     const nameOfBuyer = this.carData.nameOfBuyer != null ? this.carData.nameOfBuyer : null;
     console.log('Ez az id ' + this.carData.id);
     return new Car(
-      this.carData.id,
+      carId,
       capitalData['capitalName'],
       capitalData['capitalType'],
       capitalData['capitalColor'],

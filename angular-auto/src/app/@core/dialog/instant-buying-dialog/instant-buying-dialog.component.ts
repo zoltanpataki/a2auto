@@ -99,11 +99,12 @@ export class InstantBuyingDialogComponent implements OnInit {
 
   private saveCarData(form: any) {
     const carHandover = new Date(this.carData.carHandover);
-    if (this.carHandoverTime['hour'] != null) {
-      carHandover.setHours(this.carHandoverTime['hour']);
-    }
-    if (this.carHandoverTime['minute'] != null) {
-      carHandover.setHours(this.carHandoverTime['minute']);
+    if (this.carHandoverTime['hour'] != null && this.carHandoverTime['minute'] != null) {
+      carHandover.setHours(this.carHandoverTime['hour'], this.carHandoverTime['minute'], 0, 0);
+    } else if (this.carHandoverTime['hour'] != null && this.carHandoverTime['minute'] == null) {
+      carHandover.setHours(this.carHandoverTime['hour'], 0, 0, 0);
+    } else if (this.carHandoverTime['hour'] == null && this.carHandoverTime['minute'] != null) {
+      carHandover.setHours(0, this.carHandoverTime['minute'], 0, 0);
     }
     this.carData.carHandover = carHandover;
     this.witness1 = form.value.witness1.name === 'Egyik sem' ? null : form.value.witness1;
@@ -173,7 +174,7 @@ export class InstantBuyingDialogComponent implements OnInit {
   }
 
   private saveUser(form: any) {
-    this.userData.fullName = form.value.fullname;
+    this.userData.fullName = form.value.fullName;
     this.userData.birthName = form.value.birthName;
     this.userData.zipCode = form.value.zipCode;
     this.userData.city = form.value.city;

@@ -474,12 +474,14 @@ export class FilterComponent implements OnInit {
   private createDescriptionWithAmountRow(descriptionWithAmount: DescriptionWithAmount) {
     if (descriptionWithAmount == null) {
       return this.formBuilder.group({
+        id: [null],
         descriptionText: [null],
         charged: [null],
         amount: [null],
       });
     } else {
       return this.formBuilder.group({
+        id: [descriptionWithAmount.id],
         descriptionText: [descriptionWithAmount.description],
         charged: [descriptionWithAmount.charged],
         amount: [descriptionWithAmount.amount],
@@ -659,6 +661,7 @@ export class FilterComponent implements OnInit {
     const newDescriptionList = [];
     const remarkList = result.remarkList;
     if (this.newOrder) {
+      console.log(this.newOrder.description);
       this.newOrder.description.forEach(description => {
         if (sellOrBuy === 'sell' && description.type === 'buy') {
           newDescriptionList.push(description);
@@ -1097,7 +1100,7 @@ export class FilterComponent implements OnInit {
     descriptionForm.value.description.forEach(descriptionWithAmount => {
       const descriptionAmount = descriptionWithAmount.charged === 'AJÁNDÉK' ? 0 : descriptionWithAmount.amount;
       if (descriptionWithAmount.descriptionText != null && descriptionWithAmount.charged != null) {
-        const description = new DescriptionWithAmount(null, descriptionWithAmount.descriptionText, descriptionAmount, descriptionWithAmount.charged);
+        const description = new DescriptionWithAmount(descriptionWithAmount.id, descriptionWithAmount.descriptionText, descriptionAmount, descriptionWithAmount.charged);
         this.listOfDescriptionsWithAmount.push(description);
       }
     });
@@ -1177,6 +1180,7 @@ export class FilterComponent implements OnInit {
   }
 
   private prepareNavigationToOrderPageOrSellingPageOrWarrantPageOrInsurancePage(order: Order, car: Car, witness1: Witness, witness2: Witness, orderOrSellingOrWarrant: string, warrantType: string, a2Representation: string) {
+    console.log(order);
     sessionStorage.setItem('order', JSON.stringify(this.newOrder));
     sessionStorage.setItem('orderedCar', JSON.stringify(car));
     this.router.navigate([orderOrSellingOrWarrant], {state: {data: {

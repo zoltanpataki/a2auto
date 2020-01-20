@@ -25,9 +25,9 @@ public class OrderService {
 
     public ResponseEntity<Object> saveNewOrder(Order order) {
         try {
-            orderRepository.save(order);
+            Order savedOrder = orderRepository.saveAndFlush(order);
 
-            return new ResponseEntity<>(order, HttpStatus.OK);
+            return new ResponseEntity<>(savedOrder, HttpStatus.OK);
         } catch (Exception e) {
             logger.info(e.getMessage());
             throw new EntityFailedToSaveException("Order couldn't be saved!");
@@ -45,8 +45,8 @@ public class OrderService {
 
     public ResponseEntity<Object> updateOrder(Order order) {
         try {
-            orderRepository.save(order);
-            return new ResponseEntity<>(order, HttpStatus.OK);
+            Order updatedOrder = orderRepository.saveAndFlush(order);
+            return new ResponseEntity<>(updatedOrder, HttpStatus.OK);
         } catch (Exception e) {
             logger.info(e.getMessage());
             throw new EntityFailedToSaveException("Order couldn't be updated!");
