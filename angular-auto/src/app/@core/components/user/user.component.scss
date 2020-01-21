@@ -27,3 +27,8 @@ button:focus {
   background-color: deeppink;
   color: white;
 }
+
+.buttons{
+  display: flex;
+  justify-content: space-between;
+}

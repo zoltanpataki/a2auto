@@ -6,14 +6,14 @@
         <div *ngFor="let item of fieldsOneFirstHalf | keyvalue:keepOriginalOrder; trackBy: trackByFn">
           <mat-form-field class="example-full-width">
             <label>
-              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput placeholder="{{item.value}}" (ngModelChange)="itemChanged(carForm)" [ngModelOptions]="{updateOn: 'blur'}" ngModel="{{carData[item.key]}}" name="{{item.key}}">
+              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput placeholder="{{item.value}}" (ngModelChange)="itemChanged(carForm)" ngModel="{{carData[item.key]}}" name="{{item.key}}">
             </label>
           </mat-form-field>
         </div>
         <div>
           <mat-form-field class="example-full-width">
             <label>
-              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput placeholder="Rendszám (6 karakter)" maxlength="6" minlength="6" (ngModelChange)="itemChanged(carForm)" [ngModelOptions]="{updateOn: 'blur'}" ngModel="{{carData.plateNumber}}" name="plateNumber">
+              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput placeholder="Rendszám (6 karakter)" maxlength="6" minlength="6" (ngModelChange)="itemChanged(carForm)" ngModel="{{carData.plateNumber}}" name="plateNumber">
             </label>
           </mat-form-field>
           <mat-error *ngIf="!utilService.validPlateNumber">A rendszám hossza 6 karakter kell legyen</mat-error>
@@ -21,7 +21,7 @@
         <div *ngFor="let item of fieldsOneSecondHalf | keyvalue:keepOriginalOrder; trackBy: trackByFn">
           <mat-form-field class="example-full-width">
             <label>
-              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput placeholder="{{item.value}}" (ngModelChange)="itemChanged(carForm)" [ngModelOptions]="{updateOn: 'blur'}" ngModel="{{carData[item.key]}}" name="{{item.key}}">
+              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput placeholder="{{item.value}}" (ngModelChange)="itemChanged(carForm)" ngModel="{{carData[item.key]}}" name="{{item.key}}">
             </label>
           </mat-form-field>
         </div>
@@ -29,7 +29,7 @@
       <div class="middle">
         <div>
           <mat-form-field class="example-full-width">
-            <input matInput [matDatepicker]="motExpiryPicker" placeholder="Műszaki vizsga érvényessége" (ngModelChange)="itemChanged(carForm)" [ngModelOptions]="{updateOn: 'blur'}" ngModel="{{carData.motExpiry | date:'yyyy-MM-dd'}}" name="motExpiry">
+            <input matInput [matDatepicker]="motExpiryPicker" placeholder="Műszaki vizsga érvényessége" (ngModelChange)="itemChanged(carForm)" ngModel="{{carData.motExpiry | date:'yyyy-MM-dd'}}" name="motExpiry">
             <mat-datepicker-toggle matSuffix [for]="motExpiryPicker"></mat-datepicker-toggle>
             <mat-datepicker #motExpiryPicker></mat-datepicker>
           </mat-form-field>
@@ -37,7 +37,7 @@
         <div>
           <mat-form-field class="example-full-width">
             <mat-label>Jármű típusa</mat-label>
-            <mat-select (ngModelChange)="itemChanged(carForm)" [ngModelOptions]="{updateOn: 'blur'}" [ngModel]="carData.carOrTruck" name="carOrTruck">
+            <mat-select (ngModelChange)="itemChanged(carForm)" [ngModel]="carData.carOrTruck" name="carOrTruck">
               <mat-option *ngFor="let type of carOrTruck; trackBy: trackByFn" [value]="type">
                 {{type}}
               </mat-option>
@@ -47,14 +47,14 @@
         <div *ngFor="let item of fieldTwo | keyvalue:keepOriginalOrder; trackBy: trackByFn">
           <mat-form-field class="example-full-width">
             <label>
-              <input matInput type="number" placeholder="{{item.value}}" (ngModelChange)="itemChanged(carForm)" [ngModelOptions]="{updateOn: 'blur'}" ngModel="{{carData[item.key]}}" name="{{item.key}}">
+              <input matInput type="number" placeholder="{{item.value}}" (ngModelChange)="itemChanged(carForm)" ngModel="{{carData[item.key]}}" name="{{item.key}}">
             </label>
           </mat-form-field>
         </div>
         <div *ngFor="let item of fieldRelatedToWeight | keyvalue:keepOriginalOrder; trackBy: trackByFn">
           <mat-form-field class="example-full-width">
             <label>
-              <input type="number" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput placeholder="{{item.value}}" (ngModelChange)="itemChanged(carForm)" [ngModelOptions]="{updateOn: 'blur'}" ngModel="{{carData[item.key]}}" name="{{item.key}}">
+              <input type="number" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput placeholder="{{item.value}}" (ngModelChange)="itemChanged(carForm)" ngModel="{{carData[item.key]}}" name="{{item.key}}">
             </label>
           </mat-form-field>
         </div>
@@ -63,7 +63,7 @@
         <div>
           <mat-form-field class="example-full-width">
             <label>
-              <input matInput type="number" placeholder="Hengerűrtartalom" (ngModelChange)="itemChanged(carForm)" [ngModelOptions]="{updateOn: 'blur'}" ngModel="{{carData.capacity}}" name="capacity">
+              <input matInput type="number" placeholder="Hengerűrtartalom" (ngModelChange)="itemChanged(carForm)" ngModel="{{carData.capacity}}" name="capacity">
             </label>
           </mat-form-field>
         </div>
@@ -87,7 +87,7 @@
         <div>
           <mat-form-field class="example-full-width">
             <mat-label>Üzemanyag típusa</mat-label>
-            <mat-select  (ngModelChange)="itemChanged(carForm)" [ngModel]="carData.fuelType" [ngModelOptions]="{updateOn: 'blur'}" name="fuelType">
+            <mat-select  (ngModelChange)="itemChanged(carForm)" [ngModel]="carData.fuelType" name="fuelType">
               <mat-option *ngFor="let type of fuelTypes; trackBy: trackByFn" [value]="type">
                 {{type}}
               </mat-option>
@@ -96,7 +96,7 @@
         </div>
         <div *ngFor="let item of fieldFour | keyvalue:keepOriginalOrder; index as i; trackBy: trackByFn">
           <mat-form-field class="example-full-width">
-            <input matInput cdkTextareaAutosize cdkAutosizeMinRows=5 cdkAutosizeMaxRows=20 [matDatepicker]="picker" placeholder="{{item.value}}" (ngModelChange)="itemChanged(carForm)" [ngModelOptions]="{updateOn: 'blur'}" ngModel="{{carData[item.key] | date:'yyyy-MM-dd'}}" name="{{item.key}}">
+            <input matInput cdkTextareaAutosize cdkAutosizeMinRows=5 cdkAutosizeMaxRows=20 [matDatepicker]="picker" placeholder="{{item.value}}" (ngModelChange)="itemChanged(carForm)" ngModel="{{carData[item.key] | date:'yyyy-MM-dd'}}" name="{{item.key}}">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
@@ -104,7 +104,7 @@
         <div>
           <mat-form-field class="example-full-width">
             <label>
-              <textarea autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput placeholder="Megjegyzések" (ngModelChange)="itemChanged(carForm)" [ngModelOptions]="{updateOn: 'blur'}" ngModel="{{carData.costDescriptions}}" name="costDescriptions"></textarea>
+              <textarea autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput placeholder="Megjegyzések" (ngModelChange)="itemChanged(carForm)" ngModel="{{carData.costDescriptions}}" name="costDescriptions"></textarea>
             </label>
           </mat-form-field>
         </div>

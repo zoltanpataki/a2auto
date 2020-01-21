@@ -89,6 +89,8 @@ export class UserComponent implements OnInit {
     }
     if (this.userData == null) {
       this.userData = new Users(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+    } else {
+      this.emailFormControl.setValue(this.userData.email);
     }
   }
 
@@ -99,31 +101,123 @@ export class UserComponent implements OnInit {
   public saveUser(form: any) {
     if (!this.emailFormControl.hasError('email') && this.nullCheckOnAddress(form)) {
       this.isCompleteAddress = true;
-      const user = new Users(null, form.value.fullName, form.value.birthName, form.value.zipCode, form.value.city, form.value.address, form.value.birthPlace, form.value.phoneNumber, form.value.email, form.value.nameOfMother, form.value.birthDate, form.value.personNumber, form.value.idCardNumber, form.value.dueTimeOfIdCard, form.value.drivingLicenceNumber, form.value.dueTimeOfDrivingLicence, form.value.taxNumber, form.value.healthCareNumber, form.value.nationality);
-      this.httpService.saveUser(user).subscribe(data => {
-        console.log(data);
-        this.orderProgress.emit('saved');
-        this.newUser.emit(data);
-        this.utilService.openSnackBar('A felhasználó sikeresen mentve!', 'Szuper :)');
-      }, error => {
-        this.orderProgress.emit('unsaved');
-        this.utilService.openSnackBar('A felhasználót nem sikerült menteni!', 'Hiba :(');
-      });
+      if (this.userData.id == null) {
+        this.httpService.saveUser(this.createUserObj(form, false)).subscribe(data => {
+          this.userData = data;
+          if (this.router.url === '/filter') {
+            console.log('emitted');
+            this.orderProgress.emit('saved');
+            this.newUser.emit(data);
+          }
+          this.utilService.openSnackBar('A felhasználó sikeresen mentve!', 'Szuper :)');
+        }, error => {
+          this.orderProgress.emit('unsaved');
+          this.utilService.openSnackBar('A felhasználót nem sikerült menteni!', 'Hiba :(');
+        });
+      } else {
+        this.httpService.saveUser(this.createUserObj(form, true)).subscribe(data => {
+          this.userData = data;
+          if (this.router.url === '/filter') {
+            console.log('emitted');
+            this.orderProgress.emit('saved');
+            this.newUser.emit(data);
+          }
+          this.utilService.openSnackBar('A felhasználó sikeresen frissítve!', 'Szuper :)');
+        }, error => {
+          this.orderProgress.emit('unsaved');
+          this.utilService.openSnackBar('A felhasználót nem sikerült frissíteni!', 'Hiba :(');
+        });
+      }
     } else if (!this.nullCheckOnAddress(form)) {
       this.isCompleteAddress = false;
     }
   }
 
+  private createUserObj(form: any, updateOrNew: boolean): Users {
+    const capitalObject = this.transformToCapitalData(form);
+    if (updateOrNew) {
+      return new Users(
+        this.userData.id,
+        capitalObject['capitalFullName'],
+        capitalObject['capitalBirthName'],
+        capitalObject['capitalZipCode'],
+        capitalObject['capitalCity'],
+        capitalObject['capitalAddress'],
+        capitalObject['capitalBirthPlace'],
+        form.value.phoneNumber,
+        capitalObject['capitalEmail'],
+        capitalObject['capitalNameOfMother'],
+        form.value.birthDate,
+        capitalObject['capitalPersonNumber'],
+        capitalObject['capitalIdCardNumber'],
+        form.value.dueTimeOfIdCard,
+        capitalObject['capitalDrivingLicenceNumber'],
+        form.value.dueTimeOfDrivingLicence,
+        form.value.taxNumber,
+        form.value.healthCareNumber,
+        capitalObject['capitalNationality']);
+    } else {
+      return new Users(
+        null,
+        capitalObject['capitalFullName'],
+        capitalObject['capitalBirthName'],
+        capitalObject['capitalZipCode'],
+        capitalObject['capitalCity'],
+        capitalObject['capitalAddress'],
+        capitalObject['capitalBirthPlace'],
+        form.value.phoneNumber,
+        capitalObject['capitalEmail'],
+        capitalObject['capitalNameOfMother'],
+        form.value.birthDate,
+        capitalObject['capitalPersonNumber'],
+        capitalObject['capitalIdCardNumber'],
+        form.value.dueTimeOfIdCard,
+        capitalObject['capitalDrivingLicenceNumber'],
+        form.value.dueTimeOfDrivingLicence,
+        form.value.taxNumber,
+        form.value.healthCareNumber,
+        capitalObject['capitalNationality']);
+    }
+  }
+
   private nullCheckOnAddress(form: any): boolean {
     let nullCounter = 0;
-    nullCounter = form.value.zipcode == null || form.value.zipcode.length === 0 ? nullCounter += 1 : nullCounter -= 1;
+    nullCounter = form.value.zipCode == null || form.value.zipCode.length === 0 ? nullCounter += 1 : nullCounter -= 1;
     nullCounter = form.value.city == null || form.value.city.length === 0 ? nullCounter += 1 : nullCounter -= 1;
     nullCounter = form.value.address == null || form.value.address.length === 0 ? nullCounter += 1 : nullCounter -= 1;
     return Math.abs(nullCounter) === 3;
   }
 
   private itemChanged(form: any) {
-    const user = new Users(null, form.value.fullName, form.value.birthName, form.value.zipCode, form.value.city, form.value.address, form.value.birthPlace, form.value.phoneNumber, form.value.email, form.value.nameOfMother, form.value.birthDate, form.value.personNumber, form.value.idCardNumber, form.value.dueTimeOfIdCard, form.value.drivingLicenceNumber, form.value.dueTimeOfDrivingLicence, form.value.taxNumber, form.value.healthCareNumber, form.value.nationality);
+    let user;
+    if (this.userData.id == null) {
+      user = this.createUserObj(form, false);
+    } else {
+      user = this.createUserObj(form, true);
+    }
     sessionStorage.setItem('newUser', JSON.stringify(user));
+  }
+
+  private transformToCapitalData(form: any): Object {
+    const capitalObject = {};
+    capitalObject['capitalFullName'] = form.value.fullName != null ? form.value.fullName.toUpperCase() : null;
+    capitalObject['capitalBirthName'] = form.value.birthName != null ? form.value.birthName.toUpperCase() : null;
+    capitalObject['capitalZipCode'] = form.value.zipCode != null ? form.value.zipCode.toUpperCase() : null;
+    capitalObject['capitalCity'] = form.value.city != null ? form.value.city.toUpperCase() : null;
+    capitalObject['capitalAddress'] = form.value.address != null ? form.value.address.toUpperCase() : null;
+    capitalObject['capitalBirthPlace'] = form.value.birthPlace != null ? form.value.birthPlace.toUpperCase() : null;
+    capitalObject['capitalEmail'] = this.emailFormControl.value != null ? this.emailFormControl.value.toUpperCase() : null;
+    capitalObject['capitalNameOfMother'] = form.value.nameOfMother != null ? form.value.nameOfMother.toUpperCase() : null;
+    capitalObject['capitalPersonNumber'] = form.value.personNumber != null ? form.value.personNumber.toUpperCase() : null;
+    capitalObject['capitalIdCardNumber'] = form.value.idCardNumber != null ? form.value.idCardNumber.toUpperCase() : null;
+    capitalObject['capitalDrivingLicenceNumber'] = form.value.drivingLicenceNumber != null ? form.value.drivingLicenceNumber.toUpperCase() : null;
+    capitalObject['capitalNationality'] = form.value.nationality != null ? form.value.nationality.toUpperCase() : null;
+    return capitalObject;
+  }
+
+  private clearUserData() {
+    this.userData = null;
+    sessionStorage.removeItem('newUser');
+    this.ngOnInit();
   }
 }

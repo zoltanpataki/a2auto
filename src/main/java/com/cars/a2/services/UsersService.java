@@ -26,8 +26,8 @@ public class UsersService {
 
     public ResponseEntity<Object> saveUser(Users users) {
         try {
-            usersRepository.save(users);
-            return new ResponseEntity<>(users, HttpStatus.OK);
+            Users newUser = usersRepository.saveAndFlush(users);
+            return new ResponseEntity<>(newUser, HttpStatus.OK);
         } catch (Exception e) {
             logger.info(e.getMessage());
             throw new EntityFailedToSaveException("User couldn't be saved!");

@@ -215,7 +215,6 @@ export class CarComponent implements OnInit {
 
   public createNewCarObject(form: any, carId: any): Car {
     if (this.utilService.carUpdate) {
-      console.log('Frissitesben');
       return this.createCarObjectWithId(form, this.transformToCapitalData(form), carId);
     } else {
       return this.createCarObjectNoId(form, this.transformToCapitalData(form));

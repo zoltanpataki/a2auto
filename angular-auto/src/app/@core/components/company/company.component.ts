@@ -69,6 +69,8 @@ export class CompanyComponent implements OnInit {
     }
     if (this.companyData == null) {
       this.companyData = new Company(null, null, new Address(null, null, null, null, null), null, null, null, null, null);
+    } else {
+      this.emailFormControl.setValue(this.companyData.email);
     }
   }
 
@@ -79,7 +81,7 @@ export class CompanyComponent implements OnInit {
   public saveCompany(form: any) {
     if (!this.emailFormControl.hasError('email') && this.nullCheckOnAddress(form)) {
       this.isCompleteAddress = true;
-      const company = new Company(null, form.value.name, new Address(null, form.value.zipcode, form.value.country, form.value.city, form.value.address), form.value.companyRegistrationNumber, form.value.representation, form.value.taxNumber, form.value.phoneNumber, form.value.email);
+      const company = new Company(null, form.value.name, new Address(null, form.value.zipcode, form.value.country, form.value.city, form.value.address), form.value.companyRegistrationNumber, form.value.representation, form.value.taxNumber, form.value.phoneNumber, this.emailFormControl.value);
       this.httpService.saveCompany(company).subscribe(data => {
         console.log(data);
         this.orderProgress.emit('saved');
@@ -103,7 +105,7 @@ export class CompanyComponent implements OnInit {
   }
 
   private itemChanged(form: any) {
-    const company = new Company(null, form.value.name, new Address(null, form.value.zipcode, form.value.country, form.value.city, form.value.address), form.value.companyRegistrationNumber, form.value.representation, form.value.taxNumber, form.value.phoneNumber, form.value.email);
+    const company = new Company(null, form.value.name, new Address(null, form.value.zipcode, form.value.country, form.value.city, form.value.address), form.value.companyRegistrationNumber, form.value.representation, form.value.taxNumber, form.value.phoneNumber, this.emailFormControl.value);
     sessionStorage.setItem('newCompany', JSON.stringify(company));
   }
 
