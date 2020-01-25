@@ -296,14 +296,14 @@
                     <div>
                       <mat-form-field class="example-full-width">
                         <label>
-                          <input matInput type="number" placeholder="Beszámított autó ár" formControlName="countInPrice">
+                          <input currencyMask matInput placeholder="Beszámított autó ár" formControlName="countInPrice" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false}">
                         </label>
                       </mat-form-field>
                     </div>
                     <div>
                       <mat-form-field class="example-full-width">
                         <label>
-                          <input matInput type="number" placeholder="Korábbi hitel" formControlName="previousLoan">
+                          <input currencyMask matInput placeholder="Korábbi hitel" formControlName="previousLoan" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false}">
                         </label>
                       </mat-form-field>
                     </div>
@@ -415,7 +415,7 @@
               <div class="descriptions" *ngIf="!giftIndexList.includes(indexNum)">
                 <mat-form-field class="example-full-width" [formGroupName]="indexNum">
                   <label>
-                    <input type="number" matInput placeholder="Összeg" formControlName="amount">
+                    <input currencyMask matInput placeholder="Összeg" formControlName="amount" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false}">
                   </label>
                 </mat-form-field>
               </div>
