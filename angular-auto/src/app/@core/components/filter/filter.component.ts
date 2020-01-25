@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {HttpService} from "../../services/http.service";
 import {UtilService} from "../../services/util.service";
 import {SelectedFilter} from "../../models/selectedFilter";
@@ -82,6 +82,8 @@ export class FilterComponent implements OnInit {
   private listOfDescriptionsWithAmount: DescriptionWithAmount[] = [];
   private chargedBehalf = ['AJÁNDÉK', 'VEVŐ FIZETI'];
   private giftIndexList = [];
+  @ViewChild('focuser', {read: ElementRef})
+  focuser: ElementRef;
 
   constructor(private httpService: HttpService,
               private utilService: UtilService,
@@ -752,7 +754,7 @@ export class FilterComponent implements OnInit {
     }
     this.orderProgress = this.orderProgress > 1 ? this.orderProgress : 1;
     this.setOrderProgressInSessionStorage(this.orderProgress);
-    sessionStorage.setItem('alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready', this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready.toString())
+    sessionStorage.setItem('alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready', this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready.toString());
   }
 
   private changeCheckBoxValuesToNull() {
@@ -760,8 +762,6 @@ export class FilterComponent implements OnInit {
     this.checkedIndividual = null;
     this.checkedCorporate = null;
     this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate = null;
-    this.selectedTypeOfBuying = null;
-    this.askForInheritanceTaxCalculation = null;
   }
 
   private setIndOrCorpCheckboxValue(indOrCorp: string, selection: boolean) {
@@ -790,14 +790,16 @@ export class FilterComponent implements OnInit {
         this.inheritanceTax = null;
         this.askForInheritanceTaxCalculation = 'dontWantCalculation';
         this.wantInheritanceTaxCalculation = false;
-        this.setOrderProgressInSessionStorage(3);
+        this.orderProgress = this.orderProgress > 3 ? this.orderProgress : 3;
+        this.setOrderProgressInSessionStorage(this.orderProgress);
       }
     } else if (wantOrNotCalculation === 'dontWantCalculation') {
       if (selection) {
         this.inheritanceTax = null;
         this.askForInheritanceTaxCalculation = 'dontWantCalculation';
         this.wantInheritanceTaxCalculation = false;
-        this.setOrderProgressInSessionStorage(3);
+        this.orderProgress = this.orderProgress > 3 ? this.orderProgress : 3;
+        this.setOrderProgressInSessionStorage(this.orderProgress);
       } else {
         this.askForInheritanceTaxCalculation = 'wantCalculation';
         this.wantInheritanceTaxCalculation = true;
@@ -851,7 +853,8 @@ export class FilterComponent implements OnInit {
             const extraCharge = Number(charge.value);
             this.inheritanceTax = Number(utility.value) + (chargeForInheritanceTax * car.kwh) + carRegistry + extraCharge;
             sessionStorage.setItem('inheritanceTax', this.inheritanceTax.toString());
-            this.setOrderProgressInSessionStorage(3);
+            this.orderProgress = this.orderProgress > 3 ? this.orderProgress : 3;
+            this.setOrderProgressInSessionStorage(this.orderProgress);
           });
         });
       });

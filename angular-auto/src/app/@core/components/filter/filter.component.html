@@ -370,13 +370,18 @@
       <div *ngIf="orderProgress > 6 && clickedCarIndex == i">
         <mat-divider></mat-divider>
         <h5>Várható átadás</h5>
-        <form #handOverForm=ngForm (ngSubmit)="submitHandOver(handOverForm, car)" class="form handOverForm">
+        <form #handOverForm=ngForm (ngSubmit)="focuser.focus(); submitHandOver(handOverForm, car)" class="form handOverForm">
           <div>
             <mat-form-field class="example-full-width">
               <input matInput [matDatepicker]="handOverPicker" (ngModelChange)="updateCarWithHandoverDate(handOverForm, car)" [ngModelOptions]="{updateOn: 'blur'}" placeholder="Dátum" ngModel="{{carOfTransaction.carHandover | date:'yyyy-MM-dd'}}" name="handover">
               <mat-datepicker-toggle matSuffix [for]="handOverPicker"></mat-datepicker-toggle>
               <mat-datepicker #handOverPicker></mat-datepicker>
             </mat-form-field>
+          </div>
+          <div>
+              <label>
+                <input #focuser type="hidden">
+              </label>
           </div>
           <div *ngIf="orderProgress == 7">
             <button *ngIf="!newOrder" class="saveButton" mat-button>Tovább</button>
