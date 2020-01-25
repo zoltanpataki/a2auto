@@ -50,6 +50,7 @@ import {LoaderState} from "./@core/services/loader.state";
 import { InsurancePageComponent } from './@ui/insurance-page/insurance-page.component';
 import {environment} from "../environments/environment";
 import { InstantBuyingDialogComponent } from './@core/dialog/instant-buying-dialog/instant-buying-dialog.component';
+import {CurrencyMaskModule} from "ng2-currency-mask";
 
 @NgModule({
   declarations: [
@@ -102,7 +103,8 @@ import { InstantBuyingDialogComponent } from './@core/dialog/instant-buying-dial
     AngularFontAwesomeModule,
     MatTooltipModule,
     NgxSpinnerModule,
-    NgxsModule.forRoot([LoaderState], { developmentMode: !environment.production }),
+    NgxsModule.forRoot([LoaderState], {developmentMode: !environment.production}),
+    CurrencyMaskModule,
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },],
   bootstrap: [AppComponent],

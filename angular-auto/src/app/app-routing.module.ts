@@ -57,6 +57,10 @@ const routes: Routes = [
   {
     path: 'insurance',
     component: InsurancePageComponent
+  },
+  {
+    path: '**',
+    component: LandingComponent
   }
 ];
 

@@ -18,6 +18,7 @@ INSERT INTO utility VALUES (2, 'mediumCapacity', '18500');
 INSERT INTO utility VALUES (3, 'largeCapacity', '20000');
 INSERT INTO utility VALUES (4, 'carRegistry', '12000');
 INSERT INTO utility VALUES (5, 'insuranceOfferNumber', '936807654');
+INSERT INTO utility VALUES (6, 'extraChargeAtSelling', '7000');
 
 INSERT INTO inheritance_tax VALUES (1, 'S', 450, 300, 550);
 INSERT INTO inheritance_tax VALUES (2, 'M', 550, 450, 650);

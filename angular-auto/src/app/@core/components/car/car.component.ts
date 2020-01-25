@@ -128,7 +128,8 @@ export class CarComponent implements OnInit {
               witness1: result.witness1,
               witness2: result.witness2,
               a2Representation: result.representation,
-              remarkList: result.remarkList
+              remarkList: result.remarkList,
+              typeOfBuying: result.typeOfBuying
             }}});
       }
 

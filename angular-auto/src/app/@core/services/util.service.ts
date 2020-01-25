@@ -57,6 +57,8 @@ export class UtilService {
     sessionStorage.removeItem('witness2');
     sessionStorage.removeItem('newUserDuringSell');
     sessionStorage.removeItem('newCompanyDuringSell');
+    sessionStorage.removeItem('a2Representation');
+    sessionStorage.removeItem('typeOfBuying');
   }
 
   public createBlankWitnessToUtilServiceWitnessList(): Witness {

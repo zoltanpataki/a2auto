@@ -26,7 +26,9 @@ export class InstantBuyingDialogComponent implements OnInit {
   private witness1: Witness;
   private witness2: Witness;
   private listOfA2Representation = ['SOÓS GÁBOR', 'VINCZ ANTAL'];
+  private listOfTypeOfBuying = ['KÉSZPÉNZ', 'ÁTUTALÁS'];
   private pickedRepresentation: string;
+  private pickedTypeOfBuying: string;
   public fields = {
     fullName: 'Teljes Név',
     birthName: 'Születéskori Név',
@@ -110,6 +112,7 @@ export class InstantBuyingDialogComponent implements OnInit {
     this.witness1 = form.value.witness1.name === 'Egyik sem' ? null : form.value.witness1;
     this.witness2 = form.value.witness2.name === 'Egyik sem' ? null : form.value.witness2;
     this.pickedRepresentation = form.value.representation;
+    this.pickedTypeOfBuying = form.value.typeOfBuying;
     this.remarkPartOpen = true;
   }
 
@@ -195,6 +198,7 @@ export class InstantBuyingDialogComponent implements OnInit {
     closingData['witness2'] = this.witness2;
     closingData['representation'] = this.pickedRepresentation;
     closingData['remarkList'] = this.remarkList;
+    closingData['typeOfBuying'] = this.pickedTypeOfBuying;
 
     this.dialogRef.close(closingData);
   }

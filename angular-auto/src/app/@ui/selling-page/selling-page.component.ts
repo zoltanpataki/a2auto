@@ -38,6 +38,7 @@ export class SellingPageComponent implements OnInit{
   private sellerCompanyRepresentation: string;
   private buyerCompanyRepresentation: string;
   private remarkList;
+  private typeOfBuying;
 
   constructor(private utilService: UtilService,
               private httpService: HttpService,) { }
@@ -78,10 +79,14 @@ export class SellingPageComponent implements OnInit{
     if (history.state.data) {
       this.order = history.state.data.order;
       this.remarkList = history.state.data.remarkList;
+      this.typeOfBuying = history.state.data.typeOfBuying;
       if (this.remarkList != null) {
         this.order = new Order(null, null, null, null, null, null, null, null, null, null,null, null, null, null, null,this.remarkList, null);
       }
       this.orderedCar = history.state.data.orderedCar;
+      if (this.typeOfBuying != null) {
+        this.orderedCar.typeOfBuying = this.typeOfBuying;
+      }
       this.userSearchResult = history.state.data.userSearchResult;
       this.companySearchResult = history.state.data.companySearchResult;
       this.indexOfPickedUser = history.state.data.indexOfPickedUser;
@@ -101,6 +106,7 @@ export class SellingPageComponent implements OnInit{
       sessionStorage.setItem('witness1', JSON.stringify(this.witness1));
       sessionStorage.setItem('witness2', JSON.stringify(this.witness2));
       sessionStorage.setItem('a2Representation', this.a2Representation);
+      sessionStorage.setItem('typeOfBuying', this.typeOfBuying);
       if (this.indexOfPickedUser != null) {
         sessionStorage.setItem('indexOfPickedUser', JSON.stringify(this.indexOfPickedUser));
       }

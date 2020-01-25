@@ -47,14 +47,14 @@
         <div *ngFor="let item of fieldTwo | keyvalue:keepOriginalOrder; trackBy: trackByFn">
           <mat-form-field class="example-full-width">
             <label>
-              <input matInput type="number" placeholder="{{item.value}}" (ngModelChange)="itemChanged(carForm)" ngModel="{{carData[item.key]}}" name="{{item.key}}">
+              <input matInput currencyMask placeholder="{{item.value}}" (ngModelChange)="itemChanged(carForm)" [(ngModel)]="carData[item.key]" name="{{item.key}}" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false}">
             </label>
           </mat-form-field>
         </div>
         <div *ngFor="let item of fieldRelatedToWeight | keyvalue:keepOriginalOrder; trackBy: trackByFn">
           <mat-form-field class="example-full-width">
             <label>
-              <input type="number" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput placeholder="{{item.value}}" (ngModelChange)="itemChanged(carForm)" ngModel="{{carData[item.key]}}" name="{{item.key}}">
+              <input currencyMask autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput placeholder="{{item.value}}" (ngModelChange)="itemChanged(carForm)" [(ngModel)]="carData[item.key]" name="{{item.key}}" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false}">
             </label>
           </mat-form-field>
         </div>
@@ -63,7 +63,7 @@
         <div>
           <mat-form-field class="example-full-width">
             <label>
-              <input matInput type="number" placeholder="Hengerűrtartalom" (ngModelChange)="itemChanged(carForm)" ngModel="{{carData.capacity}}" name="capacity">
+              <input currencyMask matInput placeholder="Hengerűrtartalom" (ngModelChange)="itemChanged(carForm)" [(ngModel)]="carData.capacity" name="capacity" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false}">
             </label>
           </mat-form-field>
         </div>

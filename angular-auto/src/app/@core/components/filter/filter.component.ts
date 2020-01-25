@@ -846,10 +846,13 @@ export class FilterComponent implements OnInit {
     this.httpService.getUtility(stringCapacity).subscribe(utility => {
       this.httpService.getChargeForInheritanceTax(stringKw, stringAge).subscribe(chargeForInheritanceTax => {
         this.httpService.getUtility('carRegistry').subscribe(carReg => {
-          const carRegistry = Number(carReg.value);
-          this.inheritanceTax = Number(utility.value) + (chargeForInheritanceTax * car.kwh) + carRegistry;
-          sessionStorage.setItem('inheritanceTax', this.inheritanceTax.toString());
-          this.setOrderProgressInSessionStorage(3);
+          this.httpService.getUtility('extraChargeAtSelling').subscribe(charge => {
+            const carRegistry = Number(carReg.value);
+            const extraCharge = Number(charge.value);
+            this.inheritanceTax = Number(utility.value) + (chargeForInheritanceTax * car.kwh) + carRegistry + extraCharge;
+            sessionStorage.setItem('inheritanceTax', this.inheritanceTax.toString());
+            this.setOrderProgressInSessionStorage(3);
+          });
         });
       });
     });

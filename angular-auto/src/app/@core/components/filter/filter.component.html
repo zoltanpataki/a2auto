@@ -338,14 +338,14 @@
           <div>
             <mat-form-field class="example-full-width">
               <label>
-                <input matInput type="number" placeholder="Foglaló összege" formControlName="downPayment" (ngModelChange)="saveChangedDownPayment(downPaymentForm)">
+                <input currencyMask matInput placeholder="Foglaló összege" formControlName="downPayment" (ngModelChange)="saveChangedDownPayment(downPaymentForm)" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false}">
               </label>
             </mat-form-field>
           </div>
           <div>
             <mat-form-field class="example-full-width">
               <label>
-                <input matInput type="number" placeholder="Előleg összege" formControlName="extra" (ngModelChange)="saveChangedExtra(downPaymentForm)">
+                <input currencyMask matInput placeholder="Előleg összege" formControlName="extra" (ngModelChange)="saveChangedExtra(downPaymentForm)" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false}">
               </label>
             </mat-form-field>
           </div>
@@ -373,7 +373,7 @@
         <form #handOverForm=ngForm (ngSubmit)="submitHandOver(handOverForm, car)" class="form handOverForm">
           <div>
             <mat-form-field class="example-full-width">
-              <input matInput [matDatepicker]="handOverPicker" (ngModelChange)="updateCarWithHandoverDate(handOverForm, car)" placeholder="Dátum" ngModel="{{carOfTransaction.carHandover | date:'yyyy-MM-dd'}}" name="handover">
+              <input matInput [matDatepicker]="handOverPicker" (ngModelChange)="updateCarWithHandoverDate(handOverForm, car)" [ngModelOptions]="{updateOn: 'blur'}" placeholder="Dátum" ngModel="{{carOfTransaction.carHandover | date:'yyyy-MM-dd'}}" name="handover">
               <mat-datepicker-toggle matSuffix [for]="handOverPicker"></mat-datepicker-toggle>
               <mat-datepicker #handOverPicker></mat-datepicker>
             </mat-form-field>
