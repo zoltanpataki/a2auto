@@ -27,8 +27,8 @@ public class CarService {
 
     public ResponseEntity<Object> saveNewCar(Car car) {
         try {
-            carRepository.save(car);
-            return new ResponseEntity<>(car, HttpStatus.OK);
+            Car newCar = carRepository.saveAndFlush(car);
+            return new ResponseEntity<>(newCar, HttpStatus.OK);
         } catch (Exception e) {
             logger.info(e.getMessage());
             throw new EntityFailedToSaveException("New car couldn't be saved!");
@@ -82,8 +82,8 @@ public class CarService {
 
     public ResponseEntity<Object> updateCar(Car car) {
         try {
-            carRepository.save(car);
-            return new ResponseEntity<>(car, HttpStatus.OK);
+            Car updatedCar = carRepository.saveAndFlush(car);
+            return new ResponseEntity<>(updatedCar, HttpStatus.OK);
         } catch (Exception e) {
             logger.info(e.getMessage());
             throw new EntityFailedToSaveException("Car couldn't be updated!");

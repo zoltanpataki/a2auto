@@ -199,6 +199,7 @@ export class InstantBuyingDialogComponent implements OnInit {
     closingData['representation'] = this.pickedRepresentation;
     closingData['remarkList'] = this.remarkList;
     closingData['typeOfBuying'] = this.pickedTypeOfBuying;
+    sessionStorage.setItem('newCar', JSON.stringify(this.carData));
 
     this.dialogRef.close(closingData);
   }

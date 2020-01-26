@@ -172,6 +172,7 @@
         </div>
       </div>
       <div *ngIf="alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready == false && selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate == false">
+        <mat-divider></mat-divider>
         <div class="companySearchContainer">
           <div class="companyFilterLeftSide">
             <mat-form-field>
@@ -208,7 +209,7 @@
           </div>
           <div class="companyFilterRightSide">
             <div>
-              <table *ngIf="companySearchResult.data.length > 0" mat-table [dataSource]="companySearchResult" class="mat-elevation-z8">
+              <table *ngIf="companySearchResult && companySearchResult.data && companySearchResult.data.length > 0" mat-table [dataSource]="companySearchResult" class="mat-elevation-z8">
 
                 <!-- Name Column -->
                 <ng-container matColumnDef="name">

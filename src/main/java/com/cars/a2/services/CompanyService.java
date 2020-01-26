@@ -29,8 +29,8 @@ public class CompanyService {
 
     public ResponseEntity<Object> saveNewCompany(Company company) {
         try {
-            companyRepository.save(company);
-            return new ResponseEntity<>(company, HttpStatus.OK);
+            Company newCompany = companyRepository.saveAndFlush(company);
+            return new ResponseEntity<>(newCompany, HttpStatus.OK);
         } catch (Exception e) {
             logger.info(e.getMessage());
             throw new EntityFailedToSaveException("Company couldn't be saved!");
@@ -59,7 +59,7 @@ public class CompanyService {
 
     public ResponseEntity<Object> updateCompany(Company company) {
         try {
-            companyRepository.save(company);
+            Company updatedCompany = companyRepository.saveAndFlush(company);
             return new ResponseEntity<>("Company is updated!", HttpStatus.OK);
         } catch (Exception e) {
             logger.info(e.getMessage());

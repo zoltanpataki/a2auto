@@ -81,16 +81,27 @@ export class CompanyComponent implements OnInit {
   public saveCompany(form: any) {
     if (!this.emailFormControl.hasError('email') && this.nullCheckOnAddress(form)) {
       this.isCompleteAddress = true;
-      const company = new Company(null, form.value.name, new Address(null, form.value.zipcode, form.value.country, form.value.city, form.value.address), form.value.companyRegistrationNumber, form.value.representation, form.value.taxNumber, form.value.phoneNumber, this.emailFormControl.value);
-      this.httpService.saveCompany(company).subscribe(data => {
-        console.log(data);
-        this.orderProgress.emit('saved');
-        this.newCompany.emit(data);
-        this.utilService.openSnackBar('A társaság sikeresen mentve!', 'Szuper :)');
-      }, error => {
-        this.orderProgress.emit('unsaved');
-        this.utilService.openSnackBar('A társaságot nem sikerült menteni!', 'Hiba :(');
-      });
+      if (this.companyData.id == null) {
+        this.httpService.saveCompany(this.createCompanyObj(form, false)).subscribe(data => {
+          this.companyData = data;
+          this.orderProgress.emit('saved');
+          this.newCompany.emit(data);
+          this.utilService.openSnackBar('A társaság sikeresen mentve!', 'Szuper :)');
+        }, error => {
+          this.orderProgress.emit('unsaved');
+          this.utilService.openSnackBar('A társaságot nem sikerült menteni!', 'Hiba :(');
+        });
+      } else {
+        this.httpService.saveCompany(this.createCompanyObj(form, true)).subscribe(data => {
+          this.companyData = data;
+          this.orderProgress.emit('saved');
+          this.newCompany.emit(data);
+          this.utilService.openSnackBar('A társaság sikeresen frissítve!', 'Szuper :)');
+        }, error => {
+          this.orderProgress.emit('unsaved');
+          this.utilService.openSnackBar('A társaságot nem sikerült frissíteni!', 'Hiba :(');
+        });
+      }
     } else if (!this.nullCheckOnAddress(form)) {
       this.isCompleteAddress = false;
     }
@@ -105,8 +116,67 @@ export class CompanyComponent implements OnInit {
   }
 
   private itemChanged(form: any) {
-    const company = new Company(null, form.value.name, new Address(null, form.value.zipcode, form.value.country, form.value.city, form.value.address), form.value.companyRegistrationNumber, form.value.representation, form.value.taxNumber, form.value.phoneNumber, this.emailFormControl.value);
+    let company;
+    if (this.companyData.id == null) {
+      company = this.createCompanyObj(form, false);
+    } else {
+      company = this.createCompanyObj(form, true);
+    }
     sessionStorage.setItem('newCompany', JSON.stringify(company));
+  }
+
+  private createCompanyObj(form: any, updateOrNew: boolean): Company {
+    const capitalObject = this.transformToCapitalData(form);
+    if (updateOrNew) {
+      return new Company(
+        this.companyData.id,
+        capitalObject['capitalName'],
+        new Address(
+          this.companyData.address.id,
+          capitalObject['capitalZipCode'],
+          capitalObject['capitalCountry'],
+          capitalObject['capitalCity'],
+          capitalObject['capitalAddress'],
+          ),
+        capitalObject['capitalCompanyRegistrationNumber'],
+        capitalObject['capitalRepresentation'],
+        capitalObject['capitalTaxNumber'],
+        capitalObject['capitalPhoneNumber'],
+        capitalObject['capitalEmail']
+        )
+    } else {
+      return new Company(
+        null,
+        capitalObject['capitalName'],
+        new Address(
+          null,
+          capitalObject['capitalZipCode'],
+          capitalObject['capitalCountry'],
+          capitalObject['capitalCity'],
+          capitalObject['capitalAddress'],
+        ),
+        capitalObject['capitalCompanyRegistrationNumber'],
+        capitalObject['capitalRepresentation'],
+        capitalObject['capitalTaxNumber'],
+        capitalObject['capitalPhoneNumber'],
+        capitalObject['capitalEmail']
+      )
+    }
+  }
+
+  private transformToCapitalData(form: any): Object {
+    const capitalObject = {};
+    capitalObject['capitalName'] = form.value.name != null ? form.value.name.toUpperCase() : null;
+    capitalObject['capitalZipCode'] = form.value.zipcode != null ? form.value.zipcode.toUpperCase() : null;
+    capitalObject['capitalCity'] = form.value.city != null ? form.value.city.toUpperCase() : null;
+    capitalObject['capitalCountry'] = form.value.country != null ? form.value.country.toUpperCase() : null;
+    capitalObject['capitalAddress'] = form.value.address != null ? form.value.address.toUpperCase() : null;
+    capitalObject['capitalCompanyRegistrationNumber'] = form.value.companyRegistrationNumber != null ? form.value.companyRegistrationNumber.toUpperCase() : null;
+    capitalObject['capitalEmail'] = this.emailFormControl.value != null ? this.emailFormControl.value.toUpperCase() : null;
+    capitalObject['capitalRepresentation'] = form.value.representation != null ? form.value.representation.toUpperCase() : null;
+    capitalObject['capitalTaxNumber'] = form.value.taxNumber != null ? form.value.taxNumber.toUpperCase() : null;
+    capitalObject['capitalPhoneNumber'] = form.value.phoneNumber != null ? form.value.phoneNumber.toUpperCase() : null;
+    return capitalObject;
   }
 
 }

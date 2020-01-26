@@ -82,7 +82,7 @@ export class FilterComponent implements OnInit {
   private listOfDescriptionsWithAmount: DescriptionWithAmount[] = [];
   private chargedBehalf = ['AJÁNDÉK', 'VEVŐ FIZETI'];
   private giftIndexList = [];
-  @ViewChild('focuser', {read: ElementRef})
+  @ViewChild('focuser', {read: ElementRef, static: false})
   focuser: ElementRef;
 
   constructor(private httpService: HttpService,
@@ -765,16 +765,27 @@ export class FilterComponent implements OnInit {
   }
 
   private setIndOrCorpCheckboxValue(indOrCorp: string, selection: boolean) {
-    this.individualOrCorporate = indOrCorp;
     if (indOrCorp === 'individual') {
-      this.checkedIndividual = selection;
-      if (this.checkedIndividual) {
-        this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate = true;
+      this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate = selection;
+      if (selection) {
+        this.checkedIndividual = true;
+        this.checkedCorporate = false;
+        this.individualOrCorporate = 'individual';
+      } else {
+        this.checkedIndividual = false;
+        this.checkedCorporate = true;
+        this.individualOrCorporate = 'corporate';
       }
     } else if (indOrCorp === 'corporate') {
-      this.checkedCorporate = selection;
-      if (this.checkedCorporate) {
-        this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate = false;
+      this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate = !selection;
+      if (selection) {
+        this.checkedIndividual = false;
+        this.checkedCorporate = true;
+        this.individualOrCorporate = 'corporate';
+      } else {
+        this.checkedIndividual = true;
+        this.checkedCorporate = false;
+        this.individualOrCorporate = 'individual';
       }
     }
     sessionStorage.setItem('selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate', this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate.toString());

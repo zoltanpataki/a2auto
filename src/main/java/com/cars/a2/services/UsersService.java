@@ -48,7 +48,7 @@ public class UsersService {
 
     public ResponseEntity<Object> updateUser(Users users) {
         try {
-            usersRepository.save(users);
+            Users updatedUser = usersRepository.saveAndFlush(users);
             return new ResponseEntity<>("User is updated!", HttpStatus.OK);
         } catch (Exception e) {
             logger.info(e.getMessage());
