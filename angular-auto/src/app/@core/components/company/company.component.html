@@ -44,8 +44,13 @@
     <mat-error *ngIf="!isCompleteAddress">
       Hiányzó adat a címből, kérlek ellenőrizd az irányítószámot, várost és címet!
     </mat-error>
-    <div class="saveButton">
-      <button mat-button>Mentés</button>
+    <div class="buttons">
+      <div class="saveButton">
+        <button mat-button>Mentés</button>
+      </div>
+      <div class="saveButton">
+        <button type="button" mat-button (click)="clearCompanyData()">Új felhasználó</button>
+      </div>
     </div>
   </form>
 </div>

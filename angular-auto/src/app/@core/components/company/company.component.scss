@@ -16,3 +16,9 @@ button:focus {
 mat-form-field {
   width: 150%;
 }
+
+.buttons{
+  display: flex;
+  justify-content: space-between;
+  width: 60%;
+}

@@ -100,6 +100,7 @@ export class SellingPageComponent implements OnInit{
 
       sessionStorage.setItem('clickedCarIndex', history.state.data.clickedCarIndex);
       sessionStorage.setItem('orderedCar', JSON.stringify(this.orderedCar));
+      sessionStorage.setItem('newCar', JSON.stringify(this.orderedCar));
       sessionStorage.setItem('order', JSON.stringify(this.order));
       sessionStorage.setItem('userSearchData', JSON.stringify(this.userSearchResult));
       sessionStorage.setItem('companySearchData', JSON.stringify(this.companySearchResult));

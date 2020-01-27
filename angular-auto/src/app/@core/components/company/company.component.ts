@@ -179,4 +179,10 @@ export class CompanyComponent implements OnInit {
     return capitalObject;
   }
 
+  private clearCompanyData() {
+    this.companyData = null;
+    sessionStorage.removeItem('newCompany');
+    this.ngOnInit();
+  }
+
 }
