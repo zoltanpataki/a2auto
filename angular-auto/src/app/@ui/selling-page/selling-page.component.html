@@ -162,7 +162,8 @@
           <p *ngIf="!orderedCar.price"><strong>vételára:</strong></p>
         </div>
         <div fxFlex="75">
-          <p><strong>Ft, azaz </strong></p>
+          <p *ngIf="priceInString.length > 0"><strong>Ft, azaz &#160;&#160;&#160;{{priceInString}} </strong></p>
+          <p *ngIf="priceInString.length == 0"><strong>Ft, azaz </strong></p>
         </div>
         <div fxFlex="5">
           <p><strong>forint</strong></p>

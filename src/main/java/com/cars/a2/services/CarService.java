@@ -38,7 +38,7 @@ public class CarService {
     public ResponseEntity<Object> getAllCars(String allOrSold) {
         try {
             Boolean isSold = "sold".equals(allOrSold);
-            Optional<List<Car>> cars = carRepository.findBySold(isSold);
+            Optional<List<Car>> cars = carRepository.findBySoldOrderByIdAsc(isSold);
             return new ResponseEntity<>(cars, HttpStatus.OK);
         } catch (Exception e) {
             logger.info(e.getMessage());

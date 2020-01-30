@@ -32,7 +32,7 @@ export class CarComponent implements OnInit {
     carRegistry: 'Forgalmi engedély száma'
   };
   public fieldTwo = {
-    vintage: 'Évjárat',
+    // vintage: 'Évjárat',
     mileage: 'Futott km',
     price: 'Vételár',
     // purchasingPrice: 'Beszerzési ár',
@@ -58,6 +58,7 @@ export class CarComponent implements OnInit {
   public fuelTypes = ['BENZIN', 'DÍZEL', 'GÁZ', 'HIBRID', 'ELEKTROMOS'];
   public carOrTruck = ['SZEMÉLYGÉPJÁRMŰ', 'TEHERGÉPJÁRMŰ'];
   private savedOrNot: boolean = true;
+  private notValidVintage: boolean = false;
 
   constructor(private httpService: HttpService,
               private utilService: UtilService,
@@ -97,10 +98,14 @@ export class CarComponent implements OnInit {
   public saveCar(form: any) {
     if (form.value.plateNumber.length < 6) {
       this.utilService.validPlateNumber = false;
+    } else if (isNaN(Number(form.value.vintage))) {
+      this.notValidVintage = true;
     } else if (this.utilService.carUpdate) {
+      this.notValidVintage = false;
       this.setValidPlateNumber();
       this.updateCar(form, this.carData.id);
     } else {
+      this.notValidVintage = false;
       this.setValidPlateNumber();
       this.saveOrUpdateCar(form);
     }

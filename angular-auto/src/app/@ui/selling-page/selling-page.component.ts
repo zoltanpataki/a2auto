@@ -39,6 +39,14 @@ export class SellingPageComponent implements OnInit{
   private buyerCompanyRepresentation: string;
   private remarkList;
   private typeOfBuying;
+  private singles = ['egy', 'kettő', 'három', 'négy', 'öt', 'hat', 'hét', 'nyolc', 'kilenc'];
+  private doublesWithZero = ['tíz', 'húsz'];
+  private doubles = ['tizen', 'huszon', 'harminc', 'negyven', 'ötven', 'hatvan', 'hetven', 'nyolcvan', 'kilencven'];
+  private hundred = 'száz';
+  private thousand = 'ezer';
+  private million = 'millió';
+  private hyphen = '-';
+  private priceInString = '';
 
   constructor(private utilService: UtilService,
               private httpService: HttpService,) { }
@@ -132,6 +140,175 @@ export class SellingPageComponent implements OnInit{
     if (this.orderedCar && !this.orderedCar.sold && this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer) {
       this.setStateOfCarToSold(this.orderedCar);
     }
+
+    if (this.orderedCar && this.orderedCar.price) {
+      this.turnPriceIntoText(this.orderedCar.price);
+    }
+  }
+
+  private turnPriceIntoText(price: number) {
+    const priceInString = price.toString();
+    let priceInText = '';
+    if (priceInString.length === 1) {
+      priceInText = priceInText + this.convertSingleIntoText(priceInString[0]);
+    } else if (priceInString.length === 2) {
+      priceInText = priceInText + this.convertAllDoublesIntoText(priceInString);
+    } else if (priceInString.length === 3) {
+      priceInText = priceInText + this.convertAllThreeDigitsIntoText(priceInString);
+    } else if (priceInString.length === 4) {
+      priceInText = priceInText + this.convertAllFourDigitsIntoText(priceInString);
+    } else if (priceInString.length === 5) {
+      priceInText = priceInText + this.convertAllFiveDigitsIntoText(priceInString);
+    } else if (priceInString.length === 6) {
+      priceInText = priceInText + this.convertAllSixDigitsIntoText(priceInString);
+    } else if (priceInString.length === 7) {
+      priceInText = priceInText + this.convertAllSevenDigitsIntoText(priceInString);
+    } else if (priceInString.length === 8) {
+      priceInText = priceInText + this.convertAllEightDigitsIntoText(priceInString);
+    } else if (priceInString.length === 9) {
+      priceInText = priceInText + this.convertAllNineDigitsIntoText(priceInString);
+    }
+    priceInText = priceInText.charAt(0).toUpperCase() + priceInText.slice(1);
+    console.log(priceInText);
+    this.priceInString = priceInText;
+  }
+
+  private convertSingleIntoText(digitInText: string): string {
+    const digit = Number(digitInText);
+    return this.singles[digit - 1];
+  }
+
+  private convertDoubleIntoText(digitInText: string): string {
+    const digit = Number(digitInText);
+    return this.doubles[digit - 1];
+  }
+
+  private convertAllDoublesIntoText(priceInString: string): string {
+    let priceInText = '';
+    if (Number(priceInString[0]) === 1 && Number(priceInString[1]) === 0) {
+      priceInText = priceInText + this.doublesWithZero[0];
+    } else if (Number(priceInString[0]) === 2 && Number(priceInString[1]) === 0) {
+      priceInText = priceInText + this.doublesWithZero[1];
+    } else if (Number(priceInString[1]) === 0) {
+      priceInText = priceInText + this.convertDoubleIntoText(priceInString[0]);
+    } else {
+      priceInText = priceInText + this.convertDoubleIntoText(priceInString[0]) + this.convertSingleIntoText(priceInString[1]);
+    }
+    return priceInText;
+  }
+
+  private convertAllThreeDigitsIntoText(priceInString: string): string {
+    let priceInText = '';
+    if (Number(priceInString[1]) === 0 && Number(priceInString[2]) === 0) {
+      priceInText = Number(priceInString[0]) === 1 ? priceInText + this.hundred : priceInText + this.convertSingleIntoText(priceInString[0]) + this.hundred;
+    } else if (Number(priceInString[1]) === 0) {
+      priceInText = Number(priceInString[0]) === 1 ? priceInText + this.hundred + this.convertSingleIntoText(priceInString[2]) : priceInText + this.convertSingleIntoText(priceInString[0]) + this.hundred + this.convertSingleIntoText(priceInString[2]);
+    } else {
+      priceInText = Number(priceInString[0]) === 1 ? priceInText + this.hundred + this.convertAllDoublesIntoText(priceInString.slice(1)) : priceInText + this.convertSingleIntoText(priceInString[0]) + this.hundred + this.convertAllDoublesIntoText(priceInString.slice(1));
+    }
+    return priceInText;
+  }
+
+  private convertAllFourDigitsIntoText(priceInString: string): string {
+    let priceInText = '';
+    if (Number(priceInString[1]) === 0 && Number(priceInString[2]) === 0 && Number(priceInString[3]) === 0) {
+      priceInText = Number(priceInString[0]) === 1 ? priceInText + this.thousand : priceInText + this.convertSingleIntoText(priceInString[0]) + this.thousand;
+    } else if (Number(priceInString[1]) === 0 && Number(priceInString[2]) === 0) {
+      priceInText = Number(priceInString[0]) === 1 ? priceInText + this.thousand + this.convertSingleIntoText(priceInString[3]) : priceInText + this.convertSingleIntoText(priceInString[0]) + this.thousand + this.hyphen + this.convertSingleIntoText(priceInString[3]);
+    } else if (Number(priceInString[1]) === 0) {
+      priceInText = Number(priceInString[0]) === 1 ? priceInText + this.thousand + this.convertAllDoublesIntoText(priceInString.slice(2)) : priceInText + this.convertSingleIntoText(priceInString[0]) + this.thousand + this.hyphen + this.convertAllDoublesIntoText(priceInString.slice(2));
+    } else {
+      priceInText = Number(priceInString[0]) === 1 ? priceInText + this.thousand + this.convertAllThreeDigitsIntoText(priceInString.slice(1)) : priceInText + this.convertSingleIntoText(priceInString[0]) + this.thousand + this.hyphen + this.convertAllThreeDigitsIntoText(priceInString.slice(1));
+    }
+    return priceInText;
+  }
+
+  private convertAllFiveDigitsIntoText(priceInString: string): string {
+    let priceInText = '';
+    if (Number(priceInString[2]) === 0 && Number(priceInString[3]) === 0 && Number(priceInString[4]) === 0) {
+      priceInText = priceInText + this.convertAllDoublesIntoText(priceInString.substring(0, 2)) + this.thousand;
+    } else if (Number(priceInString[2]) === 0 && Number(priceInString[3]) === 0) {
+      priceInText = priceInText + this.convertAllDoublesIntoText(priceInString.substring(0, 2)) + this.thousand + this.hyphen + this.convertSingleIntoText(priceInString[4]);
+    } else if (Number(priceInString[2]) === 0) {
+      priceInText = priceInText + this.convertAllDoublesIntoText(priceInString.substring(0, 2)) + this.thousand + this.hyphen + this.convertAllDoublesIntoText(priceInString.slice(3));
+    } else {
+      priceInText = priceInText + this.convertAllDoublesIntoText(priceInString.substring(0, 2)) + this.thousand + this.hyphen + this.convertAllThreeDigitsIntoText(priceInString.slice(2));
+    }
+    return priceInText;
+  }
+
+  private convertAllSixDigitsIntoText(priceInString: string): string {
+    let priceInText = '';
+    if (Number(priceInString[3]) === 0 && Number(priceInString[4]) === 0 && Number(priceInString[5]) === 0) {
+      priceInText = priceInText + this.convertAllThreeDigitsIntoText(priceInString.substring(0, 3)) + this.thousand;
+    } else if (Number(priceInString[3]) === 0 && Number(priceInString[4]) === 0) {
+      priceInText = priceInText + this.convertAllThreeDigitsIntoText(priceInString.substring(0, 3)) + this.thousand + this.hyphen + this.convertSingleIntoText(priceInString[5]);
+    } else if (Number(priceInString[3]) === 0) {
+      priceInText = priceInText + this.convertAllThreeDigitsIntoText(priceInString.substring(0, 3)) + this.thousand + this.hyphen + this.convertAllDoublesIntoText(priceInString.slice(4));
+    } else {
+      priceInText = priceInText + this.convertAllThreeDigitsIntoText(priceInString.substring(0, 3)) + this.thousand + this.hyphen + this.convertAllThreeDigitsIntoText(priceInString.slice(3));
+    }
+    return priceInText;
+  }
+
+  private convertAllSevenDigitsIntoText(priceInString: string): string {
+    let priceInText = '';
+    if (Number(priceInString[1]) === 0 && Number(priceInString[2]) === 0 && Number(priceInString[3]) === 0 && Number(priceInString[4]) === 0 && Number(priceInString[5]) === 0 && Number(priceInString[6]) === 0) {
+      priceInText = priceInText + this.convertSingleIntoText(priceInString[0]) + this.million;
+    } else if (Number(priceInString[1]) === 0 && Number(priceInString[2]) === 0 && Number(priceInString[3]) === 0 && Number(priceInString[4]) === 0 && Number(priceInString[5]) === 0) {
+      priceInText = priceInText + this.convertSingleIntoText(priceInString[0]) + this.million + this.hyphen + this.convertSingleIntoText(priceInString[6]);
+    } else if (Number(priceInString[1]) === 0 && Number(priceInString[2]) === 0 && Number(priceInString[3]) === 0 && Number(priceInString[4]) === 0) {
+      priceInText = priceInText + this.convertSingleIntoText(priceInString[0]) + this.million + this.hyphen + this.convertAllDoublesIntoText(priceInString.slice(5));
+    } else if (Number(priceInString[1]) === 0 && Number(priceInString[2]) === 0 && Number(priceInString[3]) === 0) {
+      priceInText = priceInText + this.convertSingleIntoText(priceInString[0]) + this.million + this.hyphen + this.convertAllThreeDigitsIntoText(priceInString.slice(4));
+    } else if (Number(priceInString[1]) === 0 && Number(priceInString[2]) === 0) {
+      priceInText = priceInText + this.convertSingleIntoText(priceInString[0]) + this.million + this.convertAllFourDigitsIntoText(priceInString.slice(3));
+    } else if (Number(priceInString[1]) === 0) {
+      priceInText = priceInText + this.convertSingleIntoText(priceInString[0]) + this.million + this.convertAllFiveDigitsIntoText(priceInString.slice(2));
+    } else {
+      priceInText = priceInText + this.convertSingleIntoText(priceInString[0]) + this.million + this.convertAllSixDigitsIntoText(priceInString.slice(1));
+    }
+    return priceInText;
+  }
+
+  private convertAllEightDigitsIntoText(priceInString: string): string {
+    let priceInText = '';
+    if (Number(priceInString[2]) === 0 && Number(priceInString[3]) === 0 && Number(priceInString[4]) === 0 && Number(priceInString[5]) === 0 && Number(priceInString[6]) === 0 && Number(priceInString[7]) === 0) {
+      priceInText = priceInText + this.convertAllDoublesIntoText(priceInString.substring(0, 2)) + this.million;
+    } else if (Number(priceInString[2]) === 0 && Number(priceInString[3]) === 0 && Number(priceInString[4]) === 0 && Number(priceInString[5]) === 0 && Number(priceInString[6]) === 0) {
+      priceInText = priceInText + this.convertAllDoublesIntoText(priceInString.substring(0, 2)) + this.million + this.hyphen + this.convertSingleIntoText(priceInString[7]);
+    } else if (Number(priceInString[2]) === 0 && Number(priceInString[3]) === 0 && Number(priceInString[4]) === 0 && Number(priceInString[5]) === 0) {
+      priceInText = priceInText + this.convertAllDoublesIntoText(priceInString.substring(0, 2)) + this.million + this.hyphen + this.convertAllDoublesIntoText(priceInString.slice(6));
+    } else if (Number(priceInString[2]) === 0 && Number(priceInString[3]) === 0 && Number(priceInString[4]) === 0) {
+      priceInText = priceInText + this.convertAllDoublesIntoText(priceInString.substring(0, 2)) + this.million + this.hyphen + this.convertAllThreeDigitsIntoText(priceInString.slice(5));
+    } else if (Number(priceInString[2]) === 0 && Number(priceInString[3]) === 0) {
+      priceInText = priceInText + this.convertAllDoublesIntoText(priceInString.substring(0, 2)) + this.million + this.convertAllFourDigitsIntoText(priceInString.slice(4));
+    } else if (Number(priceInString[2]) === 0) {
+      priceInText = priceInText + this.convertAllDoublesIntoText(priceInString.substring(0, 2)) + this.million + this.convertAllFiveDigitsIntoText(priceInString.slice(3));
+    } else {
+      priceInText = priceInText + this.convertAllDoublesIntoText(priceInString.substring(0, 2)) + this.million + this.convertAllSixDigitsIntoText(priceInString.slice(2));
+    }
+    return priceInText;
+  }
+
+  private convertAllNineDigitsIntoText(priceInString: string): string {
+    let priceInText = '';
+    if (Number(priceInString[3]) === 0 && Number(priceInString[4]) === 0 && Number(priceInString[5]) === 0 && Number(priceInString[6]) === 0 && Number(priceInString[7]) === 0 && Number(priceInString[8]) === 0) {
+      priceInText = priceInText + this.convertAllThreeDigitsIntoText(priceInString.substring(0, 3)) + this.million;
+    } else if (Number(priceInString[3]) === 0 && Number(priceInString[4]) === 0 && Number(priceInString[5]) === 0 && Number(priceInString[6]) === 0 && Number(priceInString[7]) === 0) {
+      priceInText = priceInText + this.convertAllThreeDigitsIntoText(priceInString.substring(0, 3)) + this.million + this.hyphen + this.convertSingleIntoText(priceInString[8]);
+    } else if (Number(priceInString[3]) === 0 && Number(priceInString[4]) === 0 && Number(priceInString[5]) === 0 && Number(priceInString[6]) === 0) {
+      priceInText = priceInText + this.convertAllThreeDigitsIntoText(priceInString.substring(0, 3)) + this.million + this.hyphen + this.convertAllDoublesIntoText(priceInString.slice(7));
+    } else if (Number(priceInString[3]) === 0 && Number(priceInString[4]) === 0 && Number(priceInString[5]) === 0) {
+      priceInText = priceInText + this.convertAllThreeDigitsIntoText(priceInString.substring(0, 3)) + this.million + this.hyphen + this.convertAllThreeDigitsIntoText(priceInString.slice(6));
+    } else if (Number(priceInString[3]) === 0 && Number(priceInString[4]) === 0) {
+      priceInText = priceInText + this.convertAllThreeDigitsIntoText(priceInString.substring(0, 3)) + this.million + this.convertAllFourDigitsIntoText(priceInString.slice(5));
+    } else if (Number(priceInString[3]) === 0) {
+      priceInText = priceInText + this.convertAllThreeDigitsIntoText(priceInString.substring(0, 3)) + this.million + this.convertAllFiveDigitsIntoText(priceInString.slice(4));
+    } else {
+      priceInText = priceInText + this.convertAllThreeDigitsIntoText(priceInString.substring(0, 3)) + this.million + this.convertAllSixDigitsIntoText(priceInString.slice(3));
+    }
+    return priceInText;
   }
 
   public captureScreen() {
