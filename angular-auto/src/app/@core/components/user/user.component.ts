@@ -37,10 +37,11 @@ export class UserComponent implements OnInit {
   public fieldsOne = {
     fullName: 'Teljes Név',
     birthName: 'Születéskori Név',
-    zipCode: 'Irányítószám',
+    phoneNumber: 'Telefonszám',
+  };
+  public fieldsAddress = {
     city: 'Város',
-    address: 'Lakcím',
-    phoneNumber: 'Telefonszám'
+    address: 'Lakcím'
   };
   public fieldsTwo = {
     birthPlace: 'Születési hely',
@@ -133,6 +134,16 @@ export class UserComponent implements OnInit {
     }
   }
 
+  private checkZipCode(form: any) {
+    if (form.value.zipCode && form.value.zipCode.length === 4 && !isNaN(form.value.zipCode)) {
+      this.httpService.callZipCodeService(form.value.zipCode).subscribe(data => {
+        this.userData.city = (data[0].telepules).toUpperCase();
+        form.value.city = (data[0].telepules).toUpperCase();
+        this.itemChanged(form);
+      });
+    }
+  }
+
   private createUserObj(form: any, updateOrNew: boolean): Users {
     const capitalObject = this.transformToCapitalData(form);
     if (updateOrNew) {
@@ -140,7 +151,7 @@ export class UserComponent implements OnInit {
         this.userData.id,
         capitalObject['capitalFullName'],
         capitalObject['capitalBirthName'],
-        capitalObject['capitalZipCode'],
+        form.value.zipCode,
         capitalObject['capitalCity'],
         capitalObject['capitalAddress'],
         capitalObject['capitalBirthPlace'],
@@ -161,7 +172,7 @@ export class UserComponent implements OnInit {
         null,
         capitalObject['capitalFullName'],
         capitalObject['capitalBirthName'],
-        capitalObject['capitalZipCode'],
+        form.value.zipCode,
         capitalObject['capitalCity'],
         capitalObject['capitalAddress'],
         capitalObject['capitalBirthPlace'],
@@ -189,20 +200,23 @@ export class UserComponent implements OnInit {
   }
 
   private itemChanged(form: any) {
-    let user;
-    if (this.userData.id == null) {
-      user = this.createUserObj(form, false);
+    if (Object.entries(form.value).length === 0 && form.value.constructor === Object) {
+      //we don't do anything, the object is empty
     } else {
-      user = this.createUserObj(form, true);
+      let user;
+      if (this.userData.id == null) {
+        user = this.createUserObj(form, false);
+      } else {
+        user = this.createUserObj(form, true);
+      }
+      sessionStorage.setItem('newUser', JSON.stringify(user));
     }
-    sessionStorage.setItem('newUser', JSON.stringify(user));
   }
 
   private transformToCapitalData(form: any): Object {
     const capitalObject = {};
     capitalObject['capitalFullName'] = form.value.fullName != null ? form.value.fullName.toUpperCase() : null;
     capitalObject['capitalBirthName'] = form.value.birthName != null ? form.value.birthName.toUpperCase() : null;
-    capitalObject['capitalZipCode'] = form.value.zipCode != null ? form.value.zipCode.toUpperCase() : null;
     capitalObject['capitalCity'] = form.value.city != null ? form.value.city.toUpperCase() : null;
     capitalObject['capitalAddress'] = form.value.address != null ? form.value.address.toUpperCase() : null;
     capitalObject['capitalBirthPlace'] = form.value.birthPlace != null ? form.value.birthPlace.toUpperCase() : null;

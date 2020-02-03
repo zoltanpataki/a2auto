@@ -11,6 +11,20 @@
               </label>
             </mat-form-field>
           </div>
+          <div>
+            <mat-form-field class="example-full-width">
+              <label>
+                <input matInput placeholder="Irányítószám" maxlength="4" type="text" pattern="\d*" (ngModelChange)="itemChanged(userForm); checkZipCode(userForm)" ngModel="{{userData.zipCode}}" name="zipCode">
+              </label>
+            </mat-form-field>
+          </div>
+          <div *ngFor="let item of fieldsAddress | keyvalue:keepOriginalOrder; trackBy: trackByFn">
+            <mat-form-field class="example-full-width">
+              <label>
+                <input matInput placeholder="{{item.value}}" (ngModelChange)="itemChanged(userForm)" ngModel="{{userData[item.key]}}" name="{{item.key}}">
+              </label>
+            </mat-form-field>
+          </div>
         </div>
         <div class="middle">
           <div>
