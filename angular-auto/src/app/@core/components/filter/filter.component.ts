@@ -679,10 +679,10 @@ export class FilterComponent implements OnInit {
   private evaluateCarOfContract(resultOfCarTimeInfoDialog: any, orderedCarId: number, descriptionForm: FormGroup, countInCarSupplementForm: FormGroup) {
     if (this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer) {
       this.carOfTransaction = resultOfCarTimeInfoDialog.car;
-      this.navigateToOrderOrSellingOrWarrantOrInsurancePage(this.carOfTransaction, orderedCarId, '/sellingPage', resultOfCarTimeInfoDialog.witness1, resultOfCarTimeInfoDialog.witness2, null, resultOfCarTimeInfoDialog.representation, descriptionForm, countInCarSupplementForm);
+      this.navigateToOrderOrSellingOrWarrantOrInsurancePage(this.carOfTransaction, orderedCarId, '/sellingPage', resultOfCarTimeInfoDialog.witness1, resultOfCarTimeInfoDialog.witness2, null, resultOfCarTimeInfoDialog.representation, descriptionForm, countInCarSupplementForm, resultOfCarTimeInfoDialog.typeOfBuying);
     } else {
       this.countInCar = resultOfCarTimeInfoDialog.car;
-      this.navigateToOrderOrSellingOrWarrantOrInsurancePage(this.countInCar, orderedCarId, '/sellingPage', resultOfCarTimeInfoDialog.witness1, resultOfCarTimeInfoDialog.witness2, null, resultOfCarTimeInfoDialog.representation, descriptionForm, countInCarSupplementForm);
+      this.navigateToOrderOrSellingOrWarrantOrInsurancePage(this.countInCar, orderedCarId, '/sellingPage', resultOfCarTimeInfoDialog.witness1, resultOfCarTimeInfoDialog.witness2, null, resultOfCarTimeInfoDialog.representation, descriptionForm, countInCarSupplementForm, resultOfCarTimeInfoDialog.typeOfBuying);
     }
   }
 
@@ -697,7 +697,7 @@ export class FilterComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       if (result != null) {
-        this.navigateToOrderOrSellingOrWarrantOrInsurancePage(this.carOfTransaction, this.carOfTransaction.id, '/warrantPage', result.witness1, result.witness2, result.warrantType, null, descriptionForm, countInCarSupplementForm);
+        this.navigateToOrderOrSellingOrWarrantOrInsurancePage(this.carOfTransaction, this.carOfTransaction.id, '/warrantPage', result.witness1, result.witness2, result.warrantType, null, descriptionForm, countInCarSupplementForm, null);
       }
     });
   }
@@ -946,6 +946,9 @@ export class FilterComponent implements OnInit {
     this.selectedTypeOfBuying = type;
     this.carOfTransaction.typeOfBuying = type;
     this.httpService.updateCar(this.carOfTransaction).subscribe(data => {
+      this.carOfTransaction = data;
+      this.selectedCars[this.clickedCarIndex] = data;
+      sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
     });
     if (this.selectedTypeOfBuying === 'HITEL') {
       this.openCreditModal(this.carOfTransaction);
@@ -1134,7 +1137,7 @@ export class FilterComponent implements OnInit {
     this.giftIndexList.splice(index, 1);
   }
 
-  private navigateToOrderOrSellingOrWarrantOrInsurancePage(car: Car, orderedCarId: number, targetRoute: string,  witness1: Witness, witness2: Witness, warrantType: string, a2Representation: string, descriptionForm: FormGroup, countInCarSupplementForm: FormGroup) {
+  private navigateToOrderOrSellingOrWarrantOrInsurancePage(car: Car, orderedCarId: number, targetRoute: string,  witness1: Witness, witness2: Witness, warrantType: string, a2Representation: string, descriptionForm: FormGroup, countInCarSupplementForm: FormGroup, pickedTypeOfBuyingForCountInCar: string) {
     if (this.downPayment != null) {
       car.downPayment = this.downPayment;
       this.updateCarOfTransaction(car);
@@ -1171,7 +1174,7 @@ export class FilterComponent implements OnInit {
         this.descriptionList,
         this.listOfDescriptionsWithAmount);
       this.httpService.saveOrder(this.newOrder).subscribe(order => {
-        this.prepareNavigationToOrderPageOrSellingPageOrWarrantPageOrInsurancePage(order, car, witness1, witness2, targetRoute, warrantType, a2Representation);
+        this.prepareNavigationToOrderPageOrSellingPageOrWarrantPageOrInsurancePage(order, car, witness1, witness2, targetRoute, warrantType, a2Representation, pickedTypeOfBuyingForCountInCar);
       });
     } else {
       this.newOrder.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready;
@@ -1191,12 +1194,12 @@ export class FilterComponent implements OnInit {
       this.newOrder.description = this.descriptionList;
       this.newOrder.descriptionsWithAmount = this.listOfDescriptionsWithAmount;
       this.httpService.updateOrder(this.newOrder).subscribe(order => {
-        this.prepareNavigationToOrderPageOrSellingPageOrWarrantPageOrInsurancePage(<Order> order, car, witness1, witness2, targetRoute, warrantType, a2Representation);
+        this.prepareNavigationToOrderPageOrSellingPageOrWarrantPageOrInsurancePage(<Order> order, car, witness1, witness2, targetRoute, warrantType, a2Representation, pickedTypeOfBuyingForCountInCar);
       });
     }
   }
 
-  private prepareNavigationToOrderPageOrSellingPageOrWarrantPageOrInsurancePage(order: Order, car: Car, witness1: Witness, witness2: Witness, orderOrSellingOrWarrant: string, warrantType: string, a2Representation: string) {
+  private prepareNavigationToOrderPageOrSellingPageOrWarrantPageOrInsurancePage(order: Order, car: Car, witness1: Witness, witness2: Witness, orderOrSellingOrWarrant: string, warrantType: string, a2Representation: string, pickedTypeOfBuyingForCountInCar: string) {
     console.log(order);
     sessionStorage.setItem('order', JSON.stringify(this.newOrder));
     sessionStorage.setItem('orderedCar', JSON.stringify(car));
@@ -1214,7 +1217,8 @@ export class FilterComponent implements OnInit {
           witness1: witness1,
           witness2: witness2,
           warrantType: warrantType,
-          a2Representation: a2Representation
+          a2Representation: a2Representation,
+          typeOfBuying: pickedTypeOfBuyingForCountInCar
         }}});
   }
 
@@ -1231,7 +1235,7 @@ export class FilterComponent implements OnInit {
   }
 
   private navigateToInsurancePage(car: Car, descriptionForm: FormGroup, countInCarSupplementForm: FormGroup) {
-    this.navigateToOrderOrSellingOrWarrantOrInsurancePage(car, car.id, '/insurance', null, null, null, null, descriptionForm, countInCarSupplementForm);
+    this.navigateToOrderOrSellingOrWarrantOrInsurancePage(car, car.id, '/insurance', null, null, null, null, descriptionForm, countInCarSupplementForm, null);
   }
 
   private openWitnessPickerForWarrantPage(descriptionForm: FormGroup, countInCarSupplementForm: FormGroup) {

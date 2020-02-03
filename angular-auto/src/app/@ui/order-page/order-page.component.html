@@ -146,61 +146,114 @@
         <div class="silverCenter border">
           <p class="sectionLiner">Vevő adatai:</p>
         </div>
-        <div class="border">
-          <p *ngIf="order && order.users && order.users.fullName" class="texts">Név: <strong>{{order.users.fullName}}</strong></p>
-          <p *ngIf="!order || order && !order.users || order.users && !order.users.fullName" class="texts">Név:</p>
+        <div *ngIf="order && order.users">
+          <div class="border">
+            <p *ngIf="order && order.users && order.users.fullName" class="texts">Név: <strong>{{order.users.fullName}}</strong></p>
+            <p *ngIf="!order || order && !order.users || order.users && !order.users.fullName" class="texts">Név:</p>
+          </div>
+          <div class="border">
+            <p *ngIf="order && order.users && order.users.birthName" class="texts">Születési név: <strong>{{order.users.birthName}}</strong></p>
+            <p *ngIf="!order || order && !order.users || order.users && !order.users.birthName" class="texts">Születési név:</p>
+          </div>
+          <div class="border">
+            <p *ngIf="order && order.users && order.users.city" class="texts">Helység: <strong>{{order.users.city}}</strong></p>
+            <p *ngIf="!order || order && !order.users || order.users && !order.users.city" class="texts">Helység:</p>
+          </div>
+          <div class="border">
+            <p *ngIf="order && order.users && order.users.address"class="texts">Cím: <strong>{{order.users.address}}</strong></p>
+            <p *ngIf="!order || order && !order.users || order.users && !order.users.address" class="texts">Cím:</p>
+          </div>
+          <div class="border">
+            <p *ngIf="order && order.users && order.users.phoneNumber" class="texts">Telefon: <strong>{{order.users.phoneNumber}}</strong></p>
+            <p *ngIf="!order || order && !order.users || order.users && !order.users.phoneNumber" class="texts">Telefon:</p>
+          </div>
+          <div class="border">
+            <p *ngIf="order && order.users && order.users.email" class="texts">E-mail: <strong>{{order.users.email}}</strong></p>
+            <p *ngIf="!order || order && !order.users || order.users && !order.users.email" class="texts">E-mail:</p>
+          </div>
+          <div class="border">
+            <p *ngIf="order && order && order.users && order.users.birthPlace" class="texts">Születési hely: <strong>{{order.users.birthPlace}}</strong></p>
+            <p *ngIf="!order || order && !order || order && !order.users || order.users && !order.users.birthPlace" class="texts">Születési hely:</p>
+          </div>
+          <div class="border">
+            <p *ngIf="order && order.users && order.users.birthDate" class="texts">Születési idő: <strong>{{order.users.birthDate | date:'yyyy-MM-dd'}}</strong></p>
+            <p *ngIf="!order || order && !order.users || order.users && !order.users.birthDate" class="texts">Születési idő:</p>
+          </div>
+          <div class="border">
+            <p *ngIf="order && order.users && order.users.personNumber" class="texts">Személyi szám: <strong>{{order.users.personNumber}}</strong></p>
+            <p *ngIf="!order || order && !order.users || order.users && !order.users.personNumber" class="texts">Személyi szám:</p>
+          </div>
+          <div class="border">
+            <p *ngIf="order && order.users && order.users.nameOfMother" class="texts">Anyja neve: <strong>{{order.users.nameOfMother}}</strong></p>
+            <p *ngIf="!order || order && !order.users || order.users && !order.users.nameOfMother" class="texts">Anyja neve:</p>
+          </div>
+          <div class="border">
+            <p *ngIf="order && order.users && order.users.idCardNumber" class="texts">Személyi ig. szám: <strong>{{order.users.idCardNumber}}</strong></p>
+            <p *ngIf="!order || order && !order.users || order.users && !order.users.idCardNumber" class="texts">Személyi ig. szám:</p>
+          </div>
+          <div class="border">
+            <p *ngIf="order && order.users && order.users.dueTimeOfIdCard" class="texts">Személyi ig. érvényesség: <strong>{{order.users.dueTimeOfIdCard | date:'MM/yy'}}</strong></p>
+            <p *ngIf="!order || order && !order.users || order.users && !order.users.dueTimeOfIdCard" class="texts">Személyi ig. érvényesség:</p>
+          </div>
+          <div class="border">
+            <p *ngIf="order && order.users && order.users.drivingLicenceNumber" class="texts">Jogosítvány szám: <strong>{{order.users.drivingLicenceNumber}}</strong></p>
+            <p *ngIf="!order || order && !order.users || order.users && !order.users.drivingLicenceNumber" class="texts">Jogosítvány szám:</p>
+          </div>
+          <div class="border">
+            <p *ngIf="order && order.users && order.users.dueTimeOfDrivingLicence" class="texts">Jogosítvány lejárata: <strong>{{order.users.dueTimeOfDrivingLicence | date:'yyyy-MM-dd'}}</strong></p>
+            <p *ngIf="!order || order && !order.users || order.users && !order.users.dueTimeOfDrivingLicence" class="texts">Jogosítvány lejárata:</p>
+          </div>
         </div>
-        <div class="border">
-          <p *ngIf="order && order.users && order.users.birthName" class="texts">Születési név: <strong>{{order.users.birthName}}</strong></p>
-          <p *ngIf="!order || order && !order.users || order.users && !order.users.birthName" class="texts">Születési név:</p>
-        </div>
-        <div class="border">
-          <p *ngIf="order && order.users && order.users.city" class="texts">Helység: <strong>{{order.users.city}}</strong></p>
-          <p *ngIf="!order || order && !order.users || order.users && !order.users.city" class="texts">Helység:</p>
-        </div>
-        <div class="border">
-          <p *ngIf="order && order.users && order.users.address"class="texts">Cím: <strong>{{order.users.address}}</strong></p>
-          <p *ngIf="!order || order && !order.users || order.users && !order.users.address" class="texts">Cím:</p>
-        </div>
-        <div class="border">
-          <p *ngIf="order && order.users && order.users.phoneNumber" class="texts">Telefon: <strong>{{order.users.phoneNumber}}</strong></p>
-          <p *ngIf="!order || order && !order.users || order.users && !order.users.phoneNumber" class="texts">Telefon:</p>
-        </div>
-        <div class="border">
-          <p *ngIf="order && order.users && order.users.email" class="texts">E-mail: <strong>{{order.users.email}}</strong></p>
-          <p *ngIf="!order || order && !order.users || order.users && !order.users.email" class="texts">E-mail:</p>
-        </div>
-        <div class="border">
-          <p *ngIf="order && order && order.users && order.users.birthPlace" class="texts">Születési hely: <strong>{{order.users.birthPlace}}</strong></p>
-          <p *ngIf="!order || order && !order || order && !order.users || order.users && !order.users.birthPlace" class="texts">Születési hely:</p>
-        </div>
-        <div class="border">
-          <p *ngIf="order && order.users && order.users.birthDate" class="texts">Születési idő: <strong>{{order.users.birthDate | date:'yyyy-MM-dd'}}</strong></p>
-          <p *ngIf="!order || order && !order.users || order.users && !order.users.birthDate" class="texts">Születési idő:</p>
-        </div>
-        <div class="border">
-          <p *ngIf="order && order.users && order.users.personNumber" class="texts">Személyi szám: <strong>{{order.users.personNumber}}</strong></p>
-          <p *ngIf="!order || order && !order.users || order.users && !order.users.personNumber" class="texts">Személyi szám:</p>
-        </div>
-        <div class="border">
-          <p *ngIf="order && order.users && order.users.nameOfMother" class="texts">Anyja neve: <strong>{{order.users.nameOfMother}}</strong></p>
-          <p *ngIf="!order || order && !order.users || order.users && !order.users.nameOfMother" class="texts">Anyja neve:</p>
-        </div>
-        <div class="border">
-          <p *ngIf="order && order.users && order.users.idCardNumber" class="texts">Személyi ig. szám: <strong>{{order.users.idCardNumber}}</strong></p>
-          <p *ngIf="!order || order && !order.users || order.users && !order.users.idCardNumber" class="texts">Személyi ig. szám:</p>
-        </div>
-        <div class="border">
-          <p *ngIf="order && order.users && order.users.dueTimeOfIdCard" class="texts">Személyi ig. érvényesség: <strong>{{order.users.dueTimeOfIdCard | date:'MM/yy'}}</strong></p>
-          <p *ngIf="!order || order && !order.users || order.users && !order.users.dueTimeOfIdCard" class="texts">Személyi ig. érvényesség:</p>
-        </div>
-        <div class="border">
-          <p *ngIf="order && order.users && order.users.drivingLicenceNumber" class="texts">Jogosítvány szám: <strong>{{order.users.drivingLicenceNumber}}</strong></p>
-          <p *ngIf="!order || order && !order.users || order.users && !order.users.drivingLicenceNumber" class="texts">Jogosítvány szám:</p>
-        </div>
-        <div class="border">
-          <p *ngIf="order && order.users && order.users.dueTimeOfDrivingLicence" class="texts">Jogosítvány lejárata: <strong>{{order.users.dueTimeOfDrivingLicence | date:'yyyy-MM-dd'}}</strong></p>
-          <p *ngIf="!order || order && !order.users || order.users && !order.users.dueTimeOfDrivingLicence" class="texts">Jogosítvány lejárata:</p>
+        <div *ngIf="order && order.company">
+          <div class="border">
+            <p *ngIf="order && order.company && order.company.name" class="texts">Név: <strong>{{order.company.name}}</strong></p>
+            <p *ngIf="!order || order && !order.company || order.company && !order.company.name" class="texts">Név:</p>
+          </div>
+          <div class="border">
+            <p *ngIf="order && order.company && order.company.address" class="texts">Cím: <strong>{{order.company.address.zipcode}}&#160;{{order.company.address.city}}&#160;{{order.company.address.address}}</strong></p>
+            <p *ngIf="!order || order && !order.company || order.company && !order.company.address" class="texts">Cím:</p>
+          </div>
+          <div class="border">
+            <p *ngIf="order && order.company && order.company.companyRegistrationNumber" class="texts">Cégjegyzékszám: <strong>{{order.company.companyRegistrationNumber}}</strong></p>
+            <p *ngIf="!order || order && !order.company || order.company && !order.company.companyRegistrationNumber" class="texts">Cégjegyzékszám:</p>
+          </div>
+          <div class="border">
+            <p *ngIf="order && order.company && order.company.representation" class="texts">Képviselő: <strong>{{order.company.representation}}</strong></p>
+            <p *ngIf="!order || order && !order.company || order.company && !order.company.representation" class="texts">Képviselő:</p>
+          </div>
+          <div class="border">
+            <p *ngIf="order && order.company && order.company.taxNumber" class="texts">Adószám: <strong>{{order.company.taxNumber}}</strong></p>
+            <p *ngIf="!order || order && !order.company || order.company && !order.company.taxNumber" class="texts">Adószám:</p>
+          </div>
+          <div class="border">
+            <p *ngIf="order && order.company && order.company.phoneNumber" class="texts">Telefonszám: <strong>{{order.company.phoneNumber}}</strong></p>
+            <p *ngIf="!order || order && !order.company || order.company && !order.company.phoneNumber" class="texts">Telefonszám:</p>
+          </div>
+          <div class="border">
+            <p *ngIf="order && order.company && order.company.email" class="texts">E-mail: <strong>{{order.company.email}}</strong></p>
+            <p *ngIf="!order || order && !order.company || order.company && !order.company.email" class="texts">E-mail:</p>
+          </div>
+          <div class="border">
+            <p>&#160;</p>
+          </div>
+          <div class="border">
+            <p>&#160;</p>
+          </div>
+          <div class="border">
+            <p>&#160;</p>
+          </div>
+          <div class="border">
+            <p>&#160;</p>
+          </div>
+          <div class="border">
+            <p>&#160;</p>
+          </div>
+          <div class="border">
+            <p>&#160;</p>
+          </div>
+          <div class="border">
+            <p>&#160;</p>
+          </div>
         </div>
         <div class="silverCenter border">
           <p class="sectionLiner">Beszámított gépjármű:</p>

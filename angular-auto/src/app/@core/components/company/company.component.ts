@@ -35,7 +35,7 @@ export class CompanyComponent implements OnInit {
   public orderProgress: EventEmitter<any> = new EventEmitter<any>();
   @Output()
   public newCompany: EventEmitter<any> = new EventEmitter<any>();
-  public fields = {country: 'Ország', zipcode: 'Irányítószám', city: 'Város', address: 'Cím'};
+  public fields = {city: 'Város', address: 'Cím', country: 'Ország'};
   public fields2 = {companyRegistrationNumber: 'Cégjegyzékszám', representation: 'Képviselő', taxNumber: 'Adószám', phoneNumber: 'Telefonszám'};
   public keepOriginalOrder = (a, b) => a.key;
   private currentUrl;
@@ -116,13 +116,27 @@ export class CompanyComponent implements OnInit {
   }
 
   private itemChanged(form: any) {
-    let company;
-    if (this.companyData.id == null) {
-      company = this.createCompanyObj(form, false);
+    if (Object.entries(form.value).length === 0 && form.value.constructor === Object) {
+      //we don't do anything, the object is empty
     } else {
-      company = this.createCompanyObj(form, true);
+      let company;
+      if (this.companyData.id == null) {
+        company = this.createCompanyObj(form, false);
+      } else {
+        company = this.createCompanyObj(form, true);
+      }
+      sessionStorage.setItem('newCompany', JSON.stringify(company));
     }
-    sessionStorage.setItem('newCompany', JSON.stringify(company));
+  }
+
+  private checkZipCode(form: any) {
+    if (form.value.zipcode && form.value.zipcode.length === 4 && !isNaN(form.value.zipcode)) {
+      this.httpService.callZipCodeService(form.value.zipcode).subscribe(data => {
+        this.companyData.address.city = (data[0].telepules).toUpperCase();
+        form.value.city = (data[0].telepules).toUpperCase();
+        this.itemChanged(form);
+      });
+    }
   }
 
   private createCompanyObj(form: any, updateOrNew: boolean): Company {
@@ -133,7 +147,7 @@ export class CompanyComponent implements OnInit {
         capitalObject['capitalName'],
         new Address(
           this.companyData.address.id,
-          capitalObject['capitalZipCode'],
+          form.value.zipcode,
           capitalObject['capitalCountry'],
           capitalObject['capitalCity'],
           capitalObject['capitalAddress'],
@@ -150,7 +164,7 @@ export class CompanyComponent implements OnInit {
         capitalObject['capitalName'],
         new Address(
           null,
-          capitalObject['capitalZipCode'],
+          form.value.zipcode,
           capitalObject['capitalCountry'],
           capitalObject['capitalCity'],
           capitalObject['capitalAddress'],
@@ -167,7 +181,6 @@ export class CompanyComponent implements OnInit {
   private transformToCapitalData(form: any): Object {
     const capitalObject = {};
     capitalObject['capitalName'] = form.value.name != null ? form.value.name.toUpperCase() : null;
-    capitalObject['capitalZipCode'] = form.value.zipcode != null ? form.value.zipcode.toUpperCase() : null;
     capitalObject['capitalCity'] = form.value.city != null ? form.value.city.toUpperCase() : null;
     capitalObject['capitalCountry'] = form.value.country != null ? form.value.country.toUpperCase() : null;
     capitalObject['capitalAddress'] = form.value.address != null ? form.value.address.toUpperCase() : null;

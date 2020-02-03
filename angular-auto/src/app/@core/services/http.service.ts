@@ -9,9 +9,10 @@ import {Witness} from "../models/witness";
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type':  'application/json',
-    'Access-Control-Allow-Origin': 'http://localhost:8080',
+    'Access-Control-Allow-Origin': 'http://localhost:4200',
+    'Access-Control-Allow-Credentials': 'true',
     'Access-Control-Allow-Methods': 'DELETE, POST, GET, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With',
+    'Access-Control-Allow-Headers': 'Origin, Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With',
   })
 };
 
@@ -174,5 +175,11 @@ export class HttpService {
       headers: httpOptions.headers,
       responseType: 'text',
     });
+  }
+
+  public callZipCodeService(zipcode: string): Observable<any> {
+    const corsUrl = 'https://cors-anywhere.herokuapp.com/';
+    const baseZipCodeUrl = 'https://irmeva.herokuapp.com/api/v1/node?irsz=';
+    return this.http.get(corsUrl + baseZipCodeUrl + Number(zipcode), httpOptions);
   }
 }

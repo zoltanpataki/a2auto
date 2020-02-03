@@ -11,6 +11,13 @@
               </label>
             </mat-form-field>
           </div>
+          <div>
+            <mat-form-field class="example-full-width">
+              <label>
+                <input matInput placeholder="Irányítószám" maxlength="4" type="text" pattern="\d*" (ngModelChange)="itemChanged(companyForm); checkZipCode(companyForm)" ngModel="{{companyData.address.zipcode}}" name="zipcode">
+              </label>
+            </mat-form-field>
+          </div>
           <div *ngFor="let item of fields | keyvalue:keepOriginalOrder; trackBy: trackByFn">
             <mat-form-field class="example-full-width">
               <label>

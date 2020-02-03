@@ -24,14 +24,67 @@
         </div>
       </div>
       <mat-divider></mat-divider>
-      <div class="witnessContainer">
-        <div class="leftSide">
+      <div *ngIf="sellOrBuy == 'sell'" >
+        <div class="witnessContainer">
+          <div class="leftSide">
+            <div>
+              <mat-form-field class="example-full-width">
+                <mat-label>Tanú 1</mat-label>
+                <mat-select ngModel placeholder="Név" name="witness1">
+                  <mat-option *ngFor="let witness of utilService.witnesses; trackBy: trackByFn" [value]="witness">
+                    {{witness.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="rightSide">
+            <div>
+              <mat-form-field class="example-full-width">
+                <mat-label>Tanú 2</mat-label>
+                <mat-select ngModel placeholder="Név" name="witness2">
+                  <mat-option *ngFor="let witness of utilService.witnesses; trackBy: trackByFn" [value]="witness">
+                    {{witness.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <mat-divider></mat-divider>
+        <div class="representationContainer">
           <div>
             <mat-form-field class="example-full-width">
-              <mat-label>Tanú 1</mat-label>
-              <mat-select ngModel placeholder="Név" name="witness1">
-                <mat-option *ngFor="let witness of utilService.witnesses; trackBy: trackByFn" [value]="witness">
-                  {{witness.name}}
+              <mat-label>A2 Képviselő</mat-label>
+              <mat-select ngModel placeholder="Név" name="representation">
+                <mat-option *ngFor="let representation of listOfA2Representation; trackBy: trackByFn" [value]="representation">
+                  {{representation}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="sellOrBuy == 'buy'" class="witnessContainer">
+        <div>
+          <div class="leftSide">
+            <div>
+              <mat-form-field class="example-full-width">
+                <mat-label>Tanú 1</mat-label>
+                <mat-select ngModel placeholder="Név" name="witness1">
+                  <mat-option *ngFor="let witness of utilService.witnesses; trackBy: trackByFn" [value]="witness">
+                    {{witness.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div>
+            <mat-form-field class="example-full-width">
+              <mat-label>A2 Képviselő</mat-label>
+              <mat-select ngModel placeholder="Név" name="representation">
+                <mat-option *ngFor="let representation of listOfA2Representation; trackBy: trackByFn" [value]="representation">
+                  {{representation}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -39,30 +92,30 @@
         </div>
         <div class="rightSide">
           <div>
-            <mat-form-field class="example-full-width">
-              <mat-label>Tanú 2</mat-label>
-              <mat-select ngModel placeholder="Név" name="witness2">
-                <mat-option *ngFor="let witness of utilService.witnesses; trackBy: trackByFn" [value]="witness">
-                  {{witness.name}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
+            <div>
+              <mat-form-field class="example-full-width">
+                <mat-label>Tanú 2</mat-label>
+                <mat-select ngModel placeholder="Név" name="witness2">
+                  <mat-option *ngFor="let witness of utilService.witnesses; trackBy: trackByFn" [value]="witness">
+                    {{witness.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field class="example-full-width">
+                <mat-label>Vásárlás típusa</mat-label>
+                <mat-select ngModel placeholder="Típus" name="typeOfBuying">
+                  <mat-option *ngFor="let type of listOfTypeOfBuying; trackBy: trackByFn" [value]="type">
+                    {{type}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
           </div>
         </div>
       </div>
       <mat-divider></mat-divider>
-      <div class="representationContainer">
-        <div>
-          <mat-form-field class="example-full-width">
-            <mat-label>A2 Képviselő</mat-label>
-            <mat-select ngModel placeholder="Név" name="representation">
-              <mat-option *ngFor="let representation of listOfA2Representation; trackBy: trackByFn" [value]="representation">
-                {{representation}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-      </div>
       <div class="buttons">
         <div class="saveButton">
           <button mat-button>Tovább az adás-vételi megjegyzésekhez</button>
