@@ -20,14 +20,14 @@ export class Order {
   company: Company;
   countInCarSupplement: CountInCarSupplement;
   credit: Credit;
-  countInCar: Car;
+  countInCarId: number;
   carId: number;
   description: Description[];
   descriptionsWithAmount: DescriptionWithAmount[];
 
 
 
-  constructor(id: number, alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready: boolean, selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate: boolean, wantInheritanceTaxCalculation: boolean, inheritanceTax: number, thereIsCountInCar: boolean, downPayment: number, extra: number, selectedTypeOfBuying: string, users: Users, company: Company, countInCarSupplement: CountInCarSupplement, credit: Credit, countInCar: Car, carId: number, description: Description[], descriptionsWithAmount: DescriptionWithAmount[]) {
+  constructor(id: number, alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready: boolean, selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate: boolean, wantInheritanceTaxCalculation: boolean, inheritanceTax: number, thereIsCountInCar: boolean, downPayment: number, extra: number, selectedTypeOfBuying: string, users: Users, company: Company, countInCarSupplement: CountInCarSupplement, credit: Credit, countInCarId: number, carId: number, description: Description[], descriptionsWithAmount: DescriptionWithAmount[]) {
     this.id = id;
     this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready;
     this.selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate = selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate;
@@ -41,7 +41,7 @@ export class Order {
     this.company = company;
     this.countInCarSupplement = countInCarSupplement;
     this.credit = credit;
-    this.countInCar = countInCar;
+    this.countInCarId = countInCarId;
     this.carId = carId;
     this.description = description;
     this.descriptionsWithAmount = descriptionsWithAmount;

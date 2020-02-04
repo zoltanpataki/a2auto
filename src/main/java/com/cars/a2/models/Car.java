@@ -52,8 +52,6 @@ public class Car {
     private String fuelType;
     private String nameOfBuyer;
 
-    @OneToOne(mappedBy = "countInCar", cascade = CascadeType.REMOVE)
-    private Order order;
 
     public Car() {
     }
@@ -443,7 +441,6 @@ public class Car {
                 ", maxWeightAllowed=" + maxWeightAllowed +
                 ", fuelType=" + fuelType +
                 ", nameOfBuyer=" + nameOfBuyer +
-                ", order=" + order +
                 '}';
     }
 }

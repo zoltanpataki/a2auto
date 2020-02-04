@@ -55,14 +55,12 @@ public class Order {
     @JoinColumn(name = "credit_order_id", referencedColumnName = "id")
     private Credit credit;
 
-    @OneToOne(cascade = CascadeType.MERGE, orphanRemoval = true)
-    @JoinColumn(name = "count_in_car", referencedColumnName = "id")
-    private Car countInCar;
+    private Long countInCarId;
 
     public Order() {
     }
 
-    public Order(boolean alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready, boolean selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate, boolean wantInheritanceTaxCalculation, int inheritanceTax, boolean thereIsCountInCar, int downPayment, int extra, String selectedTypeOfBuying, CountInCarSupplement countInCarSupplement, Credit credit, Users users, Company company, Car countInCar, Long carId, List<Description> description, List<DescriptionWithAmount> descriptionsWithAmount) {
+    public Order(boolean alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready, boolean selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate, boolean wantInheritanceTaxCalculation, int inheritanceTax, boolean thereIsCountInCar, int downPayment, int extra, String selectedTypeOfBuying, CountInCarSupplement countInCarSupplement, Credit credit, Users users, Company company, Long countInCarId, Long carId, List<Description> description, List<DescriptionWithAmount> descriptionsWithAmount) {
         this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready;
         this.selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate = selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate;
         this.wantInheritanceTaxCalculation = wantInheritanceTaxCalculation;
@@ -75,10 +73,18 @@ public class Order {
         this.credit = credit;
         this.users = users;
         this.company = company;
-        this.countInCar = countInCar;
+        this.countInCarId = countInCarId;
         this.carId = carId;
         this.description = description;
         this.descriptionsWithAmount = descriptionsWithAmount;
+    }
+
+    public Long getCountInCarId() {
+        return countInCarId;
+    }
+
+    public void setCountInCarId(Long countInCarId) {
+        this.countInCarId = countInCarId;
     }
 
     public int getExtra() {
@@ -95,14 +101,6 @@ public class Order {
 
     public void setCarId(Long carId) {
         this.carId = carId;
-    }
-
-    public Car getCountInCar() {
-        return countInCar;
-    }
-
-    public void setCountInCar(Car countInCar) {
-        this.countInCar = countInCar;
     }
 
     public Users getUsers() {
@@ -236,7 +234,7 @@ public class Order {
                 ", company=" + company +
                 ", countInCarSupplement=" + countInCarSupplement +
                 ", credit=" + credit +
-                ", countInCar=" + countInCar +
+                ", countInCarId=" + countInCarId +
                 '}';
     }
 }

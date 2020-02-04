@@ -13,7 +13,7 @@ public class Description {
     private String description;
     private String type;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "order_id")
     @JsonBackReference
     private Order order;
@@ -57,7 +57,6 @@ public class Description {
                 "id=" + id +
                 ", description='" + description + '\'' +
                 ", type='" + type + '\'' +
-                ", order=" + order +
                 '}';
     }
 }

@@ -14,14 +14,14 @@
   </div>
 </div>
 <div *ngIf="selectedFilter">
-  <form #filterForm=ngForm (ngSubmit)="filterCars(filterForm)" class="form filterForm">
+  <form #filterForm=ngForm (ngSubmit)="filterCars(filterForm); filterForm.reset()" class="form filterForm">
     <div *ngIf="selectedFilter.value == 'plateNumber'">
       <mat-form-field class="example-full-width">
         <label>
           <input matInput placeholder="Itt kereshetsz (max 6 karakter)" maxlength="6" minlength="6" ngModel name="plateNumber">
         </label>
       </mat-form-field>
-      <mat-error *ngIf="!utilService.validPlateNumber">A rendszám hossza 6 karakter kell legyen</mat-error>
+      <mat-error *ngIf="!utilService.validPlateNumber">A rendszám hossza 6 karakter kell, hogy legyen</mat-error>
       <mat-error *ngIf="utilService.emptySearchField">Üresen hagyott keresőmező</mat-error>
     </div>
     <div *ngIf="selectedFilter.value == 'name' || selectedFilter.value == 'type'">
@@ -476,4 +476,4 @@
     </mat-expansion-panel>
   </mat-accordion>
 </div>
-<div *ngIf="noMatch">Nincs a keresési feltételnek megfelelő találat!</div>
+

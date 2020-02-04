@@ -42,7 +42,6 @@ export class CarTimeInfoComponent implements OnInit {
     this.carData = this.data.car;
     if (this.data.order != null) {
       const sellOrBuyRemarkList = [];
-      console.log(this.data.order.description);
       this.data.order.description.forEach(description => {
         if (description.type === this.sellOrBuy) {
           sellOrBuyRemarkList.push(description);

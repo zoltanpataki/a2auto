@@ -7,6 +7,7 @@ import {Company} from "../../@core/models/company";
 import * as jspdf from 'jspdf';
 
 import html2canvas from 'html2canvas';
+import {HttpService} from "../../@core/services/http.service";
 
 @Component({
   selector: 'app-order-page',
@@ -27,9 +28,10 @@ export class OrderPageComponent implements OnInit {
   private remainingPrice: number;
   private blankPage: boolean;
   private extraAmountChargedForTheUser: number;
+  private countInCar: Car;
 
 
-  constructor() { }
+  constructor(private httpService: HttpService) { }
 
   ngOnInit() {
     if (sessionStorage.getItem('order') != null) {
@@ -80,6 +82,12 @@ export class OrderPageComponent implements OnInit {
     }
     if (this.order && this.orderedCar) {
       this.remainingPrice = this.countRemainingPrice(this.order, this.orderedCar);
+    }
+    if (this.order && this.order.countInCarId) {
+      this.httpService.getSingleCarById(this.order.countInCarId.toString()).subscribe(data => {
+        console.log(data);
+        this.countInCar = data;
+      });
     }
   }
 

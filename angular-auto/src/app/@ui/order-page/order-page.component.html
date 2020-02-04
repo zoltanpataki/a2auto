@@ -259,36 +259,36 @@
           <p class="sectionLiner">Beszámított gépjármű:</p>
         </div>
         <div class="border">
-          <p *ngIf="order && order.countInCar && order.countInCar.plateNumber" class="texts">Rendszám: <strong>{{order.countInCar.plateNumber}}</strong></p>
-          <p *ngIf="!order || order && !order.countInCar || order.countInCar && !order.countInCar.plateNumber" class="texts">Rendszám:</p>
+          <p *ngIf="countInCar && countInCar.plateNumber" class="texts">Rendszám: <strong>{{countInCar.plateNumber}}</strong></p>
+          <p *ngIf="!countInCar || countInCar && !countInCar.plateNumber" class="texts">Rendszám:</p>
         </div>
         <div class="border">
-          <p *ngIf="order && order.countInCar && order.countInCar.type" class="texts">Típus: <strong>{{order.countInCar.type}}</strong></p>
-          <p *ngIf="!order || order && !order.countInCar || order.countInCar && !order.countInCar.type" class="texts">Típus:</p>
+          <p *ngIf="countInCar && countInCar.type" class="texts">Típus: <strong>{{countInCar.type}}</strong></p>
+          <p *ngIf="!countInCar || countInCar && !countInCar.type" class="texts">Típus:</p>
         </div>
         <div class="border">
-          <p *ngIf="order && order.countInCar && order.countInCar.name" class="texts">Model: <strong>{{order.countInCar.name}}</strong></p>
-          <p *ngIf="!order || order && !order.countInCar || order.countInCar && !order.countInCar.name" class="texts">Típus:</p>
+          <p *ngIf="countInCar && countInCar.name" class="texts">Model: <strong>{{countInCar.name}}</strong></p>
+          <p *ngIf="!countInCar || countInCar && !countInCar.name" class="texts">Típus:</p>
         </div>
         <div class="border">
-          <p *ngIf="order && order.countInCar && order.countInCar.specification" class="texts">Felszereltség: <strong>{{order.countInCar.specification}}</strong></p>
-          <p *ngIf="!order || order && !order.countInCar || order.countInCar && !order.countInCar.specification" class="texts">Felszereltség:</p>
+          <p *ngIf="countInCar && countInCar.specification" class="texts">Felszereltség: <strong>{{countInCar.specification}}</strong></p>
+          <p *ngIf="!countInCar || countInCar && !countInCar.specification" class="texts">Felszereltség:</p>
         </div>
         <div class="border">
-          <p *ngIf="order && order.countInCar && order.countInCar.vintage" class="texts">Évjárat: <strong>{{order.countInCar.vintage}}</strong></p>
-          <p *ngIf="!order || order && !order.countInCar || order.countInCar && !order.countInCar.vintage" class="texts">Évjárat:</p>
+          <p *ngIf="countInCar && countInCar.vintage" class="texts">Évjárat: <strong>{{countInCar.vintage}}</strong></p>
+          <p *ngIf="!countInCar || countInCar && !countInCar.vintage" class="texts">Évjárat:</p>
         </div>
         <div class="border">
-          <p *ngIf="order && order.countInCar && order.countInCar.capacity" class="texts">Hengerűrtartalom: <strong>{{order.countInCar.capacity}}</strong></p>
-          <p *ngIf="!order || order && !order.countInCar || order.countInCar && !order.countInCar.capacity" class="texts">Hengerűrtartalom:</p>
+          <p *ngIf="countInCar && countInCar.capacity" class="texts">Hengerűrtartalom: <strong>{{countInCar.capacity}}</strong></p>
+          <p *ngIf="!countInCar || countInCar && !countInCar.capacity" class="texts">Hengerűrtartalom:</p>
         </div>
         <div class="border">
-          <p *ngIf="order && order.countInCar && order.countInCar.motExpiry" class="texts">Műszaki érvényesség: <strong>{{order.countInCar.motExpiry | date: 'yyyy-MM-dd'}}</strong></p>
-          <p *ngIf="!order || order && !order.countInCar || order.countInCar && !order.countInCar.motExpiry" class="texts">Műszaki érvényesség:</p>
+          <p *ngIf="countInCar && countInCar.motExpiry" class="texts">Műszaki érvényesség: <strong>{{countInCar.motExpiry | date: 'yyyy-MM-dd'}}</strong></p>
+          <p *ngIf="!countInCar || countInCar && !countInCar.motExpiry" class="texts">Műszaki érvényesség:</p>
         </div>
         <div class="border">
-          <p *ngIf="order && order.countInCar && order.countInCar.mileage" class="texts">Futott km: <strong>{{order.countInCar.mileage}} km</strong></p>
-          <p *ngIf="!order || order && !order.countInCar || order.countInCar && !order.countInCar.mileage" class="texts">Futott km:</p>
+          <p *ngIf="countInCar && countInCar.mileage" class="texts">Futott km: <strong>{{countInCar.mileage}} km</strong></p>
+          <p *ngIf="!countInCar || countInCar && !countInCar.mileage" class="texts">Futott km:</p>
         </div>
         <div class="silverCenter border">
           <p class="sectionLiner">Kiegészítések:</p>

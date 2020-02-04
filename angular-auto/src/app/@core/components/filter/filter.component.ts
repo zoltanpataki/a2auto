@@ -357,7 +357,9 @@ export class FilterComponent implements OnInit {
     if (order.thereIsCountInCar) {
       this.addCountInCar = 'countIn';
       this.thereIsCountInCar = true;
-      this.countInCar = order.countInCar;
+      this.httpService.getSingleCarById(order.countInCarId.toString()).subscribe(data => {
+        this.countInCar = data;
+      });
     } else {
       this.addCountInCar = 'noCountIn';
       this.thereIsCountInCar = false;
@@ -502,11 +504,15 @@ export class FilterComponent implements OnInit {
   }
 
   public filterCars(form: any) {
+    console.log(form.value)
+    console.log(form.value.name)
+    console.log(form.value.type)
+    console.log(this.selectedFilter.value)
     this.clearSelectedCars();
     if (form.value.plateNumber && form.value.plateNumber.length < 6 ) {
       this.utilService.validPlateNumber = false;
       this.utilService.emptySearchField = false;
-    } else if (this.selectedFilter.value === 'name' && form.value.name.length === 0 || this.selectedFilter.value === 'type' && form.value.type.length === 0 || this.selectedFilter.value === 'plateNumber' && form.value.plateNumber.length === 0) {
+    } else if (this.selectedFilter.value === 'name' && form.value.name && form.value.name.length === 0 || this.selectedFilter.value === 'type' && form.value.type && form.value.type.length === 0 || this.selectedFilter.value === 'plateNumber' && form.value.plateNumber && form.value.plateNumber.length === 0) {
       this.utilService.emptySearchField = true;
     } else {
       sessionStorage.clear();
@@ -663,7 +669,6 @@ export class FilterComponent implements OnInit {
     const newDescriptionList = [];
     const remarkList = result.remarkList;
     if (this.newOrder) {
-      console.log(this.newOrder.description);
       this.newOrder.description.forEach(description => {
         if (sellOrBuy === 'sell' && description.type === 'buy') {
           newDescriptionList.push(description);
@@ -903,6 +908,7 @@ export class FilterComponent implements OnInit {
         this.addCountInCar = 'noCountIn';
         this.thereIsCountInCar = false;
         this.countInCar = null;
+        this.countInCarSupplement = null;
         this.setOrderProgressInSessionStorage(5);
       }
     } else if (isOrNotCountIn === 'noCountIn') {
@@ -910,6 +916,7 @@ export class FilterComponent implements OnInit {
         this.addCountInCar = 'noCountIn';
         this.thereIsCountInCar = false;
         this.countInCar = null;
+        this.countInCarSupplement = null;
         this.setOrderProgressInSessionStorage(5);
       } else {
         this.addCountInCar = 'countIn';
@@ -1155,6 +1162,7 @@ export class FilterComponent implements OnInit {
     } else if (!this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready && this.pickedCompany !=null) {
       companyForOrder = this.pickedCompany;
     }
+    const countInCarId = this.countInCar != null ? this.countInCar.id : null;
     if (this.newOrder == null) {
       this.newOrder = new Order(null,
         this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready,
@@ -1169,7 +1177,7 @@ export class FilterComponent implements OnInit {
         companyForOrder,
         this.countInCarSupplement,
         this.creditData,
-        this.countInCar,
+        countInCarId,
         orderedCarId,
         this.descriptionList,
         this.listOfDescriptionsWithAmount);
@@ -1189,7 +1197,7 @@ export class FilterComponent implements OnInit {
       this.newOrder.company = companyForOrder;
       this.newOrder.countInCarSupplement = this.countInCarSupplement;
       this.newOrder.credit = this.creditData;
-      this.newOrder.countInCar = this.countInCar;
+      this.newOrder.countInCarId = countInCarId;
       this.newOrder.carId = orderedCarId;
       this.newOrder.description = this.descriptionList;
       this.newOrder.descriptionsWithAmount = this.listOfDescriptionsWithAmount;
@@ -1200,7 +1208,6 @@ export class FilterComponent implements OnInit {
   }
 
   private prepareNavigationToOrderPageOrSellingPageOrWarrantPageOrInsurancePage(order: Order, car: Car, witness1: Witness, witness2: Witness, orderOrSellingOrWarrant: string, warrantType: string, a2Representation: string, pickedTypeOfBuyingForCountInCar: string) {
-    console.log(order);
     sessionStorage.setItem('order', JSON.stringify(this.newOrder));
     sessionStorage.setItem('orderedCar', JSON.stringify(car));
     this.router.navigate([orderOrSellingOrWarrant], {state: {data: {

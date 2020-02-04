@@ -66,7 +66,6 @@ public class CarService {
                     throw new EntityNotFoundException("Car is not found by plate number!");
                 }
             case "type":
-                System.out.println(filter);
                 List<Car> carsByType = carRepository.findByTypeContainingAndSoldFalse(filter).orElseThrow(() -> new EntityNotFoundException("Car is not found by type!"));
                 return new ResponseEntity<>(carsByType, HttpStatus.OK);
             case "name":
