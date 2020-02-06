@@ -178,8 +178,10 @@ export class HttpService {
   }
 
   public callZipCodeService(zipcode: string): Observable<any> {
-    const corsUrl = 'https://cors-anywhere.herokuapp.com/';
-    const baseZipCodeUrl = 'https://irmeva.herokuapp.com/api/v1/node?irsz=';
-    return this.http.get(corsUrl + baseZipCodeUrl + Number(zipcode), httpOptions);
+    // external zipCode provider but it is a little bit slow
+    // const corsUrl = 'https://cors-anywhere.herokuapp.com/';
+    // const baseZipCodeUrl = 'https://irmeva.herokuapp.com/api/v1/node?irsz=';
+    const baseZipCodeUrl = `getZipCode/${zipcode}`;
+    return this.http.get(this.carServerUrl + baseZipCodeUrl, httpOptions);
   }
 }

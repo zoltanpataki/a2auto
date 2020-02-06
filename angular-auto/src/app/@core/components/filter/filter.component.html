@@ -14,8 +14,8 @@
   </div>
 </div>
 <div *ngIf="selectedFilter">
-  <form #filterForm=ngForm (ngSubmit)="filterCars(filterForm); filterForm.reset()" class="form filterForm">
-    <div *ngIf="selectedFilter.value == 'plateNumber'">
+  <form *ngIf="selectedFilter.value == 'plateNumber'" #filterForm=ngForm (ngSubmit)="filterCars(filterForm); filterForm.reset()" class="form filterForm">
+    <div>
       <mat-form-field class="example-full-width">
         <label>
           <input matInput placeholder="Itt kereshetsz (max 6 karakter)" maxlength="6" minlength="6" ngModel name="plateNumber">
@@ -24,14 +24,31 @@
       <mat-error *ngIf="!utilService.validPlateNumber">A rendszám hossza 6 karakter kell, hogy legyen</mat-error>
       <mat-error *ngIf="utilService.emptySearchField">Üresen hagyott keresőmező</mat-error>
     </div>
-    <div *ngIf="selectedFilter.value == 'name' || selectedFilter.value == 'type'">
+    <button mat-button>Keresés</button>
+  </form>
+  <form *ngIf="selectedFilter.value == 'name'" #filterForm=ngForm (ngSubmit)="filterCars(filterForm); filterForm.reset()" class="form filterForm">
+    <div>
       <mat-form-field class="example-full-width">
         <label>
-          <input matInput placeholder="Itt kereshetsz ({{selectedFilter.viewValue}})" ngModel name="{{selectedFilter.value}}">
+          <input matInput placeholder="Itt kereshetsz (Modell)" ngModel name="name">
         </label>
       </mat-form-field>
       <mat-error *ngIf="utilService.emptySearchField">Üresen hagyott keresőmező</mat-error>
     </div>
+    <button mat-button>Keresés</button>
+  </form>
+  <form *ngIf="selectedFilter.value == 'type'" #filterForm=ngForm (ngSubmit)="filterCars(filterForm); filterForm.reset()" class="form filterForm">
+    <div>
+      <mat-form-field class="example-full-width">
+        <label>
+          <input matInput placeholder="Itt kereshetsz (Márka)" ngModel name="type">
+        </label>
+      </mat-form-field>
+      <mat-error *ngIf="utilService.emptySearchField">Üresen hagyott keresőmező</mat-error>
+    </div>
+    <button mat-button>Keresés</button>
+  </form>
+  <form *ngIf="selectedFilter.value == 'all' || selectedFilter.value == 'sold'" #filterForm=ngForm (ngSubmit)="filterCars(filterForm); filterForm.reset()" class="form filterForm">
     <button mat-button>Keresés</button>
   </form>
 </div>

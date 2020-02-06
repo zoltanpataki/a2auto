@@ -137,8 +137,8 @@ export class UserComponent implements OnInit {
   private checkZipCode(form: any) {
     if (form.value.zipCode && form.value.zipCode.length === 4 && !isNaN(form.value.zipCode)) {
       this.httpService.callZipCodeService(form.value.zipCode).subscribe(data => {
-        this.userData.city = (data[0].telepules).toUpperCase();
-        form.value.city = (data[0].telepules).toUpperCase();
+        this.userData.city = (data.zipCity).toUpperCase();
+        form.value.city = (data.zipCity).toUpperCase();
         this.itemChanged(form);
       });
     }

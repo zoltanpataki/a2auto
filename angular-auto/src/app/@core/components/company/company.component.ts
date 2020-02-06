@@ -132,8 +132,8 @@ export class CompanyComponent implements OnInit {
   private checkZipCode(form: any) {
     if (form.value.zipcode && form.value.zipcode.length === 4 && !isNaN(form.value.zipcode)) {
       this.httpService.callZipCodeService(form.value.zipcode).subscribe(data => {
-        this.companyData.address.city = (data[0].telepules).toUpperCase();
-        form.value.city = (data[0].telepules).toUpperCase();
+        this.companyData.address.city = (data.zipCity).toUpperCase();
+        form.value.city = (data.zipCity).toUpperCase();
         this.itemChanged(form);
       });
     }

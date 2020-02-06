@@ -70,10 +70,12 @@ export class InsurancePageComponent implements OnInit {
       if (this.pickedCompany != null) {
         sessionStorage.setItem('pickedCompany', JSON.stringify(this.pickedCompany));
       }
-      if (this.order && this.order.countInCar) {
-        this.insuredCar = this.order.countInCar;
-        sessionStorage.setItem('insuredCar', JSON.stringify(this.insuredCar));
-        sessionStorage.setItem('newCar', JSON.stringify(this.insuredCar));
+      if (this.order && this.order.countInCarId) {
+        this.httpService.getSingleCarById(this.order.countInCarId.toString()).subscribe(data => {
+          this.insuredCar = data;
+          sessionStorage.setItem('insuredCar', JSON.stringify(this.insuredCar));
+          sessionStorage.setItem('newCar', JSON.stringify(this.insuredCar));
+        });
       } else {
         this.insuredCar = history.state.data.insuredCar;
         sessionStorage.setItem('insuredCar', JSON.stringify(this.insuredCar));
@@ -87,22 +89,22 @@ export class InsurancePageComponent implements OnInit {
       this.insuranceOfferNumber = Number(sessionStorage.getItem('insuranceOfferNumber'));
     } else {
       if (this.order != null) {
-        this.httpService.getSingleCarById(this.order.countInCar.id.toString()).subscribe(data => {
-          if (data.insuranceNumber == null) {
-            this.httpService.getUtility('insuranceOfferNumber').subscribe(data => {
-              this.insuranceOfferNumber = Number(data.value) + 1;
-              const insuranceUtilityObject = new Utility(data.id, data.name, this.insuranceOfferNumber.toString());
+        this.httpService.getSingleCarById(this.order.countInCarId.toString()).subscribe(car => {
+          if (car.insuranceNumber == null) {
+            this.httpService.getUtility('insuranceOfferNumber').subscribe(utility => {
+              this.insuranceOfferNumber = Number(utility.value) + 1;
+              const insuranceUtilityObject = new Utility(utility.id, utility.name, this.insuranceOfferNumber.toString());
               sessionStorage.setItem('insuranceOfferNumber', this.insuranceOfferNumber.toString());
-              this.httpService.saveUtility(insuranceUtilityObject).subscribe(data => {
-                this.order.countInCar.insuranceNumber = this.insuranceOfferNumber.toString();
-                this.httpService.updateCar(this.order.countInCar).subscribe(data => {
-                  this.order.countInCar = data;
+              this.httpService.saveUtility(insuranceUtilityObject).subscribe(savedUtility => {
+                car.insuranceNumber = this.insuranceOfferNumber;
+                this.httpService.updateCar(car).subscribe(updatedCar => {
+                  this.order.countInCarId = updatedCar.id;
                   sessionStorage.setItem('order', JSON.stringify(this.order));
                 });
               });
             });
           } else {
-            this.insuranceOfferNumber = data.insuranceNumber;
+            this.insuranceOfferNumber = car.insuranceNumber;
           }
         });
       } else {

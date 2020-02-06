@@ -504,10 +504,6 @@ export class FilterComponent implements OnInit {
   }
 
   public filterCars(form: any) {
-    console.log(form.value)
-    console.log(form.value.name)
-    console.log(form.value.type)
-    console.log(this.selectedFilter.value)
     this.clearSelectedCars();
     if (form.value.plateNumber && form.value.plateNumber.length < 6 ) {
       this.utilService.validPlateNumber = false;
@@ -1019,8 +1015,12 @@ export class FilterComponent implements OnInit {
     car.downPayment = this.downPayment;
     this.setOrderProgressInSessionStorage(6);
     this.updateCarOfTransaction(car);
-    sessionStorage.setItem('downPayment', this.downPayment.toString());
-    sessionStorage.setItem('extra', this.extra.toString());
+    if (this.downPayment != null) {
+      sessionStorage.setItem('downPayment', this.downPayment.toString());
+    }
+    if (this.extra != null) {
+      sessionStorage.setItem('extra', this.extra.toString());
+    }
   }
 
   private pickUser(index: number) {
