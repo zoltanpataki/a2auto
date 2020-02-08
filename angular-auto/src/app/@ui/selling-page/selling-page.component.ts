@@ -47,6 +47,7 @@ export class SellingPageComponent implements OnInit{
   private million = 'millió';
   private hyphen = '-';
   private priceInString = '';
+  private nameOfBuyer: string;
 
   constructor(private utilService: UtilService,
               private httpService: HttpService,) { }
@@ -105,6 +106,7 @@ export class SellingPageComponent implements OnInit{
       this.witness1 = history.state.data.witness1;
       this.witness2 = history.state.data.witness2;
       this.a2Representation = history.state.data.a2Representation;
+      this.nameOfBuyer = history.state.data.nameOfBuyer;
 
       sessionStorage.setItem('clickedCarIndex', history.state.data.clickedCarIndex);
       sessionStorage.setItem('orderedCar', JSON.stringify(this.orderedCar));
@@ -116,6 +118,7 @@ export class SellingPageComponent implements OnInit{
       sessionStorage.setItem('witness2', JSON.stringify(this.witness2));
       sessionStorage.setItem('a2Representation', this.a2Representation);
       sessionStorage.setItem('typeOfBuying', this.typeOfBuying);
+      sessionStorage.setItem('nameOfBuyer', this.nameOfBuyer);
       if (this.indexOfPickedUser != null) {
         sessionStorage.setItem('indexOfPickedUser', JSON.stringify(this.indexOfPickedUser));
       }

@@ -29,6 +29,7 @@ export class OrderPageComponent implements OnInit {
   private blankPage: boolean;
   private extraAmountChargedForTheUser: number;
   private countInCar: Car;
+  private nameOfBuyer: string;
 
 
   constructor(private httpService: HttpService) { }
@@ -53,11 +54,13 @@ export class OrderPageComponent implements OnInit {
       this.indexOfPickedCompany = history.state.data.indexOfPickedCompany;
       this.pickedUser = history.state.data.pickedUser;
       this.pickedCompany = history.state.data.pickedCompany;
+      this.nameOfBuyer = history.state.data.nameOfBuyer;
       sessionStorage.setItem('clickedCarIndex', history.state.data.clickedCarIndex);
       sessionStorage.setItem('orderedCar', JSON.stringify(this.orderedCar));
       sessionStorage.setItem('order', JSON.stringify(this.order));
       sessionStorage.setItem('userSearchData', JSON.stringify(this.userSearchResult));
       sessionStorage.setItem('companySearchData', JSON.stringify(this.companySearchResult));
+      sessionStorage.setItem('nameOfBuyer', this.nameOfBuyer);
       if (this.indexOfPickedUser != null) {
         sessionStorage.setItem('indexOfPickedUser', JSON.stringify(this.indexOfPickedUser));
       }

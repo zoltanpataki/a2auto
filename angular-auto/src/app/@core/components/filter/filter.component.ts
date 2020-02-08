@@ -83,7 +83,8 @@ export class FilterComponent implements OnInit {
   private chargedBehalf = ['AJÁNDÉK', 'VEVŐ FIZETI'];
   private giftIndexList = [];
   @ViewChild('focuser', {read: ElementRef, static: false})
-  focuser: ElementRef;
+  private focuser: ElementRef;
+  private nameOfBuyer;
 
   constructor(private httpService: HttpService,
               private utilService: UtilService,
@@ -243,6 +244,9 @@ export class FilterComponent implements OnInit {
     if (sessionStorage.getItem('credit')) {
       this.creditData = JSON.parse(sessionStorage.getItem('credit'));
     }
+    if (sessionStorage.getItem('nameOfBuyer')) {
+      this.nameOfBuyer = sessionStorage.getItem('nameOfBuyer');
+    }
   }
 
   // Remove all the items from sessionStorage when other order or other route was clicked
@@ -272,10 +276,17 @@ export class FilterComponent implements OnInit {
     sessionStorage.removeItem('orderedCar');
     sessionStorage.removeItem('descriptionList');
     sessionStorage.removeItem('insuranceOfferNumber');
-    sessionStorage.removeItem('newUserDuringSell');
-    sessionStorage.removeItem('newCompanyDuringSell');
     sessionStorage.removeItem('credit');
     sessionStorage.removeItem('a2representation');
+    sessionStorage.removeItem('switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer');
+    sessionStorage.removeItem('warrantType');
+    sessionStorage.removeItem('witness1');
+    sessionStorage.removeItem('witness2');
+    sessionStorage.removeItem('newUserDuringSell');
+    sessionStorage.removeItem('newCompanyDuringSell');
+    sessionStorage.removeItem('a2Representation');
+    sessionStorage.removeItem('typeOfBuying');
+    sessionStorage.removeItem('nameOfBuyer');
   }
 
   // Sets the data to null when expansion order is collapsed
@@ -319,6 +330,7 @@ export class FilterComponent implements OnInit {
     this.setOrderProgressInSessionStorage(0);
     this.removeItemsFromSessionStorage();
     this.creditData = null;
+    this.nameOfBuyer = null;
   }
 
   // Sets variables regarding the order for the component
@@ -586,6 +598,7 @@ export class FilterComponent implements OnInit {
         sessionStorage.removeItem('newCar');
       }
       this.carOfTransaction = result;
+      this.carOfTransaction.nameOfBuyer = this.nameOfBuyer;
       this.selectedCars[this.clickedCarIndex] = this.carOfTransaction;
       sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
     });
@@ -980,8 +993,11 @@ export class FilterComponent implements OnInit {
   }
 
   private addNewUserToOrder(event: Users) {
+    console.log(event);
     this.newUser = event;
     this.carOfTransaction.nameOfBuyer = this.newUser.fullName;
+    this.nameOfBuyer = this.newUser.fullName;
+    sessionStorage.setItem('nameOfBuyer', this.nameOfBuyer);
     this.updateCarOfTransaction(this.carOfTransaction);
     sessionStorage.setItem('newUserDuringSell', JSON.stringify(this.newUser));
   }
@@ -989,6 +1005,8 @@ export class FilterComponent implements OnInit {
   private addNewCompanyToOrder(event: Company) {
     this.newCompany = event;
     this.carOfTransaction.nameOfBuyer = this.newCompany.name;
+    this.nameOfBuyer = this.newCompany.name;
+    sessionStorage.setItem('nameOfBuyer', this.nameOfBuyer);
     this.updateCarOfTransaction(this.carOfTransaction);
     sessionStorage.setItem('newCompanyDuringSell', JSON.stringify(this.newCompany));
   }
@@ -1049,6 +1067,8 @@ export class FilterComponent implements OnInit {
     sessionStorage.setItem('pickedUser', JSON.stringify(this.pickedUser));
     sessionStorage.setItem('indexOfPickedUser', this.indexOfPickedUser.toString());
     this.carOfTransaction.nameOfBuyer = this.pickedUser.fullName;
+    this.nameOfBuyer = this.pickedUser.fullName;
+    sessionStorage.setItem('nameOfBuyer', this.nameOfBuyer);
     this.updateCarOfTransaction(this.carOfTransaction);
   }
 
@@ -1067,6 +1087,8 @@ export class FilterComponent implements OnInit {
     sessionStorage.setItem('pickedCompany', JSON.stringify(this.pickedCompany));
     sessionStorage.setItem('indexOfPickedCompany', this.indexOfPickedCompany.toString());
     this.carOfTransaction.nameOfBuyer = this.pickedCompany.name;
+    this.nameOfBuyer = this.pickedCompany.name;
+    sessionStorage.setItem('nameOfBuyer', this.nameOfBuyer);
     this.updateCarOfTransaction(this.carOfTransaction);
   }
 
@@ -1225,7 +1247,8 @@ export class FilterComponent implements OnInit {
           witness2: witness2,
           warrantType: warrantType,
           a2Representation: a2Representation,
-          typeOfBuying: pickedTypeOfBuyingForCountInCar
+          typeOfBuying: pickedTypeOfBuyingForCountInCar,
+          nameOfBuyer: this.nameOfBuyer,
         }}});
   }
 

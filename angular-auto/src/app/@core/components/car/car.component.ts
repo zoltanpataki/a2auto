@@ -195,7 +195,6 @@ export class CarComponent implements OnInit {
   private updateCar(form: any, carId: any) {
     this.httpService.updateCar(this.createNewCarObject(form, carId, true)).subscribe(data => {
         this.utilService.openSnackBar('Az autó adatai sikeresen frissültek!', 'Szuper :)');
-        console.log(data);
         this.savedOrNot = true;
         const freshlyUpdatedCar = new Car(data.id, data.name, data.type, data.color, data.plateNumber, data.specification, data.bodyNumber, data.engineNumber, Number(data.capacity), Number(data.vintage), Number(data.mileage), new Date(data.motExpiry), Number(data.price), Number(data.purchasingPrice), Number(data.cost), data.costDescriptions, new Date(data.dateOfArrival), new Date(data.dateOfLeaving), data.typeOfBuying, Number(data.inheritanceTax), Number(data.downPayment), Number(data.payedAmount), Number(data.kwh), data.carRegistry, new Date(data.documentsHandover), new Date(data.dueOfContract), new Date(data.carHandover), new Date(data.dateOfContract), false, data.carOrTruck, data.salesman, data.insuranceNumber, Number(data.weight), Number(data.maxWeightAllowed), data.fuelType, null);
         if (freshlyUpdatedCar.motExpiry.getFullYear() === new Date(0).getFullYear()) {
@@ -220,10 +219,13 @@ export class CarComponent implements OnInit {
           freshlyUpdatedCar.carHandover = null;
         }
         this.carData = freshlyUpdatedCar;
-        sessionStorage.setItem('newCar', JSON.stringify(this.carData));
+        if (this.router.url === '/newCar') {
+          sessionStorage.setItem('newCar', JSON.stringify(this.carData));
+        }
         if (this.router.url === "/filter") {
           this.countInCar.emit(freshlyUpdatedCar);
         }
+        this.updatedCar.emit(this.carData);
         this.utilService.carUpdate = false;
       }, error1 => {
         this.utilService.openSnackBar('Sajnos nem sikerült frissíteni az autó adatait!', 'Hiba :(');
@@ -276,7 +278,6 @@ export class CarComponent implements OnInit {
     const isSold = this.carData.sold != false;
     const insuranceNumber = this.carData.insuranceNumber != null ? this.carData.insuranceNumber : null;
     const nameOfBuyer = this.carData.nameOfBuyer != null ? this.carData.nameOfBuyer : null;
-    console.log('Ez az id ' + this.carData.id);
     return new Car(
       carId,
       capitalData['capitalName'],
@@ -379,9 +380,10 @@ export class CarComponent implements OnInit {
   }
 
   private itemChanged(form: any) {
-    console.log(form.value);
     const car = this.createCarObjectNoId(form, this.transformToCapitalData(form));
-    sessionStorage.setItem('newCar', JSON.stringify(car));
+    if (this.router.url !== '/filter') {
+      sessionStorage.setItem('newCar', JSON.stringify(car));
+    }
   }
 
   private makeTheFormBlank() {
