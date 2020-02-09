@@ -27,6 +27,13 @@
           </div>
         </div>
         <div class="rightSide">
+          <div>
+            <mat-form-field class="example-full-width">
+              <label>
+                <input matInput placeholder="Cégjegyzékszám" maxlength="12" type="text" (ngModelChange)="itemChanged(companyForm); marshallCompanyRegNumber(companyForm)" ngModel="{{companyData.companyRegistrationNumber}}" name="companyRegistrationNumber">
+              </label>
+            </mat-form-field>
+          </div>
           <div *ngFor="let item of fields2 | keyvalue:keepOriginalOrder; trackBy: trackByFn">
             <mat-form-field class="example-full-width">
               <label>
@@ -50,6 +57,9 @@
     </div>
     <mat-error *ngIf="!isCompleteAddress">
       Hiányzó adat a címből, kérlek ellenőrizd az irányítószámot, várost és címet!
+    </mat-error>
+    <mat-error *ngIf="!isValidCompanyRegistrationNumber">
+      Nem megfelelő cégjegyzékszám, csak számot tartalmazhat!
     </mat-error>
     <div class="buttons">
       <div class="saveButton">

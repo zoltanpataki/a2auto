@@ -7,6 +7,7 @@ import {Address} from "../../models/address";
 import {filter} from "rxjs/operators";
 import {FormControl, FormGroupDirective, NgForm, Validators} from "@angular/forms";
 import {ErrorStateMatcher} from "@angular/material/core";
+import {isNumeric} from "rxjs/internal-compatibility";
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -36,10 +37,12 @@ export class CompanyComponent implements OnInit {
   @Output()
   public newCompany: EventEmitter<any> = new EventEmitter<any>();
   public fields = {city: 'Város', address: 'Cím', country: 'Ország'};
-  public fields2 = {companyRegistrationNumber: 'Cégjegyzékszám', representation: 'Képviselő', taxNumber: 'Adószám', phoneNumber: 'Telefonszám'};
+  public fields2 = {representation: 'Képviselő', taxNumber: 'Adószám', phoneNumber: 'Telefonszám'};
   public keepOriginalOrder = (a, b) => a.key;
   private currentUrl;
   private isCompleteAddress: boolean = true;
+  isValidCompanyRegistrationNumber: boolean = true;
+  private hyphen = '-';
 
   constructor(private httpService: HttpService,
               private utilService: UtilService,
@@ -79,7 +82,7 @@ export class CompanyComponent implements OnInit {
   }
 
   public saveCompany(form: any) {
-    if (!this.emailFormControl.hasError('email') && this.nullCheckOnAddress(form)) {
+    if (!this.emailFormControl.hasError('email') && this.nullCheckOnAddress(form) && this.validateCompanyRegistrationNumber(form.value.companyRegistrationNumber)) {
       this.isCompleteAddress = true;
       if (this.companyData.id == null) {
         this.httpService.saveCompany(this.createCompanyObj(form, false)).subscribe(data => {
@@ -196,6 +199,27 @@ export class CompanyComponent implements OnInit {
     this.companyData = null;
     sessionStorage.removeItem('newCompany');
     this.ngOnInit();
+  }
+
+  private marshallCompanyRegNumber(form: any) {
+    let regNumber = form.value.companyRegistrationNumber;
+    if (regNumber.length === 2 || regNumber.length === 5) {
+      regNumber = regNumber + this.hyphen;
+    }
+    this.companyData.companyRegistrationNumber = regNumber;
+  }
+
+  private validateCompanyRegistrationNumber(regNumber: string): boolean {
+    if (regNumber != null) {
+      this.isValidCompanyRegistrationNumber = true;
+      const regNumberParts = regNumber.split('-', 3);
+      regNumberParts.forEach(part => {
+        if (isNaN(Number(part))) {
+          this.isValidCompanyRegistrationNumber = false;
+        }
+      });
+      return this.isValidCompanyRegistrationNumber;
+    }
   }
 
 }

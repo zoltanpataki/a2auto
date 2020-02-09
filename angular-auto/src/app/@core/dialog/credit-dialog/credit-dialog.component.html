@@ -28,7 +28,7 @@
           <div>
             <mat-form-field class="example-full-width">
               <label>
-                <input currencyMask  matInput placeholder="Hitel összege" [(ngModel)]="credit.creditAmount" name="creditAmount" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false}">
+                <input currencyMask  matInput placeholder="Hitel összege" [(ngModel)]="credit.creditAmount" name="creditAmount" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: true}">
               </label>
             </mat-form-field>
           </div>

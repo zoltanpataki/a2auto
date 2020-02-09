@@ -6,6 +6,7 @@ import {Description} from "../../models/description";
 import {Witness} from "../../models/witness";
 import {UtilService} from "../../services/util.service";
 import {Users} from "../../models/users";
+import {HttpService} from "../../services/http.service";
 
 @Component({
   selector: 'app-instant-buying-dialog',
@@ -32,6 +33,10 @@ export class InstantBuyingDialogComponent implements OnInit {
   public fields = {
     fullName: 'Teljes Név',
     birthName: 'Születéskori Név',
+  };
+  private isCompleteAddress: boolean = true;
+
+  public addressFields = {
     zipCode: 'Irányítószám',
     city: 'Város',
     address: 'Lakcím',
@@ -48,6 +53,7 @@ export class InstantBuyingDialogComponent implements OnInit {
 
   constructor(private dialogRef: MatDialogRef<InstantBuyingDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data,
+              private httpService: HttpService,
               private utilService: UtilService,
               private formBuilder: FormBuilder,) { }
 
@@ -177,17 +183,22 @@ export class InstantBuyingDialogComponent implements OnInit {
   }
 
   private saveUser(form: any) {
-    this.userData.fullName = form.value.fullName;
-    this.userData.birthName = form.value.birthName;
-    this.userData.zipCode = form.value.zipCode;
-    this.userData.city = form.value.city;
-    this.userData.address = form.value.address;
-    this.userData.birthPlace = form.value.birthPlace;
-    this.userData.nameOfMother = form.value.nameOfMother;
-    this.userData.idCardNumber = form.value.idCardNumber;
-    this.userData.nationality = form.value.nationality;
-    this.userData.birthDate = form.value.birthDate;
-    this.createClosingData();
+    if (this.nullCheckOnAddress(form)) {
+      this.isCompleteAddress = true;
+      this.userData.fullName = form.value.fullName;
+      this.userData.birthName = form.value.birthName;
+      this.userData.zipCode = form.value.zipCode;
+      this.userData.city = form.value.city;
+      this.userData.address = form.value.address;
+      this.userData.birthPlace = form.value.birthPlace;
+      this.userData.nameOfMother = form.value.nameOfMother;
+      this.userData.idCardNumber = form.value.idCardNumber;
+      this.userData.nationality = form.value.nationality;
+      this.userData.birthDate = form.value.birthDate;
+      this.createClosingData();
+    } else {
+      this.isCompleteAddress = false;
+    }
   }
 
   private createClosingData() {
@@ -202,6 +213,23 @@ export class InstantBuyingDialogComponent implements OnInit {
     sessionStorage.setItem('newCar', JSON.stringify(this.carData));
 
     this.dialogRef.close(closingData);
+  }
+
+  private nullCheckOnAddress(form: any): boolean {
+    let nullCounter = 0;
+    nullCounter = form.value.zipCode == null || form.value.zipCode.length === 0 ? nullCounter += 1 : nullCounter -= 1;
+    nullCounter = form.value.city == null || form.value.city.length === 0 ? nullCounter += 1 : nullCounter -= 1;
+    nullCounter = form.value.address == null || form.value.address.length === 0 ? nullCounter += 1 : nullCounter -= 1;
+    return Math.abs(nullCounter) === 3;
+  }
+
+  private checkZipCode(form: any) {
+    if (form.value.zipCode && form.value.zipCode.length === 4 && !isNaN(form.value.zipCode)) {
+      this.httpService.callZipCodeService(form.value.zipCode).subscribe(data => {
+        this.userData.city = (data.zipCity).toUpperCase();
+        form.value.city = (data.zipCity).toUpperCase();
+      });
+    }
   }
 
 }

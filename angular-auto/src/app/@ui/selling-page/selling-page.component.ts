@@ -356,6 +356,7 @@ export class SellingPageComponent implements OnInit{
         console.log(this.buyerIndividual);
       } else if (order.company != null) {
         this.buyerCompany = order.company;
+        this.buyerCompanyRepresentation = order.company.representation;
       }
     } else {
       this.buyerCompany = this.utilService.a2Company;
@@ -364,10 +365,12 @@ export class SellingPageComponent implements OnInit{
         this.sellerIndividual = order.users;
       } else if (order != null && order.company != null) {
         this.sellerCompany = order.company;
+        this.sellerCompanyRepresentation = order.company.representation;
       } else if (this.pickedUser != null) {
         this.sellerIndividual = this.pickedUser;
       } else if (this.pickedCompany != null) {
         this.sellerCompany = this.pickedCompany;
+        this.sellerCompanyRepresentation = this.pickedCompany.representation;
       }
     }
   }

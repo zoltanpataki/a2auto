@@ -23,7 +23,6 @@ export class CreditDialogComponent implements OnInit {
     if (this.data.credit == null) {
       this.credit = new Credit(null, null, this.initialPayment, this.creditAmount, null, null);
     } else {
-      console.log(this.data);
       this.credit = new Credit(this.data.credit.bank, this.data.credit.creditType, this.initialPayment, this.creditAmount, this.data.credit.creditLength, this.data.credit.repayment);
     }
   }
@@ -42,11 +41,12 @@ export class CreditDialogComponent implements OnInit {
   }
 
   private countCreditAmount(car: Car, countInCarSupplement: CountInCarSupplement, downPayment: number, extra: number) {
+    const carPrice = car.price ? car.price : 0;
     const countInPrice = countInCarSupplement && countInCarSupplement.countInPrice ? countInCarSupplement.countInPrice : 0;
     const downPaymentAmount = downPayment ? downPayment : 0;
     const extraAmount = extra ? extra : 0;
     this.initialPayment = (countInPrice + downPaymentAmount + extraAmount) === 0 ? null : countInPrice + downPaymentAmount + extraAmount;
-    this.creditAmount = (car.price - this.initialPayment) === 0 ? null : car.price - this.initialPayment;
+    this.creditAmount = (carPrice - this.initialPayment) === 0 ? null : carPrice - this.initialPayment;
   }
 
 }

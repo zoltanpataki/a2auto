@@ -987,7 +987,7 @@ export class FilterComponent implements OnInit {
   }
 
   private orderOnProgressWithUser(event: string) {
-    if (event === 'saved') {
+    if (event === 'saved' && this.orderProgress < 2) {
       this.setOrderProgressInSessionStorage(2);
     }
   }
@@ -1012,7 +1012,7 @@ export class FilterComponent implements OnInit {
   }
 
   private orderOnProgressWithCar(event: string) {
-    if (event === 'saved') {
+    if (event === 'saved' && this.orderProgress < 4) {
       this.setOrderProgressInSessionStorage(4);
     }
   }
