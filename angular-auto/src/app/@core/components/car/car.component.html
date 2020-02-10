@@ -131,14 +131,14 @@
       <div class="saveButton">
         <button mat-button>Mentés</button>
       </div>
-      <div *ngIf="showInsuranceButton" class="saveButton">
+      <div *ngIf="showInsuranceButton || utilService.carUpdate" class="saveButton">
         <button type="button" mat-button (click)="navigateToInsurancePage(carForm)">Biztosítás generálása</button>
       </div>
       <div class="saveButton">
         <button *ngIf="showInsuranceButton" type="button" mat-button (click)="makeTheFormBlank()">Új autó</button>
       </div>
       <div class="saveButton">
-        <button *ngIf="showInsuranceButton" type="button" mat-button (click)="openDialog(carForm)">Adás-vételi szerződés</button>
+        <button *ngIf="showInsuranceButton || utilService.carUpdate" type="button" mat-button (click)="openDialog(carForm)">Adás-vételi szerződés</button>
       </div>
     </div>
   </form>

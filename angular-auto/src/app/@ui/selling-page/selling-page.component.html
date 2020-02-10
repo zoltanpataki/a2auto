@@ -302,7 +302,7 @@
           <p>A birtokba vételkor a kilométer számláló műszer által jelzett érték (kilométer-óra állás) </p>
         </div>
         <div fxFlex="30">
-          <p *ngIf="orderedCar.mileage">km: &#160;<strong>{{orderedCar.mileage}}</strong></p>
+          <p *ngIf="orderedCar.mileage">km: &#160;<strong>{{orderedCar.mileage | number:'2.'}}</strong></p>
           <p *ngIf="!orderedCar.mileage">km:</p>
         </div>
       </div>

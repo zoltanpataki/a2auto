@@ -53,11 +53,24 @@ export class InsurancePageComponent implements OnInit {
       this.indexOfPickedCompany = history.state.data.indexOfPickedCompany;
       this.pickedUser = history.state.data.pickedUser;
       this.pickedCompany = history.state.data.pickedCompany;
-      sessionStorage.setItem('clickedCarIndex', history.state.data.clickedCarIndex);
-      sessionStorage.setItem('orderedCar', JSON.stringify(this.orderedCar));
-      sessionStorage.setItem('order', JSON.stringify(this.order));
-      sessionStorage.setItem('userSearchData', JSON.stringify(this.userSearchResult));
-      sessionStorage.setItem('companySearchData', JSON.stringify(this.companySearchResult));
+      if (history.state.data.clickedCarIndex != null) {
+        sessionStorage.setItem('clickedCarIndex', history.state.data.clickedCarIndex);
+      }
+      if (this.orderedCar != null) {
+        sessionStorage.setItem('orderedCar', JSON.stringify(this.orderedCar));
+      }
+      if (this.order != null) {
+        sessionStorage.setItem('order', JSON.stringify(this.order));
+      }
+      if (this.userSearchResult != null) {
+        sessionStorage.setItem('userSearchData', JSON.stringify(this.userSearchResult));
+      }
+      if (this.companySearchResult != null) {
+        sessionStorage.setItem('companySearchData', JSON.stringify(this.companySearchResult));
+      }
+      if (this.orderedCar != null) {
+
+      }
       if (this.indexOfPickedUser != null) {
         sessionStorage.setItem('indexOfPickedUser', JSON.stringify(this.indexOfPickedUser));
       }

@@ -132,13 +132,13 @@ export class FilterComponent implements OnInit {
     if (sessionStorage.getItem('clickedCarIndex')) {
       this.clickedCarIndex = Number(sessionStorage.getItem('clickedCarIndex'));
       this.carOfTransaction = this.selectedCars[this.clickedCarIndex];
-      if (new Date(this.carOfTransaction.carHandover).getFullYear() === new Date(0).getFullYear()) {
+      if (this.carOfTransaction && this.carOfTransaction.carHandover && new Date(this.carOfTransaction.carHandover).getFullYear() === new Date(0).getFullYear()) {
         this.carOfTransaction.carHandover = null;
       }
     }
     if (sessionStorage.getItem('order')) {
       const order = JSON.parse(sessionStorage.getItem('order'));
-      if (order.carId === this.carOfTransaction.id) {
+      if (order.carId && order.carId === this.carOfTransaction.id) {
         this.newOrder = JSON.parse(sessionStorage.getItem('order'));
         this.setFilterComponentVariablesAccordingToOrder(this.newOrder);
         this.getDataFromSessionStorageAfterRefresh();
@@ -163,6 +163,7 @@ export class FilterComponent implements OnInit {
     } else {
       this.createDownPaymentFormWithData(this.downPayment, this.extra);
     }
+    this.changeDetectorRefs.detectChanges();
   }
 
   // Retrieve all the data after refresh
@@ -594,13 +595,22 @@ export class FilterComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
+      this.utilService.carUpdate = false;
+      console.log(this.carOfTransaction);
       if (result == null) {
         sessionStorage.removeItem('newCar');
       }
-      this.carOfTransaction = result;
-      this.carOfTransaction.nameOfBuyer = this.nameOfBuyer;
-      this.selectedCars[this.clickedCarIndex] = this.carOfTransaction;
-      sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
+      if (this.carOfTransaction != null) {
+        this.carOfTransaction = result;
+      }
+      console.log(this.carOfTransaction);
+      if (null != this.nameOfBuyer && null != this.carOfTransaction) {
+        this.carOfTransaction.nameOfBuyer = this.nameOfBuyer;
+      }
+      if (null != this.carOfTransaction) {
+        this.selectedCars[this.clickedCarIndex] = this.carOfTransaction;
+        sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
+      }
     });
   }
 

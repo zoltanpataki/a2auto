@@ -202,11 +202,16 @@ export class CompanyComponent implements OnInit {
   }
 
   private marshallCompanyRegNumber(form: any) {
-    let regNumber = form.value.companyRegistrationNumber;
-    if (regNumber.length === 2 || regNumber.length === 5) {
-      regNumber = regNumber + this.hyphen;
+    let regNumber = form.value.companyRegistrationNumber.substring(0, 10);
+    regNumber = regNumber.replace(/-/g, '');
+    let resultNumber = '';
+    for (let i = 0; i < regNumber.length; i++) {
+      resultNumber = resultNumber + regNumber.charAt(i);
+      if (resultNumber.length === 2 || resultNumber.length === 5) {
+        resultNumber = resultNumber + this.hyphen;
+      }
     }
-    this.companyData.companyRegistrationNumber = regNumber;
+    this.companyData.companyRegistrationNumber = resultNumber;
   }
 
   private validateCompanyRegistrationNumber(regNumber: string): boolean {

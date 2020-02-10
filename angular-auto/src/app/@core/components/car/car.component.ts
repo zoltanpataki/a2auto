@@ -24,6 +24,8 @@ export class CarComponent implements OnInit {
   public countInCar: EventEmitter<any> = new EventEmitter<any>();
   @Output()
   public updatedCar: EventEmitter<any> = new EventEmitter<any>();
+  @Output()
+  public dialogCloser: EventEmitter<any> = new EventEmitter<any>();
   public fieldsOneFirstHalf = {type: 'Autó típusa', name: 'Modell', color: 'Szín'};
   public fieldsOneSecondHalf = {
     specification: 'Felszereltség',
@@ -143,6 +145,7 @@ export class CarComponent implements OnInit {
   }
 
   private openDialog(carForm: any) {
+    this.dialogCloser.emit('close');
     if (this.carData.id != null) {
       const carForBuying = this.createCarObjectWithId(carForm, this.transformToCapitalData(carForm), this.carData.id);
       this.openInstantBuyingDialog(carForBuying);
@@ -177,7 +180,9 @@ export class CarComponent implements OnInit {
             newCar.carHandover = null;
           }
           this.carData = newCar;
-          sessionStorage.setItem('newCar', JSON.stringify(this.carData));
+          if (this.router.url !== '/filter') {
+            sessionStorage.setItem('newCar', JSON.stringify(this.carData));
+          }
           this.savedOrNot = true;
           this.orderProgress.emit('saved');
           this.countInCar.emit(newCar);
@@ -358,6 +363,7 @@ export class CarComponent implements OnInit {
   }
 
   private navigateToInsurancePage(form: any) {
+    this.dialogCloser.emit('close');
     if (this.carData.id != null) {
       const carForInsurance = this.createCarObjectWithId(form, this.transformToCapitalData(form), this.carData.id);
       console.log(carForInsurance);

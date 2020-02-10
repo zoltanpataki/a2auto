@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import * as jspdf from 'jspdf';
 
 import html2canvas from 'html2canvas';
@@ -50,7 +50,8 @@ export class SellingPageComponent implements OnInit{
   private nameOfBuyer: string;
 
   constructor(private utilService: UtilService,
-              private httpService: HttpService,) { }
+              private httpService: HttpService,
+              private cdRef:ChangeDetectorRef,) { }
 
   ngOnInit() {
     if (sessionStorage.getItem('A2Auto') != null) {
@@ -108,17 +109,39 @@ export class SellingPageComponent implements OnInit{
       this.a2Representation = history.state.data.a2Representation;
       this.nameOfBuyer = history.state.data.nameOfBuyer;
 
-      sessionStorage.setItem('clickedCarIndex', history.state.data.clickedCarIndex);
-      sessionStorage.setItem('orderedCar', JSON.stringify(this.orderedCar));
-      sessionStorage.setItem('newCar', JSON.stringify(this.orderedCar));
-      sessionStorage.setItem('order', JSON.stringify(this.order));
-      sessionStorage.setItem('userSearchData', JSON.stringify(this.userSearchResult));
-      sessionStorage.setItem('companySearchData', JSON.stringify(this.companySearchResult));
-      sessionStorage.setItem('witness1', JSON.stringify(this.witness1));
-      sessionStorage.setItem('witness2', JSON.stringify(this.witness2));
-      sessionStorage.setItem('a2Representation', this.a2Representation);
-      sessionStorage.setItem('typeOfBuying', this.typeOfBuying);
-      sessionStorage.setItem('nameOfBuyer', this.nameOfBuyer);
+      if (history.state.data.clickedCarIndex != null) {
+        sessionStorage.setItem('clickedCarIndex', history.state.data.clickedCarIndex);
+      }
+      if (this.orderedCar != null) {
+        sessionStorage.setItem('orderedCar', JSON.stringify(this.orderedCar));
+      }
+      if (this.orderedCar != null) {
+        sessionStorage.setItem('newCar', JSON.stringify(this.orderedCar));
+      }
+      if (this.order != null) {
+        sessionStorage.setItem('order', JSON.stringify(this.order));
+      }
+      if (this.userSearchResult != null) {
+        sessionStorage.setItem('userSearchData', JSON.stringify(this.userSearchResult));
+      }
+      if (this.companySearchResult != null) {
+        sessionStorage.setItem('companySearchData', JSON.stringify(this.companySearchResult));
+      }
+      if (this.nameOfBuyer != null) {
+        sessionStorage.setItem('nameOfBuyer', this.nameOfBuyer);
+      }
+      if (this.typeOfBuying != null) {
+        sessionStorage.setItem('typeOfBuying', this.typeOfBuying);
+      }
+      if (this.witness1 != null) {
+        sessionStorage.setItem('witness1', JSON.stringify(this.witness1));
+      }
+      if (this.witness2 != null) {
+        sessionStorage.setItem('witness2', JSON.stringify(this.witness2));
+      }
+      if (this.a2Representation != null) {
+        sessionStorage.setItem('a2Representation', this.a2Representation);
+      }
       if (this.indexOfPickedUser != null) {
         sessionStorage.setItem('indexOfPickedUser', JSON.stringify(this.indexOfPickedUser));
       }
@@ -147,6 +170,7 @@ export class SellingPageComponent implements OnInit{
     if (this.orderedCar && this.orderedCar.price) {
       this.turnPriceIntoText(this.orderedCar.price);
     }
+    this.cdRef.detectChanges();
   }
 
   private turnPriceIntoText(price: number) {
