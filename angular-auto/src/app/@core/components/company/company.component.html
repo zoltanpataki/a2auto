@@ -65,7 +65,7 @@
       <div class="saveButton">
         <button mat-button>Mentés</button>
       </div>
-      <div class="saveButton">
+      <div *ngIf="router.url == '/newCompany'" class="saveButton">
         <button type="button" mat-button (click)="clearCompanyData()">Új felhasználó</button>
       </div>
     </div>

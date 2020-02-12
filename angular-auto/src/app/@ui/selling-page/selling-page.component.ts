@@ -359,6 +359,8 @@ export class SellingPageComponent implements OnInit{
     car.sold = true;
     this.httpService.updateCar(car).subscribe(data => {
       console.log(data);
+      this.orderedCar = data;
+      sessionStorage.setItem('orderedCar', JSON.stringify(this.orderedCar));
       this.utilService.openSnackBar('Az autó eladott státuszba került!', 'Szuper :)');
     }, error => {
       this.utilService.openSnackBar('Sajnos nem sikerült az autót eladott státuszba helyezni!', 'Hiba :(');

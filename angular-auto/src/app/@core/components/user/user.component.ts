@@ -164,7 +164,7 @@ export class UserComponent implements OnInit {
         form.value.dueTimeOfIdCard,
         capitalObject['capitalDrivingLicenceNumber'],
         form.value.dueTimeOfDrivingLicence,
-        form.value.taxNumber,
+        capitalObject['capitalTaxNumber'],
         form.value.healthCareNumber,
         capitalObject['capitalNationality']);
     } else {
@@ -185,7 +185,7 @@ export class UserComponent implements OnInit {
         form.value.dueTimeOfIdCard,
         capitalObject['capitalDrivingLicenceNumber'],
         form.value.dueTimeOfDrivingLicence,
-        form.value.taxNumber,
+        capitalObject['capitalTaxNumber'],
         form.value.healthCareNumber,
         capitalObject['capitalNationality']);
     }
@@ -226,6 +226,7 @@ export class UserComponent implements OnInit {
     capitalObject['capitalIdCardNumber'] = form.value.idCardNumber != null ? form.value.idCardNumber.toUpperCase() : null;
     capitalObject['capitalDrivingLicenceNumber'] = form.value.drivingLicenceNumber != null ? form.value.drivingLicenceNumber.toUpperCase() : null;
     capitalObject['capitalNationality'] = form.value.nationality != null ? form.value.nationality.toUpperCase() : null;
+    capitalObject['capitalTaxNumber'] = form.value.taxNumber != null ? form.value.taxNumber.toUpperCase() : null;
     return capitalObject;
   }
 
