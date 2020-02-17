@@ -8,6 +8,7 @@ import * as jspdf from 'jspdf';
 
 import html2canvas from 'html2canvas';
 import {HttpService} from "../../@core/services/http.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-order-page',
@@ -32,7 +33,8 @@ export class OrderPageComponent implements OnInit {
   private nameOfBuyer: string;
 
 
-  constructor(private httpService: HttpService) { }
+  constructor(private httpService: HttpService,
+              private router: Router) { }
 
   ngOnInit() {
     if (sessionStorage.getItem('order') != null) {
@@ -132,6 +134,10 @@ export class OrderPageComponent implements OnInit {
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
       pdf.save('order.pdf'); // Generated PDF
     });
+  }
+
+  private navigateBack() {
+    this.router.navigate(['/filter']);
   }
 
 }

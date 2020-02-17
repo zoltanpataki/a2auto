@@ -7,6 +7,8 @@ import {Witness} from "../../models/witness";
 import {UtilService} from "../../services/util.service";
 import {Users} from "../../models/users";
 import {HttpService} from "../../services/http.service";
+import {Company} from "../../models/company";
+import {Address} from "../../models/address";
 
 @Component({
   selector: 'app-instant-buying-dialog',
@@ -30,6 +32,8 @@ export class InstantBuyingDialogComponent implements OnInit {
   private listOfTypeOfBuying = ['KÉSZPÉNZ', 'ÁTUTALÁS'];
   private pickedRepresentation: string;
   private pickedTypeOfBuying: string;
+  private userChooser: boolean = true;
+  private privateUserOrCorporate: string;
   public fields = {
     fullName: 'Teljes Név',
     birthName: 'Születéskori Név',
@@ -49,7 +53,16 @@ export class InstantBuyingDialogComponent implements OnInit {
     nationality: 'Állampolgárság',
   };
 
+  public companyFields = {
+    companyName: 'Cégnév',
+    companyRegistrationNumber: 'Cégjegyzékszám',
+    representation: 'Képviselő neve',
+  };
+
+  private userOrCorporate = ['MAGÁNSZEMÉLY', 'CÉG'];
+
   private userData: Users;
+  private companyData: Company;
 
   constructor(private dialogRef: MatDialogRef<InstantBuyingDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data,
@@ -60,6 +73,9 @@ export class InstantBuyingDialogComponent implements OnInit {
   ngOnInit() {
     if (this.userData == null) {
       this.userData = new Users(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+    }
+    if (this.companyData == null) {
+      this.companyData = new Company(null, null, new Address(null, null, null, null, null), null, null, null, null, null);
     }
     this.carData = this.data.car;
     this.setRemarkForm();
@@ -183,6 +199,7 @@ export class InstantBuyingDialogComponent implements OnInit {
   }
 
   private saveUser(form: any) {
+    this.companyData = null;
     if (this.nullCheckOnAddress(form)) {
       this.isCompleteAddress = true;
       this.userData.fullName = form.value.fullName;
@@ -201,10 +218,27 @@ export class InstantBuyingDialogComponent implements OnInit {
     }
   }
 
+  private saveCompany(form: any) {
+    this.userData = null;
+    if (this.nullCheckOnAddress(form)) {
+      this.isCompleteAddress = true;
+      this.companyData.name = form.value.companyName;
+      this.companyData.companyRegistrationNumber = form.value.companyRegistrationNumber;
+      this.companyData.address.zipcode = form.value.zipCode;
+      this.companyData.address.city = form.value.city;
+      this.companyData.address.address = form.value.address;
+      this.companyData.representation = form.value.representation;
+      this.createClosingData();
+    } else {
+      this.isCompleteAddress = false;
+    }
+  }
+
   private createClosingData() {
     const closingData = {};
     closingData['car'] = this.carData;
     closingData['user'] = this.userData;
+    closingData['company'] = this.companyData;
     closingData['witness1'] = this.witness1;
     closingData['witness2'] = this.witness2;
     closingData['representation'] = this.pickedRepresentation;
@@ -230,6 +264,19 @@ export class InstantBuyingDialogComponent implements OnInit {
         form.value.city = (data.zipCity).toUpperCase();
       });
     }
+  }
+
+  private checkZipCodeForCompany(form: any) {
+    if (form.value.zipCode && form.value.zipCode.length === 4 && !isNaN(form.value.zipCode)) {
+      this.httpService.callZipCodeService(form.value.zipCode).subscribe(data => {
+        this.companyData.address.city = (data.zipCity).toUpperCase();
+        form.value.city = (data.zipCity).toUpperCase();
+      });
+    }
+  }
+
+  private pickPrivateOrCorporate() {
+    this.userChooser = false;
   }
 
 }

@@ -117,66 +117,127 @@
     </form>
   </div>
   <div *ngIf="userPartOpen">
-    <form #userForm=ngForm (ngSubmit)="saveUser(userForm)" class="form userForm" (keydown.enter)="$event.preventDefault()">
-      <div class="userContainer">
-        <div>
-          <div *ngFor="let item of fields | keyvalue:keepOriginalOrder; trackBy: trackByFn">
-            <mat-form-field class="example-full-width">
-              <label>
-                <input matInput placeholder="{{item.value}}" ngModel="{{userData[item.key]}}" name="{{item.key}}">
-              </label>
-            </mat-form-field>
-          </div>
-          <div>
-            <mat-form-field class="example-full-width">
-              <label>
-                <input matInput placeholder="Irányítószám" ngModel="{{userData.zipCode}}" name="zipCode" maxlength="4" type="text" pattern="\d*" (ngModelChange)="checkZipCode(userForm)">
-              </label>
-            </mat-form-field>
-          </div>
-          <div>
-            <mat-form-field class="example-full-width">
-              <label>
-                <input matInput placeholder="Város" ngModel="{{userData.city}}" name="city">
-              </label>
-            </mat-form-field>
-          </div>
-          <div>
-            <mat-form-field class="example-full-width">
-              <label>
-                <input matInput placeholder="Lakcím" ngModel="{{userData.address}}" name="address">
-              </label>
-            </mat-form-field>
-          </div>
-        </div>
-        <div>
-          <div>
-            <mat-form-field class="example-full-width">
-              <input matInput [matDatepicker]="birthPicker" placeholder="Születési dátum" [ngModelOptions]="{updateOn: 'blur'}" ngModel="{{userData.birthDate | date:'yyyy-MM-dd'}}" name="birthDate">
-              <mat-datepicker-toggle matSuffix [for]="birthPicker"></mat-datepicker-toggle>
-              <mat-datepicker #birthPicker></mat-datepicker>
-            </mat-form-field>
-          </div>
-          <div *ngFor="let item of fieldsTwo | keyvalue:keepOriginalOrder; trackBy: trackByFn">
-            <mat-form-field class="example-full-width">
-              <label>
-                <input matInput placeholder="{{item.value}}" [ngModelOptions]="{updateOn: 'blur'}" ngModel="{{userData[item.key]}}" name="{{item.key}}">
-              </label>
-            </mat-form-field>
-          </div>
-        </div>
+    <div *ngIf="userChooser">
+      <div>
+        <mat-form-field>
+          <mat-label>Válassz magánszemély és cég között</mat-label>
+          <mat-select [(ngModel)]="privateUserOrCorporate" name="privateOrCorporate">
+            <mat-option *ngFor="let privateOrCorporate of userOrCorporate; trackBy: trackByFn" [value]="privateOrCorporate" (click)="pickPrivateOrCorporate()">
+              {{privateOrCorporate}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
-      <mat-error *ngIf="!isCompleteAddress">
-        Hiányzó adat a címből, kérlek ellenőrizd az irányítószámot, várost és címet!
-      </mat-error>
-      <div class="buttons">
-        <div class="saveButton">
-          <button mat-button>Tovább az adás-vételi szerződéshez</button>
+    </div>
+    <div *ngIf="privateUserOrCorporate == 'MAGÁNSZEMÉLY'">
+      <form #userForm=ngForm (ngSubmit)="saveUser(userForm)" class="form userForm" (keydown.enter)="$event.preventDefault()">
+        <div class="userContainer">
+          <div>
+            <div *ngFor="let item of fields | keyvalue:keepOriginalOrder; trackBy: trackByFn">
+              <mat-form-field class="example-full-width">
+                <label>
+                  <input matInput placeholder="{{item.value}}" ngModel="{{userData[item.key]}}" name="{{item.key}}">
+                </label>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field class="example-full-width">
+                <label>
+                  <input matInput placeholder="Irányítószám" ngModel="{{userData.zipCode}}" name="zipCode" maxlength="4" type="text" pattern="\d*" (ngModelChange)="checkZipCode(userForm)">
+                </label>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field class="example-full-width">
+                <label>
+                  <input matInput placeholder="Város" ngModel="{{userData.city}}" name="city">
+                </label>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field class="example-full-width">
+                <label>
+                  <input matInput placeholder="Lakcím" ngModel="{{userData.address}}" name="address">
+                </label>
+              </mat-form-field>
+            </div>
+          </div>
+          <div>
+            <div>
+              <mat-form-field class="example-full-width">
+                <input matInput [matDatepicker]="birthPicker" placeholder="Születési dátum" [ngModelOptions]="{updateOn: 'blur'}" ngModel="{{userData.birthDate | date:'yyyy-MM-dd'}}" name="birthDate">
+                <mat-datepicker-toggle matSuffix [for]="birthPicker"></mat-datepicker-toggle>
+                <mat-datepicker #birthPicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div *ngFor="let item of fieldsTwo | keyvalue:keepOriginalOrder; trackBy: trackByFn">
+              <mat-form-field class="example-full-width">
+                <label>
+                  <input matInput placeholder="{{item.value}}" [ngModelOptions]="{updateOn: 'blur'}" ngModel="{{userData[item.key]}}" name="{{item.key}}">
+                </label>
+              </mat-form-field>
+            </div>
+          </div>
         </div>
-        <div>
-          <button type="button" class="mat-raised-button mat-accent" (click)="close()"><strong class="X">X</strong></button>
+        <mat-error *ngIf="!isCompleteAddress">
+          Hiányzó adat a címből, kérlek ellenőrizd az irányítószámot, várost és címet!
+        </mat-error>
+        <div class="buttons">
+          <div class="saveButton">
+            <button mat-button>Tovább az adás-vételi szerződéshez</button>
+          </div>
+          <div>
+            <button type="button" class="mat-raised-button mat-accent" (click)="close()"><strong class="X">X</strong></button>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
+    <div *ngIf="privateUserOrCorporate == 'CÉG'">
+      <form #companyForm=ngForm (ngSubmit)="saveCompany(companyForm)" class="form companyForm" (keydown.enter)="$event.preventDefault()">
+        <div class="userContainer">
+          <div>
+            <div *ngFor="let item of companyFields | keyvalue:keepOriginalOrder; trackBy: trackByFn">
+              <mat-form-field class="example-full-width">
+                <label>
+                  <input matInput placeholder="{{item.value}}" ngModel name="{{item.key}}">
+                </label>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field class="example-full-width">
+                <label>
+                  <input matInput placeholder="Irányítószám" ngModel name="zipCode" maxlength="4" type="text" pattern="\d*" (ngModelChange)="checkZipCodeForCompany(companyForm)">
+                </label>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field class="example-full-width">
+                <label>
+                  <input matInput placeholder="Város" ngModel="{{companyData.address.city}}" name="city">
+                </label>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field class="example-full-width">
+                <label>
+                  <input matInput placeholder="Lakcím" ngModel name="address">
+                </label>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <mat-error *ngIf="!isCompleteAddress">
+          Hiányzó adat a címből, kérlek ellenőrizd az irányítószámot, várost és címet!
+        </mat-error>
+        <div class="buttons">
+          <div class="saveButton">
+            <button mat-button>Tovább az adás-vételi szerződéshez</button>
+          </div>
+          <div>
+            <button type="button" class="mat-raised-button mat-accent" (click)="close()"><strong class="X">X</strong></button>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
 </mat-dialog-content>

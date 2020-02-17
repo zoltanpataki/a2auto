@@ -9,6 +9,7 @@ import {Company} from "../../@core/models/company";
 import {UtilService} from "../../@core/services/util.service";
 import {Witness} from "../../@core/models/witness";
 import {HttpService} from "../../@core/services/http.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-selling-page',
@@ -48,10 +49,12 @@ export class SellingPageComponent implements OnInit{
   private hyphen = '-';
   private priceInString = '';
   private nameOfBuyer: string;
+  private url: string;
 
   constructor(private utilService: UtilService,
               private httpService: HttpService,
-              private cdRef:ChangeDetectorRef,) { }
+              private cdRef:ChangeDetectorRef,
+              private router: Router) { }
 
   ngOnInit() {
     if (sessionStorage.getItem('A2Auto') != null) {
@@ -108,7 +111,11 @@ export class SellingPageComponent implements OnInit{
       this.witness2 = history.state.data.witness2;
       this.a2Representation = history.state.data.a2Representation;
       this.nameOfBuyer = history.state.data.nameOfBuyer;
+      this.url = history.state.data.url;
 
+      if (history.state.data.url != null) {
+        sessionStorage.setItem('url', history.state.data.url);
+      }
       if (history.state.data.clickedCarIndex != null) {
         sessionStorage.setItem('clickedCarIndex', history.state.data.clickedCarIndex);
       }
@@ -398,6 +405,14 @@ export class SellingPageComponent implements OnInit{
         this.sellerCompany = this.pickedCompany;
         this.sellerCompanyRepresentation = this.pickedCompany.representation;
       }
+    }
+  }
+
+  private navigateBack() {
+    if (this.url == null) {
+      this.router.navigate(['/filter']);
+    } else {
+      this.router.navigate([this.url]);
     }
   }
 

@@ -7,6 +7,7 @@ import {Order} from "../../@core/models/order";
 import {Users} from "../../@core/models/users";
 import {Company} from "../../@core/models/company";
 import {Witness} from "../../@core/models/witness";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-warrant-page',
@@ -29,7 +30,7 @@ export class WarrantPageComponent implements OnInit {
   private warrantType: string;
   private nameOfBuyer: string;
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
     if (sessionStorage.getItem('order') != null) {
@@ -103,6 +104,10 @@ export class WarrantPageComponent implements OnInit {
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
       pdf.save('warrant.pdf'); // Generated PDF
     });
+  }
+
+  private navigateBack() {
+    this.router.navigate(['/filter']);
   }
 
 }

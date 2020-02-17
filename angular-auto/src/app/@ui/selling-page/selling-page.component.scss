@@ -154,6 +154,11 @@ button {
   color: white;
 }
 
+.buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
 .buyingType {
   display: flex;
   justify-content: space-between;

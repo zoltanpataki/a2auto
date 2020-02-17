@@ -8,6 +8,7 @@ import {Car} from "../../@core/models/car";
 import {Order} from "../../@core/models/order";
 import {Users} from "../../@core/models/users";
 import {Company} from "../../@core/models/company";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-insurance-page',
@@ -30,7 +31,8 @@ export class InsurancePageComponent implements OnInit {
   private insuredCar: Car;
   private insuranceDateExpiry: Date;
 
-  constructor(private httpService: HttpService,) { }
+  constructor(private httpService: HttpService,
+              private router: Router) { }
 
   ngOnInit() {
     this.today = new Date();
@@ -164,6 +166,10 @@ export class InsurancePageComponent implements OnInit {
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
       pdf.save('insurance.pdf'); // Generated PDF
     });
+  }
+
+  private navigateBack() {
+    this.router.navigate(['/filter']);
   }
 
 }
