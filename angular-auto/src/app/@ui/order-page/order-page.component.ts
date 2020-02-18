@@ -17,20 +17,20 @@ import {Router} from "@angular/router";
 })
 export class OrderPageComponent implements OnInit {
 
-  private orderedCar: Car;
-  private order: Order;
-  private today: Date;
-  private userSearchResult: Users[];
-  private companySearchResult: Company[];
-  private indexOfPickedUser: number;
-  private indexOfPickedCompany: number;
-  private pickedUser: Users;
-  private pickedCompany: Company;
-  private remainingPrice: number;
-  private blankPage: boolean;
-  private extraAmountChargedForTheUser: number;
-  private countInCar: Car;
-  private nameOfBuyer: string;
+  public orderedCar: Car;
+  public order: Order;
+  public today: Date;
+  public userSearchResult: Users[];
+  public companySearchResult: Company[];
+  public indexOfPickedUser: number;
+  public indexOfPickedCompany: number;
+  public pickedUser: Users;
+  public pickedCompany: Company;
+  public remainingPrice: number;
+  public blankPage: boolean;
+  public extraAmountChargedForTheUser: number;
+  public countInCar: Car;
+  public nameOfBuyer: string;
 
 
   constructor(private httpService: HttpService,
@@ -136,7 +136,7 @@ export class OrderPageComponent implements OnInit {
     });
   }
 
-  private navigateBack() {
+  public navigateBack() {
     this.router.navigate(['/filter']);
   }
 

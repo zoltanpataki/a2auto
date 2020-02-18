@@ -59,13 +59,13 @@ export class UserComponent implements OnInit {
     dueTimeOfIdCard: 'Személyi igazolvány lejárata'
   };
   public keepOriginalOrder = (a, b) => a.key;
-  private currentUrl;
-  private isCompleteAddress: boolean = true;
+  public currentUrl;
+  public isCompleteAddress: boolean = true;
 
   constructor(private httpService: HttpService,
-              private utilService: UtilService,
+              public utilService: UtilService,
               private route: ActivatedRoute,
-              private router: Router,) {
+              public router: Router,) {
     this.route.url.subscribe(activtedUrl => {
       this.currentUrl = window.location.pathname;
     });
@@ -134,7 +134,7 @@ export class UserComponent implements OnInit {
     }
   }
 
-  private checkZipCode(form: any) {
+  public checkZipCode(form: any) {
     if (form.value.zipCode && form.value.zipCode.length === 4 && !isNaN(form.value.zipCode)) {
       this.httpService.callZipCodeService(form.value.zipCode).subscribe(data => {
         this.userData.city = (data.zipCity).toUpperCase();
@@ -144,7 +144,7 @@ export class UserComponent implements OnInit {
     }
   }
 
-  private createUserObj(form: any, updateOrNew: boolean): Users {
+  public createUserObj(form: any, updateOrNew: boolean): Users {
     const capitalObject = this.transformToCapitalData(form);
     if (updateOrNew) {
       return new Users(
@@ -199,7 +199,7 @@ export class UserComponent implements OnInit {
     return Math.abs(nullCounter) === 3;
   }
 
-  private itemChanged(form: any) {
+  public itemChanged(form: any) {
     if (Object.entries(form.value).length === 0 && form.value.constructor === Object) {
       //we don't do anything, the object is empty
     } else {
@@ -230,7 +230,7 @@ export class UserComponent implements OnInit {
     return capitalObject;
   }
 
-  private clearUserData() {
+  public clearUserData() {
     this.userData = null;
     sessionStorage.removeItem('newUser');
     this.ngOnInit();

@@ -1,6 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogConfig, MatDialogRef} from "@angular/material/dialog";
-import {WarningDialogComponent} from "../warning-dialog/warning-dialog.component";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-salesman',
@@ -15,11 +14,11 @@ export class SalesmanComponent implements OnInit {
   ngOnInit() {
   }
 
-  private close() {
+  public close() {
     this.dialogRef.close();
   }
 
-  private saveNewSalesman(form: any) {
+  public saveNewSalesman(form: any) {
     this.dialogRef.close(form.value);
   }
 }

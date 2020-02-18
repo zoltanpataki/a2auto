@@ -28,70 +28,70 @@ import {DescriptionWithAmount} from "../../models/descriptionWithAmount";
 })
 export class FilterComponent implements OnInit {
 
-  private countInCarSupplementForm: FormGroup;
-  private filters = [{viewValue: 'Modell', value: 'name'}, {viewValue: 'Rendszám', value: 'plateNumber'}, {viewValue: 'Márka', value: 'type'}, {viewValue: 'Összes', value: 'all'}, {viewValue: 'Eladott', value: 'sold'}];
-  private userFilters = [{viewValue: 'Név', value: 'name'}, {viewValue: 'Város', value: 'city'}];
-  private selectedFilter: SelectedFilter;
-  private selectedUserFilter: SelectedFilter;
-  private companyFilters = [{viewValue: 'Név', value: 'name'}, {viewValue: 'Cégjegyzékszám', value: 'companyRegistrationNumber'}];
-  private selectedCompanyFilter: SelectedFilter;
-  private selectedCars = [];
-  private selectedCarHeader = ['Márka', 'Modell', 'Rendszám', 'Vevő', 'Vásárlás dátuma'];
+  public countInCarSupplementForm: FormGroup;
+  public filters = [{viewValue: 'Modell', value: 'name'}, {viewValue: 'Rendszám', value: 'plateNumber'}, {viewValue: 'Márka', value: 'type'}, {viewValue: 'Összes', value: 'all'}, {viewValue: 'Eladott', value: 'sold'}];
+  public userFilters = [{viewValue: 'Név', value: 'name'}, {viewValue: 'Város', value: 'city'}];
+  public selectedFilter: SelectedFilter;
+  public selectedUserFilter: SelectedFilter;
+  public companyFilters = [{viewValue: 'Név', value: 'name'}, {viewValue: 'Cégjegyzékszám', value: 'companyRegistrationNumber'}];
+  public selectedCompanyFilter: SelectedFilter;
+  public selectedCars = [];
+  public selectedCarHeader = ['Márka', 'Modell', 'Rendszám', 'Vevő', 'Vásárlás dátuma'];
   public typeOfBuying = ['KÉSZPÉNZ', 'ÁTUTALÁS', 'HITEL'];
-  private noMatch = false;
-  private selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate: boolean;
-  private alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready: boolean;
-  private checkedIndividual: boolean;
-  private checkedCorporate: boolean;
-  private previousOrNew: string;
-  private individualOrCorporate: string;
-  private selectedTypeOfBuying;
-  private carOfTransaction: Car;
-  private userSearchResult = new MatTableDataSource<Users>();
-  private companySearchResult = new MatTableDataSource<Company>();
-  private inheritanceTax: number;
-  private orderProgress: number = 0;
-  private askForInheritanceTaxCalculation: string;
-  private wantInheritanceTaxCalculation: boolean;
-  private addCountInCar: string;
-  private thereIsCountInCar: boolean;
-  private countInCarSupplement: CountInCarSupplement;
-  private clickedCarIndex: number;
-  private extra: number;
-  private userDisplayedColumns: string[] = ['name', 'city', 'taxNumber', 'symbol'];
-  private companyDisplayedColumns: string[] = ['name', 'registrationNumber', 'representation', 'symbol'];
-  private pickedUser: Users;
-  private pickedCompany: Company;
-  private indexOfPickedUser: number;
-  private indexOfPickedCompany: number;
-  private creditData: Credit;
-  private countInCar: Car;
-  private salesman: string;
-  private newOrder: Order;
-  private newUser: Users;
-  private newCompany: Company;
-  private descriptionList: Description[] = [];
-  private switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer: boolean = true;
+  public noMatch = false;
+  public selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate: boolean;
+  public alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready: boolean;
+  public checkedIndividual: boolean;
+  public checkedCorporate: boolean;
+  public previousOrNew: string;
+  public individualOrCorporate: string;
+  public selectedTypeOfBuying;
+  public carOfTransaction: Car;
+  public userSearchResult = new MatTableDataSource<Users>();
+  public companySearchResult = new MatTableDataSource<Company>();
+  public inheritanceTax: number;
+  public orderProgress: number = 0;
+  public askForInheritanceTaxCalculation: string;
+  public wantInheritanceTaxCalculation: boolean;
+  public addCountInCar: string;
+  public thereIsCountInCar: boolean;
+  public countInCarSupplement: CountInCarSupplement;
+  public clickedCarIndex: number;
+  public extra: number;
+  public userDisplayedColumns: string[] = ['name', 'city', 'taxNumber', 'symbol'];
+  public companyDisplayedColumns: string[] = ['name', 'registrationNumber', 'representation', 'symbol'];
+  public pickedUser: Users;
+  public pickedCompany: Company;
+  public indexOfPickedUser: number;
+  public indexOfPickedCompany: number;
+  public creditData: Credit;
+  public countInCar: Car;
+  public salesman: string;
+  public newOrder: Order;
+  public newUser: Users;
+  public newCompany: Company;
+  public descriptionList: Description[] = [];
+  public switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer: boolean = true;
   // Downpayment form variables
-  private downPaymentForm: FormGroup;
-  private downPayment: number;
+  public downPaymentForm: FormGroup;
+  public downPayment: number;
   // Description with amount form variables
-  private descriptionForm: FormGroup;
-  private description: FormArray;
-  private descriptions: FormArray;
-  private listOfDescriptionsWithAmount: DescriptionWithAmount[] = [];
-  private chargedBehalf = ['AJÁNDÉK', 'VEVŐ FIZETI'];
-  private giftIndexList = [];
+  public descriptionForm: FormGroup;
+  public description: FormArray;
+  public descriptions: FormArray;
+  public listOfDescriptionsWithAmount: DescriptionWithAmount[] = [];
+  public chargedBehalf = ['AJÁNDÉK', 'VEVŐ FIZETI'];
+  public giftIndexList = [];
   @ViewChild('focuser', {read: ElementRef, static: false})
-  private focuser: ElementRef;
-  private nameOfBuyer;
+  public focuser: ElementRef;
+  public nameOfBuyer;
 
   constructor(private httpService: HttpService,
-              private utilService: UtilService,
+              public utilService: UtilService,
               private dialog: MatDialog,
               private formBuilder: FormBuilder,
               private changeDetectorRefs: ChangeDetectorRef,
-              private router: Router,) {
+              public router: Router,) {
     router.events
       .subscribe((event: NavigationEnd) => {
         if (event.url !== event.urlAfterRedirects && event.url !== '/filter') {
@@ -506,12 +506,12 @@ export class FilterComponent implements OnInit {
     }
   }
 
-  private addNewDescriptionWithAmountRow(descriptionWithAmount: DescriptionWithAmount) {
+  public addNewDescriptionWithAmountRow(descriptionWithAmount: DescriptionWithAmount) {
     this.descriptions = this.descriptionForm.get('description') as FormArray;
     this.descriptions.push(this.createDescriptionWithAmountRow(descriptionWithAmount));
   }
 
-  private removeDescriptionWithAmountRow(index: number) {
+  public removeDescriptionWithAmountRow(index: number) {
     this.descriptions = this.descriptionForm.get('description') as FormArray;
     this.descriptions.removeAt(index);
   }
@@ -730,7 +730,7 @@ export class FilterComponent implements OnInit {
     return item.id; // unique id corresponding to the item
   }
 
-  private filterUser(form: any) {
+  public filterUser(form: any) {
     this.httpService.getUser(this.setFormValuesToUpperCase(form), this.selectedUserFilter.value).subscribe(data => {
       this.userSearchResult.data = data;
       this.changeDetectorRefs.detectChanges();
@@ -739,7 +739,7 @@ export class FilterComponent implements OnInit {
     this.setOrderProgressInSessionStorage(2);
   }
 
-  private filterCompany(form: any) {
+  public filterCompany(form: any) {
     this.httpService.getCompany(this.setFormValuesToUpperCase(form), this.selectedCompanyFilter.value).subscribe(data => {
       this.companySearchResult.data = data;
       this.changeDetectorRefs.detectChanges();
@@ -767,7 +767,7 @@ export class FilterComponent implements OnInit {
     return formValue;
   }
 
-  private selectBetweenNewAndPreviousCustomer(previousOrNew: string, selection:boolean) {
+  public selectBetweenNewAndPreviousCustomer(previousOrNew: string, selection:boolean) {
     this.changeCheckBoxValuesToNull();
     if (previousOrNew === 'previous') {
       this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = !selection;
@@ -788,7 +788,7 @@ export class FilterComponent implements OnInit {
     this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate = null;
   }
 
-  private setIndOrCorpCheckboxValue(indOrCorp: string, selection: boolean) {
+  public setIndOrCorpCheckboxValue(indOrCorp: string, selection: boolean) {
     if (indOrCorp === 'individual') {
       this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate = selection;
       if (selection) {
@@ -815,7 +815,7 @@ export class FilterComponent implements OnInit {
     sessionStorage.setItem('selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate', this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate.toString());
   }
 
-  private setInheritanceTaxCheckboxValue(wantOrNotCalculation: string, car: Car, selection: boolean) {
+  public setInheritanceTaxCheckboxValue(wantOrNotCalculation: string, car: Car, selection: boolean) {
     if (wantOrNotCalculation === 'wantCalculation') {
       if (selection) {
         this.askForInheritanceTaxCalculation = 'wantCalculation';
@@ -896,7 +896,7 @@ export class FilterComponent implements OnInit {
     });
   }
 
-  private setAlreadyOrNewCustomerSelectorAndCarOfTransaction(car: Car, index: number) {
+  public setAlreadyOrNewCustomerSelectorAndCarOfTransaction(car: Car, index: number) {
     this.setDataToNull();
     if (index !== this.clickedCarIndex) {
       this.carOfTransaction = car;
@@ -918,7 +918,7 @@ export class FilterComponent implements OnInit {
     }
   }
 
-  private setCountInCar(isOrNotCountIn: string, selection: boolean) {
+  public setCountInCar(isOrNotCountIn: string, selection: boolean) {
     if (isOrNotCountIn === 'countIn') {
       if (selection) {
         this.addCountInCar = 'countIn';
@@ -968,7 +968,7 @@ export class FilterComponent implements OnInit {
     })
   }
 
-  private selectTypeOfBuying(type: any, car: Car) {
+  public selectTypeOfBuying(type: any, car: Car) {
     this.selectedTypeOfBuying = type;
     this.carOfTransaction.typeOfBuying = type;
     this.httpService.updateCar(this.carOfTransaction).subscribe(data => {
@@ -996,13 +996,13 @@ export class FilterComponent implements OnInit {
     }
   }
 
-  private orderOnProgressWithUser(event: string) {
+  public orderOnProgressWithUser(event: string) {
     if (event === 'saved' && this.orderProgress < 2) {
       this.setOrderProgressInSessionStorage(2);
     }
   }
 
-  private addNewUserToOrder(event: Users) {
+  public addNewUserToOrder(event: Users) {
     console.log(event);
     this.newUser = event;
     this.carOfTransaction.nameOfBuyer = this.newUser.fullName;
@@ -1012,7 +1012,7 @@ export class FilterComponent implements OnInit {
     sessionStorage.setItem('newUserDuringSell', JSON.stringify(this.newUser));
   }
 
-  private addNewCompanyToOrder(event: Company) {
+  public addNewCompanyToOrder(event: Company) {
     this.newCompany = event;
     this.carOfTransaction.nameOfBuyer = this.newCompany.name;
     this.nameOfBuyer = this.newCompany.name;
@@ -1021,13 +1021,13 @@ export class FilterComponent implements OnInit {
     sessionStorage.setItem('newCompanyDuringSell', JSON.stringify(this.newCompany));
   }
 
-  private orderOnProgressWithCar(event: string) {
+  public orderOnProgressWithCar(event: string) {
     if (event === 'saved' && this.orderProgress < 4) {
       this.setOrderProgressInSessionStorage(4);
     }
   }
 
-  private saveCountInCarSupplement(form: FormGroup) {
+  public saveCountInCarSupplement(form: FormGroup) {
     this.countInCarSupplement = new CountInCarSupplement(
       form.value.countInPrice,
       form.value.previousLoan,
@@ -1037,7 +1037,7 @@ export class FilterComponent implements OnInit {
     this.setOrderProgressInSessionStorage(5);
   }
 
-  private saveDownPaymentAmount(form: FormGroup, car: Car) {
+  public saveDownPaymentAmount(form: FormGroup, car: Car) {
     this.downPayment = form.value.downPayment;
     this.extra = form.value.extra;
     car.downPayment = this.downPayment;
@@ -1051,7 +1051,7 @@ export class FilterComponent implements OnInit {
     }
   }
 
-  private pickUser(index: number) {
+  public pickUser(index: number) {
     this.indexOfPickedUser = index;
     const pickedUserFromDataTable = this.userSearchResult.data[index];
     this.pickedUser = new Users(
@@ -1082,7 +1082,7 @@ export class FilterComponent implements OnInit {
     this.updateCarOfTransaction(this.carOfTransaction);
   }
 
-  private pickCompany(index: number) {
+  public pickCompany(index: number) {
     this.indexOfPickedCompany = index;
     const pickedCompanyFromDataTable = this.companySearchResult.data[index];
     this.pickedCompany = new Company(
@@ -1102,12 +1102,12 @@ export class FilterComponent implements OnInit {
     this.updateCarOfTransaction(this.carOfTransaction);
   }
 
-  private getCountInCarData(event: Car) {
+  public getCountInCarData(event: Car) {
     this.countInCar = event;
     sessionStorage.setItem('countInCar', JSON.stringify(this.countInCar));
   }
 
-  private saveSalesman(salesman: any, car: Car) {
+  public saveSalesman(salesman: any, car: Car) {
     this.salesman = salesman;
     car.salesman = this.salesman;
     this.updateCarOfTransaction(car);
@@ -1130,31 +1130,31 @@ export class FilterComponent implements OnInit {
     });
   }
 
-  private submitHandOver(form: any, car: Car) {
+  public submitHandOver(form: any, car: Car) {
     this.updateCarWithHandoverDate(form, car);
     this.setOrderProgressInSessionStorage(8);
   }
 
-  private updateCarWithHandoverDate(form: any, car: Car) {
+  public updateCarWithHandoverDate(form: any, car: Car) {
     car.carHandover = form.value.handover;
     this.updateCarOfTransaction(car);
   }
 
-  private saveChangedDownPayment(form: FormGroup) {
+  public saveChangedDownPayment(form: FormGroup) {
     this.downPayment = form.value.downPayment;
     if (this.downPayment != null) {
       sessionStorage.setItem('downPayment', this.downPayment.toString());
     }
   }
 
-  private saveChangedExtra(form: FormGroup) {
+  public saveChangedExtra(form: FormGroup) {
     this.extra = form.value.extra;
     if (this.extra != null) {
       sessionStorage.setItem('extra', this.extra.toString());
     }
   }
 
-  private saveDescriptions(descriptionForm: FormGroup) {
+  public saveDescriptions(descriptionForm: FormGroup) {
     this.listOfDescriptionsWithAmount = [];
     descriptionForm.value.description.forEach(descriptionWithAmount => {
       const descriptionAmount = descriptionWithAmount.charged === 'AJÁNDÉK' ? 0 : descriptionWithAmount.amount;
@@ -1168,15 +1168,17 @@ export class FilterComponent implements OnInit {
     this.setOrderProgressInSessionStorage(9);
   }
 
-  private addToGiftIndexList(index: number) {
+  public addToGiftIndexList(index: number): boolean {
     this.giftIndexList.push(index);
+    return true;
   }
 
-  private removeFromGiftIndexList(index: number) {
+  public removeFromGiftIndexList(index: number): boolean {
     this.giftIndexList.splice(index, 1);
+    return true;
   }
 
-  private navigateToOrderOrSellingOrWarrantOrInsurancePage(car: Car, orderedCarId: number, targetRoute: string,  witness1: Witness, witness2: Witness, warrantType: string, a2Representation: string, descriptionForm: FormGroup, countInCarSupplementForm: FormGroup, pickedTypeOfBuyingForCountInCar: string) {
+  public navigateToOrderOrSellingOrWarrantOrInsurancePage(car: Car, orderedCarId: number, targetRoute: string,  witness1: Witness, witness2: Witness, warrantType: string, a2Representation: string, descriptionForm: FormGroup, countInCarSupplementForm: FormGroup, pickedTypeOfBuyingForCountInCar: string) {
     if (this.downPayment != null) {
       car.downPayment = this.downPayment;
       this.updateCarOfTransaction(car);
@@ -1262,23 +1264,25 @@ export class FilterComponent implements OnInit {
         }}});
   }
 
-  private gatherSellingPageInfo(car: Car, orderedCarId: number, sellOrBuy: string, descriptionForm: FormGroup, countInCarSupplementForm: FormGroup) {
+  public gatherSellingPageInfo(car: Car, orderedCarId: number, sellOrBuy: string, descriptionForm: FormGroup, countInCarSupplementForm: FormGroup) {
     this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer = sellOrBuy === 'sell';
     this.openCarTimeInfoDialog(car, orderedCarId, sellOrBuy, descriptionForm, countInCarSupplementForm);
   }
 
-  private navigateToBlankOrderPage(car: Car) {
+  public navigateToBlankOrderPage(car: Car) {
     this.router.navigate(['/orderPage'], {state: {blankData: {
           orderedCar: car,
           blankPage: true
         }}});
   }
 
-  private navigateToInsurancePage(car: Car, descriptionForm: FormGroup, countInCarSupplementForm: FormGroup) {
+  public navigateToInsurancePage(car: Car, descriptionForm: FormGroup, countInCarSupplementForm: FormGroup) {
     this.navigateToOrderOrSellingOrWarrantOrInsurancePage(car, car.id, '/insurance', null, null, null, null, descriptionForm, countInCarSupplementForm, null);
   }
 
-  private openWitnessPickerForWarrantPage(descriptionForm: FormGroup, countInCarSupplementForm: FormGroup) {
+  public openWitnessPickerForWarrantPage(descriptionForm: FormGroup, countInCarSupplementForm: FormGroup) {
     this.openWitnessPickerModal(descriptionForm, countInCarSupplementForm);
   }
+
+  get formData() {return <FormArray>this.descriptionForm.get('description');}
 }

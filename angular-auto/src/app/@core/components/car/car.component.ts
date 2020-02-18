@@ -54,16 +54,16 @@ export class CarComponent implements OnInit {
   public fieldRelatedToWeight = {weight: 'Saját tömeg', maxWeightAllowed: 'Megengedett legnagyobb össztömeg'};
   public keepOriginalOrder = (a, b) => a.key;
   public carHandoverTime = {};
-  private showInsuranceButton: boolean = false;
+  public showInsuranceButton: boolean = false;
 
   public typeOfBuying = ['KÉSZPÉNZ', 'ÁTUTALÁS', 'HITEL'];
   public fuelTypes = ['BENZIN', 'DÍZEL', 'GÁZ', 'HIBRID', 'ELEKTROMOS'];
   public carOrTruck = ['SZEMÉLYGÉPJÁRMŰ', 'TEHERGÉPJÁRMŰ'];
-  private savedOrNot: boolean = true;
-  private notValidVintage: boolean = false;
+  public savedOrNot: boolean = true;
+  public notValidVintage: boolean = false;
 
   constructor(private httpService: HttpService,
-              private utilService: UtilService,
+              public utilService: UtilService,
               private dialog: MatDialog,
               private router: Router) {
     router.events
@@ -145,7 +145,7 @@ export class CarComponent implements OnInit {
     });
   }
 
-  private openDialog(carForm: any) {
+  public openDialog(carForm: any) {
     this.dialogCloser.emit('close');
     if (this.carData.id != null) {
       const carForBuying = this.createCarObjectWithId(carForm, this.transformToCapitalData(carForm), this.carData.id);
@@ -363,7 +363,7 @@ export class CarComponent implements OnInit {
       null);
   }
 
-  private navigateToInsurancePage(form: any) {
+  public navigateToInsurancePage(form: any) {
     this.dialogCloser.emit('close');
     if (this.carData.id != null) {
       const carForInsurance = this.createCarObjectWithId(form, this.transformToCapitalData(form), this.carData.id);
@@ -386,14 +386,14 @@ export class CarComponent implements OnInit {
     return item.id; // unique id corresponding to the item
   }
 
-  private itemChanged(form: any) {
+  public itemChanged(form: any) {
     const car = this.createCarObjectNoId(form, this.transformToCapitalData(form));
     if (this.router.url !== '/filter') {
       sessionStorage.setItem('newCar', JSON.stringify(car));
     }
   }
 
-  private makeTheFormBlank() {
+  public makeTheFormBlank() {
     this.carData = null;
     sessionStorage.removeItem('newCar');
     this.ngOnInit();

@@ -16,21 +16,21 @@ import {Router} from "@angular/router";
 })
 export class WarrantPageComponent implements OnInit {
 
-  private orderedCar: Car;
-  private order: Order;
-  private today: Date;
-  private userSearchResult: Users[];
-  private companySearchResult: Company[];
-  private indexOfPickedUser: number;
-  private indexOfPickedCompany: number;
-  private pickedUser: Users;
-  private pickedCompany: Company;
-  private witness1: Witness;
-  private witness2: Witness;
-  private warrantType: string;
-  private nameOfBuyer: string;
+  public orderedCar: Car;
+  public order: Order;
+  public today: Date;
+  public userSearchResult: Users[];
+  public companySearchResult: Company[];
+  public indexOfPickedUser: number;
+  public indexOfPickedCompany: number;
+  public pickedUser: Users;
+  public pickedCompany: Company;
+  public witness1: Witness;
+  public witness2: Witness;
+  public warrantType: string;
+  public nameOfBuyer: string;
 
-  constructor(private router: Router) { }
+  constructor(public router: Router) { }
 
   ngOnInit() {
     if (sessionStorage.getItem('order') != null) {
@@ -106,7 +106,7 @@ export class WarrantPageComponent implements OnInit {
     });
   }
 
-  private navigateBack() {
+  public navigateBack() {
     this.router.navigate(['/filter']);
   }
 

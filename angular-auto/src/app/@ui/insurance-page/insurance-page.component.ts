@@ -17,22 +17,22 @@ import {Router} from "@angular/router";
 })
 export class InsurancePageComponent implements OnInit {
 
-  private today: Date;
-  private insuranceOfferNumber: number;
-  private orderedCar: Car;
-  private order: Order;
-  private userSearchResult: Users[];
-  private companySearchResult: Company[];
-  private indexOfPickedUser: number;
-  private indexOfPickedCompany: number;
-  private pickedUser: Users;
-  private pickedCompany: Company;
-  private insurancePrice: number;
-  private insuredCar: Car;
-  private insuranceDateExpiry: Date;
+  public today: Date;
+  public insuranceOfferNumber: number;
+  public orderedCar: Car;
+  public order: Order;
+  public userSearchResult: Users[];
+  public companySearchResult: Company[];
+  public indexOfPickedUser: number;
+  public indexOfPickedCompany: number;
+  public pickedUser: Users;
+  public pickedCompany: Company;
+  public insurancePrice: number;
+  public insuredCar: Car;
+  public insuranceDateExpiry: Date;
 
   constructor(private httpService: HttpService,
-              private router: Router) { }
+              public router: Router) { }
 
   ngOnInit() {
     this.today = new Date();
@@ -168,7 +168,7 @@ export class InsurancePageComponent implements OnInit {
     });
   }
 
-  private navigateBack() {
+  public navigateBack() {
     this.router.navigate(['/filter']);
   }
 

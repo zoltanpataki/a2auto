@@ -18,28 +18,28 @@ import {Router} from "@angular/router";
 })
 export class SellingPageComponent implements OnInit{
 
-  private orderedCar: Car;
-  private order: Order;
-  private today: Date;
-  private userSearchResult: Users[];
-  private companySearchResult: Company[];
-  private indexOfPickedUser: number;
-  private indexOfPickedCompany: number;
-  private pickedUser: Users;
-  private pickedCompany: Company;
-  private carHandoverTime = {};
-  private switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer: boolean;
-  private sellerCompany: Company;
-  private buyerCompany: Company;
-  private sellerIndividual: Users;
-  private buyerIndividual: Users;
-  private witness1: Witness;
-  private witness2: Witness;
-  private a2Representation: string;
-  private sellerCompanyRepresentation: string;
-  private buyerCompanyRepresentation: string;
-  private remarkList;
-  private typeOfBuying;
+  public orderedCar: Car;
+  public order: Order;
+  public today: Date;
+  public userSearchResult: Users[];
+  public companySearchResult: Company[];
+  public indexOfPickedUser: number;
+  public indexOfPickedCompany: number;
+  public pickedUser: Users;
+  public pickedCompany: Company;
+  public carHandoverTime = {};
+  public switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer: boolean;
+  public sellerCompany: Company;
+  public buyerCompany: Company;
+  public sellerIndividual: Users;
+  public buyerIndividual: Users;
+  public witness1: Witness;
+  public witness2: Witness;
+  public a2Representation: string;
+  public sellerCompanyRepresentation: string;
+  public buyerCompanyRepresentation: string;
+  public remarkList;
+  public typeOfBuying;
   private singles = ['egy', 'kettő', 'három', 'négy', 'öt', 'hat', 'hét', 'nyolc', 'kilenc'];
   private doublesWithZero = ['tíz', 'húsz'];
   private doubles = ['tizen', 'huszon', 'harminc', 'negyven', 'ötven', 'hatvan', 'hetven', 'nyolcvan', 'kilencven'];
@@ -47,14 +47,14 @@ export class SellingPageComponent implements OnInit{
   private thousand = 'ezer';
   private million = 'millió';
   private hyphen = '-';
-  private priceInString = '';
-  private nameOfBuyer: string;
-  private url: string;
+  public priceInString = '';
+  public nameOfBuyer: string;
+  public url: string;
 
   constructor(private utilService: UtilService,
               private httpService: HttpService,
               private cdRef:ChangeDetectorRef,
-              private router: Router) { }
+              public router: Router) { }
 
   ngOnInit() {
     if (sessionStorage.getItem('A2Auto') != null) {
@@ -408,7 +408,7 @@ export class SellingPageComponent implements OnInit{
     }
   }
 
-  private navigateBack() {
+  public navigateBack() {
     if (this.url == null) {
       this.router.navigate(['/filter']);
     } else {

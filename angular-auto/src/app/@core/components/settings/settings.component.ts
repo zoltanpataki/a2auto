@@ -20,11 +20,11 @@ import {filter} from "rxjs/operators";
 export class SettingsComponent implements OnInit {
 
   private carSalesmen = [];
-  private salesmen = new MatTableDataSource<any>();
-  private salesmanDisplayedColumns = ['name', 'symbol'];
+  public salesmen = new MatTableDataSource<any>();
+  public salesmanDisplayedColumns = ['name', 'symbol'];
   private witnessList = [];
-  private witnesses = new MatTableDataSource<any>();
-  private witnessDisplayedColumns = ['name', 'idCardNumber', 'symbol'];
+  public witnesses = new MatTableDataSource<any>();
+  public witnessDisplayedColumns = ['name', 'idCardNumber', 'symbol'];
 
   constructor(private dialog: MatDialog,
               private changeDetectorRefs: ChangeDetectorRef,
@@ -62,7 +62,7 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  private deleteSalesman(id: number) {
+  public deleteSalesman(id: number) {
     this.prepareSalesmanListForChange();
     this.httpService.deleteSalesman(id).subscribe(data => {
       this.carSalesmen.forEach((salesman, index) => {
@@ -76,7 +76,7 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  private deleteWitness(id: number) {
+  public deleteWitness(id: number) {
     this.prepareWitnessListForChange();
     this.httpService.deleteWitness(id).subscribe(data => {
       this.witnessList.forEach((witness, index) => {
@@ -90,7 +90,7 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  private addSalesman(salesman: any) {
+  public addSalesman(salesman: any) {
     const newSalesman = new Salesmen(null, salesman);
     this.prepareSalesmanListForChange();
     this.httpService.saveSalesman(newSalesman).subscribe(data => {
@@ -101,7 +101,7 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  private addWitness(witness: any) {
+  public addWitness(witness: any) {
     const newWitness = new Witness(null, new WitnessAddress(null, witness.zipcode, witness.city, witness.address), witness.idCardNumber, witness.name);
     this.prepareWitnessListForChange();
     this.httpService.saveWitness(newWitness).subscribe(data => {

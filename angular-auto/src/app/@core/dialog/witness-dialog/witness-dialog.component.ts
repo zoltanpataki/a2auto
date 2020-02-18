@@ -14,11 +14,11 @@ export class WitnessDialogComponent implements OnInit {
   ngOnInit() {
   }
 
-  private close() {
+  public close() {
     this.dialogRef.close();
   }
 
-  private saveNewWitness(form: any) {
+  public saveNewWitness(form: any) {
     this.dialogRef.close(form.value);
   }
 }

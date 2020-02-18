@@ -418,7 +418,7 @@
         </div>
         <div>
           <form [formGroup]="descriptionForm" (submit)="saveDescriptions(descriptionForm)" class="descriptionForm">
-            <div class="descriptions" formArrayName="description" *ngFor="let singleDescription of descriptionForm.get('description').controls; let indexNum = index">
+            <div class="descriptions" formArrayName="description" *ngFor="let singleDescription of formData.controls; let indexNum = index">
               <div class="descriptions">
                 <mat-form-field class="example-full-width" [formGroupName]="indexNum">
                   <label>

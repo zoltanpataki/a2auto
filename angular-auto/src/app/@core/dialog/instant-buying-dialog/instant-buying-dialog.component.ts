@@ -17,28 +17,28 @@ import {Address} from "../../models/address";
 })
 export class InstantBuyingDialogComponent implements OnInit {
 
-  private carData : Car;
-  private remarkPartOpen: boolean = false;
-  private userPartOpen: boolean = false;
-  private remarkForm: FormGroup;
-  private description: FormArray;
-  private remarkList: Description[] = [];
+  public carData : Car;
+  public remarkPartOpen: boolean = false;
+  public userPartOpen: boolean = false;
+  public remarkForm: FormGroup;
+  public description: FormArray;
+  public remarkList: Description[] = [];
   public carHandoverTime = {};
   public fields1 = {dueOfContract: 'Eladás dátuma', documentsHandover: 'Dokumentumok átadásának időpontja', dateOfContract : 'Szerződés szerinti teljesítés időpontja'};
   public keepOriginalOrder = (a, b) => a.key;
-  private witness1: Witness;
-  private witness2: Witness;
-  private listOfA2Representation = ['SOÓS GÁBOR', 'VINCZ ANTAL'];
-  private listOfTypeOfBuying = ['KÉSZPÉNZ', 'ÁTUTALÁS'];
-  private pickedRepresentation: string;
-  private pickedTypeOfBuying: string;
-  private userChooser: boolean = true;
-  private privateUserOrCorporate: string;
+  public witness1: Witness;
+  public witness2: Witness;
+  public listOfA2Representation = ['SOÓS GÁBOR', 'VINCZ ANTAL'];
+  public listOfTypeOfBuying = ['KÉSZPÉNZ', 'ÁTUTALÁS'];
+  public pickedRepresentation: string;
+  public pickedTypeOfBuying: string;
+  public userChooser: boolean = true;
+  public privateUserOrCorporate: string;
   public fields = {
     fullName: 'Teljes Név',
     birthName: 'Születéskori Név',
   };
-  private isCompleteAddress: boolean = true;
+  public isCompleteAddress: boolean = true;
 
   public addressFields = {
     zipCode: 'Irányítószám',
@@ -59,15 +59,15 @@ export class InstantBuyingDialogComponent implements OnInit {
     representation: 'Képviselő neve',
   };
 
-  private userOrCorporate = ['MAGÁNSZEMÉLY', 'CÉG'];
+  public userOrCorporate = ['MAGÁNSZEMÉLY', 'CÉG'];
 
-  private userData: Users;
-  private companyData: Company;
+  public userData: Users;
+  public companyData: Company;
 
   constructor(private dialogRef: MatDialogRef<InstantBuyingDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data,
               private httpService: HttpService,
-              private utilService: UtilService,
+              public utilService: UtilService,
               private formBuilder: FormBuilder,) { }
 
   ngOnInit() {
@@ -95,12 +95,12 @@ export class InstantBuyingDialogComponent implements OnInit {
     }
   }
 
-  private addNewRemarkRow(description: string) {
+  public addNewRemarkRow(description: string) {
     this.description = this.remarkForm.get('description') as FormArray;
     this.description.push(this.createRemarkRow(description));
   }
 
-  private removeRemarkRow(index: number) {
+  public removeRemarkRow(index: number) {
     this.description = this.remarkForm.get('description') as FormArray;
     this.description.removeAt(index);
   }
@@ -121,7 +121,7 @@ export class InstantBuyingDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  private saveCarData(form: any) {
+  public saveCarData(form: any) {
     const carHandover = new Date(this.carData.carHandover);
     if (this.carHandoverTime['hour'] != null && this.carHandoverTime['minute'] != null) {
       carHandover.setHours(this.carHandoverTime['hour'], this.carHandoverTime['minute'], 0, 0);
@@ -138,7 +138,7 @@ export class InstantBuyingDialogComponent implements OnInit {
     this.remarkPartOpen = true;
   }
 
-  private saveRemark(form: FormGroup) {
+  public saveRemark(form: FormGroup) {
     this.remarkPartOpen = false;
     this.remarkList = [];
     form.value.description.forEach(description => {
@@ -184,7 +184,7 @@ export class InstantBuyingDialogComponent implements OnInit {
     }
   }
 
-  private changeAllDateFieldIfEmptyElseOnlyThisOne(dateString: string, item: string) {
+  public changeAllDateFieldIfEmptyElseOnlyThisOne(dateString: string, item: string) {
     const date = new Date(dateString);
     if (this.carData.dateOfContract != null && this.carData.dueOfContract != null) {
       this.carData[item] = new Date(date);
@@ -198,7 +198,7 @@ export class InstantBuyingDialogComponent implements OnInit {
     }
   }
 
-  private saveUser(form: any) {
+  public saveUser(form: any) {
     this.companyData = null;
     if (this.nullCheckOnAddress(form)) {
       this.isCompleteAddress = true;
@@ -218,7 +218,7 @@ export class InstantBuyingDialogComponent implements OnInit {
     }
   }
 
-  private saveCompany(form: any) {
+  public saveCompany(form: any) {
     this.userData = null;
     if (this.nullCheckOnAddress(form)) {
       this.isCompleteAddress = true;
@@ -257,7 +257,7 @@ export class InstantBuyingDialogComponent implements OnInit {
     return Math.abs(nullCounter) === 3;
   }
 
-  private checkZipCode(form: any) {
+  public checkZipCode(form: any) {
     if (form.value.zipCode && form.value.zipCode.length === 4 && !isNaN(form.value.zipCode)) {
       this.httpService.callZipCodeService(form.value.zipCode).subscribe(data => {
         this.userData.city = (data.zipCity).toUpperCase();
@@ -266,7 +266,7 @@ export class InstantBuyingDialogComponent implements OnInit {
     }
   }
 
-  private checkZipCodeForCompany(form: any) {
+  public checkZipCodeForCompany(form: any) {
     if (form.value.zipCode && form.value.zipCode.length === 4 && !isNaN(form.value.zipCode)) {
       this.httpService.callZipCodeService(form.value.zipCode).subscribe(data => {
         this.companyData.address.city = (data.zipCity).toUpperCase();
@@ -275,8 +275,10 @@ export class InstantBuyingDialogComponent implements OnInit {
     }
   }
 
-  private pickPrivateOrCorporate() {
+  public pickPrivateOrCorporate() {
     this.userChooser = false;
   }
+
+  get formData() {return <FormArray>this.remarkForm.get('description');}
 
 }

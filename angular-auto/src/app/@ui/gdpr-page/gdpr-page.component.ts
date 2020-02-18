@@ -15,12 +15,12 @@ import {filter} from "rxjs/operators";
 })
 export class GdprPageComponent implements OnInit {
 
-  private Autocentrum: Company;
-  private AutocentrumAddress: string;
-  private today: Date;
+  public Autocentrum: Company;
+  public AutocentrumAddress: string;
+  public today: Date;
 
   constructor(private httpService: HttpService,
-              private router: Router,
+              public router: Router,
               private utilService: UtilService,) {
     router.events
       .pipe(filter(e => e instanceof NavigationEnd))

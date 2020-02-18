@@ -13,7 +13,7 @@ import {Description} from "../../models/description";
 })
 export class CarTimeInfoComponent implements OnInit {
 
-  private carData: Car;
+  public carData: Car;
   public fields1 = {dueOfContract: 'Eladás dátuma', documentsHandover: 'Dokumentumok átadásának időpontja', dateOfContract : 'Szerződés szerinti teljesítés időpontja'};
   public keepOriginalOrder = (a, b) => a.key;
   public carHandoverTime = {};
@@ -21,20 +21,20 @@ export class CarTimeInfoComponent implements OnInit {
   private selectedCars: Car[];
   private witness1: Witness;
   private witness2: Witness;
-  private listOfA2Representation = ['SOÓS GÁBOR', 'VINCZ ANTAL'];
-  private listOfTypeOfBuying = ['KÉSZPÉNZ', 'ÁTUTALÁS'];
+  public listOfA2Representation = ['SOÓS GÁBOR', 'VINCZ ANTAL'];
+  public listOfTypeOfBuying = ['KÉSZPÉNZ', 'ÁTUTALÁS'];
   private pickedRepresentation: string;
   private pickedTypeOfBuying: string;
 
-  private remarkPartOpen: boolean = false;
-  private remarkForm: FormGroup;
-  private description: FormArray;
+  public remarkPartOpen: boolean = false;
+  public remarkForm: FormGroup;
+  public description: FormArray;
   private remarkList: Description[] = [];
-  private sellOrBuy: string;
+  public sellOrBuy: string;
 
   constructor(private dialogRef: MatDialogRef<CarTimeInfoComponent>,
               @Inject(MAT_DIALOG_DATA) public data,
-              private utilService: UtilService,
+              public utilService: UtilService,
               private formBuilder: FormBuilder,) {}
 
   ngOnInit() {
@@ -74,12 +74,12 @@ export class CarTimeInfoComponent implements OnInit {
     });
   }
 
-  private addNewRemarkRow(remark: Description) {
+  public addNewRemarkRow(remark: Description) {
     this.description = this.remarkForm.get('description') as FormArray;
     this.description.push(this.createRemarkRow(remark));
   }
 
-  private removeRemarkRow(index: number) {
+  public removeRemarkRow(index: number) {
     this.description = this.remarkForm.get('description') as FormArray;
     this.description.removeAt(index);
   }
@@ -104,7 +104,7 @@ export class CarTimeInfoComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  private saveCarData(form: any) {
+  public saveCarData(form: any) {
     const carHandover = new Date(this.carData.carHandover);
     if (this.carHandoverTime['hour'] != null && this.carHandoverTime['minute'] != null) {
       carHandover.setHours(this.carHandoverTime['hour'], this.carHandoverTime['minute'], 0, 0);
@@ -121,7 +121,7 @@ export class CarTimeInfoComponent implements OnInit {
     this.remarkPartOpen = true;
   }
 
-  private saveRemark(form: FormGroup) {
+  public saveRemark(form: FormGroup) {
     this.remarkPartOpen = false;
     this.remarkList = [];
     form.value.description.forEach(description => {
@@ -179,7 +179,7 @@ export class CarTimeInfoComponent implements OnInit {
     }
   }
 
-  private changeAllDateFieldIfEmptyElseOnlyThisOne(dateString: string, item: string) {
+  public changeAllDateFieldIfEmptyElseOnlyThisOne(dateString: string, item: string) {
     const date = new Date(dateString);
     if (this.carData.dateOfContract != null && this.carData.dueOfContract != null) {
       this.carData[item] = new Date(date);
@@ -192,5 +192,7 @@ export class CarTimeInfoComponent implements OnInit {
       this.carData.dateOfContract = new Date(date);
     }
   }
+
+  get formData() {return <FormArray>this.remarkForm.get('description');}
 
 }

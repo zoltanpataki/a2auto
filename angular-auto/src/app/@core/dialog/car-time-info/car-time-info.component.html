@@ -130,7 +130,7 @@
     <form [formGroup]="remarkForm" (submit)="saveRemark(remarkForm)" class="remarkForm">
       <div class="remarkContainer">
         <div class="leftSide">
-          <div formArrayName="description" *ngFor="let remark of remarkForm.get('description').controls; let ind = index">
+          <div formArrayName="description" *ngFor="let remark of formData.controls; let ind = index">
             <div class="descriptions">
               <div>
                 <mat-form-field class="example-full-width" [formGroupName]="ind">

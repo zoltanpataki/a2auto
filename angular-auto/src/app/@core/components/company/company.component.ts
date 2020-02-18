@@ -39,15 +39,15 @@ export class CompanyComponent implements OnInit {
   public fields = {city: 'Város', address: 'Cím', country: 'Ország'};
   public fields2 = {representation: 'Képviselő', taxNumber: 'Adószám', phoneNumber: 'Telefonszám'};
   public keepOriginalOrder = (a, b) => a.key;
-  private currentUrl;
-  private isCompleteAddress: boolean = true;
+  public currentUrl;
+  public isCompleteAddress: boolean = true;
   isValidCompanyRegistrationNumber: boolean = true;
   private hyphen = '-';
 
   constructor(private httpService: HttpService,
               private utilService: UtilService,
               private route: ActivatedRoute,
-              private router: Router,) {
+              public router: Router,) {
     this.route.url.subscribe(activtedUrl => {
       this.currentUrl = window.location.pathname;
     });
@@ -118,7 +118,7 @@ export class CompanyComponent implements OnInit {
     return Math.abs(nullCounter) === 3;
   }
 
-  private itemChanged(form: any) {
+  public itemChanged(form: any) {
     if (Object.entries(form.value).length === 0 && form.value.constructor === Object) {
       //we don't do anything, the object is empty
     } else {
@@ -132,7 +132,7 @@ export class CompanyComponent implements OnInit {
     }
   }
 
-  private checkZipCode(form: any) {
+  public checkZipCode(form: any) {
     if (form.value.zipcode && form.value.zipcode.length === 4 && !isNaN(form.value.zipcode)) {
       this.httpService.callZipCodeService(form.value.zipcode).subscribe(data => {
         this.companyData.address.city = (data.zipCity).toUpperCase();
@@ -195,13 +195,13 @@ export class CompanyComponent implements OnInit {
     return capitalObject;
   }
 
-  private clearCompanyData() {
+  public clearCompanyData() {
     this.companyData = null;
     sessionStorage.removeItem('newCompany');
     this.ngOnInit();
   }
 
-  private marshallCompanyRegNumber(form: any) {
+  public marshallCompanyRegNumber(form: any) {
     let regNumber = form.value.companyRegistrationNumber.substring(0, 10);
     regNumber = regNumber.replace(/-/g, '');
     let resultNumber = '';

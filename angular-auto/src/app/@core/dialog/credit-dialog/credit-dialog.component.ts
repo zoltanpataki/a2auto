@@ -11,7 +11,7 @@ import {CountInCarSupplement} from "../../models/countInCarSupplement";
 })
 export class CreditDialogComponent implements OnInit {
 
-  private credit: Credit;
+  public credit: Credit;
   private creditAmount: number;
   private initialPayment : number;
 
@@ -35,7 +35,7 @@ export class CreditDialogComponent implements OnInit {
     this.dialogRef.close(this.credit);
   }
 
-  private saveCredit(form: any) {
+  public saveCredit(form: any) {
     this.credit = new Credit(form.value.bank, form.value.creditType, form.value.initialPayment, form.value.creditAmount, form.value.creditLength, form.value.repayment);
     this.closeWithData()
   }

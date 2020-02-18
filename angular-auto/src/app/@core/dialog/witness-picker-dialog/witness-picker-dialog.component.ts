@@ -13,17 +13,17 @@ export class WitnessPickerDialogComponent implements OnInit {
 
   private witness1: Witness;
   private witness2: Witness;
-  private warrantTypes = ['MAGÁNSZEMÉLY', 'CÉG'];
-  private warrantType: string;
-  private missingWarrantType: boolean = false;
+  public warrantTypes = ['MAGÁNSZEMÉLY', 'CÉG'];
+  public warrantType: string;
+  public missingWarrantType: boolean = false;
 
   constructor(private dialogRef: MatDialogRef<WarningDialogComponent>,
-              private utilService: UtilService) { }
+              public utilService: UtilService) { }
 
   ngOnInit() {
   }
 
-  private saveWitnessPicker(form: any) {
+  public saveWitnessPicker(form: any) {
     this.witness1 = form.value.witness1;
     this.witness2 = form.value.witness2;
     this.warrantType = form.value.warrantType;

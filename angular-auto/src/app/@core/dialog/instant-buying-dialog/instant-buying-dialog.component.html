@@ -89,7 +89,7 @@
     <form [formGroup]="remarkForm" (submit)="saveRemark(remarkForm)" class="remarkForm">
       <div class="remarkContainer">
         <div class="leftSide">
-          <div formArrayName="description" *ngFor="let remark of remarkForm.get('description').controls; let ind = index">
+          <div formArrayName="description" *ngFor="let remark of formData.controls; let ind = index">
             <div class="descriptions">
               <div>
                 <mat-form-field class="example-full-width" [formGroupName]="ind">
@@ -119,7 +119,7 @@
   <div *ngIf="userPartOpen">
     <div *ngIf="userChooser">
       <div>
-        <mat-form-field>
+        <mat-form-field class="privateOrCorpPicker">
           <mat-label>Válassz magánszemély és cég között</mat-label>
           <mat-select [(ngModel)]="privateUserOrCorporate" name="privateOrCorporate">
             <mat-option *ngFor="let privateOrCorporate of userOrCorporate; trackBy: trackByFn" [value]="privateOrCorporate" (click)="pickPrivateOrCorporate()">

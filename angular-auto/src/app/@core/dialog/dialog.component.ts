@@ -25,14 +25,14 @@ export class DialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  private closeDialog(event: any) {
+  public closeDialog(event: any) {
     console.log(event);
     if (event === 'close') {
       this.dialogRef.close();
     }
   }
 
-  private saveUpdatedCar(updatedCar: Event) {
+  public saveUpdatedCar(updatedCar: Event) {
     this.dialogRef.close(updatedCar);
   }
 
