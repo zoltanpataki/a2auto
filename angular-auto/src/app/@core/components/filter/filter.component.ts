@@ -243,6 +243,9 @@ export class FilterComponent implements OnInit {
       this.inheritanceTax = Number(sessionStorage.getItem('inheritanceTax'));
     }
     if (sessionStorage.getItem('credit')) {
+      console.log('valami');
+      console.log(this.creditData);
+      console.log(JSON.parse(sessionStorage.getItem('credit')));
       this.creditData = JSON.parse(sessionStorage.getItem('credit'));
     }
     if (sessionStorage.getItem('nameOfBuyer')) {
@@ -388,6 +391,10 @@ export class FilterComponent implements OnInit {
     if (order.extra != null) {
       this.extra = order.extra;
       sessionStorage.setItem('extra', this.extra.toString());
+    }
+    if (order.credit != null) {
+      this.creditData = order.credit;
+      sessionStorage.setItem('credit', JSON.stringify(this.creditData));
     }
     if (order.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready) {
       if (order.selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate) {
@@ -649,7 +656,7 @@ export class FilterComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       this.creditData = result;
-      if (this.creditData) {
+      if (this.creditData != null) {
         sessionStorage.setItem("credit", JSON.stringify(this.creditData));
       }
     });
