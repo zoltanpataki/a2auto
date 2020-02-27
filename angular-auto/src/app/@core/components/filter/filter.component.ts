@@ -243,9 +243,6 @@ export class FilterComponent implements OnInit {
       this.inheritanceTax = Number(sessionStorage.getItem('inheritanceTax'));
     }
     if (sessionStorage.getItem('credit')) {
-      console.log('valami');
-      console.log(this.creditData);
-      console.log(JSON.parse(sessionStorage.getItem('credit')));
       this.creditData = JSON.parse(sessionStorage.getItem('credit'));
     }
     if (sessionStorage.getItem('nameOfBuyer')) {
@@ -603,14 +600,12 @@ export class FilterComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       this.utilService.carUpdate = false;
-      console.log(this.carOfTransaction);
       if (result == null) {
         sessionStorage.removeItem('newCar');
       }
       if (this.carOfTransaction != null) {
         this.carOfTransaction = result;
       }
-      console.log(this.carOfTransaction);
       if (null != this.nameOfBuyer && null != this.carOfTransaction) {
         this.carOfTransaction.nameOfBuyer = this.nameOfBuyer;
       }
@@ -1010,7 +1005,6 @@ export class FilterComponent implements OnInit {
   }
 
   public addNewUserToOrder(event: Users) {
-    console.log(event);
     this.newUser = event;
     this.carOfTransaction.nameOfBuyer = this.newUser.fullName;
     this.nameOfBuyer = this.newUser.fullName;

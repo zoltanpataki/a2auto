@@ -7,7 +7,7 @@
           <div *ngFor="let item of fieldsOne | keyvalue:keepOriginalOrder; trackBy: trackByFn">
             <mat-form-field class="example-full-width">
               <label>
-                <input matInput placeholder="{{item.value}}" (ngModelChange)="itemChanged(userForm)" ngModel="{{userData[item.key]}}" name="{{item.key}}">
+                <input matInput maxlength="30" placeholder="{{item.value}}" (ngModelChange)="itemChanged(userForm)" ngModel="{{userData[item.key]}}" name="{{item.key}}">
               </label>
             </mat-form-field>
           </div>
@@ -21,7 +21,7 @@
           <div *ngFor="let item of fieldsAddress | keyvalue:keepOriginalOrder; trackBy: trackByFn">
             <mat-form-field class="example-full-width">
               <label>
-                <input matInput placeholder="{{item.value}}" (ngModelChange)="itemChanged(userForm)" ngModel="{{userData[item.key]}}" name="{{item.key}}">
+                <input matInput maxlength="30" placeholder="{{item.value}}" (ngModelChange)="itemChanged(userForm)" ngModel="{{userData[item.key]}}" name="{{item.key}}">
               </label>
             </mat-form-field>
           </div>
@@ -48,7 +48,7 @@
           <div *ngFor="let item of fieldsTwo | keyvalue:keepOriginalOrder; trackBy: trackByFn">
             <mat-form-field class="example-full-width">
               <label>
-                <input matInput placeholder="{{item.value}}" (ngModelChange)="itemChanged(userForm)" ngModel="{{userData[item.key]}}" name="{{item.key}}">
+                <input matInput maxlength="30" placeholder="{{item.value}}" (ngModelChange)="itemChanged(userForm)" ngModel="{{userData[item.key]}}" name="{{item.key}}">
               </label>
             </mat-form-field>
           </div>
@@ -57,7 +57,7 @@
           <div *ngFor="let item of fieldsThree | keyvalue:keepOriginalOrder; trackBy: trackByFn">
             <mat-form-field class="example-full-width">
               <label>
-                <input matInput placeholder="{{item.value}}" (ngModelChange)="itemChanged(userForm)" ngModel="{{userData[item.key]}}" name="{{item.key}}">
+                <input matInput maxlength="30" placeholder="{{item.value}}" (ngModelChange)="itemChanged(userForm)" ngModel="{{userData[item.key]}}" name="{{item.key}}">
               </label>
             </mat-form-field>
           </div>

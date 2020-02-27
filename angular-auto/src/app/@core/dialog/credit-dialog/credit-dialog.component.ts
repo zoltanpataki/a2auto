@@ -21,9 +21,9 @@ export class CreditDialogComponent implements OnInit {
   ngOnInit() {
     this.countCreditAmount(this.data.car, this.data.countInCarSupplement, this.data.downPayment, this.data.extra);
     if (this.data.credit == null) {
-      this.credit = new Credit(null, null, this.initialPayment, this.creditAmount, null, null);
+      this.credit = new Credit(null,null, null, this.initialPayment, this.creditAmount, null, null);
     } else {
-      this.credit = new Credit(this.data.credit.bank, this.data.credit.creditType, this.initialPayment, this.creditAmount, this.data.credit.creditLength, this.data.credit.repayment);
+      this.credit = new Credit(this.data.credit.id, this.data.credit.bank, this.data.credit.creditType, this.initialPayment, this.creditAmount, this.data.credit.creditLength, this.data.credit.repayment);
     }
   }
 
@@ -36,7 +36,7 @@ export class CreditDialogComponent implements OnInit {
   }
 
   public saveCredit(form: any) {
-    this.credit = new Credit(form.value.bank, form.value.creditType, form.value.initialPayment, form.value.creditAmount, form.value.creditLength, form.value.repayment);
+    this.credit = new Credit(this.credit.id, form.value.bank, form.value.creditType, form.value.initialPayment, form.value.creditAmount, form.value.creditLength, form.value.repayment);
     this.closeWithData()
   }
 

@@ -6,7 +6,7 @@
         <div *ngFor="let item of fieldsOneFirstHalf | keyvalue:keepOriginalOrder; trackBy: trackByFn">
           <mat-form-field class="example-full-width">
             <label>
-              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput placeholder="{{item.value}}" (ngModelChange)="itemChanged(carForm)" ngModel="{{carData[item.key]}}" name="{{item.key}}">
+              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput maxlength="30" placeholder="{{item.value}}" (ngModelChange)="itemChanged(carForm)" ngModel="{{carData[item.key]}}" name="{{item.key}}">
             </label>
           </mat-form-field>
         </div>
@@ -21,7 +21,7 @@
         <div *ngFor="let item of fieldsOneSecondHalf | keyvalue:keepOriginalOrder; trackBy: trackByFn">
           <mat-form-field class="example-full-width">
             <label>
-              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput placeholder="{{item.value}}" (ngModelChange)="itemChanged(carForm)" ngModel="{{carData[item.key]}}" name="{{item.key}}">
+              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput maxlength="30" placeholder="{{item.value}}" (ngModelChange)="itemChanged(carForm)" ngModel="{{carData[item.key]}}" name="{{item.key}}">
             </label>
           </mat-form-field>
         </div>
@@ -111,7 +111,7 @@
         <div>
           <mat-form-field class="example-full-width">
             <label>
-              <textarea autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput placeholder="Megjegyzések" (ngModelChange)="itemChanged(carForm)" ngModel="{{carData.costDescriptions}}" name="costDescriptions"></textarea>
+              <textarea autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput maxlength="250" placeholder="Megjegyzések" (ngModelChange)="itemChanged(carForm)" ngModel="{{carData.costDescriptions}}" name="costDescriptions"></textarea>
             </label>
           </mat-form-field>
         </div>

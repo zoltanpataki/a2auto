@@ -30,7 +30,7 @@
     <div>
       <mat-form-field class="example-full-width">
         <label>
-          <input matInput placeholder="Itt kereshetsz (Modell)" ngModel name="name">
+          <input matInput maxlength="30" placeholder="Itt kereshetsz (Modell)" ngModel name="name">
         </label>
       </mat-form-field>
       <mat-error *ngIf="utilService.emptySearchField">Üresen hagyott keresőmező</mat-error>
@@ -41,7 +41,7 @@
     <div>
       <mat-form-field class="example-full-width">
         <label>
-          <input matInput placeholder="Itt kereshetsz (Márka)" ngModel name="type">
+          <input matInput maxlength="30" placeholder="Itt kereshetsz (Márka)" ngModel name="type">
         </label>
       </mat-form-field>
       <mat-error *ngIf="utilService.emptySearchField">Üresen hagyott keresőmező</mat-error>
@@ -133,14 +133,14 @@
                   <div class="searchType" *ngIf="selectedUserFilter.value == 'name'">
                     <mat-form-field class="example-full-width">
                       <label>
-                        <input matInput placeholder="Itt kereshetsz ({{selectedUserFilter.viewValue}})" ngModel name="name">
+                        <input matInput maxlength="30" placeholder="Itt kereshetsz ({{selectedUserFilter.viewValue}})" ngModel name="name">
                       </label>
                     </mat-form-field>
                   </div>
                   <div class="searchType" *ngIf="selectedUserFilter.value == 'city'">
                     <mat-form-field class="example-full-width">
                       <label>
-                        <input matInput placeholder="Itt kereshetsz ({{selectedUserFilter.viewValue}})" ngModel name="city">
+                        <input matInput maxlength="30" placeholder="Itt kereshetsz ({{selectedUserFilter.viewValue}})" ngModel name="city">
                       </label>
                     </mat-form-field>
                   </div>
@@ -328,14 +328,14 @@
                     <div>
                       <mat-form-field class="example-full-width">
                         <label>
-                          <input matInput placeholder="Korábbi bank" formControlName="previousBank">
+                          <input matInput maxlength="30" placeholder="Korábbi bank" formControlName="previousBank">
                         </label>
                       </mat-form-field>
                     </div>
                     <div>
                       <mat-form-field class="example-full-width">
                         <label>
-                          <input matInput placeholder="Hitel típusa" formControlName="loanType">
+                          <input matInput maxlength="30" placeholder="Hitel típusa" formControlName="loanType">
                         </label>
                       </mat-form-field>
                     </div>
@@ -422,7 +422,7 @@
               <div class="descriptions">
                 <mat-form-field class="example-full-width" [formGroupName]="indexNum">
                   <label>
-                    <input matInput placeholder="Szöveg" formControlName="descriptionText">
+                    <input matInput maxlength="30" placeholder="Szöveg" formControlName="descriptionText">
                   </label>
                 </mat-form-field>
               </div>
