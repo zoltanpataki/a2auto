@@ -1,0 +1,30 @@
+version: "3"
+services:
+  postgres:
+    image: postgres:latest
+    network_mode: bridge
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    expose:
+      - 5432
+    ports:
+      - 5433
+    environment:
+      - POSTGRES_PASSWORD=macika
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=a2db
+  # APP*****************************************
+  springbootapp:
+    image: springbootapp:latest
+    network_mode: bridge
+    container_name: springbootapp
+    expose:
+      - 60000
+    ports:
+      - 60000:60000
+    depends_on:
+      - postgres
+    links:
+      - postgres
+volumes:
+  postgres-data:

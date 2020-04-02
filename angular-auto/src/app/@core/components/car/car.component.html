@@ -127,6 +127,7 @@
     </div>
     <mat-error *ngIf="!savedOrNot">Az autót először mentsd el kérlek!</mat-error>
     <mat-error *ngIf="notValidVintage">Az évszám nem megfelelő!</mat-error>
+    <mat-error *ngIf="isThereLongFieldValue">Túl hosszú mező érték ({{tooLongFieldValue}})!</mat-error>
     <div class="buttons">
       <div class="saveButton">
         <button mat-button>Mentés</button>

@@ -23,6 +23,7 @@
       </mat-form-field>
       <mat-error *ngIf="!utilService.validPlateNumber">A rendszám hossza 6 karakter kell, hogy legyen</mat-error>
       <mat-error *ngIf="utilService.emptySearchField">Üresen hagyott keresőmező</mat-error>
+      <mat-error *ngIf="isThereLongFieldValue">30 karakternél hosszabb mező érték ({{tooLongFieldValue}})!</mat-error>
     </div>
     <button mat-button>Keresés</button>
   </form>
@@ -34,6 +35,7 @@
         </label>
       </mat-form-field>
       <mat-error *ngIf="utilService.emptySearchField">Üresen hagyott keresőmező</mat-error>
+      <mat-error *ngIf="isThereLongFieldValue">30 karakternél hosszabb mező érték ({{tooLongFieldValue}})!</mat-error>
     </div>
     <button mat-button>Keresés</button>
   </form>
@@ -45,6 +47,7 @@
         </label>
       </mat-form-field>
       <mat-error *ngIf="utilService.emptySearchField">Üresen hagyott keresőmező</mat-error>
+      <mat-error *ngIf="isThereLongFieldValue">30 karakternél hosszabb mező érték ({{tooLongFieldValue}})!</mat-error>
     </div>
     <button mat-button>Keresés</button>
   </form>
@@ -136,6 +139,7 @@
                         <input matInput maxlength="30" placeholder="Itt kereshetsz ({{selectedUserFilter.viewValue}})" ngModel name="name">
                       </label>
                     </mat-form-field>
+                    <mat-error *ngIf="isThereLongFieldValue">30 karakternél hosszabb mező érték ({{tooLongFieldValue}})!</mat-error>
                   </div>
                   <div class="searchType" *ngIf="selectedUserFilter.value == 'city'">
                     <mat-form-field class="example-full-width">
@@ -143,6 +147,7 @@
                         <input matInput maxlength="30" placeholder="Itt kereshetsz ({{selectedUserFilter.viewValue}})" ngModel name="city">
                       </label>
                     </mat-form-field>
+                    <mat-error *ngIf="isThereLongFieldValue">30 karakternél hosszabb mező érték ({{tooLongFieldValue}})!</mat-error>
                   </div>
                   <div>
                     <button mat-button class="searchButton">Keresés</button>
@@ -206,16 +211,18 @@
                   <div class="searchType" *ngIf="selectedCompanyFilter.value == 'name'">
                     <mat-form-field class="example-full-width">
                       <label>
-                        <input matInput placeholder="Itt kereshetsz ({{selectedCompanyFilter.viewValue}})" ngModel name="name">
+                        <input matInput  maxlength="30" placeholder="Itt kereshetsz ({{selectedCompanyFilter.viewValue}})" ngModel name="name">
                       </label>
                     </mat-form-field>
+                    <mat-error *ngIf="isThereLongFieldValue">30 karakternél hosszabb mező érték ({{tooLongFieldValue}})!</mat-error>
                   </div>
                   <div *ngIf="selectedCompanyFilter.value == 'companyRegistrationNumber'">
                     <mat-form-field class="example-full-width">
                       <label>
-                        <input matInput placeholder="Itt kereshetsz ({{selectedCompanyFilter.viewValue}})" ngModel name="companyRegistrationNumber">
+                        <input matInput  maxlength="30" placeholder="Itt kereshetsz ({{selectedCompanyFilter.viewValue}})" ngModel name="companyRegistrationNumber">
                       </label>
                     </mat-form-field>
+                    <mat-error *ngIf="isThereLongFieldValue">30 karakternél hosszabb mező érték ({{tooLongFieldValue}})!</mat-error>
                   </div>
                   <div class="searchButton">
                     <button mat-button class="search">Keresés</button>
@@ -342,6 +349,7 @@
                   </div>
                 </div>
               </div>
+              <mat-error *ngIf="isThereLongFieldValue">30 karakternél hosszabb mező érték ({{tooLongFieldValue}})!</mat-error>
               <div *ngIf="orderProgress == 4">
                 <button class="saveButton" mat-button type="submit">Tovább</button>
               </div>

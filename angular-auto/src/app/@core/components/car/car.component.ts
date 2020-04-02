@@ -61,6 +61,8 @@ export class CarComponent implements OnInit {
   public carOrTruck = ['SZEMÉLYGÉPJÁRMŰ', 'TEHERGÉPJÁRMŰ'];
   public savedOrNot: boolean = true;
   public notValidVintage: boolean = false;
+  public tooLongFieldValue: string = '';
+  public isThereLongFieldValue: boolean = false;
 
   constructor(private httpService: HttpService,
               public utilService: UtilService,
@@ -98,18 +100,20 @@ export class CarComponent implements OnInit {
   }
 
   public saveCar(form: any) {
-    if (form.value.plateNumber.length < 6) {
-      this.utilService.validPlateNumber = false;
-    } else if (isNaN(Number(form.value.vintage))) {
-      this.notValidVintage = true;
-    } else if (this.utilService.carUpdate) {
-      this.notValidVintage = false;
-      this.setValidPlateNumber();
-      this.updateCar(form, this.carData.id);
-    } else {
-      this.notValidVintage = false;
-      this.setValidPlateNumber();
-      this.saveOrUpdateCar(form);
+    if (this.validateFormFieldLength(form.value)) {
+      if (form.value.plateNumber.length < 6) {
+        this.utilService.validPlateNumber = false;
+      } else if (isNaN(Number(form.value.vintage))) {
+        this.notValidVintage = true;
+      } else if (this.utilService.carUpdate) {
+        this.notValidVintage = false;
+        this.setValidPlateNumber();
+        this.updateCar(form, this.carData.id);
+      } else {
+        this.notValidVintage = false;
+        this.setValidPlateNumber();
+        this.saveOrUpdateCar(form);
+      }
     }
   }
 
@@ -397,5 +401,23 @@ export class CarComponent implements OnInit {
     this.carData = null;
     sessionStorage.removeItem('newCar');
     this.ngOnInit();
+  }
+
+  private validateFormFieldLength(formValue: any): boolean {
+    const formFieldLists = Object.entries(formValue);
+    for (const list of formFieldLists) {
+      if (list[0] !== 'costDescriptions' && typeof list[1] === "string" && list[1].length > 30) {
+        return this.setLongFieldVariables(list);
+      } else if (list[0] === 'costDescriptions' && typeof list[1] === "string" && list[1].length > 250) {
+        return this.setLongFieldVariables(list);
+      }
+    }
+    return true;
+  }
+
+  private setLongFieldVariables(list: any): boolean {
+    this.tooLongFieldValue = list[1];
+    this.isThereLongFieldValue = true;
+    return false;
   }
 }

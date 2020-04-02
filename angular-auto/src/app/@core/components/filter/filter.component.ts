@@ -85,6 +85,8 @@ export class FilterComponent implements OnInit {
   @ViewChild('focuser', {read: ElementRef, static: false})
   public focuser: ElementRef;
   public nameOfBuyer;
+  public tooLongFieldValue: string = '';
+  public isThereLongFieldValue: boolean = false;
 
   constructor(private httpService: HttpService,
               public utilService: UtilService,
@@ -521,59 +523,64 @@ export class FilterComponent implements OnInit {
   }
 
   public filterCars(form: any) {
-    this.clearSelectedCars();
-    if (form.value.plateNumber && form.value.plateNumber.length < 6 ) {
-      this.utilService.validPlateNumber = false;
-      this.utilService.emptySearchField = false;
-    } else if (this.selectedFilter.value === 'name' && form.value.name && form.value.name.length === 0 || this.selectedFilter.value === 'type' && form.value.type && form.value.type.length === 0 || this.selectedFilter.value === 'plateNumber' && form.value.plateNumber && form.value.plateNumber.length === 0) {
-      this.utilService.emptySearchField = true;
-    } else {
-      sessionStorage.clear();
-      let formValue = null;
-      this.utilService.validPlateNumber = true;
-      this.utilService.emptySearchField = false;
-      switch (Object.keys(form.value)[0]) {
-        case 'name': {
-          formValue = form.value.name.toUpperCase();
-          break;
-        }
-        case 'type': {
-          formValue = form.value.type.toUpperCase();
-          break;
-        }
-        case 'plateNumber': {
-          formValue = form.value.plateNumber.toUpperCase();
-          break;
-        }
-      }
-
-      if (this.selectedFilter.value !== 'all' && this.selectedFilter.value !== 'sold') {
-        this.httpService.getSingleCar(formValue, this.selectedFilter.value).subscribe(data => {
-          if (!data) {
-            this.noMatch = true;
+    if (this.validateFormFieldLength(form.value)) {
+      this.clearSelectedCars();
+      if (form.value.plateNumber
+        && form.value.plateNumber.length < 6 ) {
+        this.utilService.validPlateNumber = false;
+        this.utilService.emptySearchField = false;
+      } else if (this.selectedFilter.value === 'name' && form.value.name && form.value.name.length === 0
+        || this.selectedFilter.value === 'type' && form.value.type && form.value.type.length === 0
+        || this.selectedFilter.value === 'plateNumber' && form.value.plateNumber && form.value.plateNumber.length === 0) {
+        this.utilService.emptySearchField = true;
+      } else {
+        sessionStorage.clear();
+        let formValue = null;
+        this.utilService.validPlateNumber = true;
+        this.utilService.emptySearchField = false;
+        switch (Object.keys(form.value)[0]) {
+          case 'name': {
+            formValue = form.value.name.toUpperCase();
+            break;
           }
-          if (Array.isArray(data)) {
+          case 'type': {
+            formValue = form.value.type.toUpperCase();
+            break;
+          }
+          case 'plateNumber': {
+            formValue = form.value.plateNumber.toUpperCase();
+            break;
+          }
+        }
+
+        if (this.selectedFilter.value !== 'all' && this.selectedFilter.value !== 'sold') {
+          this.httpService.getSingleCar(formValue, this.selectedFilter.value).subscribe(data => {
+            if (!data) {
+              this.noMatch = true;
+            }
+            if (Array.isArray(data)) {
+              this.selectedCars = data;
+              sessionStorage.setItem('selectedCars', JSON.stringify(data));
+            } else {
+              this.selectedCars = [];
+              this.selectedCars.push(data);
+              sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
+            }
+          }, error => {
+            sessionStorage.clear();
+            this.selectedCars = [];
+            if (error.error.errorCode === '404') {
+              this.utilService.openSnackBar('Ilyen paraméterű autó nem található!', 'Hiba :(');
+            } else {
+              this.utilService.openSnackBar('Az adatbáziskapcsolat váratlanul megszakadt!', 'Hiba :(');
+            }
+          });
+        } else {
+          this.httpService.getAllCars(this.selectedFilter.value).subscribe(data => {
             this.selectedCars = data;
             sessionStorage.setItem('selectedCars', JSON.stringify(data));
-          } else {
-            this.selectedCars = [];
-            this.selectedCars.push(data);
-            sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
-          }
-        }, error => {
-          sessionStorage.clear();
-          this.selectedCars = [];
-          if (error.error.errorCode === '404') {
-            this.utilService.openSnackBar('Ilyen paraméterű autó nem található!', 'Hiba :(');
-          } else {
-            this.utilService.openSnackBar('Az adatbáziskapcsolat váratlanul megszakadt!', 'Hiba :(');
-          }
-        });
-      } else {
-        this.httpService.getAllCars(this.selectedFilter.value).subscribe(data => {
-          this.selectedCars = data;
-          sessionStorage.setItem('selectedCars', JSON.stringify(data));
-        });
+          });
+        }
       }
     }
   }
@@ -733,21 +740,25 @@ export class FilterComponent implements OnInit {
   }
 
   public filterUser(form: any) {
-    this.httpService.getUser(this.setFormValuesToUpperCase(form), this.selectedUserFilter.value).subscribe(data => {
-      this.userSearchResult.data = data;
-      this.changeDetectorRefs.detectChanges();
-      sessionStorage.setItem('userSearchData', JSON.stringify(data));
-    });
-    this.setOrderProgressInSessionStorage(2);
+    if (this.validateFormFieldLength(form.value)) {
+      this.httpService.getUser(this.setFormValuesToUpperCase(form), this.selectedUserFilter.value).subscribe(data => {
+        this.userSearchResult.data = data;
+        this.changeDetectorRefs.detectChanges();
+        sessionStorage.setItem('userSearchData', JSON.stringify(data));
+      });
+      this.setOrderProgressInSessionStorage(2);
+    }
   }
 
   public filterCompany(form: any) {
-    this.httpService.getCompany(this.setFormValuesToUpperCase(form), this.selectedCompanyFilter.value).subscribe(data => {
-      this.companySearchResult.data = data;
-      this.changeDetectorRefs.detectChanges();
-      sessionStorage.setItem('companySearchData', JSON.stringify(data));
-    });
-    this.setOrderProgressInSessionStorage(2);
+    if (this.validateFormFieldLength(form.value)) {
+      this.httpService.getCompany(this.setFormValuesToUpperCase(form), this.selectedCompanyFilter.value).subscribe(data => {
+        this.companySearchResult.data = data;
+        this.changeDetectorRefs.detectChanges();
+        sessionStorage.setItem('companySearchData', JSON.stringify(data));
+      });
+      this.setOrderProgressInSessionStorage(2);
+    }
   }
 
   private setFormValuesToUpperCase(form: any): string {
@@ -1029,13 +1040,15 @@ export class FilterComponent implements OnInit {
   }
 
   public saveCountInCarSupplement(form: FormGroup) {
-    this.countInCarSupplement = new CountInCarSupplement(
-      form.value.countInPrice,
-      form.value.previousLoan,
-      form.value.previousBank,
-      form.value.loanType);
-    sessionStorage.setItem('countInCarSupplement', JSON.stringify(this.countInCarSupplement));
-    this.setOrderProgressInSessionStorage(5);
+    if (this.validateFormFieldLength(form.value)) {
+      this.countInCarSupplement = new CountInCarSupplement(
+        form.value.countInPrice,
+        form.value.previousLoan,
+        form.value.previousBank,
+        form.value.loanType);
+      sessionStorage.setItem('countInCarSupplement', JSON.stringify(this.countInCarSupplement));
+      this.setOrderProgressInSessionStorage(5);
+    }
   }
 
   public saveDownPaymentAmount(form: FormGroup, car: Car) {
@@ -1286,4 +1299,16 @@ export class FilterComponent implements OnInit {
   }
 
   get formData() {return <FormArray>this.descriptionForm.get('description');}
+
+  private validateFormFieldLength(formValue: any): boolean {
+    const formValues = Object.values(formValue);
+    for (const value of formValues) {
+      if (typeof value === "string" && value.length > 30) {
+        this.tooLongFieldValue = value;
+        this.isThereLongFieldValue = true;
+        return false;
+      }
+    }
+    return true;
+  }
 }

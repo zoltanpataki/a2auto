@@ -74,6 +74,7 @@
     <mat-error *ngIf="!isCompleteAddress">
       Hiányzó adat a címből, kérlek ellenőrizd az irányítószámot, várost és címet!
     </mat-error>
+    <mat-error *ngIf="isThereLongFieldValue">30 karakternél hosszabb mező érték ({{tooLongFieldValue}})!</mat-error>
     <div class="buttons">
       <div class="saveButton">
         <button mat-button>Mentés</button>

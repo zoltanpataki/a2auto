@@ -61,6 +61,8 @@ export class UserComponent implements OnInit {
   public keepOriginalOrder = (a, b) => a.key;
   public currentUrl;
   public isCompleteAddress: boolean = true;
+  public tooLongFieldValue: string = '';
+  public isThereLongFieldValue: boolean = false;
 
   constructor(private httpService: HttpService,
               public utilService: UtilService,
@@ -100,7 +102,9 @@ export class UserComponent implements OnInit {
   }
 
   public saveUser(form: any) {
-    if (!this.emailFormControl.hasError('email') && this.nullCheckOnAddress(form)) {
+    if (!this.emailFormControl.hasError('email')
+      && this.nullCheckOnAddress(form)
+      && this.validateFormFieldLength(form.value)) {
       this.isCompleteAddress = true;
       if (this.userData.id == null) {
         this.httpService.saveUser(this.createUserObj(form, false)).subscribe(data => {
@@ -234,5 +238,17 @@ export class UserComponent implements OnInit {
     this.userData = null;
     sessionStorage.removeItem('newUser');
     this.ngOnInit();
+  }
+
+  private validateFormFieldLength(formValue: any): boolean {
+    const formValues = Object.values(formValue);
+    for (const value of formValues) {
+      if (typeof value === "string" && value.length > 30) {
+        this.tooLongFieldValue = value;
+        this.isThereLongFieldValue = true;
+        return false;
+      }
+    }
+    return true;
   }
 }

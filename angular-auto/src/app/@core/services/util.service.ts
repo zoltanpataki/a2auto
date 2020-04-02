@@ -66,4 +66,5 @@ export class UtilService {
   public createBlankWitnessToUtilServiceWitnessList(): Witness {
     return new Witness(null, null, null, 'Egyik sem');
   }
+
 }

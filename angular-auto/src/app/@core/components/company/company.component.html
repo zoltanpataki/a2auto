@@ -61,6 +61,9 @@
     <mat-error *ngIf="!isValidCompanyRegistrationNumber">
       Nem megfelelő cégjegyzékszám, csak számot tartalmazhat!
     </mat-error>
+    <mat-error *ngIf="isThereLongFieldValue">
+      30 karakternél hosszabb mező érték ({{tooLongFieldValue}})!
+    </mat-error>
     <div class="buttons">
       <div class="saveButton">
         <button mat-button>Mentés</button>

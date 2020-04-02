@@ -7,7 +7,6 @@ import {Address} from "../../models/address";
 import {filter} from "rxjs/operators";
 import {FormControl, FormGroupDirective, NgForm, Validators} from "@angular/forms";
 import {ErrorStateMatcher} from "@angular/material/core";
-import {isNumeric} from "rxjs/internal-compatibility";
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -43,6 +42,8 @@ export class CompanyComponent implements OnInit {
   public isCompleteAddress: boolean = true;
   isValidCompanyRegistrationNumber: boolean = true;
   private hyphen = '-';
+  public tooLongFieldValue: string = '';
+  public isThereLongFieldValue: boolean = false;
 
   constructor(private httpService: HttpService,
               private utilService: UtilService,
@@ -82,7 +83,10 @@ export class CompanyComponent implements OnInit {
   }
 
   public saveCompany(form: any) {
-    if (!this.emailFormControl.hasError('email') && this.nullCheckOnAddress(form) && this.validateCompanyRegistrationNumber(form.value.companyRegistrationNumber)) {
+    if (!this.emailFormControl.hasError('email')
+      && this.nullCheckOnAddress(form)
+      && this.validateCompanyRegistrationNumber(form.value.companyRegistrationNumber)
+      && this.validateFormFieldLength(form.value)) {
       this.isCompleteAddress = true;
       if (this.companyData.id == null) {
         this.httpService.saveCompany(this.createCompanyObj(form, false)).subscribe(data => {
@@ -227,4 +231,15 @@ export class CompanyComponent implements OnInit {
     }
   }
 
+  private validateFormFieldLength(formValue: any): boolean {
+    const formValues = Object.values(formValue);
+    for (const value of formValues) {
+      if (typeof value === "string" && value.length > 30) {
+        this.tooLongFieldValue = value;
+        this.isThereLongFieldValue = true;
+        return false;
+      }
+    }
+    return true;
+  }
 }
