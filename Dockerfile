@@ -1,7 +1,6 @@
 FROM openjdk:8-jdk-alpine
-VOLUME /tmp
+RUN mkdir /usr/app
+COPY target/a2-0.0.1-SNAPSHOT.jar /usr/app
+WORKDIR /usr/app
 EXPOSE 60000
-RUN mkdir -p /app/
-RUN mkdir -p /app/logs/
-ADD target/a2-0.0.1-SNAPSHOT.jar /app/app.jar
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-Dspring.profiles.active=container", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java", "-jar", "a2-0.0.1-SNAPSHOT.jar"]

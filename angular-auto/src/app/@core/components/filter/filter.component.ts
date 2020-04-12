@@ -441,7 +441,7 @@ export class FilterComponent implements OnInit {
     }
   }
 
-  // DescriptionForm
+  // Description form
 
   private createFormGroupForDescriptionWithAmount() {
     if (this.listOfDescriptionsWithAmount.length === 0) {
@@ -459,38 +459,6 @@ export class FilterComponent implements OnInit {
     });
     this.listOfDescriptionsWithAmount.forEach(descriptionWithAmount => {
       this.addNewDescriptionWithAmountRow(descriptionWithAmount);
-    });
-  }
-
-  private setCountInCarSupplementForm(countInCarSupplement: CountInCarSupplement) {
-    this.countInCarSupplementForm = this.formBuilder.group({
-      countInPrice: [countInCarSupplement.countInPrice],
-      previousLoan: [countInCarSupplement.previousLoan],
-      previousBank: [countInCarSupplement.previousBank],
-      loanType: [countInCarSupplement.loanType],
-    });
-  }
-
-  private createEmptyCarSupplementForm() {
-    this.countInCarSupplementForm = this.formBuilder.group({
-      countInPrice: [null],
-      previousLoan: [null],
-      previousBank: [null],
-      loanType: [null],
-    });
-  }
-
-  private createEmptyDownPaymentForm() {
-    this.downPaymentForm = this.formBuilder.group({
-      downPayment: [null],
-      extra: [null],
-    });
-  }
-
-  private createDownPaymentFormWithData(downPayment: number, extra: number) {
-    this.downPaymentForm = this.formBuilder.group({
-      downPayment: [downPayment],
-      extra: [extra],
     });
   }
 
@@ -521,6 +489,54 @@ export class FilterComponent implements OnInit {
     this.descriptions = this.descriptionForm.get('description') as FormArray;
     this.descriptions.removeAt(index);
   }
+
+  //Count In Car Supplement form
+
+  private setCountInCarSupplementForm(countInCarSupplement: CountInCarSupplement) {
+    this.countInCarSupplementForm = this.formBuilder.group({
+      countInPrice: [countInCarSupplement.countInPrice],
+      previousLoan: [countInCarSupplement.previousLoan],
+      previousBank: [countInCarSupplement.previousBank],
+      loanType: [countInCarSupplement.loanType],
+    });
+  }
+
+  private createEmptyCarSupplementForm() {
+    this.countInCarSupplementForm = this.formBuilder.group({
+      countInPrice: [null],
+      previousLoan: [null],
+      previousBank: [null],
+      loanType: [null],
+    });
+  }
+
+  //Down payment form
+
+  private createEmptyDownPaymentForm() {
+    this.downPaymentForm = this.formBuilder.group({
+      downPayment: [null],
+      extra: [null],
+    });
+  }
+
+  private createDownPaymentFormWithData(downPayment: number, extra: number) {
+    this.downPaymentForm = this.formBuilder.group({
+      downPayment: [downPayment],
+      extra: [extra],
+    });
+  }
+
+  // Filters cars in filter component by model, type or plate number.
+  // Validates the length of the input, the plate number, wether if the input field is an empty field.
+  // Clears the session storage.
+  // Convert the form values to uppercase.
+  // If the selection filter is not 'all' or 'sold', then it gets a single car object
+  // else it gets all the unsold or sold cars.
+  // The getSingleCar call gets called through the http.service.ts with two parameters,
+  // the first is the actual string searched in that type,
+  // the second is the name of the search type eg.: 'type', 'name', 'plateNumber'
+  // The getAllCars method gets called in the same service but with just one parameter
+  // which is the allOrSold and it can have two values: 'all', 'sold'
 
   public filterCars(form: any) {
     if (this.validateFormFieldLength(form.value)) {
@@ -585,6 +601,9 @@ export class FilterComponent implements OnInit {
     }
   }
 
+  // It uses the http.service.ts to retrieve all the car objects through http call.
+  // The only parameter it gets is allOrSold with the value of 'all'.
+
   public getAllCars() {
     this.clearSelectedCars();
     this.httpService.getAllCars('all').subscribe(data => {
@@ -592,6 +611,14 @@ export class FilterComponent implements OnInit {
       sessionStorage.setItem('selectedCars', JSON.stringify(data));
     });
   }
+
+  // This is the modal section.
+  // 5 modals are declared here at the moment. Most likely the number gets bigger :)
+
+  // The first modal is the car update modal which is helpful when we want to edit the saved and listed cars.
+  // This method sets all the configurations for the dialog and injects the DialogComponent in here.
+  // After the dialog was closed it sets the updated car as a carOfTransaction
+  // and updates the list of selected cars as well
 
   public openUpdateModal(car: Car): void {
     this.utilService.carUpdate = true;
@@ -623,6 +650,12 @@ export class FilterComponent implements OnInit {
     });
   }
 
+  // The second modal is the warning modal which warns us when we want to delete a car.
+  // Basically it is just a double check to make sure that the deletion did happen on purpose.
+  // This method sets all the configurations for the dialog and injects the WarningDialogComponent in here.
+  // After the dialog was closed it depends whether the result is a carId.
+  // If yes then the car with that id gets deleted.
+
   public openWarningModal(carId: any): void {
     const warningDialogConfig = new MatDialogConfig();
 
@@ -639,6 +672,10 @@ export class FilterComponent implements OnInit {
       }
     });
   }
+
+  // The third modal is the credit form modal in which we can fill up the necessary data for getting credit.
+  // This method sets all the configurations for the dialog and injects the CreditDialogComponent in here.
+  // After the dialog was closed the result will be set as a creditData and will be part of the car order.
 
   public openCreditModal(car: Car): void {
     const creditDialogConfig = new MatDialogConfig();
@@ -663,6 +700,19 @@ export class FilterComponent implements OnInit {
       }
     });
   }
+
+  // The fourth modal is the car time info form modal which opens right before the selling-buying document.
+  // Many data gets collected here not just the timing information as the name of the dialog indicates it.
+  // So don't let the name of the dialog misleading anybody.
+  // Beside the timing info, the representateur of the A2-Autocentrum Kft gets chosen along with the witnesses.
+  // Also some description can be added for the document
+  // and in case of count in car a few data from the seller gets collected as well.
+  // This method sets all the configurations for the dialog and injects the CarTimeInfoComponent in here.
+  // The result contains the car object which is most likely modified and the carOfTransaction needs to be updated.
+  // The other part of the result is the description list which is going to take place on the document,
+  // and needs to be saved as part of the order.
+  // And finally the evaluateCarOfContract method gets called where actions will take place depends on the transaction
+  // which can be sell or buy from the A2 company perspective.
 
   public openCarTimeInfoDialog(car: Car, orderedCarId: number, sellOrBuy: string, descriptionForm: FormGroup, countInCarSupplementForm: FormGroup) {
     const carTimeInfoDialogConfig = new MatDialogConfig();
@@ -693,31 +743,9 @@ export class FilterComponent implements OnInit {
     });
   }
 
-  private reOrderDescriptionList(result: any, sellOrBuy: string) {
-    const newDescriptionList = [];
-    const remarkList = result.remarkList;
-    if (this.newOrder) {
-      this.newOrder.description.forEach(description => {
-        if (sellOrBuy === 'sell' && description.type === 'buy') {
-          newDescriptionList.push(description);
-        } else if (sellOrBuy === 'buy' && description.type === 'sell') {
-          newDescriptionList.push(description);
-        }
-      });
-    }
-    newDescriptionList.push(...remarkList);
-    this.descriptionList = newDescriptionList;
-  }
-
-  private evaluateCarOfContract(resultOfCarTimeInfoDialog: any, orderedCarId: number, descriptionForm: FormGroup, countInCarSupplementForm: FormGroup) {
-    if (this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer) {
-      this.carOfTransaction = resultOfCarTimeInfoDialog.car;
-      this.navigateToOrderOrSellingOrWarrantOrInsurancePage(this.carOfTransaction, orderedCarId, '/sellingPage', resultOfCarTimeInfoDialog.witness1, resultOfCarTimeInfoDialog.witness2, null, resultOfCarTimeInfoDialog.representation, descriptionForm, countInCarSupplementForm, resultOfCarTimeInfoDialog.typeOfBuying);
-    } else {
-      this.countInCar = resultOfCarTimeInfoDialog.car;
-      this.navigateToOrderOrSellingOrWarrantOrInsurancePage(this.countInCar, orderedCarId, '/sellingPage', resultOfCarTimeInfoDialog.witness1, resultOfCarTimeInfoDialog.witness2, null, resultOfCarTimeInfoDialog.representation, descriptionForm, countInCarSupplementForm, resultOfCarTimeInfoDialog.typeOfBuying);
-    }
-  }
+  // The fifth modal is the witness picker modal where (not a miracle) you can pick witnesses.
+  // This method sets all the configurations for the dialog and injects the WitnessPickerDialogComponent in here.
+  // After the dialog was closed and the result in not null the clicked document gets generated.
 
   public openWitnessPickerModal(descriptionForm: FormGroup, countInCarSupplementForm: FormGroup): void {
     const witnessPickerDialogConfig = new MatDialogConfig();
@@ -735,9 +763,47 @@ export class FilterComponent implements OnInit {
     });
   }
 
+  // Updates descriptions for selling-buying page
+
+  private reOrderDescriptionList(result: any, sellOrBuy: string) {
+    const newDescriptionList = [];
+    const remarkList = result.remarkList;
+    if (this.newOrder) {
+      this.newOrder.description.forEach(description => {
+        if (sellOrBuy === 'sell' && description.type === 'buy') {
+          newDescriptionList.push(description);
+        } else if (sellOrBuy === 'buy' && description.type === 'sell') {
+          newDescriptionList.push(description);
+        }
+      });
+    }
+    newDescriptionList.push(...remarkList);
+    this.descriptionList = newDescriptionList;
+  }
+
+  // Navigates to the clicked document and structure it depends on the transaction is sell or buy from the A2 company perspective.
+
+  private evaluateCarOfContract(resultOfCarTimeInfoDialog: any, orderedCarId: number, descriptionForm: FormGroup, countInCarSupplementForm: FormGroup) {
+    if (this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer) {
+      this.carOfTransaction = resultOfCarTimeInfoDialog.car;
+      this.navigateToOrderOrSellingOrWarrantOrInsurancePage(this.carOfTransaction, orderedCarId, '/sellingPage', resultOfCarTimeInfoDialog.witness1, resultOfCarTimeInfoDialog.witness2, null, resultOfCarTimeInfoDialog.representation, descriptionForm, countInCarSupplementForm, resultOfCarTimeInfoDialog.typeOfBuying);
+    } else {
+      this.countInCar = resultOfCarTimeInfoDialog.car;
+      this.navigateToOrderOrSellingOrWarrantOrInsurancePage(this.countInCar, orderedCarId, '/sellingPage', resultOfCarTimeInfoDialog.witness1, resultOfCarTimeInfoDialog.witness2, null, resultOfCarTimeInfoDialog.representation, descriptionForm, countInCarSupplementForm, resultOfCarTimeInfoDialog.typeOfBuying);
+    }
+  }
+
+  // TODO: needs to move to utility service
+  // Gives indexes for the items in ngFor loops, and enhances there performance.
+
   public trackByFn(index, item) {
     return item.id; // unique id corresponding to the item
   }
+
+  // When a previous customer (private) wants to buy or sell a car
+  // then the data about the customer gets retrieved from the database.
+  // It has two parameters, the first is the value of the field, the second is the filter type.
+  // The resulting data will also be part of the order.
 
   public filterUser(form: any) {
     if (this.validateFormFieldLength(form.value)) {
@@ -750,6 +816,49 @@ export class FilterComponent implements OnInit {
     }
   }
 
+  // Selects user from userSearchResult
+  // It has only one parameter which is a number(index).
+  // After that the chosen user will be set as pickedUser and put into the sessionStorage
+  // and will be saved as the part of the order
+  // Also the nameOfBuyer variable is set and saved into sessionStorage
+  // the nameOfBuyer play its part as a column value in the filter component
+
+  public pickUser(index: number) {
+    this.indexOfPickedUser = index;
+    const pickedUserFromDataTable = this.userSearchResult.data[index];
+    this.pickedUser = new Users(
+      pickedUserFromDataTable.id,
+      pickedUserFromDataTable.fullName,
+      pickedUserFromDataTable.birthName,
+      pickedUserFromDataTable.zipCode,
+      pickedUserFromDataTable.city,
+      pickedUserFromDataTable.address,
+      pickedUserFromDataTable.birthPlace,
+      pickedUserFromDataTable.phoneNumber,
+      pickedUserFromDataTable.email,
+      pickedUserFromDataTable.nameOfMother,
+      pickedUserFromDataTable.birthDate,
+      pickedUserFromDataTable.personNumber,
+      pickedUserFromDataTable.idCardNumber,
+      pickedUserFromDataTable.dueTimeOfIdCard,
+      pickedUserFromDataTable.drivingLicenceNumber,
+      pickedUserFromDataTable.dueTimeOfDrivingLicence,
+      pickedUserFromDataTable.taxNumber,
+      pickedUserFromDataTable.healthcareNumber,
+      pickedUserFromDataTable.nationality);
+    sessionStorage.setItem('pickedUser', JSON.stringify(this.pickedUser));
+    sessionStorage.setItem('indexOfPickedUser', this.indexOfPickedUser.toString());
+    this.carOfTransaction.nameOfBuyer = this.pickedUser.fullName;
+    this.nameOfBuyer = this.pickedUser.fullName;
+    sessionStorage.setItem('nameOfBuyer', this.nameOfBuyer);
+    this.updateCarOfTransaction(this.carOfTransaction);
+  }
+
+  // When a previous customer (corporate) wants to buy or sell a car
+  // then the data about the customer gets retrieved from the database.
+  // It has two parameters, the first is the value of the field, the second is the filter type.
+  // The resulting data will also be part of the order.
+
   public filterCompany(form: any) {
     if (this.validateFormFieldLength(form.value)) {
       this.httpService.getCompany(this.setFormValuesToUpperCase(form), this.selectedCompanyFilter.value).subscribe(data => {
@@ -760,6 +869,35 @@ export class FilterComponent implements OnInit {
       this.setOrderProgressInSessionStorage(2);
     }
   }
+
+  // Selects company from companySearchResult
+  // It has only one parameter which is a number(index).
+  // After that the chosen company will be set as pickedCompany and put into the sessionStorage
+  // and will be saved as the part of the order
+  // Also the nameOfBuyer variable is set and saved into sessionStorage
+  // the nameOfBuyer play its part as a column value in the filter component
+
+  public pickCompany(index: number) {
+    this.indexOfPickedCompany = index;
+    const pickedCompanyFromDataTable = this.companySearchResult.data[index];
+    this.pickedCompany = new Company(
+      pickedCompanyFromDataTable.id,
+      pickedCompanyFromDataTable.name,
+      pickedCompanyFromDataTable.address,
+      pickedCompanyFromDataTable.companyRegistrationNumber,
+      pickedCompanyFromDataTable.representation,
+      pickedCompanyFromDataTable.taxNumber,
+      pickedCompanyFromDataTable.phoneNumber,
+      pickedCompanyFromDataTable.email);
+    sessionStorage.setItem('pickedCompany', JSON.stringify(this.pickedCompany));
+    sessionStorage.setItem('indexOfPickedCompany', this.indexOfPickedCompany.toString());
+    this.carOfTransaction.nameOfBuyer = this.pickedCompany.name;
+    this.nameOfBuyer = this.pickedCompany.name;
+    sessionStorage.setItem('nameOfBuyer', this.nameOfBuyer);
+    this.updateCarOfTransaction(this.carOfTransaction);
+  }
+
+  // Converts the values of the filter form into upper case values.
 
   private setFormValuesToUpperCase(form: any): string {
     let formValue = null;
@@ -780,6 +918,13 @@ export class FilterComponent implements OnInit {
     return formValue;
   }
 
+  // This section is all about checkboxes.
+
+  // Basically it helps to coordinate the checkbox of the previous and new customer.
+  // It has two parameters, the first is the previousOrNew which can have two values: 'previous', 'new'.
+  // The second parameter is a boolean which can say whether a checkbox's click event was true or false =>
+  // (the box is filled or not).
+
   public selectBetweenNewAndPreviousCustomer(previousOrNew: string, selection:boolean) {
     this.changeCheckBoxValuesToNull();
     if (previousOrNew === 'previous') {
@@ -794,12 +939,19 @@ export class FilterComponent implements OnInit {
     sessionStorage.setItem('alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready', this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready.toString());
   }
 
+  // Sets the checkbox values to null.
+
   private changeCheckBoxValuesToNull() {
     this.individualOrCorporate = null;
     this.checkedIndividual = null;
     this.checkedCorporate = null;
     this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate = null;
   }
+
+  // Basically it helps to coordinate the checkbox of the private and corporate customer.
+  // It has two parameters, the first is the indOrCorp which can have two values: 'individual', 'corporate'.
+  // The second parameter is a boolean which can say whether a checkbox's click event was true or false =>
+  // (the box is filled or not).
 
   public setIndOrCorpCheckboxValue(indOrCorp: string, selection: boolean) {
     if (indOrCorp === 'individual') {
@@ -827,6 +979,12 @@ export class FilterComponent implements OnInit {
     }
     sessionStorage.setItem('selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate', this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate.toString());
   }
+
+  // Basically it helps to coordinate the checkbox for the customers who
+  // want and don't want inheritance calculation.
+  // It has two parameters, the first is the wantOrNotCalculation which can have two values: 'wantCalculation', 'dontWantCalculation'.
+  // The second parameter is a boolean which can say whether a checkbox's click event was true or false =>
+  // (the box is filled or not).
 
   public setInheritanceTaxCheckboxValue(wantOrNotCalculation: string, car: Car, selection: boolean) {
     if (wantOrNotCalculation === 'wantCalculation') {
@@ -856,6 +1014,44 @@ export class FilterComponent implements OnInit {
     }
     sessionStorage.setItem('wantInheritanceTaxCalculation', this.wantInheritanceTaxCalculation.toString());
   }
+
+  // Basically it helps to coordinate the checkbox for scenario when there is or there isn't count in car.
+  // It has two parameters, the first is the isOrNotCountIn which can have two values: 'countIn', 'noCountIn'.
+  // The second parameter is a boolean which can say whether a checkbox's click event was true or false =>
+  // (the box is filled or not).
+
+  public setCountInCar(isOrNotCountIn: string, selection: boolean) {
+    if (isOrNotCountIn === 'countIn') {
+      if (selection) {
+        this.addCountInCar = 'countIn';
+        this.thereIsCountInCar = true;
+      } else {
+        this.addCountInCar = 'noCountIn';
+        this.thereIsCountInCar = false;
+        this.countInCar = null;
+        this.countInCarSupplement = null;
+        this.setOrderProgressInSessionStorage(5);
+      }
+    } else if (isOrNotCountIn === 'noCountIn') {
+      if (selection) {
+        this.addCountInCar = 'noCountIn';
+        this.thereIsCountInCar = false;
+        this.countInCar = null;
+        this.countInCarSupplement = null;
+        this.setOrderProgressInSessionStorage(5);
+      } else {
+        this.addCountInCar = 'countIn';
+        this.thereIsCountInCar = true;
+      }
+    }
+    sessionStorage.setItem('thereIsCountInCar', this.thereIsCountInCar.toString());
+  }
+
+  //TODO: reorganize the values of the count into setting component
+
+  // Counts the inheritance tax for the customer
+  // It has only one parameter which is the car itself.
+  // Calls the http.service.ts's getUtility, getChargeForInheritanceTax methods to retrieve relevant data form the db.
 
   private countInheritanceTax (car: Car) {
     const carAge = (new Date()).getFullYear() - car.vintage;
@@ -909,6 +1105,12 @@ export class FilterComponent implements OnInit {
     });
   }
 
+  // This is the first method gets called when somebody wants to buy a car.
+  // It sets all data to null, making it like a clean sheet.
+  // The clicked car will be the carOfTransaction and the http.service.ts's getOrder method gets called
+  // If there is order for the picked car then the previously filled data gets loaded
+  // otherwise a new order can be initiated
+
   public setAlreadyOrNewCustomerSelectorAndCarOfTransaction(car: Car, index: number) {
     this.setDataToNull();
     if (index !== this.clickedCarIndex) {
@@ -931,32 +1133,10 @@ export class FilterComponent implements OnInit {
     }
   }
 
-  public setCountInCar(isOrNotCountIn: string, selection: boolean) {
-    if (isOrNotCountIn === 'countIn') {
-      if (selection) {
-        this.addCountInCar = 'countIn';
-        this.thereIsCountInCar = true;
-      } else {
-        this.addCountInCar = 'noCountIn';
-        this.thereIsCountInCar = false;
-        this.countInCar = null;
-        this.countInCarSupplement = null;
-        this.setOrderProgressInSessionStorage(5);
-      }
-    } else if (isOrNotCountIn === 'noCountIn') {
-      if (selection) {
-        this.addCountInCar = 'noCountIn';
-        this.thereIsCountInCar = false;
-        this.countInCar = null;
-        this.countInCarSupplement = null;
-        this.setOrderProgressInSessionStorage(5);
-      } else {
-        this.addCountInCar = 'countIn';
-        this.thereIsCountInCar = true;
-      }
-    }
-    sessionStorage.setItem('thereIsCountInCar', this.thereIsCountInCar.toString());
-  }
+  // Called in setAlreadyOrNewCustomerSelectorAndCarOfTransaction method
+  // It calls the setFilterComponentVariablesAccordingToOrder method to set all the order related data
+  // and if countInCarSupplement is present then sets it
+  // and creates down payment form with the given data
 
   private setAllOrderDataAfterHttpCall(order: Order, car: Car) {
     this.setFilterComponentVariablesAccordingToOrder(order);
@@ -966,6 +1146,8 @@ export class FilterComponent implements OnInit {
     this.createDownPaymentFormWithData(this.downPayment, this.extra);
     this.carOfTransaction = car;
   }
+
+  // Deletes car from the database, it uses the http.service.ts
 
   private deleteCar(carId: any) {
     this.httpService.deleteCar(carId).subscribe(data => {
@@ -980,6 +1162,8 @@ export class FilterComponent implements OnInit {
       this.utilService.openSnackBar('Az adatbáziskapcsolat váratlanul megszakadt!', 'Hiba :(');
     })
   }
+
+  // Selects type of buying and updates the carOfTransaction in the database.
 
   public selectTypeOfBuying(type: any, car: Car) {
     this.selectedTypeOfBuying = type;
@@ -996,11 +1180,18 @@ export class FilterComponent implements OnInit {
     sessionStorage.setItem('selectedTypeOfBuying', this.selectedTypeOfBuying);
   }
 
+  // Sets all the variables to null then empties the selectedCars list and the orderProgress will be zero.
+  // Initiate a fresh start.
+
   private clearSelectedCars() {
     this.setDataToNull();
     this.selectedCars = [];
     this.setOrderProgressInSessionStorage(0);
   }
+
+  // This is a technical method.
+  // It handles the orderProgress on the filter component page
+  // The orderProgress starts with 0 and the highest value can be 10 at the moment.
 
   private setOrderProgressInSessionStorage(stage: number) {
     if (this.newOrder == null || stage === 10) {
@@ -1009,11 +1200,20 @@ export class FilterComponent implements OnInit {
     }
   }
 
+  // Gets a string object through the users or company component as a result of an eventEmitter
+  // if the orderProgress is less than 2 then the value 2 will be saved and set for the orderProgress variable
+  // otherwise not (it can happen when an already saved order is edited and an event is triggered
+  // but we don't want to change the orderProgress back to 2 from 10.
+
   public orderOnProgressWithUser(event: string) {
     if (event === 'saved' && this.orderProgress < 2) {
       this.setOrderProgressInSessionStorage(2);
     }
   }
+
+  // Gets a users object through the users component as a result of an eventEmitter
+  // and sets it in the sessionStorage
+  // later on it will be saved along with the order.
 
   public addNewUserToOrder(event: Users) {
     this.newUser = event;
@@ -1024,6 +1224,10 @@ export class FilterComponent implements OnInit {
     sessionStorage.setItem('newUserDuringSell', JSON.stringify(this.newUser));
   }
 
+  // Gets a company object through the company component as a result of an eventEmitter
+  // and sets it in the sessionStorage
+  // later on it will be saved along with the order.
+
   public addNewCompanyToOrder(event: Company) {
     this.newCompany = event;
     this.carOfTransaction.nameOfBuyer = this.newCompany.name;
@@ -1033,11 +1237,19 @@ export class FilterComponent implements OnInit {
     sessionStorage.setItem('newCompanyDuringSell', JSON.stringify(this.newCompany));
   }
 
+  // Gets a string object through the car component as a result of an eventEmitter
+  // if the orderProgress is less than 4 then the value 4 will be saved and set for the orderProgress variable
+  // otherwise not (it can happen when an already saved order is edited and an event is triggered
+  // but we don't want to change the orderProgress back to 4 from 10.
+
   public orderOnProgressWithCar(event: string) {
     if (event === 'saved' && this.orderProgress < 4) {
       this.setOrderProgressInSessionStorage(4);
     }
   }
+
+  // After field length validation the countInCarSupplement is saved into the sessionStorage
+  // later on it will be part of the saved order
 
   public saveCountInCarSupplement(form: FormGroup) {
     if (this.validateFormFieldLength(form.value)) {
@@ -1050,6 +1262,9 @@ export class FilterComponent implements OnInit {
       this.setOrderProgressInSessionStorage(5);
     }
   }
+
+  // Down payment and extra payment are saved into the sessionStorage
+  // later on it will be part of the saved order
 
   public saveDownPaymentAmount(form: FormGroup, car: Car) {
     this.downPayment = form.value.downPayment;
@@ -1065,61 +1280,16 @@ export class FilterComponent implements OnInit {
     }
   }
 
-  public pickUser(index: number) {
-    this.indexOfPickedUser = index;
-    const pickedUserFromDataTable = this.userSearchResult.data[index];
-    this.pickedUser = new Users(
-      pickedUserFromDataTable.id,
-      pickedUserFromDataTable.fullName,
-      pickedUserFromDataTable.birthName,
-      pickedUserFromDataTable.zipCode,
-      pickedUserFromDataTable.city,
-      pickedUserFromDataTable.address,
-      pickedUserFromDataTable.birthPlace,
-      pickedUserFromDataTable.phoneNumber,
-      pickedUserFromDataTable.email,
-      pickedUserFromDataTable.nameOfMother,
-      pickedUserFromDataTable.birthDate,
-      pickedUserFromDataTable.personNumber,
-      pickedUserFromDataTable.idCardNumber,
-      pickedUserFromDataTable.dueTimeOfIdCard,
-      pickedUserFromDataTable.drivingLicenceNumber,
-      pickedUserFromDataTable.dueTimeOfDrivingLicence,
-      pickedUserFromDataTable.taxNumber,
-      pickedUserFromDataTable.healthcareNumber,
-      pickedUserFromDataTable.nationality);
-    sessionStorage.setItem('pickedUser', JSON.stringify(this.pickedUser));
-    sessionStorage.setItem('indexOfPickedUser', this.indexOfPickedUser.toString());
-    this.carOfTransaction.nameOfBuyer = this.pickedUser.fullName;
-    this.nameOfBuyer = this.pickedUser.fullName;
-    sessionStorage.setItem('nameOfBuyer', this.nameOfBuyer);
-    this.updateCarOfTransaction(this.carOfTransaction);
-  }
-
-  public pickCompany(index: number) {
-    this.indexOfPickedCompany = index;
-    const pickedCompanyFromDataTable = this.companySearchResult.data[index];
-    this.pickedCompany = new Company(
-      pickedCompanyFromDataTable.id,
-      pickedCompanyFromDataTable.name,
-      pickedCompanyFromDataTable.address,
-      pickedCompanyFromDataTable.companyRegistrationNumber,
-      pickedCompanyFromDataTable.representation,
-      pickedCompanyFromDataTable.taxNumber,
-      pickedCompanyFromDataTable.phoneNumber,
-      pickedCompanyFromDataTable.email);
-    sessionStorage.setItem('pickedCompany', JSON.stringify(this.pickedCompany));
-    sessionStorage.setItem('indexOfPickedCompany', this.indexOfPickedCompany.toString());
-    this.carOfTransaction.nameOfBuyer = this.pickedCompany.name;
-    this.nameOfBuyer = this.pickedCompany.name;
-    sessionStorage.setItem('nameOfBuyer', this.nameOfBuyer);
-    this.updateCarOfTransaction(this.carOfTransaction);
-  }
+  // Gets a car object through the car component as a result of an eventEmitter
+  // the car object is given as a value for the countInCar variable and saved into sessionStorage
+  // and later on it will be saved along with the order.
 
   public getCountInCarData(event: Car) {
     this.countInCar = event;
     sessionStorage.setItem('countInCar', JSON.stringify(this.countInCar));
   }
+
+  // Save the chosen salesman and update the car of transaction with it.
 
   public saveSalesman(salesman: any, car: Car) {
     this.salesman = salesman;
@@ -1128,6 +1298,12 @@ export class FilterComponent implements OnInit {
     this.setOrderProgressInSessionStorage(7);
     sessionStorage.setItem('salesman', this.salesman);
   }
+
+  // Called many times throughout the filter component
+  // It calls the http.service.ts with the updated car in order to save its new state
+  // If the updated car will be bought then the returned data will be set for the countInCar variable
+  // Else if the car will be for sale then the retrieved data will be set for the carOfTransaction variable
+  // At both cases the new state of car is saved into sessionStorage as well.
 
   private updateCarOfTransaction(car: Car) {
     this.httpService.updateCar(car).subscribe(data => {
@@ -1144,15 +1320,25 @@ export class FilterComponent implements OnInit {
     });
   }
 
+  // This is a simple one field form where the value of the field contains the date
+  // which is agreed by the buyer and the seller to hand over the car.
+
   public submitHandOver(form: any, car: Car) {
     this.updateCarWithHandoverDate(form, car);
     this.setOrderProgressInSessionStorage(8);
   }
 
+  // Called in the submitHandOver method
+  // It updates the carHandOver field of the car object
+  // and updates that car.
+
   public updateCarWithHandoverDate(form: any, car: Car) {
     car.carHandover = form.value.handover;
     this.updateCarOfTransaction(car);
   }
+
+  // If any changes happens on the down payment form then ngModelChange triggers this method
+  // and the new value gets updated in sessionStorage, and later on it will be part of the order.
 
   public saveChangedDownPayment(form: FormGroup) {
     this.downPayment = form.value.downPayment;
@@ -1161,12 +1347,21 @@ export class FilterComponent implements OnInit {
     }
   }
 
+  // If any changes happens on the extra form then ngModelChange triggers this method
+  // and the new value gets updated in sessionStorage, and later on it will be part of the order.
+
   public saveChangedExtra(form: FormGroup) {
     this.extra = form.value.extra;
     if (this.extra != null) {
       sessionStorage.setItem('extra', this.extra.toString());
     }
   }
+
+  // After the description with amount was filled and submitted, this method gets triggered.
+  // This descriptions are only visible on the order page and not on the selling page.
+  // It can be split into two groups. The first is when the item of the description is payed by the customer,
+  // the second when it will be a gift.
+  // Two variables are saved into the sessionStorage: listOfDescriptionWithAmount, giftIndexList.
 
   public saveDescriptions(descriptionForm: FormGroup) {
     this.listOfDescriptionsWithAmount = [];
@@ -1182,15 +1377,32 @@ export class FilterComponent implements OnInit {
     this.setOrderProgressInSessionStorage(9);
   }
 
+  // When it's been decided whether an item will be charged the customer or A2, this method gets called.
+  // If the customer gets the item as a gift, then this item's index gets saved in a list called giftIndexList
+
   public addToGiftIndexList(index: number): boolean {
     this.giftIndexList.push(index);
     return true;
   }
 
+  // When it's been decided whether an item will be charged the customer or A2, this method gets called.
+  // If the customer has to pay for the item and the list contained the index of the item
+  // then this item index gets removed from the giftIndexList
+
   public removeFromGiftIndexList(index: number): boolean {
     this.giftIndexList.splice(index, 1);
     return true;
   }
+
+  //TODO: this method is a beast, needs to be refactored
+
+  // Navigates to the clicked page.
+  // It checks the downPayment form, the descriptions and the countInCarSupplement.
+  // Then sets the user or company according to the value of alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready variable.
+  // If the newOrder variable is null then a new Order objects is created and saved into the database
+  // otherwise the previous one gets updated with the new values and updated in the database as well.
+  // After the backend call the prepareNavigationToOrderPageOrSellingPageOrWarrantPageOrInsurancePage method
+  // gets called with the returned value.
 
   public navigateToOrderOrSellingOrWarrantOrInsurancePage(car: Car, orderedCarId: number, targetRoute: string,  witness1: Witness, witness2: Witness, warrantType: string, a2Representation: string, descriptionForm: FormGroup, countInCarSupplementForm: FormGroup, pickedTypeOfBuyingForCountInCar: string) {
     if (this.downPayment != null) {
@@ -1255,6 +1467,8 @@ export class FilterComponent implements OnInit {
     }
   }
 
+  // Prepares the navigation to the clicked page. All the data traverse through the router.navigate method
+
   private prepareNavigationToOrderPageOrSellingPageOrWarrantPageOrInsurancePage(order: Order, car: Car, witness1: Witness, witness2: Witness, orderOrSellingOrWarrant: string, warrantType: string, a2Representation: string, pickedTypeOfBuyingForCountInCar: string) {
     sessionStorage.setItem('order', JSON.stringify(this.newOrder));
     sessionStorage.setItem('orderedCar', JSON.stringify(car));
@@ -1278,10 +1492,14 @@ export class FilterComponent implements OnInit {
         }}});
   }
 
+  // It opens the carTimeInfoDialog, and it is decided at this point that the selling page will be for sell or buy.
+
   public gatherSellingPageInfo(car: Car, orderedCarId: number, sellOrBuy: string, descriptionForm: FormGroup, countInCarSupplementForm: FormGroup) {
     this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer = sellOrBuy === 'sell';
     this.openCarTimeInfoDialog(car, orderedCarId, sellOrBuy, descriptionForm, countInCarSupplementForm);
   }
+
+  // Navigates to blank order page for the clicked car.
 
   public navigateToBlankOrderPage(car: Car) {
     this.router.navigate(['/orderPage'], {state: {blankData: {
@@ -1290,15 +1508,24 @@ export class FilterComponent implements OnInit {
         }}});
   }
 
+  // Navigates to insurance page
+
   public navigateToInsurancePage(car: Car, descriptionForm: FormGroup, countInCarSupplementForm: FormGroup) {
     this.navigateToOrderOrSellingOrWarrantOrInsurancePage(car, car.id, '/insurance', null, null, null, null, descriptionForm, countInCarSupplementForm, null);
   }
+
+  // Opens the witness picker dialog
 
   public openWitnessPickerForWarrantPage(descriptionForm: FormGroup, countInCarSupplementForm: FormGroup) {
     this.openWitnessPickerModal(descriptionForm, countInCarSupplementForm);
   }
 
+  // This is a technical method, it collects data from form array.
+  // It is used to collect descriptions.
+
   get formData() {return <FormArray>this.descriptionForm.get('description');}
+
+  // Validates the length of the form fields
 
   private validateFormFieldLength(formValue: any): boolean {
     const formValues = Object.values(formValue);
