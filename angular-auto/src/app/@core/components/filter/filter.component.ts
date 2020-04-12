@@ -708,7 +708,7 @@ export class FilterComponent implements OnInit {
   // Also some description can be added for the document
   // and in case of count in car a few data from the seller gets collected as well.
   // This method sets all the configurations for the dialog and injects the CarTimeInfoComponent in here.
-  // The result contains the car object which is most likely modified and the carOfTransaction needs to be updated.
+  // The result contains the car object which is most likely modified and therefore the carOfTransaction needs to be updated.
   // The other part of the result is the description list which is going to take place on the document,
   // and needs to be saved as part of the order.
   // And finally the evaluateCarOfContract method gets called where actions will take place depends on the transaction
@@ -745,7 +745,7 @@ export class FilterComponent implements OnInit {
 
   // The fifth modal is the witness picker modal where (not a miracle) you can pick witnesses.
   // This method sets all the configurations for the dialog and injects the WitnessPickerDialogComponent in here.
-  // After the dialog was closed and the result in not null the clicked document gets generated.
+  // After the dialog was closed and the result is not null the clicked document gets generated.
 
   public openWitnessPickerModal(descriptionForm: FormGroup, countInCarSupplementForm: FormGroup): void {
     const witnessPickerDialogConfig = new MatDialogConfig();
