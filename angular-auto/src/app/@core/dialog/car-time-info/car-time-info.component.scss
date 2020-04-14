@@ -31,3 +31,11 @@ button {
   display: flex;
   justify-content: center;
 }
+
+.delete {
+  cursor: pointer;
+}
+
+.miniFab:focus {
+  outline: none;
+}

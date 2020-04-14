@@ -487,7 +487,13 @@ export class FilterComponent implements OnInit {
 
   public removeDescriptionWithAmountRow(index: number) {
     this.descriptions = this.descriptionForm.get('description') as FormArray;
-    this.descriptions.removeAt(index);
+    if (this.descriptions.length === 1) {
+      this.giftIndexList = [];
+      this.listOfDescriptionsWithAmount = [];
+      this.createFormGroupForDescriptionWithAmount();
+    } else {
+      this.descriptions.removeAt(index);
+    }
   }
 
   //Count In Car Supplement form

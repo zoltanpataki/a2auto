@@ -4,9 +4,7 @@ import {HttpService} from "../../services/http.service";
 import {UtilService} from "../../services/util.service";
 import {NavigationEnd, Router} from "@angular/router";
 import {filter} from "rxjs/operators";
-import {FormGroup} from "@angular/forms";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
-import {CarTimeInfoComponent} from "../../dialog/car-time-info/car-time-info.component";
 import {InstantBuyingDialogComponent} from "../../dialog/instant-buying-dialog/instant-buying-dialog.component";
 
 @Component({
@@ -82,6 +80,8 @@ export class CarComponent implements OnInit {
         }
       });
   }
+
+  // Loads car data from sessionStorage, if present as newCar
 
   public ngOnInit() {
     if (sessionStorage.getItem('newCar') != null) {

@@ -55,6 +55,11 @@ export class CarTimeInfoComponent implements OnInit {
     this.carHandoverTime['hour'] = carHandoverDate.getHours();
     this.carHandoverTime['minute'] = carHandoverDate.getMinutes();
 
+    this.createFormGroupForRemark();
+    this.initiateDatesWithToday();
+  }
+
+  private createFormGroupForRemark() {
     if (this.remarkList.length === 0) {
       this.remarkForm = this.formBuilder.group({
         description: this.formBuilder.array([this.createRemarkRow(null)])
@@ -62,7 +67,6 @@ export class CarTimeInfoComponent implements OnInit {
     } else {
       this.setRemarkForm();
     }
-    this.initiateDatesWithToday();
   }
 
   private setRemarkForm() {
@@ -81,7 +85,12 @@ export class CarTimeInfoComponent implements OnInit {
 
   public removeRemarkRow(index: number) {
     this.description = this.remarkForm.get('description') as FormArray;
-    this.description.removeAt(index);
+    if (this.description.length === 1) {
+      this.remarkList = [];
+      this.createFormGroupForRemark();
+    } else {
+      this.description.removeAt(index);
+    }
   }
 
   private createRemarkRow(remark: Description) {
