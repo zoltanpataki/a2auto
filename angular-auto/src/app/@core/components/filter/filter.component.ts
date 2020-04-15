@@ -493,6 +493,15 @@ export class FilterComponent implements OnInit {
       this.createFormGroupForDescriptionWithAmount();
     } else {
       this.descriptions.removeAt(index);
+      if (this.giftIndexList.includes(index)) {
+        this.giftIndexList.splice(this.giftIndexList.indexOf(index), 1);
+      }
+      this.giftIndexList.forEach(function (item, indexOfItem, array) {
+        if (item > index) {
+          item -= 1;
+          array[indexOfItem] = item;
+        }
+      })
     }
   }
 
