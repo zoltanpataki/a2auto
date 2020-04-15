@@ -99,6 +99,10 @@ export class CarComponent implements OnInit {
     }
   }
 
+  // Two outcome can happen from this method, save the car object or update one.
+  // First of all the input is validated (length, vintage and plate number).
+  // Depends on the value of utilService.carUpdate the input is saved or overwrite an existing one.
+
   public saveCar(form: any) {
     if (this.validateFormFieldLength(form.value)) {
       if (form.value.plateNumber.length < 6) {
@@ -116,6 +120,25 @@ export class CarComponent implements OnInit {
       }
     }
   }
+
+  // Before the dialog opens, it is examined whether this.carData is saved already to the database or not yet.
+  // If the id has a value then it means that the car is saved already and the dialog can be called for open.
+  // So it is not possible to proceed until the car was saved.
+
+  public openDialog(carForm: any) {
+    this.dialogCloser.emit('close');
+    if (this.carData.id != null) {
+      const carForBuying = this.createCarObjectWithId(carForm, this.transformToCapitalData(carForm), this.carData.id);
+      this.openInstantBuyingDialog(carForBuying);
+    } else {
+      this.savedOrNot = false;
+    }
+  }
+
+  // From the perspective of the A2-Autocentrum, instant buying is an option.
+  // Opens a dialog with basic configuration same as if we want to end up with selling page.
+  // The result will be eligible to open the selling page, all the data will be available.
+  // And in the end it navigates to the desired page.
 
   public openInstantBuyingDialog(car: Car) {
     const instantBuyingDialogConfig = new MatDialogConfig();
@@ -149,15 +172,9 @@ export class CarComponent implements OnInit {
     });
   }
 
-  public openDialog(carForm: any) {
-    this.dialogCloser.emit('close');
-    if (this.carData.id != null) {
-      const carForBuying = this.createCarObjectWithId(carForm, this.transformToCapitalData(carForm), this.carData.id);
-      this.openInstantBuyingDialog(carForBuying);
-    } else {
-      this.savedOrNot = false;
-    }
-  }
+  // It saves or updates the car object, whether this.carData has id or not (meaning that it is saved to the db or not).
+  // After the save the date objects of the retrieved data needs to be modified,
+  // otherwise it would look funny (zero instead of empty field)
 
   private saveOrUpdateCar(form: any) {
     if (this.carData.id == null) {
