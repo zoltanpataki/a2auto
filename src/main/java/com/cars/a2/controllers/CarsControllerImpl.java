@@ -23,8 +23,8 @@ public class CarsControllerImpl implements CarsController {
 
 
     @Override
-    public ResponseEntity<Object> getAllCars(String allOrSold) {
-        return carService.getAllCars(allOrSold);
+    public ResponseEntity<Object> getAllCars() {
+        return carService.getAllCars();
     }
 
     @Override
@@ -33,8 +33,8 @@ public class CarsControllerImpl implements CarsController {
     }
 
     @Override
-    public ResponseEntity<Object> getSingleCar(String filter, String filterType) {
-        return carService.getSingleCar(filter, filterType);
+    public ResponseEntity<Object> getSingleCar(String filter, String filterType, String soldOrNot) {
+        return carService.getSingleCar(filter, filterType, Boolean.parseBoolean(soldOrNot));
     }
 
     @Override

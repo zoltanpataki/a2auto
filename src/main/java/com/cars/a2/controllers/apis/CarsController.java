@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public interface CarsController {
 
-    @GetMapping("/getAllCars/{allOrSold}")
-    ResponseEntity<Object> getAllCars(@PathVariable String allOrSold);
+    @GetMapping("/getAllCars")
+    ResponseEntity<Object> getAllCars();
 
     @PostMapping("/saveCar")
     ResponseEntity<Object> saveCar(@RequestBody Car car);
 
     @GetMapping("/getSingleCar")
-    ResponseEntity<Object> getSingleCar(@RequestParam String filter, @RequestParam String filterType);
+    ResponseEntity<Object> getSingleCar(@RequestParam String filter, @RequestParam String filterType, @RequestParam String soldOrNot);
 
     @GetMapping("/getSingleCarById/{id}")
     ResponseEntity<Object> getSingleCarById(@PathVariable long id);

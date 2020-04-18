@@ -85,16 +85,17 @@ export class HttpService {
     });
   }
 
-  public getAllCars(allOrSold: string): Observable<any> {
-    const urlPostFix = `getAllCars/${allOrSold}`;
+  public getAllCars(): Observable<any> {
+    const urlPostFix = `getAllCars`;
     return this.http.get(this.carServerUrl + urlPostFix, httpOptions);
   }
 
-  public getSingleCar(filter: string, filterType: string): Observable<any> {
+  public getSingleCar(filter: string, filterType: string, soldOrNot: string): Observable<any> {
     const urlPostFix = 'getSingleCar';
     const params = new HttpParams()
       .set('filter', filter)
-      .set('filterType', filterType);
+      .set('filterType', filterType)
+      .set('soldOrNot', soldOrNot);
     return this.http.get(this.carServerUrl + urlPostFix, {
       headers: httpOptions.headers,
       params: params

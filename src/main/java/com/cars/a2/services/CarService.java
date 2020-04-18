@@ -35,10 +35,9 @@ public class CarService {
         }
     }
 
-    public ResponseEntity<Object> getAllCars(String allOrSold) {
+    public ResponseEntity<Object> getAllCars() {
         try {
-            Boolean isSold = "sold".equals(allOrSold);
-            Optional<List<Car>> cars = carRepository.findBySoldOrderByIdAsc(isSold);
+            Optional<List<Car>> cars = carRepository.findBySoldOrderByIdAsc(false);
             return new ResponseEntity<>(cars, HttpStatus.OK);
         } catch (Exception e) {
             logger.info(e.getMessage());
@@ -56,24 +55,38 @@ public class CarService {
         }
     }
 
-    public ResponseEntity<Object> getSingleCar(String filter, String filterType) {
+    public ResponseEntity<Object> getSingleCar(String filter, String filterType, Boolean soldOrNot) {
         switch (filterType) {
             case "plateNumber":
                 try {
-                    Optional<Car> car = carRepository.findByPlateNumberAndSoldFalse(filter);
+                    Optional<Car> car = carRepository.findByPlateNumber(filter);
                     return new ResponseEntity<>(car, HttpStatus.OK);
                 } catch (Exception e) {
                     throw new EntityNotFoundException("Car is not found by plate number!");
                 }
             case "type":
-                List<Car> carsByType = carRepository.findByTypeContainingAndSoldFalse(filter).orElseThrow(() -> new EntityNotFoundException("Car is not found by type!"));
-                return new ResponseEntity<>(carsByType, HttpStatus.OK);
-            case "name":
-                Optional<List<Car>> car = carRepository.findByNameContainingAndSoldFalse(filter);
-                if (!car.isPresent()) {
-                    throw new EntityNotFoundException("Car is not found by name!");
+                if (soldOrNot) {
+                    List<Car> soldCarsByType = carRepository.findByTypeContainingAndSoldTrue(filter).orElseThrow(() -> new EntityNotFoundException("Car is not found by type!"));
+                    return new ResponseEntity<>(soldCarsByType, HttpStatus.OK);
                 } else {
-                    return new ResponseEntity<>(car, HttpStatus.OK);
+                    List<Car> activeCarsByType = carRepository.findByTypeContainingAndSoldFalse(filter).orElseThrow(() -> new EntityNotFoundException("Car is not found by type!"));
+                    return new ResponseEntity<>(activeCarsByType, HttpStatus.OK);
+                }
+            case "name":
+                if (soldOrNot) {
+                    Optional<List<Car>> soldCar = carRepository.findByNameContainingAndSoldTrue(filter);
+                    if (!soldCar.isPresent()) {
+                        throw new EntityNotFoundException("Car is not found by name!");
+                    } else {
+                        return new ResponseEntity<>(soldCar, HttpStatus.OK);
+                    }
+                } else {
+                    Optional<List<Car>> activeCar = carRepository.findByNameContainingAndSoldFalse(filter);
+                    if (!activeCar.isPresent()) {
+                        throw new EntityNotFoundException("Car is not found by name!");
+                    } else {
+                        return new ResponseEntity<>(activeCar, HttpStatus.OK);
+                    }
                 }
         }
         return null;

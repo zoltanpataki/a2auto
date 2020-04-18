@@ -1,20 +1,33 @@
 <div class="filterRow">
   <div>
-    <mat-form-field>
-      <mat-label>Szűrési feltétel</mat-label>
-      <mat-select [(ngModel)]="selectedFilter" name="filter">
-        <mat-option *ngFor="let filter of filters; trackBy: trackByFn" [value]="filter">
-          {{filter.viewValue}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+    <div>
+      <mat-form-field>
+        <mat-label>Szűrési feltétel</mat-label>
+        <mat-select [(ngModel)]="selectedFilter" name="filter">
+          <mat-option (click)="checkSelectedFilter()" *ngFor="let filter of filters; trackBy: trackByFn" [value]="filter">
+            {{filter.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div *ngIf="selectedFilter && selectedFilter.value == 'sold'">
+      <mat-form-field>
+        <mat-label>Másodlagos szűrési feltétel</mat-label>
+        <mat-select [(ngModel)]="secondarySelectedFilter" name="secondaryFilter">
+          <mat-option *ngFor="let secondaryFilter of secondaryFilters; trackBy: trackByFn" [value]="secondaryFilter">
+            {{secondaryFilter.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
   </div>
   <div class="databaseIcon">
     <fa name="download" (click)="getAllCars()" matTooltip="Összes autó letöltése"></fa>
   </div>
 </div>
-<div *ngIf="selectedFilter">
-  <form *ngIf="selectedFilter.value == 'plateNumber'" #filterForm=ngForm (ngSubmit)="filterCars(filterForm); filterForm.reset()" class="form filterForm">
+<div *ngIf="selectedFilter && selectedFilter.value != 'sold' || secondarySelectedFilter">
+  <form *ngIf="selectedFilter && selectedFilter.value == 'plateNumber'
+        || secondarySelectedFilter && secondarySelectedFilter.value == 'plateNumber'" #filterForm=ngForm (ngSubmit)="filterCars(filterForm); filterForm.reset()" class="form filterForm">
     <div>
       <mat-form-field class="example-full-width">
         <label>
@@ -27,7 +40,7 @@
     </div>
     <button mat-button>Keresés</button>
   </form>
-  <form *ngIf="selectedFilter.value == 'name'" #filterForm=ngForm (ngSubmit)="filterCars(filterForm); filterForm.reset()" class="form filterForm">
+  <form *ngIf="selectedFilter && selectedFilter.value == 'name' || secondarySelectedFilter && secondarySelectedFilter.value == 'name'" #filterForm=ngForm (ngSubmit)="filterCars(filterForm); filterForm.reset()" class="form filterForm">
     <div>
       <mat-form-field class="example-full-width">
         <label>
@@ -39,7 +52,7 @@
     </div>
     <button mat-button>Keresés</button>
   </form>
-  <form *ngIf="selectedFilter.value == 'type'" #filterForm=ngForm (ngSubmit)="filterCars(filterForm); filterForm.reset()" class="form filterForm">
+  <form *ngIf="selectedFilter && selectedFilter.value == 'type' || secondarySelectedFilter && secondarySelectedFilter.value == 'type'" #filterForm=ngForm (ngSubmit)="filterCars(filterForm); filterForm.reset()" class="form filterForm">
     <div>
       <mat-form-field class="example-full-width">
         <label>
@@ -51,7 +64,7 @@
     </div>
     <button mat-button>Keresés</button>
   </form>
-  <form *ngIf="selectedFilter.value == 'all' || selectedFilter.value == 'sold'" #filterForm=ngForm (ngSubmit)="filterCars(filterForm); filterForm.reset()" class="form filterForm">
+  <form *ngIf="selectedFilter && selectedFilter.value == 'all'" #filterForm=ngForm (ngSubmit)="filterCars(filterForm); filterForm.reset()" class="form filterForm">
     <button mat-button>Keresés</button>
   </form>
 </div>

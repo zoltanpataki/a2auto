@@ -10,8 +10,10 @@ import java.util.Optional;
 @Repository
 public interface CarRepository extends JpaRepository<Car, Long> {
     Optional<List<Car>> findBySoldOrderByIdAsc(Boolean sold);
-    Optional<Car> findByPlateNumberAndSoldFalse(String plateNumber);
+    Optional<Car> findByPlateNumber(String plateNumber);
     Optional<List<Car>> findByTypeContainingAndSoldFalse(String type);
+    Optional<List<Car>> findByTypeContainingAndSoldTrue(String type);
     Optional<List<Car>> findByNameContainingAndSoldFalse(String name);
+    Optional<List<Car>> findByNameContainingAndSoldTrue(String name);
     Optional<Car> findById(Long id);
 }

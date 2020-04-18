@@ -30,8 +30,10 @@ export class FilterComponent implements OnInit {
 
   public countInCarSupplementForm: FormGroup;
   public filters = [{viewValue: 'Modell', value: 'name'}, {viewValue: 'Rendszám', value: 'plateNumber'}, {viewValue: 'Márka', value: 'type'}, {viewValue: 'Összes', value: 'all'}, {viewValue: 'Eladott', value: 'sold'}];
+  public secondaryFilters = [{viewValue: 'Modell', value: 'name'}, {viewValue: 'Rendszám', value: 'plateNumber'}, {viewValue: 'Márka', value: 'type'}];
   public userFilters = [{viewValue: 'Név', value: 'name'}, {viewValue: 'Város', value: 'city'}];
   public selectedFilter: SelectedFilter;
+  public secondarySelectedFilter: SelectedFilter;
   public selectedUserFilter: SelectedFilter;
   public companyFilters = [{viewValue: 'Név', value: 'name'}, {viewValue: 'Cégjegyzékszám', value: 'companyRegistrationNumber'}];
   public selectedCompanyFilter: SelectedFilter;
@@ -541,17 +543,29 @@ export class FilterComponent implements OnInit {
     });
   }
 
+  // Checks the value of the selectedFilter and the secondarySelectedFilter
+  // if the value of the selectedFilter is not 'sold' than the secondarySelectedFilter has to be null
+
+  public checkSelectedFilter() {
+    if ('sold' !== this.selectedFilter.value && this.secondarySelectedFilter != null) {
+      this.secondarySelectedFilter.value = null;
+    }
+  }
+
   // Filters cars in filter component by model, type or plate number.
   // Validates the length of the input, the plate number, wether if the input field is an empty field.
   // Clears the session storage.
   // Convert the form values to uppercase.
-  // If the selection filter is not 'all' or 'sold', then it gets a single car object
-  // else it gets all the unsold or sold cars.
-  // The getSingleCar call gets called through the http.service.ts with two parameters,
+  // If the selection filter is 'plateNumber', then it gets a single car object
+  // If the selection filter is 'all', then it gets all the car objects.
+  // If the selection filter is 'name' or 'type', then it can get one or multiple car objects.
+  // If the selection filter is 'sold', then a secondary filter steps up and then
+  // we can get one or multiple cars back.
+  // The getSingleCar call gets called through the http.service.ts with three parameters,
   // the first is the actual string searched in that type,
   // the second is the name of the search type eg.: 'type', 'name', 'plateNumber'
-  // The getAllCars method gets called in the same service but with just one parameter
-  // which is the allOrSold and it can have two values: 'all', 'sold'
+  // the third is the soldOrNot, which helps distinguish between sold and active cars.
+  // The getAllCars method gets called in the same service
 
   public filterCars(form: any) {
     if (this.validateFormFieldLength(form.value)) {
@@ -562,7 +576,10 @@ export class FilterComponent implements OnInit {
         this.utilService.emptySearchField = false;
       } else if (this.selectedFilter.value === 'name' && form.value.name && form.value.name.length === 0
         || this.selectedFilter.value === 'type' && form.value.type && form.value.type.length === 0
-        || this.selectedFilter.value === 'plateNumber' && form.value.plateNumber && form.value.plateNumber.length === 0) {
+        || this.selectedFilter.value === 'plateNumber' && form.value.plateNumber && form.value.plateNumber.length === 0
+        || this.secondarySelectedFilter && this.secondarySelectedFilter.value === 'name' && form.value.name && form.value.name.length === 0
+        || this.secondarySelectedFilter && this.secondarySelectedFilter.value === 'type' && form.value.type && form.value.type.length === 0
+        || this.secondarySelectedFilter && this.secondarySelectedFilter.value === 'plateNumber' && form.value.plateNumber && form.value.plateNumber.length === 0) {
         this.utilService.emptySearchField = true;
       } else {
         sessionStorage.clear();
@@ -584,8 +601,10 @@ export class FilterComponent implements OnInit {
           }
         }
 
-        if (this.selectedFilter.value !== 'all' && this.selectedFilter.value !== 'sold') {
-          this.httpService.getSingleCar(formValue, this.selectedFilter.value).subscribe(data => {
+        if (this.selectedFilter.value !== 'all') {
+          const soldOrNot = this.selectedFilter.value === 'sold';
+          const selectedFilterValue = soldOrNot ? this.secondarySelectedFilter.value : this.selectedFilter.value;
+          this.httpService.getSingleCar(formValue, selectedFilterValue, soldOrNot.toString()).subscribe(data => {
             if (!data) {
               this.noMatch = true;
             }
@@ -607,7 +626,7 @@ export class FilterComponent implements OnInit {
             }
           });
         } else {
-          this.httpService.getAllCars(this.selectedFilter.value).subscribe(data => {
+          this.httpService.getAllCars().subscribe(data => {
             this.selectedCars = data;
             sessionStorage.setItem('selectedCars', JSON.stringify(data));
           });
