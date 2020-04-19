@@ -62,8 +62,17 @@
   cursor: pointer;
 }
 
+.trophyIcon {
+  justify-content: flex-end;
+}
+
 .money {
   color: deeppink;
+}
+
+.trophy {
+  // color: #A8B4A5;
+   color: #6C6EA0;
 }
 
 .edit {
@@ -194,4 +203,8 @@ table {
 
 .emptyDescriptionColumn {
   min-width: 32.5%;
+}
+
+.secondaryFilter {
+  width: 140%;
 }

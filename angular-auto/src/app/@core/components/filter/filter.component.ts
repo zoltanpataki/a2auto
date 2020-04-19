@@ -640,7 +640,7 @@ export class FilterComponent implements OnInit {
 
   public getAllCars() {
     this.clearSelectedCars();
-    this.httpService.getAllCars('all').subscribe(data => {
+    this.httpService.getAllCars().subscribe(data => {
       this.selectedCars = data;
       sessionStorage.setItem('selectedCars', JSON.stringify(data));
     });
@@ -654,7 +654,7 @@ export class FilterComponent implements OnInit {
   // After the dialog was closed it sets the updated car as a carOfTransaction
   // and updates the list of selected cars as well
 
-  public openUpdateModal(car: Car): void {
+  public openUpdateModal(car: Car, index: number): void {
     this.utilService.carUpdate = true;
     const dialogConfig = new MatDialogConfig();
 
@@ -679,6 +679,9 @@ export class FilterComponent implements OnInit {
       }
       if (null != this.carOfTransaction) {
         this.selectedCars[this.clickedCarIndex] = this.carOfTransaction;
+        sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
+      } else {
+        this.selectedCars[index] = result;
         sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
       }
     });

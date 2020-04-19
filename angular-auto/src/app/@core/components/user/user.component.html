@@ -4,24 +4,38 @@
     <div>
       <div class="inputContainer">
         <div class="leftSide">
-          <div *ngFor="let item of fieldsOne | keyvalue:keepOriginalOrder; trackBy: trackByFn">
+          <div>
             <mat-form-field class="example-full-width">
               <label>
-                <input matInput maxlength="30" placeholder="{{item.value}}" (ngModelChange)="itemChanged(userForm)" ngModel="{{userData[item.key]}}" name="{{item.key}}">
+                <input matInput maxlength="30" placeholder="Teljes Név" (ngModelChange)="itemChanged(userForm, 'fullName')" ngModel="{{userData.fullName}}" name="fullName">
               </label>
             </mat-form-field>
           </div>
           <div>
             <mat-form-field class="example-full-width">
               <label>
-                <input matInput placeholder="Irányítószám" maxlength="4" type="text" pattern="\d*" (ngModelChange)="itemChanged(userForm); checkZipCode(userForm)" ngModel="{{userData.zipCode}}" name="zipCode">
+                <input matInput maxlength="30" placeholder="Születéskori Név" (ngModelChange)="itemChanged(userForm, 'birthName')" ngModel="{{userData.birthName}}" name="birthName">
+              </label>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field class="example-full-width">
+              <label>
+                <input matInput maxlength="30" placeholder="Telefonszám" (ngModelChange)="itemChanged(userForm, 'phoneNumber')" ngModel="{{userData.phoneNumber}}" name="phoneNumber">
+              </label>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field class="example-full-width">
+              <label>
+                <input matInput placeholder="Irányítószám" maxlength="4" type="text" pattern="\d*" (ngModelChange)="itemChanged(userForm, 'zipCode'); checkZipCode(userForm)" ngModel="{{userData.zipCode}}" name="zipCode">
               </label>
             </mat-form-field>
           </div>
           <div *ngFor="let item of fieldsAddress | keyvalue:keepOriginalOrder; trackBy: trackByFn">
             <mat-form-field class="example-full-width">
               <label>
-                <input matInput maxlength="30" placeholder="{{item.value}}" (ngModelChange)="itemChanged(userForm)" ngModel="{{userData[item.key]}}" name="{{item.key}}">
+                <input matInput maxlength="30" placeholder="{{item.value}}" (ngModelChange)="itemChanged(userForm, item.key)" ngModel="{{userData[item.key]}}" name="{{item.key}}">
               </label>
             </mat-form-field>
           </div>
@@ -29,7 +43,7 @@
         <div class="middle">
           <div>
             <mat-form-field class="example-full-width">
-              <input matInput [matDatepicker]="birthPicker" placeholder="Születési dátum" (ngModelChange)="itemChanged(userForm)" ngModel="{{userData.birthDate | date:'yyyy-MM-dd'}}" name="birthDate">
+              <input matInput [matDatepicker]="birthPicker" placeholder="Születési dátum" (ngModelChange)="itemChanged(userForm, 'birthDate')" ngModel="{{userData.birthDate | date:'yyyy-MM-dd'}}" name="birthDate">
               <mat-datepicker-toggle matSuffix [for]="birthPicker"></mat-datepicker-toggle>
               <mat-datepicker #birthPicker></mat-datepicker>
             </mat-form-field>
@@ -38,7 +52,7 @@
             <mat-form-field class="example-full-width">
               <label>
                 <input matInput [formControl]="emailFormControl"
-                       [errorStateMatcher]="matcher" placeholder="E-mail" (ngModelChange)="itemChanged(userForm)" ngModel="{{userData.email}}" name="email">
+                       [errorStateMatcher]="matcher" placeholder="E-mail" (ngModelChange)="itemChanged(userForm, 'email')" ngModel="{{userData.email}}" name="email">
               </label>
               <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
                 Kérlek adj meg megfelelő e-mail címet :)
@@ -48,7 +62,7 @@
           <div *ngFor="let item of fieldsTwo | keyvalue:keepOriginalOrder; trackBy: trackByFn">
             <mat-form-field class="example-full-width">
               <label>
-                <input matInput maxlength="30" placeholder="{{item.value}}" (ngModelChange)="itemChanged(userForm)" ngModel="{{userData[item.key]}}" name="{{item.key}}">
+                <input matInput maxlength="30" placeholder="{{item.value}}" (ngModelChange)="itemChanged(userForm, item.key)" ngModel="{{userData[item.key]}}" name="{{item.key}}">
               </label>
             </mat-form-field>
           </div>
@@ -57,13 +71,13 @@
           <div *ngFor="let item of fieldsThree | keyvalue:keepOriginalOrder; trackBy: trackByFn">
             <mat-form-field class="example-full-width">
               <label>
-                <input matInput maxlength="30" placeholder="{{item.value}}" (ngModelChange)="itemChanged(userForm)" ngModel="{{userData[item.key]}}" name="{{item.key}}">
+                <input matInput maxlength="30" placeholder="{{item.value}}" (ngModelChange)="itemChanged(userForm, item.key)" ngModel="{{userData[item.key]}}" name="{{item.key}}">
               </label>
             </mat-form-field>
           </div>
           <div *ngFor="let item of fieldsFour | keyvalue:keepOriginalOrder; index as i; trackBy: trackByFn">
             <mat-form-field class="example-full-width">
-              <input matInput [matDatepicker]="picker" placeholder="{{item.value}}" (ngModelChange)="itemChanged(userForm)" ngModel="{{userData[item.key] | date:'yyyy-MM-dd'}}" name="{{item.key}}">
+              <input matInput [matDatepicker]="picker" placeholder="{{item.value}}" (ngModelChange)="itemChanged(userForm, item.key)" ngModel="{{userData[item.key] | date:'yyyy-MM-dd'}}" name="{{item.key}}">
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>

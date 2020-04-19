@@ -11,7 +11,7 @@
       </mat-form-field>
     </div>
     <div *ngIf="selectedFilter && selectedFilter.value == 'sold'">
-      <mat-form-field>
+      <mat-form-field class="secondaryFilter">
         <mat-label>Másodlagos szűrési feltétel</mat-label>
         <mat-select [(ngModel)]="secondarySelectedFilter" name="secondaryFilter">
           <mat-option *ngFor="let secondaryFilter of secondaryFilters; trackBy: trackByFn" [value]="secondaryFilter">
@@ -75,10 +75,11 @@
         <mat-panel-title fxFlex="15" *ngFor="let header of selectedCarHeader; trackBy: trackByFn">
           <strong>{{header}}</strong>
         </mat-panel-title>
-        <mat-panel-title fxFlex="7"></mat-panel-title>
-        <mat-panel-title fxFlex="6"></mat-panel-title>
-        <mat-panel-title fxFlex="6"></mat-panel-title>
-        <mat-panel-title fxFlex="6"></mat-panel-title>
+        <mat-panel-title fxFlex="5"></mat-panel-title>
+        <mat-panel-title fxFlex="5"></mat-panel-title>
+        <mat-panel-title fxFlex="5"></mat-panel-title>
+        <mat-panel-title fxFlex="5"></mat-panel-title>
+        <mat-panel-title fxFlex="5"></mat-panel-title>
       </div>
     </mat-card>
     <mat-expansion-panel [disabled]="true" #mep="matExpansionPanel" [expanded]="i == clickedCarIndex" hideToggle *ngFor="let car of selectedCars; index as i; trackBy: trackByFn">
@@ -99,16 +100,19 @@
           <mat-panel-title fxFlex="15">
             {{car.dateOfLeaving | date:'yyyy-MM-dd'}}
           </mat-panel-title>
-          <mat-panel-title class="buyButton" fxFlex="7">
+          <mat-panel-title class="trophyIcon" fxFlex="5">
+            <i *ngIf="car.sold" class="material-icons trophy" matTooltip="Eladott autó">emoji_events</i>
+          </mat-panel-title>
+          <mat-panel-title class="buyButton" fxFlex="5">
             <i class="material-icons" (click)="navigateToBlankOrderPage(car)" matTooltip="Üres megrendelőlap az autóhoz">spellcheck</i>
           </mat-panel-title>
-          <mat-panel-title class="buyButton" fxFlex="6">
-            <i class="material-icons edit" (click)="openUpdateModal(car)" matTooltip="Autó szerkesztése">edit</i>
+          <mat-panel-title class="buyButton" fxFlex="5">
+            <i class="material-icons edit" (click)="openUpdateModal(car, i)" matTooltip="Autó szerkesztése">edit</i>
           </mat-panel-title>
-          <mat-panel-title class="buyButton" fxFlex="6">
+          <mat-panel-title class="buyButton" fxFlex="5">
             <i class="material-icons money" (click)="setAlreadyOrNewCustomerSelectorAndCarOfTransaction(car, i)" matTooltip="Autó megvásárlása">shopping_cart</i>
           </mat-panel-title>
-          <mat-panel-title class="buyButton" fxFlex="6">
+          <mat-panel-title class="buyButton" fxFlex="5">
             <i class="material-icons delete" (click)="openWarningModal(car.id)" matTooltip="Autó végleges törlése">clear</i>
           </mat-panel-title>
         </div>
@@ -334,14 +338,14 @@
                     <div>
                       <mat-form-field class="example-full-width">
                         <label>
-                          <input currencyMask matInput placeholder="Beszámított autó ár" formControlName="countInPrice" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false}">
+                          <input currencyMask matInput placeholder="Beszámított autó ár" formControlName="countInPrice" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false, suffix: ' Ft'}">
                         </label>
                       </mat-form-field>
                     </div>
                     <div>
                       <mat-form-field class="example-full-width">
                         <label>
-                          <input currencyMask matInput placeholder="Korábbi hitel" formControlName="previousLoan" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false}">
+                          <input currencyMask matInput placeholder="Korábbi hitel" formControlName="previousLoan" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false, suffix: ' Ft'}">
                         </label>
                       </mat-form-field>
                     </div>
@@ -377,14 +381,14 @@
           <div>
             <mat-form-field class="example-full-width">
               <label>
-                <input currencyMask matInput placeholder="Foglaló összege" formControlName="downPayment" (ngModelChange)="saveChangedDownPayment(downPaymentForm)" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false}">
+                <input currencyMask matInput placeholder="Foglaló összege" formControlName="downPayment" (ngModelChange)="saveChangedDownPayment(downPaymentForm)" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false, suffix: ' Ft'}">
               </label>
             </mat-form-field>
           </div>
           <div>
             <mat-form-field class="example-full-width">
               <label>
-                <input currencyMask matInput placeholder="Előleg összege" formControlName="extra" (ngModelChange)="saveChangedExtra(downPaymentForm)" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false}">
+                <input currencyMask matInput placeholder="Előleg összege" formControlName="extra" (ngModelChange)="saveChangedExtra(downPaymentForm)" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false, suffix: ' Ft'}">
               </label>
             </mat-form-field>
           </div>
@@ -459,7 +463,7 @@
               <div class="descriptions" *ngIf="!giftIndexList.includes(indexNum)">
                 <mat-form-field class="example-full-width" [formGroupName]="indexNum">
                   <label>
-                    <input currencyMask matInput placeholder="Összeg" formControlName="amount" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false}">
+                    <input currencyMask matInput placeholder="Összeg" formControlName="amount" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false, suffix: ' Ft'}">
                   </label>
                 </mat-form-field>
               </div>

@@ -133,10 +133,17 @@
       <form #userForm=ngForm (ngSubmit)="saveUser(userForm)" class="form userForm" (keydown.enter)="$event.preventDefault()">
         <div class="userContainer">
           <div>
-            <div *ngFor="let item of fields | keyvalue:keepOriginalOrder; trackBy: trackByFn">
+            <div>
               <mat-form-field class="example-full-width">
                 <label>
-                  <input matInput placeholder="{{item.value}}" ngModel="{{userData[item.key]}}" name="{{item.key}}">
+                  <input matInput placeholder="Teljes Név" (ngModelChange)="itemChanged(userForm, 'fullName')" ngModel="{{userData.fullName}}" name="fullName">
+                </label>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field class="example-full-width">
+                <label>
+                  <input matInput placeholder="Születéskori Név" (ngModelChange)="itemChanged(userForm, 'birthName')" ngModel="{{userData.birthName}}" name="birthName">
                 </label>
               </mat-form-field>
             </div>

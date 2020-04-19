@@ -91,7 +91,7 @@ export class UserComponent implements OnInit {
       this.userData = JSON.parse(sessionStorage.getItem('newUser'));
     }
     if (this.userData == null) {
-      this.userData = new Users(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+      this.userData = new Users(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 'MAGYAR');
     } else {
       this.emailFormControl.setValue(this.userData.email);
     }
@@ -143,7 +143,7 @@ export class UserComponent implements OnInit {
       this.httpService.callZipCodeService(form.value.zipCode).subscribe(data => {
         this.userData.city = (data.zipCity).toUpperCase();
         form.value.city = (data.zipCity).toUpperCase();
-        this.itemChanged(form);
+        this.itemChanged(form, 'checkZipCode');
       });
     }
   }
@@ -203,11 +203,20 @@ export class UserComponent implements OnInit {
     return Math.abs(nullCounter) === 3;
   }
 
-  public itemChanged(form: any) {
+  public itemChanged(form: any, fieldName: string) {
     if (Object.entries(form.value).length === 0 && form.value.constructor === Object) {
       //we don't do anything, the object is empty
     } else {
       let user;
+      if ('fullName' === fieldName && this.userData.birthName === this.userData.fullName) {
+        form.value.birthName = form.value.fullName;
+        this.userData.birthName = form.value.fullName;
+        this.userData.fullName = form.value.fullName;
+      } else if ('birthName' === fieldName) {
+        this.userData.birthName = form.value.birthName;
+      } else if ('fullName' === fieldName) {
+        this.userData.fullName = form.value.fullName;
+      }
       if (this.userData.id == null) {
         user = this.createUserObj(form, false);
       } else {

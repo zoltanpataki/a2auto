@@ -33,14 +33,14 @@ export class CarComponent implements OnInit {
   };
   public fieldTwo = {
     // vintage: 'Évjárat',
-    mileage: 'Futott km',
-    price: 'Vételár',
+    // mileage: 'Futott km',
+    // price: 'Vételár',
     // purchasingPrice: 'Beszerzési ár',
     // cost: 'Költség',
     // inheritanceTax: 'Átírási illeték',
     // downPayment: 'Foglaló',
     // payedAmount: 'Befizetett összeg',
-    kwh: 'Teljesítmény'
+    // kwh: 'Teljesítmény'
   };
   public fieldFour = {
     dateOfArrival: 'Vétel dátuma',
@@ -177,6 +177,7 @@ export class CarComponent implements OnInit {
   // otherwise it would look funny (zero instead of empty field)
 
   private saveOrUpdateCar(form: any) {
+    console.log(form.value);
     if (this.carData.id == null) {
       this.httpService.saveCar(this.createNewCarObject(form, null, false)).subscribe(data => {
           const newCar = new Car(data.id, data.name, data.type, data.color, data.plateNumber, data.specification, data.bodyNumber, data.engineNumber, Number(data.capacity), Number(data.vintage), Number(data.mileage), new Date(data.motExpiry), Number(data.price), Number(data.purchasingPrice), Number(data.cost), data.costDescriptions, new Date(data.dateOfArrival), new Date(data.dateOfLeaving), data.typeOfBuying, Number(data.inheritanceTax), Number(data.downPayment), Number(data.payedAmount), Number(data.kwh), data.carRegistry, new Date(data.documentsHandover), new Date(data.dueOfContract), new Date(data.carHandover), new Date(data.dateOfContract), false, data.carOrTruck, data.salesman, data.insuranceNumber, Number(data.weight), Number(data.maxWeightAllowed), data.fuelType, data.nameOfBuyer);

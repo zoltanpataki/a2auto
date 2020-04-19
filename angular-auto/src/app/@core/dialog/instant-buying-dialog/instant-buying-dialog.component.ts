@@ -72,7 +72,7 @@ export class InstantBuyingDialogComponent implements OnInit {
 
   ngOnInit() {
     if (this.userData == null) {
-      this.userData = new Users(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+      this.userData = new Users(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 'MAGYAR');
     }
     if (this.companyData == null) {
       this.companyData = new Company(null, null, new Address(null, null, null, null, null), null, null, null, null, null);
@@ -202,15 +202,15 @@ export class InstantBuyingDialogComponent implements OnInit {
     this.companyData = null;
     if (this.nullCheckOnAddress(form)) {
       this.isCompleteAddress = true;
-      this.userData.fullName = form.value.fullName;
-      this.userData.birthName = form.value.birthName;
-      this.userData.zipCode = form.value.zipCode;
-      this.userData.city = form.value.city;
-      this.userData.address = form.value.address;
-      this.userData.birthPlace = form.value.birthPlace;
-      this.userData.nameOfMother = form.value.nameOfMother;
-      this.userData.idCardNumber = form.value.idCardNumber;
-      this.userData.nationality = form.value.nationality;
+      this.userData.fullName = form.value.fullName.toUpperCase();
+      this.userData.birthName = form.value.birthName.toUpperCase();
+      this.userData.zipCode = form.value.zipCode.toUpperCase();
+      this.userData.city = form.value.city.toUpperCase();
+      this.userData.address = form.value.address.toUpperCase();
+      this.userData.birthPlace = form.value.birthPlace.toUpperCase();
+      this.userData.nameOfMother = form.value.nameOfMother.toUpperCase();
+      this.userData.idCardNumber = form.value.idCardNumber.toUpperCase();
+      this.userData.nationality = form.value.nationality.toUpperCase();
       this.userData.birthDate = form.value.birthDate;
       this.createClosingData();
     } else {
@@ -222,12 +222,12 @@ export class InstantBuyingDialogComponent implements OnInit {
     this.userData = null;
     if (this.nullCheckOnAddress(form)) {
       this.isCompleteAddress = true;
-      this.companyData.name = form.value.companyName;
-      this.companyData.companyRegistrationNumber = form.value.companyRegistrationNumber;
-      this.companyData.address.zipcode = form.value.zipCode;
-      this.companyData.address.city = form.value.city;
-      this.companyData.address.address = form.value.address;
-      this.companyData.representation = form.value.representation;
+      this.companyData.name = form.value.companyName.toUpperCase();
+      this.companyData.companyRegistrationNumber = form.value.companyRegistrationNumber.toUpperCase();
+      this.companyData.address.zipcode = form.value.zipCode.toUpperCase();
+      this.companyData.address.city = form.value.city.toUpperCase();
+      this.companyData.address.address = form.value.address.toUpperCase();
+      this.companyData.representation = form.value.representation.toUpperCase();
       this.createClosingData();
     } else {
       this.isCompleteAddress = false;
@@ -277,6 +277,21 @@ export class InstantBuyingDialogComponent implements OnInit {
 
   public pickPrivateOrCorporate() {
     this.userChooser = false;
+  }
+
+  public itemChanged(form: any, fieldName: string) {
+    if (Object.entries(form.value).length === 0 && form.value.constructor === Object) {
+      //we don't do anything, the object is empty
+    } else {
+      if ('fullName' === fieldName && this.userData.birthName === this.userData.fullName) {
+        this.userData.birthName = form.value.fullName;
+        this.userData.fullName = form.value.fullName;
+      } else if ('birthName' === fieldName) {
+        this.userData.birthName = form.value.birthName;
+      } else if ('fullName' === fieldName) {
+        this.userData.fullName = form.value.fullName;
+      }
+    }
   }
 
   get formData() {return <FormArray>this.remarkForm.get('description');}

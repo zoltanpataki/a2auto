@@ -51,17 +51,31 @@
             </label>
           </mat-form-field>
         </div>
-        <div *ngFor="let item of fieldTwo | keyvalue:keepOriginalOrder; trackBy: trackByFn">
+        <div>
           <mat-form-field class="example-full-width">
             <label>
-              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput currencyMask placeholder="{{item.value}}" (ngModelChange)="itemChanged(carForm)" [(ngModel)]="carData[item.key]" name="{{item.key}}" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false}">
+              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput currencyMask placeholder="Futott km" (ngModelChange)="itemChanged(carForm)" [(ngModel)]="carData.mileage" name="mileage" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false, suffix: ' km'}">
+            </label>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="example-full-width">
+            <label>
+              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput currencyMask placeholder="Vételár" (ngModelChange)="itemChanged(carForm)" [(ngModel)]="carData.price" name="price" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false, suffix: ' Ft'}">
+            </label>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="example-full-width">
+            <label>
+              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput currencyMask placeholder="Teljesítmény" (ngModelChange)="itemChanged(carForm)" [(ngModel)]="carData.kwh" name="kwh" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false, suffix: ' kwh'}">
             </label>
           </mat-form-field>
         </div>
         <div *ngFor="let item of fieldRelatedToWeight | keyvalue:keepOriginalOrder; trackBy: trackByFn">
           <mat-form-field class="example-full-width">
             <label>
-              <input currencyMask autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput placeholder="{{item.value}}" (ngModelChange)="itemChanged(carForm)" [(ngModel)]="carData[item.key]" name="{{item.key}}" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false}">
+              <input currencyMask autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput placeholder="{{item.value}}" (ngModelChange)="itemChanged(carForm)" [(ngModel)]="carData[item.key]" name="{{item.key}}" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false, suffix: ' kg'}">
             </label>
           </mat-form-field>
         </div>
@@ -70,7 +84,7 @@
         <div>
           <mat-form-field class="example-full-width">
             <label>
-              <input currencyMask matInput placeholder="Hengerűrtartalom" (ngModelChange)="itemChanged(carForm)" [(ngModel)]="carData.capacity" name="capacity" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false}">
+              <input currencyMask matInput placeholder="Hengerűrtartalom" (ngModelChange)="itemChanged(carForm)" [(ngModel)]="carData.capacity" name="capacity" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false, suffix: ' ccm'}">
             </label>
           </mat-form-field>
         </div>
