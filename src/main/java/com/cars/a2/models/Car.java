@@ -51,12 +51,13 @@ public class Car {
     private int maxWeightAllowed;
     private String fuelType;
     private String nameOfBuyer;
+    private Date firstRegistration;
 
 
     public Car() {
     }
 
-    public Car(Users user, Company company, String name, String type, String color, String plateNumber, String specification, String bodyNumber, String engineNumber, int capacity, int vintage, int mileage, Date motExpiry, int price, int purchasingPrice, int cost, String costDescriptions, Date dateOfArrival, Date dateOfLeaving, String typeOfBuying, int inheritanceTax, int downPayment, int payedAmount, int kwh, String carRegistry, Date documentsHandover, Date dueOfContract, Date carHandover, Date dateOfContract, boolean sold, String carOrTruck, String salesman, String insuranceNumber, int weight, int maxWeightAllowed, String fuelType, String nameOfBuyer) {
+    public Car(Users user, Company company, String name, String type, String color, String plateNumber, String specification, String bodyNumber, String engineNumber, int capacity, int vintage, int mileage, Date motExpiry, int price, int purchasingPrice, int cost, String costDescriptions, Date dateOfArrival, Date dateOfLeaving, String typeOfBuying, int inheritanceTax, int downPayment, int payedAmount, int kwh, String carRegistry, Date documentsHandover, Date dueOfContract, Date carHandover, Date dateOfContract, boolean sold, String carOrTruck, String salesman, String insuranceNumber, int weight, int maxWeightAllowed, String fuelType, String nameOfBuyer, Date firstRegistration) {
         this.company = company;
         this.user =user;
         this.name = name;
@@ -94,6 +95,15 @@ public class Car {
         this.maxWeightAllowed = maxWeightAllowed;
         this.fuelType = fuelType;
         this.nameOfBuyer = nameOfBuyer;
+        this.firstRegistration = firstRegistration;
+    }
+
+    public Date getFirstRegistration() {
+        return firstRegistration;
+    }
+
+    public void setFirstRegistration(Date firstRegistration) {
+        this.firstRegistration = firstRegistration;
     }
 
     public String getNameOfBuyer() {
@@ -439,8 +449,9 @@ public class Car {
                 ", insuranceNumber='" + insuranceNumber + '\'' +
                 ", weight=" + weight +
                 ", maxWeightAllowed=" + maxWeightAllowed +
-                ", fuelType=" + fuelType +
-                ", nameOfBuyer=" + nameOfBuyer +
+                ", fuelType='" + fuelType + '\'' +
+                ", nameOfBuyer='" + nameOfBuyer + '\'' +
+                ", firstRegistration=" + firstRegistration +
                 '}';
     }
 }

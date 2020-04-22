@@ -35,9 +35,10 @@ export class Car {
   maxWeightAllowed: number;
   fuelType: string;
   nameOfBuyer: string;
+  firstRegistration: Date;
 
 
-  constructor(id: number, name: string, type: string, color: string, plateNumber: string, specification: string, bodyNumber: string, engineNumber: string, capacity: number, vintage: number, mileage: number, motExpiry: Date, price: number, purchasingPrice: number, cost: number, costDescriptions: string, dateOfArrival: Date, dateOfLeaving: Date, typeOfBuying: string, inheritanceTax: number, downPayment: number, payedAmount: number, kwh: number, carRegistry: string, documentsHandover: Date, dueOfContract: Date, carHandover: Date, dateOfContract: Date, sold: boolean, carOrTruck: string, salesman: string, insuranceNumber: string, weight: number, maxWeightAllowed: number, fuelType: string, nameOfBuyer: string) {
+  constructor(id: number, name: string, type: string, color: string, plateNumber: string, specification: string, bodyNumber: string, engineNumber: string, capacity: number, vintage: number, mileage: number, motExpiry: Date, price: number, purchasingPrice: number, cost: number, costDescriptions: string, dateOfArrival: Date, dateOfLeaving: Date, typeOfBuying: string, inheritanceTax: number, downPayment: number, payedAmount: number, kwh: number, carRegistry: string, documentsHandover: Date, dueOfContract: Date, carHandover: Date, dateOfContract: Date, sold: boolean, carOrTruck: string, salesman: string, insuranceNumber: string, weight: number, maxWeightAllowed: number, fuelType: string, nameOfBuyer: string, firstRegistration: Date) {
     this.id = id;
     this.name = name;
     this.type = type;
@@ -74,5 +75,6 @@ export class Car {
     this.maxWeightAllowed = maxWeightAllowed;
     this.fuelType = fuelType;
     this.nameOfBuyer = nameOfBuyer;
+    this.firstRegistration = firstRegistration;
   }
 }

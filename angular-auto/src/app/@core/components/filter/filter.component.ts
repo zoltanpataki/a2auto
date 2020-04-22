@@ -89,6 +89,7 @@ export class FilterComponent implements OnInit {
   public nameOfBuyer;
   public tooLongFieldValue: string = '';
   public isThereLongFieldValue: boolean = false;
+  public creditNeedsToBeRecalculated: boolean = false;
 
   constructor(private httpService: HttpService,
               public utilService: UtilService,
@@ -224,6 +225,7 @@ export class FilterComponent implements OnInit {
     }
     if (sessionStorage.getItem('downPayment')) {
       this.downPayment = Number(sessionStorage.getItem('downPayment'));
+      console.log(this.downPayment);
     }
     if (sessionStorage.getItem('descriptionList')) {
       this.descriptionList = JSON.parse(sessionStorage.getItem('descriptionList'));
@@ -251,6 +253,9 @@ export class FilterComponent implements OnInit {
     }
     if (sessionStorage.getItem('nameOfBuyer')) {
       this.nameOfBuyer = sessionStorage.getItem('nameOfBuyer');
+    }
+    if (sessionStorage.getItem('creditNeedsToBeRecalculated')) {
+      this.creditNeedsToBeRecalculated = JSON.parse(sessionStorage.getItem('creditNeedsToBeRecalculated'));
     }
   }
 
@@ -292,6 +297,7 @@ export class FilterComponent implements OnInit {
     sessionStorage.removeItem('a2Representation');
     sessionStorage.removeItem('typeOfBuying');
     sessionStorage.removeItem('nameOfBuyer');
+    sessionStorage.removeItem('creditNeedsToBeRecalculated');
   }
 
   // Sets the data to null when expansion order is collapsed
@@ -336,6 +342,7 @@ export class FilterComponent implements OnInit {
     this.removeItemsFromSessionStorage();
     this.creditData = null;
     this.nameOfBuyer = null;
+    this.creditNeedsToBeRecalculated = false;
   }
 
   // Sets variables regarding the order for the component
@@ -731,7 +738,10 @@ export class FilterComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      this.creditData = result;
+      if (result != null) {
+        this.creditData = result;
+        this.creditNeedsToBeRecalculated = false;
+      }
       if (this.creditData != null) {
         sessionStorage.setItem("credit", JSON.stringify(this.creditData));
       }
@@ -1378,9 +1388,12 @@ export class FilterComponent implements OnInit {
   // and the new value gets updated in sessionStorage, and later on it will be part of the order.
 
   public saveChangedDownPayment(form: FormGroup) {
+    console.log(form.value.downPayment);
     this.downPayment = form.value.downPayment;
     if (this.downPayment != null) {
       sessionStorage.setItem('downPayment', this.downPayment.toString());
+      this.newOrder.downPayment = this.downPayment;
+      sessionStorage.setItem('order', JSON.stringify(this.newOrder));
     }
   }
 
@@ -1391,6 +1404,8 @@ export class FilterComponent implements OnInit {
     this.extra = form.value.extra;
     if (this.extra != null) {
       sessionStorage.setItem('extra', this.extra.toString());
+      this.newOrder.extra = this.extra;
+      sessionStorage.setItem('order', JSON.stringify(this.newOrder));
     }
   }
 
@@ -1431,6 +1446,23 @@ export class FilterComponent implements OnInit {
     return true;
   }
 
+  // Counts credit amount from the given data.
+  // It is necessary because the different amounts affect the credit amount
+  // could be modified.
+
+  private countCreditAmount(car: Car, countInCarSupplement: CountInCarSupplement, downPayment: number, extra: number): Object {
+    const creditNumbers = {};
+    const carPrice = car.price ? car.price : 0;
+    const countInPrice = countInCarSupplement && countInCarSupplement.countInPrice ? countInCarSupplement.countInPrice : 0;
+    const downPaymentAmount = downPayment ? downPayment : 0;
+    const extraAmount = extra ? extra : 0;
+    const initialPayment = (countInPrice + downPaymentAmount + extraAmount) === 0 ? null : countInPrice + downPaymentAmount + extraAmount;
+    const creditAmount = (carPrice - initialPayment) === 0 ? null : carPrice - initialPayment;
+    creditNumbers['initialPayment'] = initialPayment;
+    creditNumbers['creditAmount'] = creditAmount;
+    return creditNumbers;
+  }
+
   //TODO: this method is a beast, needs to be refactored
 
   // Navigates to the clicked page.
@@ -1448,6 +1480,14 @@ export class FilterComponent implements OnInit {
     }
     this.saveDescriptions(descriptionForm);
     this.saveCountInCarSupplement(countInCarSupplementForm);
+    if ('/orderPage' === targetRoute) {
+      const creditNumbers = this.countCreditAmount(car, this.countInCarSupplement, this.downPayment, this.extra);
+      if (this.creditData.creditAmount !== creditNumbers['creditAmount']
+        || this.creditData.initialPayment !== creditNumbers['initialPayment']) {
+        this.creditNeedsToBeRecalculated = true;
+        sessionStorage.setItem('creditNeedsToBeRecalculated', this.creditNeedsToBeRecalculated.toString())
+      }
+    }
     let userForOrder;
     let companyForOrder;
     if (this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready && this.newUser !=null) {
@@ -1507,26 +1547,28 @@ export class FilterComponent implements OnInit {
   // Prepares the navigation to the clicked page. All the data traverse through the router.navigate method
 
   private prepareNavigationToOrderPageOrSellingPageOrWarrantPageOrInsurancePage(order: Order, car: Car, witness1: Witness, witness2: Witness, orderOrSellingOrWarrant: string, warrantType: string, a2Representation: string, pickedTypeOfBuyingForCountInCar: string) {
-    sessionStorage.setItem('order', JSON.stringify(this.newOrder));
-    sessionStorage.setItem('orderedCar', JSON.stringify(car));
-    this.router.navigate([orderOrSellingOrWarrant], {state: {data: {
-          order: order,
-          orderedCar: car,
-          clickedCarIndex: this.clickedCarIndex,
-          userSearchResult: this.userSearchResult.data,
-          companySearchResult: this.companySearchResult.data,
-          indexOfPickedUser: this.indexOfPickedUser,
-          pickedUser: this.pickedUser,
-          indexOfPickedCompany: this.indexOfPickedCompany,
-          pickedCompany: this.pickedCompany,
-          switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer: this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer,
-          witness1: witness1,
-          witness2: witness2,
-          warrantType: warrantType,
-          a2Representation: a2Representation,
-          typeOfBuying: pickedTypeOfBuyingForCountInCar,
-          nameOfBuyer: this.nameOfBuyer,
-        }}});
+    if ('/orderPage' !== orderOrSellingOrWarrant && this.creditNeedsToBeRecalculated || !this.creditNeedsToBeRecalculated) {
+      sessionStorage.setItem('order', JSON.stringify(this.newOrder));
+      sessionStorage.setItem('orderedCar', JSON.stringify(car));
+      this.router.navigate([orderOrSellingOrWarrant], {state: {data: {
+            order: order,
+            orderedCar: car,
+            clickedCarIndex: this.clickedCarIndex,
+            userSearchResult: this.userSearchResult.data,
+            companySearchResult: this.companySearchResult.data,
+            indexOfPickedUser: this.indexOfPickedUser,
+            pickedUser: this.pickedUser,
+            indexOfPickedCompany: this.indexOfPickedCompany,
+            pickedCompany: this.pickedCompany,
+            switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer: this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer,
+            witness1: witness1,
+            witness2: witness2,
+            warrantType: warrantType,
+            a2Representation: a2Representation,
+            typeOfBuying: pickedTypeOfBuyingForCountInCar,
+            nameOfBuyer: this.nameOfBuyer,
+          }}});
+    }
   }
 
   // It opens the carTimeInfoDialog, and it is decided at this point that the selling page will be for sell or buy.

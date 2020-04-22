@@ -75,7 +75,11 @@ export class CarComponent implements OnInit {
         if (event.url !== '/newCompany') {
           sessionStorage.removeItem('newCompany');
         }
-        if (event.url !== '/filter' && event.url !== '/orderPage' && event.url !== 'sellingPage' && event.url !== '/warrantPage' && event.url !== '/insurancePage') {
+        if (event.url !== '/filter'
+          && event.url !== '/orderPage'
+          && event.url !== 'sellingPage'
+          && event.url !== '/warrantPage'
+          && event.url !== '/insurancePage') {
           this.utilService.removeItemsFromSessionStorage();
         }
       });
@@ -91,7 +95,13 @@ export class CarComponent implements OnInit {
       this.showInsuranceButton = true;
     }
     if (this.carData == null) {
-      this.carData = new Car(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, false, null, null, null, null, null, null, null);
+      this.carData = new Car(null, null, null, null, null, null,
+        null, null, null, null, null, null,
+        null, null, null, null, null, null,
+        null, null, null, null, null, null,
+        null, null, null, null, false,
+        null, null, null, null, null,
+        null, null, null);
     } else {
       const carHandoverDate: Date = new Date(this.carData.carHandover);
       this.carHandoverTime['hour'] = carHandoverDate.getHours();
@@ -180,7 +190,44 @@ export class CarComponent implements OnInit {
     console.log(form.value);
     if (this.carData.id == null) {
       this.httpService.saveCar(this.createNewCarObject(form, null, false)).subscribe(data => {
-          const newCar = new Car(data.id, data.name, data.type, data.color, data.plateNumber, data.specification, data.bodyNumber, data.engineNumber, Number(data.capacity), Number(data.vintage), Number(data.mileage), new Date(data.motExpiry), Number(data.price), Number(data.purchasingPrice), Number(data.cost), data.costDescriptions, new Date(data.dateOfArrival), new Date(data.dateOfLeaving), data.typeOfBuying, Number(data.inheritanceTax), Number(data.downPayment), Number(data.payedAmount), Number(data.kwh), data.carRegistry, new Date(data.documentsHandover), new Date(data.dueOfContract), new Date(data.carHandover), new Date(data.dateOfContract), false, data.carOrTruck, data.salesman, data.insuranceNumber, Number(data.weight), Number(data.maxWeightAllowed), data.fuelType, data.nameOfBuyer);
+          const newCar = new Car(
+            data.id,
+            data.name,
+            data.type,
+            data.color,
+            data.plateNumber,
+            data.specification,
+            data.bodyNumber,
+            data.engineNumber,
+            Number(data.capacity),
+            Number(data.vintage),
+            Number(data.mileage),
+            new Date(data.motExpiry),
+            Number(data.price),
+            Number(data.purchasingPrice),
+            Number(data.cost),
+            data.costDescriptions,
+            new Date(data.dateOfArrival),
+            new Date(data.dateOfLeaving),
+            data.typeOfBuying,
+            Number(data.inheritanceTax),
+            Number(data.downPayment),
+            Number(data.payedAmount),
+            Number(data.kwh),
+            data.carRegistry,
+            new Date(data.documentsHandover),
+            new Date(data.dueOfContract),
+            new Date(data.carHandover),
+            new Date(data.dateOfContract),
+            false,
+            data.carOrTruck,
+            data.salesman,
+            data.insuranceNumber,
+            Number(data.weight),
+            Number(data.maxWeightAllowed),
+            data.fuelType,
+            data.nameOfBuyer,
+            data.firstRegistration);
           if (newCar.motExpiry.getFullYear() === new Date(0).getFullYear()) {
             newCar.motExpiry = null;
           }
@@ -224,7 +271,44 @@ export class CarComponent implements OnInit {
     this.httpService.updateCar(this.createNewCarObject(form, carId, true)).subscribe(data => {
         this.utilService.openSnackBar('Az autó adatai sikeresen frissültek!', 'Szuper :)');
         this.savedOrNot = true;
-        const freshlyUpdatedCar = new Car(data.id, data.name, data.type, data.color, data.plateNumber, data.specification, data.bodyNumber, data.engineNumber, Number(data.capacity), Number(data.vintage), Number(data.mileage), new Date(data.motExpiry), Number(data.price), Number(data.purchasingPrice), Number(data.cost), data.costDescriptions, new Date(data.dateOfArrival), new Date(data.dateOfLeaving), data.typeOfBuying, Number(data.inheritanceTax), Number(data.downPayment), Number(data.payedAmount), Number(data.kwh), data.carRegistry, new Date(data.documentsHandover), new Date(data.dueOfContract), new Date(data.carHandover), new Date(data.dateOfContract), false, data.carOrTruck, data.salesman, data.insuranceNumber, Number(data.weight), Number(data.maxWeightAllowed), data.fuelType, null);
+        const freshlyUpdatedCar = new Car(
+          data.id,
+          data.name,
+          data.type,
+          data.color,
+          data.plateNumber,
+          data.specification,
+          data.bodyNumber,
+          data.engineNumber,
+          Number(data.capacity),
+          Number(data.vintage),
+          Number(data.mileage),
+          new Date(data.motExpiry),
+          Number(data.price),
+          Number(data.purchasingPrice),
+          Number(data.cost),
+          data.costDescriptions,
+          new Date(data.dateOfArrival),
+          new Date(data.dateOfLeaving),
+          data.typeOfBuying,
+          Number(data.inheritanceTax),
+          Number(data.downPayment),
+          Number(data.payedAmount),
+          Number(data.kwh),
+          data.carRegistry,
+          new Date(data.documentsHandover),
+          new Date(data.dueOfContract),
+          new Date(data.carHandover),
+          new Date(data.dateOfContract),
+          false,
+          data.carOrTruck,
+          data.salesman,
+          data.insuranceNumber,
+          Number(data.weight),
+          Number(data.maxWeightAllowed),
+          data.fuelType,
+          null,
+          data.firstRegistration);
         if (freshlyUpdatedCar.motExpiry.getFullYear() === new Date(0).getFullYear()) {
           freshlyUpdatedCar.motExpiry = null;
         }
@@ -342,7 +426,8 @@ export class CarComponent implements OnInit {
       form.value.weight,
       form.value.maxWeightAllowed,
       capitalData['capitalFuelType'],
-      nameOfBuyer);
+      nameOfBuyer,
+      form.value.firstRegistration);
   }
 
   private createCarObjectNoId(form: any, capitalData: Object) {
@@ -382,7 +467,8 @@ export class CarComponent implements OnInit {
       form.value.weight,
       form.value.maxWeightAllowed,
       capitalData['capitalFuelType'],
-      null);
+      null,
+    form.value.firstRegistration);
   }
 
   public navigateToInsurancePage(form: any) {

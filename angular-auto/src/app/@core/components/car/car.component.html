@@ -46,6 +46,13 @@
         </div>
         <div>
           <mat-form-field class="example-full-width">
+            <input matInput [matDatepicker]="firstRegistrationPicker" placeholder="Forgalomba helyezés dátuma" (ngModelChange)="itemChanged(carForm)" ngModel="{{carData.firstRegistration | date:'yyyy-MM-dd'}}" name="firstRegistration">
+            <mat-datepicker-toggle matSuffix [for]="firstRegistrationPicker"></mat-datepicker-toggle>
+            <mat-datepicker #firstRegistrationPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="example-full-width">
             <label>
               <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput type="text" pattern="\d*" maxlength="4" minlength="4" placeholder="Évjárat" (ngModelChange)="itemChanged(carForm)" ngModel="{{carData.vintage}}" name="vintage">
             </label>

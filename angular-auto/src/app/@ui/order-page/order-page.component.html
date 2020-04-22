@@ -51,8 +51,8 @@
           <p *ngIf="!orderedCar.capacity" class="texts">Hengerűrtartalom:</p>
         </div>
         <div class="border">
-          <p *ngIf="orderedCar.vintage" class="texts">Évjárat: <strong>{{orderedCar.vintage}}</strong></p>
-          <p *ngIf="!orderedCar.vintage" class="texts">Évjárat:</p>
+          <p *ngIf="orderedCar.firstRegistration" class="texts">Forgalomba helyezés: <strong>{{orderedCar.firstRegistration | date: 'yyyy-MM-dd'}}</strong></p>
+          <p *ngIf="!orderedCar.firstRegistration" class="texts">Forgalomba helyezés:</p>
         </div>
         <div class="border">
           <p *ngIf="orderedCar.motExpiry" class="texts">Műszaki vizsga: <strong>{{orderedCar.motExpiry | date:'yyyy-MM-dd'}}</strong></p>
