@@ -367,6 +367,13 @@ export class SellingPageComponent implements OnInit{
     this.httpService.updateCar(car).subscribe(data => {
       console.log(data);
       this.orderedCar = data;
+      if (sessionStorage.getItem('clickedCarIndex') != null
+          && sessionStorage.getItem('selectedCars') != null) {
+        const clickedCarIndex = JSON.parse(sessionStorage.getItem('clickedCarIndex'));
+        const selectedCars = JSON.parse(sessionStorage.getItem('selectedCars'));
+        selectedCars[clickedCarIndex] = data;
+        sessionStorage.setItem('selectedCars', JSON.stringify(selectedCars));
+      }
       sessionStorage.setItem('orderedCar', JSON.stringify(this.orderedCar));
       this.utilService.openSnackBar('Az autó eladott státuszba került!', 'Szuper :)');
     }, error => {

@@ -496,7 +496,7 @@
       </div>
       <div *ngIf="orderProgress > 9 && clickedCarIndex == i">
         <mat-divider></mat-divider>
-        <mat-error class="creditWarning" *ngIf="creditNeedsToBeRecalculated"><h5>A hitel adatai módosultak, kérlek kalkuláld újra őket!</h5></mat-error>
+        <mat-error *ngIf="creditNeedsToBeRecalculated"><h5>A hitel adatai módosultak, kérlek kalkuláld újra őket!</h5></mat-error>
         <h5>Összesítő</h5>
         <div class="summary">
           <div>

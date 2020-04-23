@@ -1480,7 +1480,7 @@ export class FilterComponent implements OnInit {
     }
     this.saveDescriptions(descriptionForm);
     this.saveCountInCarSupplement(countInCarSupplementForm);
-    if ('/orderPage' === targetRoute) {
+    if ('/orderPage' === targetRoute && this.creditData != null) {
       const creditNumbers = this.countCreditAmount(car, this.countInCarSupplement, this.downPayment, this.extra);
       if (this.creditData.creditAmount !== creditNumbers['creditAmount']
         || this.creditData.initialPayment !== creditNumbers['initialPayment']) {
