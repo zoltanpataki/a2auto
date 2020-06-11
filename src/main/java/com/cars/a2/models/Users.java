@@ -6,12 +6,13 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+@Table(name = "users")
 @SequenceGenerator(name = "seq", initialValue = 4, allocationSize = 100)
 public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
-    private long id;
+    private Integer id;
 
     @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true, mappedBy = "user")
     private List<Car> cars = new ArrayList<>();
@@ -35,7 +36,7 @@ public class Users {
     private String nationality;
 
     @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true, mappedBy = "users")
-    private List<Order> order = new ArrayList<>();
+    private List<Orders> orders = new ArrayList<>();
 
     public Users() {
     }
@@ -85,11 +86,11 @@ public class Users {
         this.birthPlace = birthPlace;
     }
 
-    public long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -236,7 +237,7 @@ public class Users {
                 ", taxNumber='" + taxNumber + '\'' +
                 ", healthcareNumber='" + healthcareNumber + '\'' +
                 ", nationality='" + nationality + '\'' +
-                ", order=" + order +
+                ", order=" + orders +
                 '}';
     }
 }

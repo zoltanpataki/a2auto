@@ -5,13 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "company")
 @SequenceGenerator(name = "seq3", initialValue = 2, allocationSize = 100)
 public class Company {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq3")
     @Column(name = "id")
-    private long id;
+    private Integer id;
     @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true, mappedBy = "company")
     private List<Car> cars = new ArrayList<>();
     private String name;
@@ -27,7 +28,7 @@ public class Company {
     private String email;
 
     @OneToOne(mappedBy = "company")
-    private Order order;
+    private Orders orders;
 
     public Company() {
     }
@@ -66,11 +67,11 @@ public class Company {
         this.email = email;
     }
 
-    public long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -118,7 +119,7 @@ public class Company {
                 ", taxNumber='" + taxNumber + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
-                ", order=" + order +
+                ", order=" + orders +
                 '}';
     }
 }

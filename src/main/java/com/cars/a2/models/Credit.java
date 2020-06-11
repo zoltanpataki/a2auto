@@ -8,7 +8,7 @@ public class Credit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     private String bank;
     private String creditType;
     private int initialPayment;
@@ -17,7 +17,7 @@ public class Credit {
     private int repayment;
 
     @OneToOne(mappedBy = "credit")
-    private Order creditOrder;
+    private Orders creditOrder;
 
     public Credit() {
     }
@@ -31,11 +31,11 @@ public class Credit {
         this.repayment = repayment;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -5,11 +5,12 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "descriptionWithAmount")
 public class DescriptionWithAmount {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     private String description;
     private int amount;
     private String charged;
@@ -17,7 +18,7 @@ public class DescriptionWithAmount {
     @ManyToOne()
     @JoinColumn(name = "order_id")
     @JsonBackReference
-    private Order order;
+    private Orders orders;
 
     public DescriptionWithAmount() {
     }
@@ -28,11 +29,11 @@ public class DescriptionWithAmount {
         this.charged = charged;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -4,12 +4,13 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Table(name = "car")
 @SequenceGenerator(name = "seq2", initialValue = 5, allocationSize = 100)
 public class Car {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq2")
-    private long id;
+    private Integer id;
 
     @ManyToOne
     private Users user;
@@ -186,11 +187,11 @@ public class Car {
         this.user = user;
     }
 
-    public long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

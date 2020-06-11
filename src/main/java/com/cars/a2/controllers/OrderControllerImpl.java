@@ -1,7 +1,7 @@
 package com.cars.a2.controllers;
 
 import com.cars.a2.controllers.apis.OrderController;
-import com.cars.a2.models.Order;
+import com.cars.a2.models.Orders;
 import com.cars.a2.services.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,8 +20,8 @@ public class OrderControllerImpl implements OrderController {
     }
 
     @Override
-    public ResponseEntity<Object> saveOrder(Order order) {
-        return orderService.saveNewOrder(order);
+    public ResponseEntity<Object> saveOrder(Orders orders) {
+        return orderService.saveNewOrder(orders);
     }
 
     @Override
@@ -30,8 +30,8 @@ public class OrderControllerImpl implements OrderController {
     }
 
     @Override
-    public ResponseEntity<Object> updateOrder(Order order) {
-        return orderService.updateOrder(order);
+    public ResponseEntity<Object> updateOrder(Orders orders) {
+        return orderService.updateOrder(orders);
     }
 
     @Override

@@ -4,12 +4,13 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Table(name = "saldo")
 @SequenceGenerator(name = "seq4", initialValue = 2, allocationSize = 100)
 public class Saldo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq4")
-    private long id;
+    private Integer id;
     private Date transactionDate;
     private int moneyIn;
     private int moneyOut;
@@ -25,11 +26,11 @@ public class Saldo {
         this.description = description;
     }
 
-    public long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

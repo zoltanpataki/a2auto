@@ -8,6 +8,10 @@ import {NavigationEnd, Router} from "@angular/router";
 import {UtilService} from "../../@core/services/util.service";
 import {filter} from "rxjs/operators";
 
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
 @Component({
   selector: 'app-gdpr-page',
   templateUrl: './gdpr-page.component.html',
@@ -58,18 +62,23 @@ export class GdprPageComponent implements OnInit {
 
   public captureScreen() {
     var data = document.getElementById('gdprContainer');
-    html2canvas(data).then(canvas => {
-      // Few necessary setting options
-      var imgWidth = 208;
-      var pageHeight = 295;
-      var imgHeight = canvas.height * imgWidth / canvas.width;
-      var heightLeft = imgHeight;
-
-      const contentDataURL = canvas.toDataURL('image/png');
-      let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF
-      var position = 0;
-      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
-      pdf.save('GDPR.pdf'); // Generated PDF
-    });
+    const documentDefinition = { content: 'data dfdfdffd fdfdfdfdfdfdf fdfdfdfdfdfdfdf' };
+    pdfMake.createPdf(documentDefinition).open();
+    // const jsPDF = require('jspdf');
+    // var data = document.getElementById('gdprContainer');
+    // html2canvas(data).then(canvas => {
+    //   // Few necessary setting options
+    //   var imgWidth = 208;
+    //   var pageHeight = 295;
+    //   var imgHeight = canvas.height * imgWidth / canvas.width;
+    //   var heightLeft = imgHeight;
+    //   var imageData = canvas.getContext('2d');
+    //
+    //   const contentDataURL = canvas.toDataURL('image/png');
+    //   let pdf = new jsPDF('p', 'mm', 'a4'); // A4 size page of PDF
+    //   var position = 0;
+    //   pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+    //   pdf.save('GDPR.pdf'); // Generated PDF
+    // });
   }
 }

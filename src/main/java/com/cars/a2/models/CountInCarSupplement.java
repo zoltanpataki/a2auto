@@ -1,8 +1,6 @@
 package com.cars.a2.models;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "countInCarSupplement")
@@ -11,14 +9,14 @@ public class CountInCarSupplement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private Integer id;
     private int countInPrice;
     private int previousLoan;
     private String previousBank;
     private String loanType;
 
     @OneToOne(mappedBy = "countInCarSupplement")
-    private Order countInOrder;
+    private Orders countInOrder;
 
     public CountInCarSupplement() {
     }
@@ -30,11 +28,11 @@ public class CountInCarSupplement {
         this.loanType = loanType;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -8,13 +8,14 @@ import java.util.List;
 
 @Entity
 @Table(name = "orders")
-public class Order {
+public class Orders {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private Integer id;
     private boolean alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready;
+    @Column(name = "individualOrCorporate")
     private boolean selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate;
     private boolean wantInheritanceTaxCalculation;
     private int inheritanceTax;
@@ -25,7 +26,7 @@ public class Order {
     private Long carId;
 
     @OneToMany(
-            mappedBy = "order",
+            mappedBy = "orders",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
@@ -33,7 +34,7 @@ public class Order {
     private List<Description> description = new ArrayList<>();
 
     @OneToMany(
-            mappedBy = "order",
+            mappedBy = "orders",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
@@ -57,10 +58,10 @@ public class Order {
 
     private Long countInCarId;
 
-    public Order() {
+    public Orders() {
     }
 
-    public Order(boolean alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready, boolean selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate, boolean wantInheritanceTaxCalculation, int inheritanceTax, boolean thereIsCountInCar, int downPayment, int extra, String selectedTypeOfBuying, CountInCarSupplement countInCarSupplement, Credit credit, Users users, Company company, Long countInCarId, Long carId, List<Description> description, List<DescriptionWithAmount> descriptionsWithAmount) {
+    public Orders(boolean alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready, boolean selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate, boolean wantInheritanceTaxCalculation, int inheritanceTax, boolean thereIsCountInCar, int downPayment, int extra, String selectedTypeOfBuying, CountInCarSupplement countInCarSupplement, Credit credit, Users users, Company company, Long countInCarId, Long carId, List<Description> description, List<DescriptionWithAmount> descriptionsWithAmount) {
         this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready;
         this.selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate = selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate;
         this.wantInheritanceTaxCalculation = wantInheritanceTaxCalculation;
@@ -119,11 +120,11 @@ public class Order {
         this.company = company;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

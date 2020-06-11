@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, Inject} from '@angular/core';
 import {HttpService} from "../../services/http.service";
 import {Users} from "../../models/users";
 import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
@@ -6,9 +6,11 @@ import {UtilService} from "../../services/util.service";
 import {filter} from "rxjs/operators";
 import {FormControl, FormGroupDirective, NgForm, Validators} from "@angular/forms";
 import {ErrorStateMatcher} from "@angular/material/core";
+import { WINDOW } from '@ng-toolkit/universal';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
+
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     const isSubmitted = form && form.submitted;
     return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));

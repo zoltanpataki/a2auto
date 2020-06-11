@@ -3,13 +3,14 @@ package com.cars.a2.models;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "witness")
 @SequenceGenerator(name = "seq8", initialValue = 3, allocationSize = 100)
 public class Witness {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq8")
     @Column(name = "id")
-    private long id;
+    private Integer id;
     private String name;
     private String idCardNumber;
 
@@ -26,11 +27,11 @@ public class Witness {
         this.witnessAddress = witnessAddress;
     }
 
-    public long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

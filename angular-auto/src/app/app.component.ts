@@ -1,22 +1,24 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Inject, PLATFORM_ID} from '@angular/core';
 import { Select } from '@ngxs/store';
 import {HttpService} from "./@core/services/http.service";
 import {UtilService} from "./@core/services/util.service";
 import {LoaderState} from "./@core/services/loader.state";
 import {Observable} from "rxjs";
 import {Witness} from "./@core/models/witness";
+import { environment } from '../environments/environment';
+import { isPlatformBrowser, DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
   @Select(LoaderState.status)
   public loadingStatus$: Observable<boolean>;
   title = 'angular-auto';
 
-  constructor(private httpService: HttpService,
+  constructor(@Inject(PLATFORM_ID) private platformId: any, @Inject(DOCUMENT) private document: any, private httpService: HttpService,
               private utilService: UtilService,) {
   }
 
@@ -34,7 +36,13 @@ export class AppComponent implements OnInit{
       this.utilService.witnesses = data;
       this.utilService.witnesses.push(this.utilService.createBlankWitnessToUtilServiceWitnessList());
     });
-  }
+  if (!isPlatformBrowser(this.platformId)) {
+    const bases = this.document.getElementsByTagName('base');
+
+    if (bases.length > 0) {
+        bases[0].setAttribute('href', environment.baseHref);
+    }
+}}
 
 
 

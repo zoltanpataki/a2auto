@@ -2,15 +2,13 @@ package com.cars.a2.services;
 
 import com.cars.a2.exceptions.EntityFailedToSaveException;
 import com.cars.a2.exceptions.EntityNotFoundException;
-import com.cars.a2.models.Order;
+import com.cars.a2.models.Orders;
 import com.cars.a2.repositories.OrderRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -23,9 +21,9 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
-    public ResponseEntity<Object> saveNewOrder(Order order) {
+    public ResponseEntity<Object> saveNewOrder(Orders orders) {
         try {
-            Order savedOrder = orderRepository.saveAndFlush(order);
+            Orders savedOrder = orderRepository.saveAndFlush(orders);
 
             return new ResponseEntity<>(savedOrder, HttpStatus.OK);
         } catch (Exception e) {
@@ -36,16 +34,16 @@ public class OrderService {
 
     public ResponseEntity<Object> getSingleOrder(Long carId) {
         try {
-            Order orderByCarId = orderRepository.findByCarId(carId).orElseThrow(() -> new EntityNotFoundException("Order is not found by id!"));
+            Orders orderByCarId = orderRepository.findByCarId(carId).orElseThrow(() -> new EntityNotFoundException("Order is not found by id!"));
             return new ResponseEntity<>(orderByCarId, HttpStatus.OK);
         } catch (Exception e) {
             throw new EntityNotFoundException("Order is not found by carId!");
         }
     }
 
-    public ResponseEntity<Object> updateOrder(Order order) {
+    public ResponseEntity<Object> updateOrder(Orders orders) {
         try {
-            Order updatedOrder = orderRepository.saveAndFlush(order);
+            Orders updatedOrder = orderRepository.saveAndFlush(orders);
             return new ResponseEntity<>(updatedOrder, HttpStatus.OK);
         } catch (Exception e) {
             logger.info(e.getMessage());

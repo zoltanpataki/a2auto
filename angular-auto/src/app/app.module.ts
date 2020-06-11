@@ -51,6 +51,9 @@ import { InsurancePageComponent } from './@ui/insurance-page/insurance-page.comp
 import {environment} from "../environments/environment";
 import { InstantBuyingDialogComponent } from './@core/dialog/instant-buying-dialog/instant-buying-dialog.component';
 import {CurrencyMaskModule} from "ng2-currency-mask";
+import { CommonModule } from '@angular/common';
+import { TransferHttpCacheModule } from '@nguniversal/common';
+import { NgtUniversalModule } from '@ng-toolkit/universal';
 
 @NgModule({
   declarations: [
@@ -79,7 +82,7 @@ import {CurrencyMaskModule} from "ng2-currency-mask";
     InstantBuyingDialogComponent,
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
@@ -105,8 +108,11 @@ import {CurrencyMaskModule} from "ng2-currency-mask";
     NgxSpinnerModule,
     NgxsModule.forRoot([LoaderState], {developmentMode: !environment.production}),
     CurrencyMaskModule,
+    CommonModule,
+    TransferHttpCacheModule,
+    NgtUniversalModule,
   ],
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },{ provide: 'isBrowser', useValue: true },],
   bootstrap: [AppComponent],
   entryComponents: [DialogComponent, InstantBuyingDialogComponent, WarningDialogComponent, CreditDialogComponent, CarTimeInfoComponent, SalesmanComponent, WitnessDialogComponent, WitnessPickerDialogComponent]
 })
