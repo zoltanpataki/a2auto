@@ -10,14 +10,25 @@ table {
 }
 
 .salesmanTable {
-  width: 20%;
+  width: 40%;
 }
 
 .witnessTable {
-  width: 30%;
+  width: 60%;
 }
 
 .header {
   margin-bottom: 2%;
   margin-top: 5%;
+}
+
+.settingsContainer {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+.left, .right {
+  width: 50%;
 }

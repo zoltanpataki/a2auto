@@ -1,0 +1,33 @@
+{
+  "universal": {
+    "clientProject": "angular-auto",
+    "directory": ".",
+    "skipInstall": false,
+    "http": true,
+    "appId": "serverApp",
+    "main": "main.server.ts",
+    "serverFileName": "server.ts",
+    "serverPort": 4000,
+    "tsconfigFileName": "tsconfig.server",
+    "testTsconfigFileName": "tsconfig.spec",
+    "appDir": "app",
+    "rootModuleFileName": "app.server.module.ts",
+    "rootModuleClassName": "AppServerModule",
+    "skipServer": false,
+    "skipUniversal": false,
+    "webpack": true
+  },
+  "serverless": {
+    "provider": "aws",
+    "project": "angular-auto",
+    "skipInstall": false,
+    "directory": ".",
+    "lambdaTS": false,
+    "offline": false,
+    "clientProject": "angular-auto",
+    "serverless": {
+      "aws": {},
+      "gcloud": {}
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import {Company} from "../../@core/models/company";
 import {HttpService} from "../../@core/services/http.service";
 import * as jspdf from 'jspdf';
