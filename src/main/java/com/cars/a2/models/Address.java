@@ -9,7 +9,7 @@ public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq5")
-    private Integer id;
+    private Long id;
 
     private String zipcode;
     private String country;
@@ -29,11 +29,11 @@ public class Address {
         this.address = address;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

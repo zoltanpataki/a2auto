@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 public class UtilityControllerImpl implements UtilityController {
@@ -27,7 +29,17 @@ public class UtilityControllerImpl implements UtilityController {
     }
 
     @Override
+    public ResponseEntity<Object> getAllUtilities() {
+        return utilityService.getAllUtilities();
+    }
+
+    @Override
     public ResponseEntity<Object> saveUtility(Utility utility) {
         return utilityService.saveUtility(utility);
+    }
+
+    @Override
+    public ResponseEntity<Object> updateUtility(List<Utility> utilities) {
+        return utilityService.updateUtility(utilities);
     }
 }

@@ -9,7 +9,7 @@ public class CountInCarSupplement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
     private int countInPrice;
     private int previousLoan;
     private String previousBank;
@@ -28,11 +28,11 @@ public class CountInCarSupplement {
         this.loanType = loanType;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

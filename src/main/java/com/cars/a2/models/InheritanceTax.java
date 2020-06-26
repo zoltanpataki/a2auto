@@ -8,7 +8,7 @@ public class InheritanceTax {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     private String kW;
     private int young;
     private int mediumAged;
@@ -24,11 +24,11 @@ public class InheritanceTax {
         this.old = old;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

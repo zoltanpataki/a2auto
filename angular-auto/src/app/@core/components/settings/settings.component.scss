@@ -17,6 +17,11 @@ table {
   width: 60%;
 }
 
+.inheritanceTax1Table {
+  width: 90%;
+  text-align: center;
+}
+
 .header {
   margin-bottom: 2%;
   margin-top: 5%;
@@ -32,3 +37,38 @@ table {
 .left, .right {
   width: 50%;
 }
+
+.mat-column-min, .mat-column-max {
+  width: 16% !important;
+  max-width: 16% !important;
+}
+
+.mat-column-kw, .mat-column-young, .mat-column-mediumAged, .mat-column-old {
+  width: 17% !important;
+}
+
+.mat-column-kw, .mat-column-max {
+  border-right: 1px black solid;
+}
+
+.mat-header-cell.iTax {
+  text-align: center;
+}
+
+.mat-form-field {
+  width: 30%;
+}
+
+input {
+  text-align: center;
+}
+
+::ng-deep .mat-column-kw div.mat-form-field-infix,
+::ng-deep .mat-column-min div.mat-form-field-infix,
+::ng-deep .mat-column-max div.mat-form-field-infix,
+::ng-deep .mat-column-young div.mat-form-field-infix,
+::ng-deep .mat-column-mediumAged div.mat-form-field-infix,
+::ng-deep .mat-column-old div.mat-form-field-infix {
+  width: 16% !important;
+}
+

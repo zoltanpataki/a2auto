@@ -10,7 +10,7 @@ public class Description {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     private String description;
     private String type;
 
@@ -35,11 +35,11 @@ public class Description {
         this.type = type;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

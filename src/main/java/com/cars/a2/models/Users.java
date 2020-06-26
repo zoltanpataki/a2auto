@@ -12,7 +12,7 @@ public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
-    private Integer id;
+    private Long id;
 
     @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true, mappedBy = "user")
     private List<Car> cars = new ArrayList<>();
@@ -86,11 +86,11 @@ public class Users {
         this.birthPlace = birthPlace;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

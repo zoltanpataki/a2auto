@@ -49,31 +49,68 @@
     </table>
   </div>
   <div class="right">
-<!--    <h5 class="header">Átírási illetékhez szükséges adatok</h5>-->
-<!--    <table mat-table [dataSource]="inheritanceTax1" class="mat-elevation-z8 witnessTable">-->
+    <h5 class="header">Átírási illetékhez szükséges adatok</h5>
+    <table mat-table [dataSource]="inheritanceTax1" class="mat-elevation-z8 inheritanceTax1Table">
 
-<!--      &lt;!&ndash; Name Column &ndash;&gt;-->
-<!--      <ng-container matColumnDef="min">-->
-<!--        <th mat-header-cell *matHeaderCellDef> Min </th>-->
-<!--        <td mat-cell *matCellDef="let element"> {{element.min}} </td>-->
-<!--      </ng-container>-->
+      <!-- MIN Column -->
+      <ng-container matColumnDef="kw">
+        <th mat-header-cell *matHeaderCellDef class="iTax"> kwh </th>
+        <td mat-cell *matCellDef="let element"> {{element.kw}} </td>
+      </ng-container>
 
-<!--      &lt;!&ndash; Id card Column &ndash;&gt;-->
-<!--      <ng-container matColumnDef="max">-->
-<!--        <th mat-header-cell *matHeaderCellDef> Max </th>-->
-<!--        <td mat-cell *matCellDef="let element"> {{element.max}} </td>-->
-<!--      </ng-container>-->
+      <!-- MIN Column -->
+      <ng-container matColumnDef="min">
+        <th mat-header-cell *matHeaderCellDef class="iTax"> Min </th>
+        <td mat-cell *matCellDef="let element; let inheritanceIndex = index;">
+          <mat-form-field floatLabel="never">
+            <input matInput placeholder="" [value]="element.min" [(ngModel)]="element.min" (ngModelChange)="updateInheritanceInfo1($event, inheritanceIndex, 'min')">
+          </mat-form-field>
+        </td>
+      </ng-container>
 
-<!--      &lt;!&ndash; Symbol Column &ndash;&gt;-->
-<!--      <ng-container matColumnDef="young">-->
-<!--        <th mat-header-cell *matHeaderCellDef>Fiatal</th>-->
-<!--        <td mat-cell *matCellDef="let element; let witnessIndex = index;">-->
-<!--          <i class="material-icons" (click)="deleteWitness(element.id)">delete</i>-->
-<!--        </td>-->
-<!--      </ng-container>-->
+      <!-- MAX Column -->
+      <ng-container matColumnDef="max">
+        <th mat-header-cell *matHeaderCellDef class="iTax"> Max </th>
+        <td mat-cell *matCellDef="let element; let inheritanceIndex = index;">
+          <mat-form-field *ngIf="element.max" floatLabel="never">
+            <input matInput placeholder="" [value]="element.max" [(ngModel)]="element.max" (ngModelChange)="updateInheritanceInfo1($event, inheritanceIndex, 'max')">
+          </mat-form-field>
+        </td>
+      </ng-container>
 
-<!--      <tr mat-header-row *matHeaderRowDef="witnessDisplayedColumns"></tr>-->
-<!--      <tr mat-row *matRowDef="let row; columns: witnessDisplayedColumns;"></tr>-->
-<!--    </table>-->
+      <!-- Young Column -->
+      <ng-container matColumnDef="young">
+        <th mat-header-cell *matHeaderCellDef class="iTax">Fiatal</th>
+        <td mat-cell *matCellDef="let element; let inheritanceIndex = index;">
+          <mat-form-field floatLabel="never">
+            <input matInput placeholder="" [value]="element.young" [(ngModel)]="element.young" (ngModelChange)="updateInheritanceInfo1($event, inheritanceIndex, 'young')">
+          </mat-form-field>
+        </td>
+      </ng-container>
+
+      <!-- Medium aged Column -->
+      <ng-container matColumnDef="mediumAged">
+        <th mat-header-cell *matHeaderCellDef class="iTax">Középkorú</th>
+        <td mat-cell *matCellDef="let element; let inheritanceIndex = index;">
+          <mat-form-field floatLabel="never">
+            <input matInput placeholder="" [value]="element.mediumAged" [(ngModel)]="element.mediumAged" (ngModelChange)="updateInheritanceInfo1($event, inheritanceIndex, 'mediumAged')">
+          </mat-form-field>
+        </td>
+      </ng-container>
+
+      <!-- Old Column -->
+      <ng-container matColumnDef="old">
+        <th mat-header-cell *matHeaderCellDef class="iTax">Öreg</th>
+        <td mat-cell *matCellDef="let element; let inheritanceIndex = index;">
+          <mat-form-field floatLabel="never">
+            <input matInput placeholder="" [value]="element.old" [(ngModel)]="element.old" (ngModelChange)="updateInheritanceInfo1($event, inheritanceIndex, 'old')">
+          </mat-form-field>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="inheritanceTax1Columns"></tr>
+      <tr mat-row *matRowDef="let row; columns: inheritanceTax1Columns;"></tr>
+    </table>
+    <mat-error *ngIf="inheritanceTax1ContainsWrongData">Az adat típusa nem megfelelő!</mat-error>
   </div>
 </div>

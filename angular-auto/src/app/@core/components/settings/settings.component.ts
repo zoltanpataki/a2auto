@@ -10,6 +10,7 @@ import {WitnessAddress} from "../../models/witnessAddress";
 import {WitnessDialogComponent} from "../../dialog/witness-dialog/witness-dialog.component";
 import {NavigationEnd, Router} from "@angular/router";
 import {filter} from "rxjs/operators";
+import {InheritanceTax} from "../../models/inheritanceTax";
 
 
 @Component({
@@ -25,6 +26,11 @@ export class SettingsComponent implements OnInit {
   private witnessList = [];
   public witnesses = new MatTableDataSource<any>();
   public witnessDisplayedColumns = ['name', 'idCardNumber', 'symbol'];
+  public inheritanceTax1 = new MatTableDataSource<any>();
+  public inheritanceTax1Columns = ['kw', 'min', 'max', 'young', 'mediumAged', 'old'];
+  public utilityList = [];
+  public inheritanceInfoList = [];
+  public inheritanceTax1ContainsWrongData: boolean = false;
 
   constructor(private dialog: MatDialog,
               private changeDetectorRefs: ChangeDetectorRef,
@@ -55,11 +61,98 @@ export class SettingsComponent implements OnInit {
       this.utilService.salesmen = data;
     });
 
+    this.httpService.getAllUtilities().subscribe(data => {
+      this.utilityList = data;
+      this.httpService.getAllInheritanceTaxInfo().subscribe(data => {
+        this.inheritanceInfoList = data;
+        this.inheritanceTax1.data = this.createTableDataForInheritanceTax1(this.utilityList, this.inheritanceInfoList);
+        console.log(this.inheritanceTax1.data);
+      });
+    });
+
     this.httpService.getAllWitnesses().subscribe(data => {
       this.witnesses.data = data;
       this.utilService.witnesses = data;
       this.utilService.witnesses.push(this.utilService.createBlankWitnessToUtilServiceWitnessList());
     });
+  }
+
+  public updateInheritanceInfo1(event: Event, index: number, column: string) {
+    if (!isNaN(Number(event))) {
+      this.inheritanceTax1ContainsWrongData = false;
+      this.inheritanceTax1.data[index][column] = Number(event);
+      this.changeDetectorRefs.detectChanges();
+      const tableData = this.inheritanceTax1.data;
+      const updatedInheritanceTaxInfo = [];
+      let rowId = 1;
+      tableData.forEach(row => {
+        let newRow = new InheritanceTax(rowId, row.kw, Number(row.young), Number(row.mediumAged), Number(row.old));
+        updatedInheritanceTaxInfo.push(newRow);
+        switch (rowId) {
+          case 1:
+            this.utilityList[6].value = row.min.length > 0 ? row.min.toString() : '0';
+            this.utilityList[7].value = row.max.length > 0 ? row.max.toString() : '0';
+            break;
+          case 2:
+            this.utilityList[8].value = row.min.length > 0 ? row.min.toString() : '0';
+            this.utilityList[9].value = row.max.length > 0 ? row.max.toString() : '0';
+            break;
+          case 3:
+            this.utilityList[10].value = row.min.length > 0 ? row.min.toString() : '0';
+            this.utilityList[11].value = row.max.length > 0 ? row.max.toString() : '0';
+            break;
+          case 4:
+            this.utilityList[12].value = row.min.length > 0 ? row.min.toString() : '0';
+            break;
+        }
+        rowId = rowId + 1;
+      });
+      this.httpService.updateUtility(this.utilityList).subscribe(data => {
+        console.log(data);
+      });
+      this.httpService.updateInheritanceTaxInfo(updatedInheritanceTaxInfo).subscribe(data => {
+        console.log(data);
+      });
+    } else {
+      this.inheritanceTax1ContainsWrongData = true;
+    }
+  }
+
+  private createTableDataForInheritanceTax1(utilities: Array<any>, inheritanceInfo: Array<any>): Array<any> {
+    const tableData = [];
+    const firstRow = {};
+    firstRow['kw'] = inheritanceInfo[0].kW;
+    firstRow['min'] = utilities[6].value;
+    firstRow['max'] = utilities[7].value;
+    firstRow['young'] = inheritanceInfo[0].young.toString();
+    firstRow['mediumAged'] = inheritanceInfo[0].mediumAged.toString();
+    firstRow['old'] = inheritanceInfo[0].old.toString();
+    tableData.push(firstRow);
+    const secondRow = {};
+    secondRow['kw'] = inheritanceInfo[1].kW;
+    secondRow['min'] = utilities[8].value;
+    secondRow['max'] = utilities[9].value;
+    secondRow['young'] = inheritanceInfo[1].young.toString();
+    secondRow['mediumAged'] = inheritanceInfo[1].mediumAged.toString();
+    secondRow['old'] = inheritanceInfo[1].old.toString();
+    tableData.push(secondRow);
+    const thirdRow = {};
+    thirdRow['kw'] = inheritanceInfo[2].kW;
+    thirdRow['min'] = utilities[10].value;
+    thirdRow['max'] = utilities[11].value;
+    thirdRow['young'] = inheritanceInfo[2].young.toString();
+    thirdRow['mediumAged'] = inheritanceInfo[2].mediumAged.toString();
+    thirdRow['old'] = inheritanceInfo[2].old.toString();
+    tableData.push(thirdRow);
+    const fourthRow = {};
+    fourthRow['kw'] = inheritanceInfo[3].kW;
+    fourthRow['min'] = utilities[12].value;
+    fourthRow['max'] = null;
+    fourthRow['young'] = inheritanceInfo[3].young.toString();
+    fourthRow['mediumAged'] = inheritanceInfo[3].mediumAged.toString();
+    fourthRow['old'] = inheritanceInfo[3].old.toString();
+    tableData.push(fourthRow);
+    return tableData;
   }
 
   public deleteSalesman(id: number) {

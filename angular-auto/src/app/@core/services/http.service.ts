@@ -5,11 +5,13 @@ import {Car} from "../models/car";
 import {Order} from "../models/order";
 import {Salesmen} from "../models/salesmen";
 import {Witness} from "../models/witness";
+import {Utility} from "../models/utility";
+import {InheritanceTax} from "../models/inheritanceTax";
 
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type':  'application/json',
-    'Access-Control-Allow-Origin': 'http://localhost:4200',
+    'Access-Control-Allow-Origin': 'http://192.168.0.4:4200',
     'Access-Control-Allow-Credentials': 'true',
     'Access-Control-Allow-Methods': 'DELETE, POST, GET, OPTIONS',
     'Access-Control-Allow-Headers': 'Origin, Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With',
@@ -21,7 +23,8 @@ const httpOptions = {
 })
 export class HttpService {
 
-  private carServerUrl =  'http://localhost:60000/';
+  private carServerUrl =  'http://192.168.0.4:60000/';
+  // private carServerUrl =  'http://localhost:60000/';
 
   constructor(private http: HttpClient) { }
 
@@ -135,6 +138,26 @@ export class HttpService {
   public getUtility(name: string): Observable<any> {
     const urlPostFix = `getUtility/${name}`;
     return this.http.get(this.carServerUrl + urlPostFix, httpOptions);
+  }
+
+  public getAllUtilities(): Observable<any> {
+    const urlPostFix = 'getAllUtilities';
+    return this.http.get(this.carServerUrl + urlPostFix, httpOptions);
+  }
+
+  public updateUtility(utilities: Array<Utility>): Observable<any> {
+    const urlPostFix = 'updateUtility';
+    return this.http.post(this.carServerUrl + urlPostFix, utilities, httpOptions);
+  }
+
+  public getAllInheritanceTaxInfo(): Observable<any> {
+    const urlPostFix = 'getAllInheritanceTaxInfo';
+    return this.http.get(this.carServerUrl + urlPostFix, httpOptions);
+  }
+
+  public updateInheritanceTaxInfo(inheritanceTaxInfo: Array<InheritanceTax>): Observable<any> {
+    const urlPostFix = 'updateInheritanceTax';
+    return this.http.post(this.carServerUrl + urlPostFix, inheritanceTaxInfo, httpOptions);
   }
 
   public getChargeForInheritanceTax(kw: string, age: string): Observable<any> {

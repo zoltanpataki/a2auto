@@ -13,7 +13,7 @@ public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
     private boolean alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready;
     @Column(name = "individualOrCorporate")
     private boolean selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate;
@@ -120,11 +120,11 @@ public class Orders {
         this.company = company;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

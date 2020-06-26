@@ -10,7 +10,7 @@ public class Witness {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq8")
     @Column(name = "id")
-    private Integer id;
+    private Long id;
     private String name;
     private String idCardNumber;
 
@@ -27,11 +27,11 @@ public class Witness {
         this.witnessAddress = witnessAddress;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
