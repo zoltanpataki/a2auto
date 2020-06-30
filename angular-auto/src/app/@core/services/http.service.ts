@@ -11,7 +11,7 @@ import {InheritanceTax} from "../models/inheritanceTax";
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type':  'application/json',
-    'Access-Control-Allow-Origin': 'http://192.168.0.4:4200',
+    'Access-Control-Allow-Origin': 'http://192.168.0.4:80',
     'Access-Control-Allow-Credentials': 'true',
     'Access-Control-Allow-Methods': 'DELETE, POST, GET, OPTIONS',
     'Access-Control-Allow-Headers': 'Origin, Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With',

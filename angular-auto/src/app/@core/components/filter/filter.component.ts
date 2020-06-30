@@ -687,7 +687,7 @@ export class FilterComponent implements OnInit {
       if (null != this.carOfTransaction) {
         this.selectedCars[this.clickedCarIndex] = this.carOfTransaction;
         sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
-      } else {
+      } else if (null != result) {
         this.selectedCars[index] = result;
         sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
       }
@@ -1392,8 +1392,10 @@ export class FilterComponent implements OnInit {
     this.downPayment = form.value.downPayment;
     if (this.downPayment != null) {
       sessionStorage.setItem('downPayment', this.downPayment.toString());
-      this.newOrder.downPayment = this.downPayment;
-      sessionStorage.setItem('order', JSON.stringify(this.newOrder));
+      if (null != this.newOrder) {
+        this.newOrder.downPayment = this.downPayment;
+        sessionStorage.setItem('order', JSON.stringify(this.newOrder));
+      }
     }
   }
 
@@ -1404,8 +1406,10 @@ export class FilterComponent implements OnInit {
     this.extra = form.value.extra;
     if (this.extra != null) {
       sessionStorage.setItem('extra', this.extra.toString());
-      this.newOrder.extra = this.extra;
-      sessionStorage.setItem('order', JSON.stringify(this.newOrder));
+      if (null != this.newOrder) {
+        this.newOrder.extra = this.extra;
+        sessionStorage.setItem('order', JSON.stringify(this.newOrder));
+      }
     }
   }
 
