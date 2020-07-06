@@ -12,7 +12,7 @@
         <tr>
           <td *ngIf="orderedCar && orderedCar.plateNumber">&#160;Forgalmi rendszám:&#160; <strong>{{orderedCar.plateNumber}}</strong></td>
           <td *ngIf="!orderedCar || orderedCar && !orderedCar.plateNumber">&#160;Forgalmi rendszám:</td>
-          <td *ngIf="orderedCar.name && orderedCar.type">&#160;Jármű gyártmánya, típusa: &#160;<strong>{{orderedCar.name}}&#160;{{orderedCar.type}}</strong></td>
+          <td *ngIf="orderedCar.name && orderedCar.type">&#160;Jármű gyártmánya, típusa: &#160;<strong>{{orderedCar.type}}&#160;{{orderedCar.name}}</strong></td>
           <td *ngIf="!orderedCar.name || !orderedCar.type">&#160;Jármű gyártmánya, típusa:</td>
         </tr>
         <tr>
@@ -24,8 +24,8 @@
         <tr>
           <td *ngIf="orderedCar.engineNumber">&#160;Motorszám: &#160;<strong>{{orderedCar.engineNumber}}</strong></td>
           <td *ngIf="!orderedCar.engineNumber">&#160;Motorszám:</td>
-          <td *ngIf="orderedCar.carRegistry">&#160;Törzskönyv szám: &#160;<strong>{{orderedCar.carRegistry}}</strong></td>
-          <td *ngIf="!orderedCar.carRegistry">&#160;Törzskönyv szám:</td>
+          <td *ngIf="orderedCar.vehicleRegistrationCard">&#160;Törzskönyv szám: &#160;<strong>{{orderedCar.vehicleRegistrationCard}}</strong></td>
+          <td *ngIf="!orderedCar.vehicleRegistrationCard">&#160;Törzskönyv szám:</td>
         </tr>
       </table>
     </div>

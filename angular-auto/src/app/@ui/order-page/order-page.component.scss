@@ -24,14 +24,14 @@
 .gridContainer {
   display: flex;
   justify-content: center;
-  margin-bottom: 5%;
+  margin-bottom: 3%;
 }
 
 .mainGrid {
   display: flex;
   justify-content: center;
   border: 1px solid black;
-  width: 80%;
+  width: 100%;
 }
 
 .leftGrid, .rightGrid {
@@ -44,7 +44,7 @@
 
 .sectionLiner {
   font-weight: bolder;
-  font-size: 150%;
+  font-size: 170%;
 }
 
 .silverStart {
@@ -58,11 +58,11 @@
 
 .subSectionLiner {
   font-weight: bold;
-  font-size: 120%;
+  font-size: 140%;
 }
 
 .texts {
-  font-size: 100%;
+  font-size: 120%;
 }
 
 p, h1 {
@@ -79,7 +79,7 @@ p {
 }
 
 .date {
-  margin-bottom: 5%;
+  margin-bottom: 3%;
   margin-left: 10%;
 }
 

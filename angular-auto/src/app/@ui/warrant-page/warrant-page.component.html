@@ -138,7 +138,7 @@
           <p>hogy a &#160;&#160;</p>
         </div>
         <div fxFlex="30">
-          <p *ngIf="orderedCar && orderedCar.type"><strong>{{orderedCar.type}}</strong></p>
+          <p *ngIf="orderedCar && orderedCar.type"><strong>{{orderedCar.type}}&#160;{{orderedCar.name}}</strong></p>
           <p *ngIf="!orderedCar || orderedCar && !orderedCar.type"></p>
         </div>
         <div fxFlex="20">

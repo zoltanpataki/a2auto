@@ -555,7 +555,7 @@ export class FilterComponent implements OnInit {
 
   public checkSelectedFilter() {
     if ('sold' !== this.selectedFilter.value && this.secondarySelectedFilter != null) {
-      this.secondarySelectedFilter.value = null;
+      this.secondarySelectedFilter = null;
     }
   }
 
@@ -581,12 +581,12 @@ export class FilterComponent implements OnInit {
         && form.value.plateNumber.length < 6 ) {
         this.utilService.validPlateNumber = false;
         this.utilService.emptySearchField = false;
-      } else if (this.selectedFilter.value === 'name' && form.value.name && form.value.name.length === 0
-        || this.selectedFilter.value === 'type' && form.value.type && form.value.type.length === 0
-        || this.selectedFilter.value === 'plateNumber' && form.value.plateNumber && form.value.plateNumber.length === 0
-        || this.secondarySelectedFilter && this.secondarySelectedFilter.value === 'name' && form.value.name && form.value.name.length === 0
-        || this.secondarySelectedFilter && this.secondarySelectedFilter.value === 'type' && form.value.type && form.value.type.length === 0
-        || this.secondarySelectedFilter && this.secondarySelectedFilter.value === 'plateNumber' && form.value.plateNumber && form.value.plateNumber.length === 0) {
+      } else if (this.selectedFilter.value === 'name' && form.value.name != null && form.value.name.length === 0
+        || this.selectedFilter.value === 'type' && form.value.type != null && form.value.type.length === 0
+        || this.selectedFilter.value === 'plateNumber' && form.value.plateNumber != null && form.value.plateNumber.length === 0
+        || this.secondarySelectedFilter != null && this.secondarySelectedFilter.value === 'name' && form.value.name != null && form.value.name.length === 0
+        || this.secondarySelectedFilter != null && this.secondarySelectedFilter.value === 'type' && form.value.type != null && form.value.type.length === 0
+        || this.secondarySelectedFilter != null && this.secondarySelectedFilter.value === 'plateNumber' && form.value.plateNumber != null && form.value.plateNumber.length === 0) {
         this.utilService.emptySearchField = true;
       } else {
         sessionStorage.clear();
@@ -1450,23 +1450,6 @@ export class FilterComponent implements OnInit {
     return true;
   }
 
-  // Counts credit amount from the given data.
-  // It is necessary because the different amounts affect the credit amount
-  // could be modified.
-
-  private countCreditAmount(car: Car, countInCarSupplement: CountInCarSupplement, downPayment: number, extra: number): Object {
-    const creditNumbers = {};
-    const carPrice = car.price ? car.price : 0;
-    const countInPrice = countInCarSupplement && countInCarSupplement.countInPrice ? countInCarSupplement.countInPrice : 0;
-    const downPaymentAmount = downPayment ? downPayment : 0;
-    const extraAmount = extra ? extra : 0;
-    const initialPayment = (countInPrice + downPaymentAmount + extraAmount) === 0 ? null : countInPrice + downPaymentAmount + extraAmount;
-    const creditAmount = (carPrice - initialPayment) === 0 ? null : carPrice - initialPayment;
-    creditNumbers['initialPayment'] = initialPayment;
-    creditNumbers['creditAmount'] = creditAmount;
-    return creditNumbers;
-  }
-
   //TODO: this method is a beast, needs to be refactored
 
   // Navigates to the clicked page.
@@ -1484,14 +1467,6 @@ export class FilterComponent implements OnInit {
     }
     this.saveDescriptions(descriptionForm);
     this.saveCountInCarSupplement(countInCarSupplementForm);
-    if ('/orderPage' === targetRoute && this.creditData != null) {
-      const creditNumbers = this.countCreditAmount(car, this.countInCarSupplement, this.downPayment, this.extra);
-      if (this.creditData.creditAmount !== creditNumbers['creditAmount']
-        || this.creditData.initialPayment !== creditNumbers['initialPayment']) {
-        this.creditNeedsToBeRecalculated = true;
-        sessionStorage.setItem('creditNeedsToBeRecalculated', this.creditNeedsToBeRecalculated.toString())
-      }
-    }
     let userForOrder;
     let companyForOrder;
     if (this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready && this.newUser !=null) {

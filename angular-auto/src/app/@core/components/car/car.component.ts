@@ -101,7 +101,7 @@ export class CarComponent implements OnInit {
         null, null, null, null, null, null,
         null, null, null, null, false,
         null, null, null, null, null,
-        null, null, null);
+        null, null, null, null);
     } else {
       const carHandoverDate: Date = new Date(this.carData.carHandover);
       this.carHandoverTime['hour'] = carHandoverDate.getHours();
@@ -227,7 +227,8 @@ export class CarComponent implements OnInit {
             Number(data.maxWeightAllowed),
             data.fuelType,
             data.nameOfBuyer,
-            data.firstRegistration);
+            data.firstRegistration,
+            data.vehicleRegistrationCard);
           if (newCar.motExpiry.getFullYear() === new Date(0).getFullYear()) {
             newCar.motExpiry = null;
           }
@@ -308,7 +309,8 @@ export class CarComponent implements OnInit {
           Number(data.maxWeightAllowed),
           data.fuelType,
           null,
-          data.firstRegistration);
+          data.firstRegistration,
+          data.vehicleRegistrationCard);
         if (freshlyUpdatedCar.motExpiry.getFullYear() === new Date(0).getFullYear()) {
           freshlyUpdatedCar.motExpiry = null;
         }
@@ -380,6 +382,7 @@ export class CarComponent implements OnInit {
     capitalObject['capitalCostDescriptions'] = form.value.costDescriptions.toUpperCase();
     // capitalObject['capitalTypeOfBuying'] = form.value.typeOfBuying != null ? form.value.typeOfBuying.toUpperCase(): null;
     capitalObject['capitalCarRegistry'] = form.value.carRegistry.toUpperCase();
+    capitalObject['vehicleRegistrationCard'] = form.value.vehicleRegistrationCard.toUpperCase();
     capitalObject['capitalCarOrTruck'] = form.value.carOrTruck != null ? form.value.carOrTruck.toUpperCase(): null;
     // capitalObject['capitalSalesman'] = form.value.salesman != null ? form.value.salesman.toUpperCase() : null;
     capitalObject['capitalFuelType'] = form.value.fuelType != null ? form.value.fuelType.toUpperCase(): null;
@@ -427,7 +430,8 @@ export class CarComponent implements OnInit {
       form.value.maxWeightAllowed,
       capitalData['capitalFuelType'],
       nameOfBuyer,
-      form.value.firstRegistration);
+      form.value.firstRegistration,
+      capitalData['vehicleRegistrationCard']);
   }
 
   private createCarObjectNoId(form: any, capitalData: Object) {
@@ -468,7 +472,8 @@ export class CarComponent implements OnInit {
       form.value.maxWeightAllowed,
       capitalData['capitalFuelType'],
       null,
-    form.value.firstRegistration);
+    form.value.firstRegistration,
+      capitalData['vehicleRegistrationCard']);
   }
 
   public navigateToInsurancePage(form: any) {

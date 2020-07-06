@@ -29,6 +29,13 @@
       <div class="middle">
         <div>
           <mat-form-field class="example-full-width">
+            <label>
+              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput maxlength="30" placeholder="Törzskönyv száma" (ngModelChange)="itemChanged(carForm)" ngModel="{{carData.vehicleRegistrationCard}}" name="vehicleRegistrationCard">
+            </label>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="example-full-width">
             <input matInput [matDatepicker]="motExpiryPicker" placeholder="Műszaki vizsga érvényessége" (ngModelChange)="itemChanged(carForm)" ngModel="{{carData.motExpiry | date:'yyyy-MM-dd'}}" name="motExpiry">
             <mat-datepicker-toggle matSuffix [for]="motExpiryPicker"></mat-datepicker-toggle>
             <mat-datepicker #motExpiryPicker></mat-datepicker>
@@ -72,13 +79,6 @@
             </label>
           </mat-form-field>
         </div>
-        <div>
-          <mat-form-field class="example-full-width">
-            <label>
-              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput currencyMask placeholder="Teljesítmény" (ngModelChange)="itemChanged(carForm)" [(ngModel)]="carData.kwh" name="kwh" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false, suffix: ' kwh'}">
-            </label>
-          </mat-form-field>
-        </div>
         <div *ngFor="let item of fieldRelatedToWeight | keyvalue:keepOriginalOrder; trackBy: trackByFn">
           <mat-form-field class="example-full-width">
             <label>
@@ -88,6 +88,13 @@
         </div>
       </div>
       <div class="rightSide">
+        <div>
+          <mat-form-field class="example-full-width">
+            <label>
+              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput currencyMask placeholder="Teljesítmény" (ngModelChange)="itemChanged(carForm)" [(ngModel)]="carData.kwh" name="kwh" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false, suffix: ' kwh'}">
+            </label>
+          </mat-form-field>
+        </div>
         <div>
           <mat-form-field class="example-full-width">
             <label>

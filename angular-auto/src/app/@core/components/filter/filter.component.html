@@ -14,7 +14,7 @@
       <mat-form-field class="secondaryFilter">
         <mat-label>Másodlagos szűrési feltétel</mat-label>
         <mat-select [(ngModel)]="secondarySelectedFilter" name="secondaryFilter">
-          <mat-option *ngFor="let secondaryFilter of secondaryFilters; trackBy: trackByFn" [value]="secondaryFilter">
+          <mat-option (click)="checkSelectedFilter()" *ngFor="let secondaryFilter of secondaryFilters; trackBy: trackByFn" [value]="secondaryFilter">
             {{secondaryFilter.viewValue}}
           </mat-option>
         </mat-select>
