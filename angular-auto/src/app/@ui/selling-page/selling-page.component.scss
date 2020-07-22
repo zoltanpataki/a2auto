@@ -5,8 +5,8 @@
 }
 
 .title {
-  margin-top: 5%;
-  margin-bottom: 5%;
+  margin-top: 3%;
+  margin-bottom: 2%;
   text-align: center;
 }
 
@@ -15,17 +15,22 @@
 }
 
 .titleText {
+  font-family: "Times New Roman", Times, serif;
   font-size: 280%;
   font-style: italic;
   font-weight: bolder;
 }
 
 .largerText {
+  font-family: "Times New Roman", Times, serif;
   font-size: 130%;
+  margin-bottom: 0;
 }
 
 .textToMiddle {
+  font-family: "Times New Roman", Times, serif;
   text-align: center;
+  margin-bottom: 0;
 }
 
 .sellerBuyer {
@@ -35,6 +40,7 @@
 }
 
 .sellerBuyerText {
+  font-family: "Times New Roman", Times, serif;
   font-size: 130%;
   font-weight: bolder;
 }
@@ -46,10 +52,18 @@
 
 .carGrid {
   display: flex;
-  width: 80%;
+  width: 100%;
 }
 
 .carGridLeft, .carGridRight {
+  width: 50%;
+}
+
+.carTable {
+  table-layout: fixed;
+}
+
+.carTableCell {
   width: 50%;
 }
 
@@ -58,11 +72,16 @@
 }
 
 .individualSellingGrid, .corporateSellingGrid {
-  width: 80%;
+  width: 100%;
 }
 
 table, th, td, .dateBox, .signatureBox {
   border: 1px solid black;
+}
+
+td {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 115%;
 }
 
 table {
@@ -71,16 +90,22 @@ table {
 
 .middleColumn {
   text-align: center;
+  line-height: 115%;
 }
 
 .carPriceBox {
   border: 1px solid black;
-  width: 80%;
+  width: 100%;
   margin-top: 3%;
   margin-bottom: 3%;
   padding-left: 1%;
   padding-right: 1%;
-  padding-top: 1%;
+}
+
+.carPriceBoxText {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 115%;
+  margin-bottom: 0;
 }
 
 .price {
@@ -89,7 +114,7 @@ table {
 }
 
 .lawPart {
-  width: 70%;
+  width: 90%;
   p {
     margin-bottom: 0;
   }
@@ -102,15 +127,14 @@ table {
 .dateBox {
   margin-top: 3%;
   margin-bottom: 1%;
-  width: 80%;
-  padding-top: 1%;
+  width: 100%;
   padding-left: 1%;
 }
 
 .signatureBox {
   margin-top: 1%;
   margin-bottom: 1%;
-  width: 80%;
+  width: 100%;
   padding-top: 1%;
   padding-left: 1%;
 }
@@ -140,7 +164,7 @@ table {
 }
 
 .witnessBox {
-  width: 80%;
+  width: 100%;
 }
 
 .lastRow {
@@ -163,4 +187,10 @@ button {
   display: flex;
   justify-content: space-between;
   width: 70%;
+}
+
+.dateBoxRowText {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 115%;
+  margin-bottom: 0;
 }

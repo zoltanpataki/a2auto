@@ -8,24 +8,24 @@
   </div>
   <div class="carGridContainer">
     <div class="carGrid">
-      <table>
+      <table class="carTable">
         <tr>
-          <td *ngIf="orderedCar && orderedCar.plateNumber">&#160;Forgalmi rendszám:&#160; <strong>{{orderedCar.plateNumber}}</strong></td>
-          <td *ngIf="!orderedCar || orderedCar && !orderedCar.plateNumber">&#160;Forgalmi rendszám:</td>
-          <td *ngIf="orderedCar.name && orderedCar.type">&#160;Jármű gyártmánya, típusa: &#160;<strong>{{orderedCar.type}}&#160;{{orderedCar.name}}</strong></td>
-          <td *ngIf="!orderedCar.name || !orderedCar.type">&#160;Jármű gyártmánya, típusa:</td>
+          <td class="carTableCell" *ngIf="orderedCar && orderedCar.plateNumber">&#160;Forgalmi rendszám:&#160; <strong>{{orderedCar.plateNumber}}</strong></td>
+          <td class="carTableCell" *ngIf="!orderedCar || orderedCar && !orderedCar.plateNumber">&#160;Forgalmi rendszám:</td>
+          <td class="carTableCell" *ngIf="orderedCar.name && orderedCar.type">&#160;Jármű gyártmánya, típusa: &#160;<strong>{{orderedCar.type}}&#160;{{orderedCar.name}}</strong></td>
+          <td class="carTableCell" *ngIf="!orderedCar.name || !orderedCar.type">&#160;Jármű gyártmánya, típusa:</td>
         </tr>
         <tr>
-          <td *ngIf="orderedCar.bodyNumber">&#160;Alvázszám: &#160;<strong>{{orderedCar.bodyNumber}}</strong></td>
-          <td *ngIf="!orderedCar.bodyNumber">&#160;Alvázszám:</td>
-          <td *ngIf="orderedCar.carRegistry">&#160;Forgalmi engedély szám: &#160;<strong>{{orderedCar.carRegistry}}</strong></td>
-          <td *ngIf="!orderedCar.carRegistry">&#160;Forgalmi engedély szám:</td>
+          <td class="carTableCell" *ngIf="orderedCar.bodyNumber">&#160;Alvázszám: &#160;<strong>{{orderedCar.bodyNumber}}</strong></td>
+          <td class="carTableCell" *ngIf="!orderedCar.bodyNumber">&#160;Alvázszám:</td>
+          <td class="carTableCell" *ngIf="orderedCar.carRegistry">&#160;Forgalmi engedély szám: &#160;<strong>{{orderedCar.carRegistry}}</strong></td>
+          <td class="carTableCell" *ngIf="!orderedCar.carRegistry">&#160;Forgalmi engedély szám:</td>
         </tr>
         <tr>
-          <td *ngIf="orderedCar.engineNumber">&#160;Motorszám: &#160;<strong>{{orderedCar.engineNumber}}</strong></td>
-          <td *ngIf="!orderedCar.engineNumber">&#160;Motorszám:</td>
-          <td *ngIf="orderedCar.vehicleRegistrationCard">&#160;Törzskönyv szám: &#160;<strong>{{orderedCar.vehicleRegistrationCard}}</strong></td>
-          <td *ngIf="!orderedCar.vehicleRegistrationCard">&#160;Törzskönyv szám:</td>
+          <td class="carTableCell" *ngIf="orderedCar.engineNumber">&#160;Motorszám: &#160;<strong>{{orderedCar.engineNumber}}</strong></td>
+          <td class="carTableCell" *ngIf="!orderedCar.engineNumber">&#160;Motorszám:</td>
+          <td class="carTableCell" *ngIf="orderedCar.vehicleRegistrationCard">&#160;Törzskönyv szám: &#160;<strong>{{orderedCar.vehicleRegistrationCard}}</strong></td>
+          <td class="carTableCell" *ngIf="!orderedCar.vehicleRegistrationCard">&#160;Törzskönyv szám:</td>
         </tr>
       </table>
     </div>
@@ -154,19 +154,19 @@
   <div class="carPriceBoxContainer">
     <div class="carPriceBox">
       <div>
-        <p><strong>A jármű kölcsönösen kialkudott</strong></p>
+        <p class="carPriceBoxText"><strong>A jármű kölcsönösen kialkudott</strong></p>
       </div>
       <div class="price" fxLayout="row">
         <div fxFlex="20">
-          <p *ngIf="orderedCar.price"><strong>vételára: &#160;&#160;{{orderedCar.price | number:'2.'}}</strong></p>
-          <p *ngIf="!orderedCar.price"><strong>vételára:</strong></p>
+          <p class="carPriceBoxText" *ngIf="orderedCar.price"><strong>vételára: &#160;&#160;{{orderedCar.price | number:'2.'}}</strong></p>
+          <p class="carPriceBoxText" *ngIf="!orderedCar.price"><strong>vételára:</strong></p>
         </div>
         <div fxFlex="75">
-          <p *ngIf="priceInString.length > 0"><strong>Ft, azaz &#160;&#160;&#160;{{priceInString}} </strong></p>
-          <p *ngIf="priceInString.length == 0"><strong>Ft, azaz </strong></p>
+          <p class="carPriceBoxText" *ngIf="priceInString.length > 0"><strong>Ft, azaz &#160;&#160;&#160;{{priceInString}} </strong></p>
+          <p class="carPriceBoxText" *ngIf="priceInString.length == 0"><strong>Ft, azaz </strong></p>
         </div>
         <div fxFlex="5">
-          <p><strong>forint</strong></p>
+          <p class="carPriceBoxText"><strong>forint</strong></p>
         </div>
       </div>
       <div>
@@ -223,87 +223,87 @@
     <div class="dateBox">
       <div class="dateBoxRow" fxLayout="row">
         <div fxFlex="30">
-          <p>Az okmányok átadása- átvétele: </p>
+          <p class="dateBoxRowText">Az okmányok átadása- átvétele: </p>
         </div>
         <div fxFlex="15">
-          <p *ngIf="orderedCar.documentsHandover">év: &#160;<strong>{{orderedCar.documentsHandover | date: 'yyyy'}}</strong></p>
-          <p *ngIf="!orderedCar.documentsHandover">év:</p>
+          <p class="dateBoxRowText" *ngIf="orderedCar.documentsHandover">év: &#160;<strong>{{orderedCar.documentsHandover | date: 'yyyy'}}</strong></p>
+          <p class="dateBoxRowText" *ngIf="!orderedCar.documentsHandover">év:</p>
         </div>
         <div fxFlex="30">
-          <p *ngIf="orderedCar.documentsHandover">hó: &#160;<strong>{{orderedCar.documentsHandover | date: 'MM'}}</strong></p>
-          <p *ngIf="!orderedCar.documentsHandover">hó:</p>
+          <p class="dateBoxRowText" *ngIf="orderedCar.documentsHandover">hó: &#160;<strong>{{orderedCar.documentsHandover | date: 'MM'}}</strong></p>
+          <p class="dateBoxRowText" *ngIf="!orderedCar.documentsHandover">hó:</p>
         </div>
         <div fxFlex="25">
-          <p *ngIf="orderedCar.documentsHandover">nap: &#160;<strong>{{orderedCar.documentsHandover | date: 'dd'}}</strong></p>
-          <p *ngIf="!orderedCar.documentsHandover">nap:</p>
+          <p class="dateBoxRowText" *ngIf="orderedCar.documentsHandover">nap: &#160;<strong>{{orderedCar.documentsHandover | date: 'dd'}}</strong></p>
+          <p class="dateBoxRowText" *ngIf="!orderedCar.documentsHandover">nap:</p>
         </div>
       </div>
       <div class="dateBoxRow" fxLayout="row">
         <div fxFlex="30">
-          <p>A tulajdonjog hatálybalépésének napja:</p>
+          <p class="dateBoxRowText">A tulajdonjog hatálybalépésének napja:</p>
         </div>
         <div fxFlex="15">
-          <p *ngIf="orderedCar.dueOfContract">év: &#160;<strong>{{orderedCar.dueOfContract | date: 'yyyy'}}</strong></p>
-          <p *ngIf="!orderedCar.dueOfContract">év:</p>
+          <p class="dateBoxRowText" *ngIf="orderedCar.dueOfContract">év: &#160;<strong>{{orderedCar.dueOfContract | date: 'yyyy'}}</strong></p>
+          <p class="dateBoxRowText" *ngIf="!orderedCar.dueOfContract">év:</p>
         </div>
         <div fxFlex="30">
-          <p *ngIf="orderedCar.dueOfContract">hó: &#160;<strong>{{orderedCar.dueOfContract | date: 'MM'}}</strong></p>
-          <p *ngIf="!orderedCar.dueOfContract">hó:</p>
+          <p class="dateBoxRowText" *ngIf="orderedCar.dueOfContract">hó: &#160;<strong>{{orderedCar.dueOfContract | date: 'MM'}}</strong></p>
+          <p class="dateBoxRowText" *ngIf="!orderedCar.dueOfContract">hó:</p>
         </div>
         <div fxFlex="25">
-          <p *ngIf="orderedCar.dueOfContract">nap: &#160;<strong>{{orderedCar.dueOfContract | date: 'dd'}}</strong></p>
-          <p *ngIf="!orderedCar.dueOfContract">nap:</p>
+          <p class="dateBoxRowText" *ngIf="orderedCar.dueOfContract">nap: &#160;<strong>{{orderedCar.dueOfContract | date: 'dd'}}</strong></p>
+          <p class="dateBoxRowText" *ngIf="!orderedCar.dueOfContract">nap:</p>
         </div>
       </div>
       <div class="dateBoxRow" fxLayout="row">
         <div fxFlex="30">
-          <p>A jármű a vevő birtokába kerül:</p>
+          <p class="dateBoxRowText">A jármű a vevő birtokába kerül:</p>
         </div>
         <div fxFlex="15">
-          <p *ngIf="orderedCar.carHandover">év: &#160;<strong>{{orderedCar.carHandover | date: 'yyyy'}}</strong></p>
-          <p *ngIf="!orderedCar.carHandover">év:</p>
+          <p class="dateBoxRowText" *ngIf="orderedCar.carHandover">év: &#160;<strong>{{orderedCar.carHandover | date: 'yyyy'}}</strong></p>
+          <p class="dateBoxRowText" *ngIf="!orderedCar.carHandover">év:</p>
         </div>
         <div fxFlex="30">
-          <p *ngIf="orderedCar.carHandover">hó: &#160;<strong>{{orderedCar.carHandover | date: 'MM'}}</strong></p>
-          <p *ngIf="!orderedCar.carHandover">hó:</p>
+          <p class="dateBoxRowText" *ngIf="orderedCar.carHandover">hó: &#160;<strong>{{orderedCar.carHandover | date: 'MM'}}</strong></p>
+          <p class="dateBoxRowText" *ngIf="!orderedCar.carHandover">hó:</p>
         </div>
         <div fxFlex="9">
-          <p *ngIf="orderedCar.carHandover">nap: &#160;<strong>{{orderedCar.carHandover | date: 'dd'}}</strong></p>
-          <p *ngIf="!orderedCar.carHandover">nap:</p>
+          <p class="dateBoxRowText" *ngIf="orderedCar.carHandover">nap: &#160;<strong>{{orderedCar.carHandover | date: 'dd'}}</strong></p>
+          <p class="dateBoxRowText" *ngIf="!orderedCar.carHandover">nap:</p>
         </div>
         <div fxFlex="8">
-          <p *ngIf="carHandoverTime">óra: &#160;<strong>{{carHandoverTime['hour']}}</strong></p>
-          <p *ngIf="!carHandoverTime">óra:</p>
+          <p class="dateBoxRowText" *ngIf="carHandoverTime">óra: &#160;<strong>{{carHandoverTime['hour']}}</strong></p>
+          <p class="dateBoxRowText" *ngIf="!carHandoverTime">óra:</p>
         </div>
         <div fxFlex="8">
-          <p *ngIf="carHandoverTime">perc: &#160;<strong>{{carHandoverTime['minute']}}</strong></p>
-          <p *ngIf="!carHandoverTime">perc:</p>
+          <p class="dateBoxRowText" *ngIf="carHandoverTime">perc: &#160;<strong>{{carHandoverTime['minute']}}</strong></p>
+          <p class="dateBoxRowText" *ngIf="!carHandoverTime">perc:</p>
         </div>
       </div>
       <div class="dateBoxRow" fxLayout="row">
         <div fxFlex="30">
-          <p>Az adásvételi szerződés kelte:</p>
+          <p class="dateBoxRowText">Az adásvételi szerződés kelte:</p>
         </div>
         <div fxFlex="15">
-          <p *ngIf="orderedCar.dateOfContract">év: &#160;<strong>{{orderedCar.dateOfContract | date: 'yyyy'}}</strong></p>
-          <p *ngIf="!orderedCar.dateOfContract">év:</p>
+          <p class="dateBoxRowText" *ngIf="orderedCar.dateOfContract">év: &#160;<strong>{{orderedCar.dateOfContract | date: 'yyyy'}}</strong></p>
+          <p class="dateBoxRowText" *ngIf="!orderedCar.dateOfContract">év:</p>
         </div>
         <div fxFlex="30">
-          <p *ngIf="orderedCar.dateOfContract">hó: &#160;<strong>{{orderedCar.dateOfContract | date: 'MM'}}</strong></p>
-          <p *ngIf="!orderedCar.dateOfContract">hó:</p>
+          <p class="dateBoxRowText" *ngIf="orderedCar.dateOfContract">hó: &#160;<strong>{{orderedCar.dateOfContract | date: 'MM'}}</strong></p>
+          <p class="dateBoxRowText" *ngIf="!orderedCar.dateOfContract">hó:</p>
         </div>
         <div fxFlex="25">
-          <p *ngIf="orderedCar.dateOfContract">nap: &#160;<strong>{{orderedCar.dateOfContract | date: 'dd'}}</strong></p>
-          <p *ngIf="!orderedCar.dateOfContract">nap:</p>
+          <p class="dateBoxRowText" *ngIf="orderedCar.dateOfContract">nap: &#160;<strong>{{orderedCar.dateOfContract | date: 'dd'}}</strong></p>
+          <p class="dateBoxRowText" *ngIf="!orderedCar.dateOfContract">nap:</p>
         </div>
       </div>
       <div class="dateBoxRow" fxLayout="row">
         <div fxFlex="70">
-          <p>A birtokba vételkor a kilométer számláló műszer által jelzett érték (kilométer-óra állás) </p>
+          <p class="dateBoxRowText">A birtokba vételkor a kilométer számláló műszer által jelzett érték (kilométer-óra állás) </p>
         </div>
         <div fxFlex="30">
-          <p *ngIf="orderedCar.mileage">km: &#160;<strong>{{orderedCar.mileage | number:'2.'}}</strong></p>
-          <p *ngIf="!orderedCar.mileage">km:</p>
+          <p class="dateBoxRowText" *ngIf="orderedCar.mileage">km: &#160;<strong>{{orderedCar.mileage | number:'2.'}}</strong></p>
+          <p class="dateBoxRowText" *ngIf="!orderedCar.mileage">km:</p>
         </div>
       </div>
     </div>

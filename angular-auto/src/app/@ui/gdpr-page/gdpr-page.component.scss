@@ -14,7 +14,7 @@ html, body {
 }
 
 p, h1 {
-  font-family: Lucida Console, Courier, monospace !important;
+  font-family: "Times New Roman", Times, serif !important;
 }
 .company {
   margin-left: 8%;
@@ -33,7 +33,7 @@ p, h1 {
 
 .sectionLiner {
   font-weight: bolder;
-  font-size: 120%;
+  font-size: 130%;
 }
 
 .listItem {
@@ -53,7 +53,7 @@ button {
 }
 
 .date {
-  margin-bottom: 2%;
+  margin-bottom: 4%;
   margin-left: 10%;
 }
 
@@ -79,4 +79,8 @@ button {
   padding-left: 5%;
   padding-right: 5%;
   padding-top: 1%;
+}
+
+p {
+  font-size: 105%;
 }

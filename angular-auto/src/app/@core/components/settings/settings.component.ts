@@ -66,7 +66,6 @@ export class SettingsComponent implements OnInit {
       this.httpService.getAllInheritanceTaxInfo().subscribe(data => {
         this.inheritanceInfoList = data;
         this.inheritanceTax1.data = this.createTableDataForInheritanceTax1(this.utilityList, this.inheritanceInfoList);
-        console.log(this.inheritanceTax1.data);
       });
     });
 
@@ -86,27 +85,30 @@ export class SettingsComponent implements OnInit {
       const updatedInheritanceTaxInfo = [];
       let rowId = 1;
       tableData.forEach(row => {
-        let newRow = new InheritanceTax(rowId, row.kw, Number(row.young), Number(row.mediumAged), Number(row.old));
+        console.log(row);
+        let newRow = new InheritanceTax(rowId, row.kW, Number(row.young), Number(row.mediumAged), Number(row.old));
+        console.log(newRow);
         updatedInheritanceTaxInfo.push(newRow);
         switch (rowId) {
           case 1:
-            this.utilityList[6].value = row.min.length > 0 ? row.min.toString() : '0';
-            this.utilityList[7].value = row.max.length > 0 ? row.max.toString() : '0';
+            this.utilityList[6].value = row.min.toString().length > 0 ? row.min.toString() : '0';
+            this.utilityList[7].value = row.max.toString().length > 0 ? row.max.toString() : '0';
             break;
           case 2:
-            this.utilityList[8].value = row.min.length > 0 ? row.min.toString() : '0';
-            this.utilityList[9].value = row.max.length > 0 ? row.max.toString() : '0';
+            this.utilityList[8].value = row.min.toString().length > 0 ? row.min.toString() : '0';
+            this.utilityList[9].value = row.max.toString().length > 0 ? row.max.toString() : '0';
             break;
           case 3:
-            this.utilityList[10].value = row.min.length > 0 ? row.min.toString() : '0';
-            this.utilityList[11].value = row.max.length > 0 ? row.max.toString() : '0';
+            this.utilityList[10].value = row.min.toString().length > 0 ? row.min.toString() : '0';
+            this.utilityList[11].value = row.max.toString().length > 0 ? row.max.toString() : '0';
             break;
           case 4:
-            this.utilityList[12].value = row.min.length > 0 ? row.min.toString() : '0';
+            this.utilityList[12].value = row.min.toString().length > 0 ? row.min.toString() : '0';
             break;
         }
         rowId = rowId + 1;
       });
+      console.log(this.utilityList);
       this.httpService.updateUtility(this.utilityList).subscribe(data => {
         console.log(data);
       });
@@ -121,7 +123,7 @@ export class SettingsComponent implements OnInit {
   private createTableDataForInheritanceTax1(utilities: Array<any>, inheritanceInfo: Array<any>): Array<any> {
     const tableData = [];
     const firstRow = {};
-    firstRow['kw'] = inheritanceInfo[0].kW;
+    firstRow['kW'] = inheritanceInfo[0].kW;
     firstRow['min'] = utilities[6].value;
     firstRow['max'] = utilities[7].value;
     firstRow['young'] = inheritanceInfo[0].young.toString();
@@ -129,7 +131,7 @@ export class SettingsComponent implements OnInit {
     firstRow['old'] = inheritanceInfo[0].old.toString();
     tableData.push(firstRow);
     const secondRow = {};
-    secondRow['kw'] = inheritanceInfo[1].kW;
+    secondRow['kW'] = inheritanceInfo[1].kW;
     secondRow['min'] = utilities[8].value;
     secondRow['max'] = utilities[9].value;
     secondRow['young'] = inheritanceInfo[1].young.toString();
@@ -137,7 +139,7 @@ export class SettingsComponent implements OnInit {
     secondRow['old'] = inheritanceInfo[1].old.toString();
     tableData.push(secondRow);
     const thirdRow = {};
-    thirdRow['kw'] = inheritanceInfo[2].kW;
+    thirdRow['kW'] = inheritanceInfo[2].kW;
     thirdRow['min'] = utilities[10].value;
     thirdRow['max'] = utilities[11].value;
     thirdRow['young'] = inheritanceInfo[2].young.toString();
@@ -145,7 +147,7 @@ export class SettingsComponent implements OnInit {
     thirdRow['old'] = inheritanceInfo[2].old.toString();
     tableData.push(thirdRow);
     const fourthRow = {};
-    fourthRow['kw'] = inheritanceInfo[3].kW;
+    fourthRow['kW'] = inheritanceInfo[3].kW;
     fourthRow['min'] = utilities[12].value;
     fourthRow['max'] = null;
     fourthRow['young'] = inheritanceInfo[3].young.toString();

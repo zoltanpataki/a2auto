@@ -1148,7 +1148,11 @@ export class FilterComponent implements OnInit {
             this.setOrderProgressInSessionStorage(this.orderProgress);
           });
         });
+      }, error1 => {
+        this.utilService.openSnackBar('Sajnos az autó évjárata vagy lökettérfogata hiányzik!', 'Hiba :(');
       });
+    }, error1 => {
+      this.utilService.openSnackBar('Sajnos az autó hengerűrtartalma hiányzik!', 'Hiba :(');
     });
   }
 
