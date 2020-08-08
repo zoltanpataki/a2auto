@@ -5,6 +5,7 @@ import {UtilService} from "../../services/util.service";
 import {Witness} from "../../models/witness";
 import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
 import {Description} from "../../models/description";
+import {formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-car-time-info',
@@ -31,6 +32,7 @@ export class CarTimeInfoComponent implements OnInit {
   public description: FormArray;
   private remarkList: Description[] = [];
   public sellOrBuy: string;
+  public today: string
 
   constructor(private dialogRef: MatDialogRef<CarTimeInfoComponent>,
               @Inject(MAT_DIALOG_DATA) public data,
@@ -52,8 +54,8 @@ export class CarTimeInfoComponent implements OnInit {
     this.clickedCarIndex = this.data.clickedCarIndex;
     this.selectedCars = this.data.selectedCars;
     const carHandoverDate: Date = new Date(this.carData.carHandover);
-    this.carHandoverTime['hour'] = carHandoverDate.getHours();
-    this.carHandoverTime['minute'] = carHandoverDate.getMinutes();
+    this.carHandoverTime['hour'] = carHandoverDate.getHours() === 0 ? new Date().getHours() : carHandoverDate.getHours();
+    this.carHandoverTime['minute'] = carHandoverDate.getMinutes() === 0 ? new Date().getMinutes() : carHandoverDate.getMinutes();
 
     this.createFormGroupForRemark();
     this.initiateDatesWithToday();
@@ -182,7 +184,7 @@ export class CarTimeInfoComponent implements OnInit {
       this.carData.carHandover = this.carData.carHandover == null ? new Date() : this.carData.carHandover;
       this.carData.dueOfContract = new Date();
       this.carData.dateOfArrival = new Date();
-      this.carData.dateOfLeaving = new Date();
+      this.carData.dateOfLeaving = this.sellOrBuy === 'sell' ? new Date() : null;
       this.carData.documentsHandover = new Date();
       this.carData.dateOfContract = new Date();
     }
@@ -196,7 +198,7 @@ export class CarTimeInfoComponent implements OnInit {
       this.carData.carHandover = new Date(date);
       this.carData.dueOfContract = new Date(date);
       this.carData.dateOfArrival = new Date(date);
-      this.carData.dateOfLeaving = new Date(date);
+      this.carData.dateOfLeaving = this.sellOrBuy === 'sell' ? new Date() : null;
       this.carData.documentsHandover = new Date(date);
       this.carData.dateOfContract = new Date(date);
     }

@@ -301,14 +301,14 @@ export class CarComponent implements OnInit {
           new Date(data.dueOfContract),
           new Date(data.carHandover),
           new Date(data.dateOfContract),
-          false,
+          data.sold,
           data.carOrTruck,
           data.salesman,
           data.insuranceNumber,
           Number(data.weight),
           Number(data.maxWeightAllowed),
           data.fuelType,
-          null,
+          data.nameOfBuyer,
           data.firstRegistration,
           data.vehicleRegistrationCard);
         if (freshlyUpdatedCar.motExpiry.getFullYear() === new Date(0).getFullYear()) {

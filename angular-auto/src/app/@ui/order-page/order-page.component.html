@@ -156,7 +156,7 @@
             <p *ngIf="!order || order && !order.users || order.users && !order.users.birthName" class="texts">Születési név:</p>
           </div>
           <div class="border">
-            <p *ngIf="order && order.users && order.users.city" class="texts">Helység: <strong>{{order.users.city}}</strong></p>
+            <p *ngIf="order && order.users && order.users.city" class="texts">Helység: <strong>{{order.users.zipCode}}&#160;{{order.users.city}}</strong></p>
             <p *ngIf="!order || order && !order.users || order.users && !order.users.city" class="texts">Helység:</p>
           </div>
           <div class="border">

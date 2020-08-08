@@ -1384,7 +1384,9 @@ export class FilterComponent implements OnInit {
   // and updates that car.
 
   public updateCarWithHandoverDate(form: any, car: Car) {
-    car.carHandover = form.value.handover;
+    car.carHandover = new Date(form.value.handover);
+    car.carHandover.setHours(0);
+    car.carHandover.setMinutes(0);
     this.updateCarOfTransaction(car);
   }
 
@@ -1392,7 +1394,6 @@ export class FilterComponent implements OnInit {
   // and the new value gets updated in sessionStorage, and later on it will be part of the order.
 
   public saveChangedDownPayment(form: FormGroup) {
-    console.log(form.value.downPayment);
     this.downPayment = form.value.downPayment;
     if (this.downPayment != null) {
       sessionStorage.setItem('downPayment', this.downPayment.toString());
