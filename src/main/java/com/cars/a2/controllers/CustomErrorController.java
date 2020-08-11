@@ -3,12 +3,14 @@ package com.cars.a2.controllers;
 import com.cars.a2.exceptions.ConnectionTemporarilyLostException;
 import com.cars.a2.exceptions.EntityFailedToSaveException;
 import com.cars.a2.exceptions.UnexpectedBehaviourException;
+import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller

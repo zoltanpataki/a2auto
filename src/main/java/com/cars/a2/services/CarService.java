@@ -33,7 +33,11 @@ public class CarService {
             return new ResponseEntity<>(newCar, HttpStatus.OK);
         } catch (Exception e) {
             logger.info(e.getMessage());
-            throw new EntityFailedToSaveException("New car couldn't be saved!");
+            if ("DataIntegrityViolationException".equals(e.getClass().getSimpleName())) {
+                throw new EntityFailedToSaveException("Duplication");
+            } else {
+                throw new EntityFailedToSaveException("New car couldn't be saved!");
+            }
         }
     }
 

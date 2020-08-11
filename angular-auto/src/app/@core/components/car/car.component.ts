@@ -259,7 +259,11 @@ export class CarComponent implements OnInit {
           this.countInCar.emit(newCar);
           this.utilService.openSnackBar('Az autót sikerült elmenteni!', 'Szuper :)');
         }, error => {
-          this.utilService.openSnackBar('Az adatbáziskapcsolat váratlanul megszakadt!', 'Hiba :(');
+          if ('Duplication' === error.error.errorDescription) {
+            this.utilService.openSnackBar('Ez a rendszám már szerepel az adatbázisban!', 'Hiba :(');
+          } else {
+            this.utilService.openSnackBar('Az adatbáziskapcsolat váratlanul megszakadt!', 'Hiba :(');
+          }
         }
       )
     } else {
