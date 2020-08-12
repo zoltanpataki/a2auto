@@ -9,6 +9,7 @@ import * as jspdf from 'jspdf';
 import html2canvas from 'html2canvas';
 import {HttpService} from "../../@core/services/http.service";
 import {Router} from "@angular/router";
+import {UtilService} from "../../@core/services/util.service";
 
 @Component({
   selector: 'app-order-page',
@@ -31,9 +32,11 @@ export class OrderPageComponent implements OnInit {
   public extraAmountChargedForTheUser: number;
   public countInCar: Car;
   public nameOfBuyer: string;
+  public trophyClick: boolean = false;
 
 
   constructor(private httpService: HttpService,
+              private utilService: UtilService,
               private router: Router) { }
 
   ngOnInit() {
@@ -46,6 +49,9 @@ export class OrderPageComponent implements OnInit {
     if (sessionStorage.getItem('blankPage') != null) {
       this.blankPage = JSON.parse(sessionStorage.getItem('blankPage'));
     }
+    if (sessionStorage.getItem('trophyClick') != null) {
+      this.trophyClick = JSON.parse(sessionStorage.getItem('trophyClick'));
+    }
     this.today = new Date();
     if (history.state.data) {
       this.order = history.state.data.order;
@@ -57,6 +63,10 @@ export class OrderPageComponent implements OnInit {
       this.pickedUser = history.state.data.pickedUser;
       this.pickedCompany = history.state.data.pickedCompany;
       this.nameOfBuyer = history.state.data.nameOfBuyer;
+      if (null != history.state.data.trophyClick) {
+        this.trophyClick = history.state.data.trophyClick;
+        sessionStorage.setItem('trophyClick', JSON.stringify(this.trophyClick));
+      }
       sessionStorage.setItem('clickedCarIndex', history.state.data.clickedCarIndex);
       sessionStorage.setItem('orderedCar', JSON.stringify(this.orderedCar));
       sessionStorage.setItem('order', JSON.stringify(this.order));
@@ -138,7 +148,12 @@ export class OrderPageComponent implements OnInit {
   }
 
   public navigateBack() {
-    this.router.navigate(['/filter']);
+    if (this.trophyClick) {
+      this.utilService.removeItemsFromSessionStorage();
+      this.router.navigate(['/filter']);
+    } else {
+      this.router.navigate(['/filter']);
+    }
   }
 
 }

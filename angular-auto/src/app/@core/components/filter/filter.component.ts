@@ -106,6 +106,9 @@ export class FilterComponent implements OnInit {
           sessionStorage.removeItem('blankPage');
           sessionStorage.removeItem('insuredCar');
         }
+        if (event.url === '/filter' && sessionStorage.getItem('trophyClick') != null) {
+          this.utilService.removeItemsFromSessionStorage();
+        }
         if (event.url !== '/newUser') {
           sessionStorage.removeItem('newUser');
         }
@@ -554,6 +557,8 @@ export class FilterComponent implements OnInit {
   // if the value of the selectedFilter is not 'sold' than the secondarySelectedFilter has to be null
 
   public checkSelectedFilter() {
+    this.clickedCarIndex = null;
+    sessionStorage.removeItem('clickerCarIndex');
     if ('sold' !== this.selectedFilter.value && this.secondarySelectedFilter != null) {
       this.secondarySelectedFilter = null;
     }
@@ -646,6 +651,8 @@ export class FilterComponent implements OnInit {
   // The only parameter it gets is allOrSold with the value of 'all'.
 
   public getAllCars() {
+    this.clickedCarIndex = null;
+    sessionStorage.removeItem('clickerCarIndex');
     this.clearSelectedCars();
     this.httpService.getAllCars().subscribe(data => {
       this.selectedCars = data;
@@ -1600,5 +1607,22 @@ export class FilterComponent implements OnInit {
       }
     }
     return true;
+  }
+
+  public navigateToOrderPage(car: Car) {
+    this.setDataToNull();
+    this.httpService.getOrder(car.id).subscribe(data => {
+      this.router.navigate(['/orderPage'], {state: {data: {
+            order: data,
+            orderedCar: car,
+            pickedUser: data.users,
+            pickedCompany: data.company,
+            trophyClick: true
+          }}});
+    }, error => {
+      if (error.error.errorCode === '404') {
+        this.utilService.openSnackBar('Ehhez az autóhoz még nincs rendelés!', ':(');
+      }
+    });
   }
 }

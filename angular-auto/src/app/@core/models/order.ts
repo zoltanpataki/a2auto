@@ -2,7 +2,6 @@ import {Users} from "./users";
 import {Company} from "./company";
 import {CountInCarSupplement} from "./countInCarSupplement";
 import {Credit} from "./credit";
-import {Car} from "./car";
 import {Description} from "./description";
 import {DescriptionWithAmount} from "./descriptionWithAmount";
 

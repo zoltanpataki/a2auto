@@ -61,6 +61,7 @@ export class UtilService {
     sessionStorage.removeItem('typeOfBuying');
     sessionStorage.removeItem('nameOfBuyer');
     sessionStorage.removeItem('url');
+    sessionStorage.removeItem('trophyClick');
   }
 
   public createBlankWitnessToUtilServiceWitnessList(): Witness {
