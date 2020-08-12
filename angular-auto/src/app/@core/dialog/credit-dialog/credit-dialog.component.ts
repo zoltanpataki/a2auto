@@ -41,7 +41,7 @@ export class CreditDialogComponent implements OnInit {
   }
 
   private countCreditAmount(car: Car, countInCarSupplement: CountInCarSupplement, downPayment: number, extra: number) {
-    const carPrice = car.price ? car.price : 0;
+    const carPrice = car.purchasingPrice ? car.purchasingPrice : 0;
     const countInPrice = countInCarSupplement && countInCarSupplement.countInPrice ? countInCarSupplement.countInPrice : 0;
     const downPaymentAmount = downPayment ? downPayment : 0;
     const extraAmount = extra ? extra : 0;

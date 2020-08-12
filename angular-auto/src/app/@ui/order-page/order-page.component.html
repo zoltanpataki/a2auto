@@ -63,8 +63,8 @@
           <p *ngIf="!orderedCar.mileage" class="texts">Km óra állása:</p>
         </div>
         <div class="border">
-          <p *ngIf="orderedCar.price" class="texts">Vételár: <strong>{{orderedCar.price  | number: '2.'}} Ft</strong></p>
-          <p *ngIf="!orderedCar.price" class="texts">Vételár:</p>
+          <p *ngIf="orderedCar.purchasingPrice" class="texts">Vételár: <strong>{{orderedCar.purchasingPrice  | number: '2.'}} Ft</strong></p>
+          <p *ngIf="!orderedCar.purchasingPrice" class="texts">Vételár:</p>
         </div>
         <div class="silverCenter border">
           <p class="sectionLiner">Hitel adatai:</p>
@@ -97,8 +97,8 @@
           <p class="sectionLiner">Fizetendő:</p>
         </div>
         <div class="border">
-          <p *ngIf="orderedCar.price" class="subSectionLiner">Vételár: <strong>{{orderedCar.price | number: '2.'}} Ft</strong></p>
-          <p *ngIf="!orderedCar.price" class="subSectionLiner">Vételár:</p>
+          <p *ngIf="orderedCar.purchasingPrice" class="subSectionLiner">Vételár: <strong>{{orderedCar.purchasingPrice | number: '2.'}} Ft</strong></p>
+          <p *ngIf="!orderedCar.purchasingPrice" class="subSectionLiner">Vételár:</p>
         </div>
         <div class="border">
           <p *ngIf="order && order.inheritanceTax" class="texts">Átírás/Ügyintézés: <strong>{{order.inheritanceTax | number: '2.'}} Ft</strong></p>

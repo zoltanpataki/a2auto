@@ -99,7 +99,7 @@ export class OrderPageComponent implements OnInit {
   private countRemainingPrice(order: Order, car: Car): number {
     const inheritance = order.inheritanceTax ? order.inheritanceTax : 0;
     const downPayment = order.downPayment ? order.downPayment : 0;
-    const carPrice = car.price;
+    const carPrice = car.purchasingPrice;
     const countInCarPrice = order.countInCarSupplement ? order.countInCarSupplement.countInPrice : 0;
     const credit = order.credit ? order.credit.creditAmount : 0;
     const extra = order.extra ? order.extra : 0;

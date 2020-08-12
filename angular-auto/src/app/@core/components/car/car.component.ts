@@ -187,7 +187,6 @@ export class CarComponent implements OnInit {
   // otherwise it would look funny (zero instead of empty field)
 
   private saveOrUpdateCar(form: any) {
-    console.log(form.value);
     if (this.carData.id == null) {
       this.httpService.saveCar(this.createNewCarObject(form, null, false)).subscribe(data => {
           const newCar = new Car(
@@ -411,7 +410,7 @@ export class CarComponent implements OnInit {
       form.value.mileage,
       form.value.motExpiry,
       form.value.price,
-      this.carData.purchasingPrice,
+      form.value.purchasingPrice,
       this.carData.cost,
       capitalData['capitalCostDescriptions'],
       form.value.dateOfArrival,
@@ -453,7 +452,7 @@ export class CarComponent implements OnInit {
       form.value.mileage,
       form.value.motExpiry,
       form.value.price,
-      null,
+      form.value.purchasingPrice,
       null,
       capitalData['capitalCostDescriptions'],
       form.value.dateOfArrival,
