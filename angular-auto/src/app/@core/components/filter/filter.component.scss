@@ -7,11 +7,20 @@
   display: flex;
 }
 
+.allCars {
+  font-size: 200%;
+  color: #5D737E;
+}
+
 .databaseIcon {
   padding-left: 3%;
   text-align: center;
-  font-size: xx-large;
   cursor: pointer;
+}
+
+.databaseIcon > i {
+  position:relative;
+  top: calc(50% - 18px); /* 50% - 3/4 of icon height */
 }
 
 .search {
@@ -209,4 +218,5 @@ table {
 .secondaryFilter {
   width: 140%;
 }
+
 

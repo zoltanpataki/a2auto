@@ -41,10 +41,15 @@ public class CarService {
         }
     }
 
-    public ResponseEntity<Object> getAllCars() {
+    public ResponseEntity<Object> getAllCars(Boolean isSold) {
         try {
-            Optional<List<Car>> cars = carRepository.findBySoldOrderByIdAsc(false);
-            return new ResponseEntity<>(cars, HttpStatus.OK);
+            if (!isSold) {
+                Optional<List<Car>> cars = carRepository.findBySoldOrderByIdAsc(isSold);
+                return new ResponseEntity<>(cars, HttpStatus.OK);
+            } else {
+                Optional<List<Car>> cars = carRepository.findBySoldOrderByDateOfLeavingDesc(isSold);
+                return new ResponseEntity<>(cars, HttpStatus.OK);
+            }
         } catch (Exception e) {
             logger.info(e.getMessage());
             throw new ConnectionTemporarilyLostException("Couldn't get all cars at the moment!");

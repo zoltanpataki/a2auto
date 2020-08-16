@@ -88,9 +88,14 @@ export class HttpService {
     });
   }
 
-  public getAllCars(): Observable<any> {
+  public getAllCars(isSold: boolean): Observable<any> {
     const urlPostFix = `getAllCars`;
-    return this.http.get(this.carServerUrl + urlPostFix, httpOptions);
+    const params = new HttpParams()
+      .set('isSold', isSold.toString());
+    return this.http.get(this.carServerUrl + urlPostFix, {
+      headers: httpOptions.headers,
+      params: params
+    });
   }
 
   public getSingleCar(filter: string, filterType: string, soldOrNot: string): Observable<any> {

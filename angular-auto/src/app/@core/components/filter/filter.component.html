@@ -22,7 +22,10 @@
     </div>
   </div>
   <div class="databaseIcon">
-    <fa name="download" (click)="getAllCars()" matTooltip="Összes autó letöltése"></fa>
+    <i class="material-icons-outlined allCars" (click)="getAllCars(false)" matTooltip="Összes autó betöltése">time_to_leave</i>
+  </div>
+  <div class="databaseIcon">
+    <i class="material-icons allCars soldCars" (click)="getAllCars(true)" matTooltip="Összes eladott autó betöltése">time_to_leave</i>
   </div>
 </div>
 <div *ngIf="selectedFilter && selectedFilter.value != 'sold' || secondarySelectedFilter">

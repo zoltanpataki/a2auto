@@ -638,7 +638,7 @@ export class FilterComponent implements OnInit {
             }
           });
         } else {
-          this.httpService.getAllCars().subscribe(data => {
+          this.httpService.getAllCars(false).subscribe(data => {
             this.selectedCars = data;
             sessionStorage.setItem('selectedCars', JSON.stringify(data));
           });
@@ -650,11 +650,11 @@ export class FilterComponent implements OnInit {
   // It uses the http.service.ts to retrieve all the car objects through http call.
   // The only parameter it gets is allOrSold with the value of 'all'.
 
-  public getAllCars() {
+  public getAllCars(isSold: boolean) {
     this.clickedCarIndex = null;
     sessionStorage.removeItem('clickerCarIndex');
     this.clearSelectedCars();
-    this.httpService.getAllCars().subscribe(data => {
+    this.httpService.getAllCars(isSold).subscribe(data => {
       this.selectedCars = data;
       sessionStorage.setItem('selectedCars', JSON.stringify(data));
     });
