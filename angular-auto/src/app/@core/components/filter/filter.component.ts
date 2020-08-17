@@ -1233,6 +1233,10 @@ export class FilterComponent implements OnInit {
     });
     if (this.selectedTypeOfBuying === 'HITEL') {
       this.openCreditModal(this.carOfTransaction);
+    } else {
+      this.creditData = null;
+      this.creditNeedsToBeRecalculated = false;
+      sessionStorage.removeItem('credit');
     }
     this.setOrderProgressInSessionStorage(10);
     sessionStorage.setItem('selectedTypeOfBuying', this.selectedTypeOfBuying);

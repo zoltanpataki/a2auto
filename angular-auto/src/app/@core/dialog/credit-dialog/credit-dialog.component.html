@@ -21,28 +21,28 @@
           <div>
             <mat-form-field class="example-full-width">
               <label>
-                <input currencyMask matInput placeholder="Kezdő befizetés" [(ngModel)]="credit.initialPayment" name="initialPayment" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false}">
+                <input currencyMask matInput placeholder="Kezdő befizetés" ngModel="{{credit.initialPayment}}" name="initialPayment" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false, suffix: ' Ft'}">
               </label>
             </mat-form-field>
           </div>
           <div>
             <mat-form-field class="example-full-width">
               <label>
-                <input currencyMask  matInput placeholder="Hitel összege" [(ngModel)]="credit.creditAmount" name="creditAmount" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: true}">
+                <input currencyMask  matInput placeholder="Hitel összege" ngModel="{{credit.creditAmount}}" name="creditAmount" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: true, suffix: ' Ft'}">
               </label>
             </mat-form-field>
           </div>
           <div>
             <mat-form-field class="example-full-width">
               <label>
-                <input currencyMask matInput placeholder="Futamidő" [(ngModel)]="credit.creditLength" name="creditLength" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false}">
+                <input currencyMask matInput placeholder="Futamidő" ngModel="{{credit.creditLength}}" name="creditLength" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false, suffix: ' hónap'}">
               </label>
             </mat-form-field>
           </div>
           <div>
             <mat-form-field class="example-full-width">
               <label>
-                <input currencyMask matInput placeholder="Törlesztőrészlet/hó." [(ngModel)]="credit.repayment" name="repayment" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false}">
+                <input currencyMask matInput placeholder="Törlesztőrészlet/hó." ngModel="{{credit.repayment}}" name="repayment" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false, suffix: ' Ft'}">
               </label>
             </mat-form-field>
           </div>

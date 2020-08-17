@@ -36,6 +36,9 @@ export class CreditDialogComponent implements OnInit {
   }
 
   public saveCredit(form: any) {
+    console.log(form);
+    console.log(form.value);
+    console.log(form.value.initialPayment);
     this.credit = new Credit(this.credit.id, form.value.bank, form.value.creditType, form.value.initialPayment, form.value.creditAmount, form.value.creditLength, form.value.repayment);
     this.closeWithData()
   }
