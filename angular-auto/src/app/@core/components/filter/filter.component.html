@@ -1,31 +1,50 @@
-<div class="filterRow">
-  <div>
+<div class="filters">
+  <div class="filterRow">
     <div>
-      <mat-form-field>
-        <mat-label>Szűrési feltétel</mat-label>
-        <mat-select [(ngModel)]="selectedFilter" name="filter">
-          <mat-option (click)="checkSelectedFilter()" *ngFor="let filter of filters; trackBy: trackByFn" [value]="filter">
-            {{filter.viewValue}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+      <div>
+        <mat-form-field>
+          <mat-label>Szűrési feltétel</mat-label>
+          <mat-select [(ngModel)]="selectedFilter" name="filter">
+            <mat-option (click)="checkSelectedFilter()" *ngFor="let filter of filters; trackBy: trackByFn" [value]="filter">
+              {{filter.viewValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div *ngIf="selectedFilter && selectedFilter.value == 'sold'">
+        <mat-form-field class="secondaryFilter">
+          <mat-label>Másodlagos szűrési feltétel</mat-label>
+          <mat-select [(ngModel)]="secondarySelectedFilter" name="secondaryFilter">
+            <mat-option (click)="checkSelectedFilter()" *ngFor="let secondaryFilter of secondaryFilters; trackBy: trackByFn" [value]="secondaryFilter">
+              {{secondaryFilter.viewValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
-    <div *ngIf="selectedFilter && selectedFilter.value == 'sold'">
-      <mat-form-field class="secondaryFilter">
-        <mat-label>Másodlagos szűrési feltétel</mat-label>
-        <mat-select [(ngModel)]="secondarySelectedFilter" name="secondaryFilter">
-          <mat-option (click)="checkSelectedFilter()" *ngFor="let secondaryFilter of secondaryFilters; trackBy: trackByFn" [value]="secondaryFilter">
-            {{secondaryFilter.viewValue}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+    <div class="databaseIcon">
+      <i class="material-icons-outlined allCars" (click)="getAllCars(false)" matTooltip="Készleten lévő autók betöltése">time_to_leave</i>
+    </div>
+    <div class="databaseIcon">
+      <i class="material-icons allCars soldCars" (click)="getAllCars(true)" matTooltip="Összes eladott autó betöltése">time_to_leave</i>
     </div>
   </div>
-  <div class="databaseIcon">
-    <i class="material-icons-outlined allCars" (click)="getAllCars(false)" matTooltip="Összes autó betöltése">time_to_leave</i>
-  </div>
-  <div class="databaseIcon">
-    <i class="material-icons allCars soldCars" (click)="getAllCars(true)" matTooltip="Összes eladott autó betöltése">time_to_leave</i>
+  <div>
+    <mat-form-field>
+      <mat-label>Rendezés</mat-label>
+      <mat-select [(ngModel)]="selectedOrganizer" name="organizer">
+        <mat-select-trigger *ngIf="selectedOrganizer && selectedOrganizer.direction == 'down'">
+          <fa class="plus" name="sort-alpha-up"></fa> &#160;{{selectedOrganizer.viewValue}}
+        </mat-select-trigger>
+        <mat-select-trigger *ngIf="selectedOrganizer && selectedOrganizer.direction == 'up'">
+          <fa class="plus" name="sort-alpha-down"></fa> &#160;{{selectedOrganizer.viewValue}}
+        </mat-select-trigger>
+        <mat-option (click)="checkSelectedOrganizer()" *ngFor="let organizer of organizers; trackBy: trackByFn" [value]="organizer">
+          <fa *ngIf="organizer.direction == 'up'" class="plus" name="sort-alpha-down"></fa>
+          <fa *ngIf="organizer.direction == 'down'" class="plus" name="sort-alpha-up"></fa> &#160;{{organizer.viewValue}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
 </div>
 <div *ngIf="selectedFilter && selectedFilter.value != 'sold' || secondarySelectedFilter">

@@ -21,6 +21,7 @@ import {MatNativeDateModule} from "@angular/material/core";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {MatExpansionModule} from "@angular/material/expansion";
 import {MatCardModule} from "@angular/material/card";
+import {MatIconModule} from "@angular/material/icon";
 import {MatDialogModule} from "@angular/material/dialog";
 import {DialogComponent} from "./@core/dialog/dialog.component";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
@@ -111,6 +112,7 @@ import { NgtUniversalModule } from '@ng-toolkit/universal';
     CommonModule,
     TransferHttpCacheModule,
     NgtUniversalModule,
+    MatIconModule
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },{ provide: 'isBrowser', useValue: true },],
   bootstrap: [AppComponent],

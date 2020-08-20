@@ -20,6 +20,7 @@ import {CarTimeInfoComponent} from "../../dialog/car-time-info/car-time-info.com
 import {Witness} from "../../models/witness";
 import {WitnessPickerDialogComponent} from "../../dialog/witness-picker-dialog/witness-picker-dialog.component";
 import {DescriptionWithAmount} from "../../models/descriptionWithAmount";
+import {Organizer} from "../../models/organizer";
 
 @Component({
   selector: 'app-filter',
@@ -30,9 +31,11 @@ export class FilterComponent implements OnInit {
 
   public countInCarSupplementForm: FormGroup;
   public filters = [{viewValue: 'Modell', value: 'name'}, {viewValue: 'Rendszám', value: 'plateNumber'}, {viewValue: 'Márka', value: 'type'}, {viewValue: 'Összes', value: 'all'}, {viewValue: 'Eladott', value: 'sold'}];
+  public organizers = [{viewValue: 'Márka', value: 'type', direction: 'up'}, {viewValue: 'Márka', value: 'type', direction: 'down'}, {viewValue: 'Modell', value: 'name', direction: 'up'}, {viewValue: 'Modell', value: 'name', direction: 'down'}, {viewValue: 'Rendszám', value: 'plateNumber', direction: 'up'}, {viewValue: 'Rendszám', value: 'plateNumber', direction: 'down'}];
   public secondaryFilters = [{viewValue: 'Modell', value: 'name'}, {viewValue: 'Rendszám', value: 'plateNumber'}, {viewValue: 'Márka', value: 'type'}];
   public userFilters = [{viewValue: 'Név', value: 'name'}, {viewValue: 'Város', value: 'city'}];
   public selectedFilter: SelectedFilter;
+  public selectedOrganizer: Organizer;
   public secondarySelectedFilter: SelectedFilter;
   public selectedUserFilter: SelectedFilter;
   public companyFilters = [{viewValue: 'Név', value: 'name'}, {viewValue: 'Cégjegyzékszám', value: 'companyRegistrationNumber'}];
@@ -562,6 +565,10 @@ export class FilterComponent implements OnInit {
     if ('sold' !== this.selectedFilter.value && this.secondarySelectedFilter != null) {
       this.secondarySelectedFilter = null;
     }
+  }
+
+  public checkSelectedOrganizer() {
+    console.log(this.selectedOrganizer);
   }
 
   // Filters cars in filter component by model, type or plate number.

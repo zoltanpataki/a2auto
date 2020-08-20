@@ -44,7 +44,7 @@ public class CarService {
     public ResponseEntity<Object> getAllCars(Boolean isSold) {
         try {
             if (!isSold) {
-                Optional<List<Car>> cars = carRepository.findBySoldOrderByIdAsc(isSold);
+                Optional<List<Car>> cars = carRepository.findBySoldOrderByIdDesc(isSold);
                 return new ResponseEntity<>(cars, HttpStatus.OK);
             } else {
                 Optional<List<Car>> cars = carRepository.findBySoldOrderByDateOfLeavingDesc(isSold);

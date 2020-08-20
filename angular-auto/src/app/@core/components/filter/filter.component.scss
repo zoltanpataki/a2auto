@@ -3,8 +3,12 @@
   color: white;
 }
 
-.filterRow {
+.filterRow, .filters {
   display: flex;
+}
+
+.filters {
+  justify-content: space-between;
 }
 
 .allCars {
@@ -13,7 +17,7 @@
 }
 
 .databaseIcon {
-  padding-left: 3%;
+  padding-left: 10%;
   text-align: center;
   cursor: pointer;
 }
