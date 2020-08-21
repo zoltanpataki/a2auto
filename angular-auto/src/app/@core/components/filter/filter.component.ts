@@ -20,7 +20,7 @@ import {CarTimeInfoComponent} from "../../dialog/car-time-info/car-time-info.com
 import {Witness} from "../../models/witness";
 import {WitnessPickerDialogComponent} from "../../dialog/witness-picker-dialog/witness-picker-dialog.component";
 import {DescriptionWithAmount} from "../../models/descriptionWithAmount";
-import {Organizer} from "../../models/organizer";
+import {Direction, Organizer} from "../../models/organizer";
 
 @Component({
   selector: 'app-filter',
@@ -29,9 +29,12 @@ import {Organizer} from "../../models/organizer";
 })
 export class FilterComponent implements OnInit {
 
+  public get direction(): typeof Direction {
+    return Direction;
+  }
   public countInCarSupplementForm: FormGroup;
   public filters = [{viewValue: 'Modell', value: 'name'}, {viewValue: 'Rendszám', value: 'plateNumber'}, {viewValue: 'Márka', value: 'type'}, {viewValue: 'Összes', value: 'all'}, {viewValue: 'Eladott', value: 'sold'}];
-  public organizers = [{viewValue: 'Márka', value: 'type', direction: 'up'}, {viewValue: 'Márka', value: 'type', direction: 'down'}, {viewValue: 'Modell', value: 'name', direction: 'up'}, {viewValue: 'Modell', value: 'name', direction: 'down'}, {viewValue: 'Rendszám', value: 'plateNumber', direction: 'up'}, {viewValue: 'Rendszám', value: 'plateNumber', direction: 'down'}];
+  public organizers = [{viewValue: 'Márka', value: 'type', direction: Direction.up}, {viewValue: 'Márka', value: 'type', direction: Direction.down}, {viewValue: 'Modell', value: 'name', direction: Direction.up}, {viewValue: 'Modell', value: 'name', direction: Direction.down}, {viewValue: 'Rendszám', value: 'plateNumber', direction: Direction.up}, {viewValue: 'Rendszám', value: 'plateNumber', direction: Direction.down}];
   public secondaryFilters = [{viewValue: 'Modell', value: 'name'}, {viewValue: 'Rendszám', value: 'plateNumber'}, {viewValue: 'Márka', value: 'type'}];
   public userFilters = [{viewValue: 'Név', value: 'name'}, {viewValue: 'Város', value: 'city'}];
   public selectedFilter: SelectedFilter;

@@ -33,15 +33,13 @@
     <mat-form-field>
       <mat-label>Rendezés</mat-label>
       <mat-select [(ngModel)]="selectedOrganizer" name="organizer">
-        <mat-select-trigger *ngIf="selectedOrganizer && selectedOrganizer.direction == 'down'">
-          <fa class="plus" name="sort-alpha-up"></fa> &#160;{{selectedOrganizer.viewValue}}
-        </mat-select-trigger>
-        <mat-select-trigger *ngIf="selectedOrganizer && selectedOrganizer.direction == 'up'">
-          <fa class="plus" name="sort-alpha-down"></fa> &#160;{{selectedOrganizer.viewValue}}
+        <mat-select-trigger *ngIf="selectedOrganizer">
+          <fa *ngIf="selectedOrganizer.direction == direction.down" class="orderIcon" name="sort-alpha-up"></fa>
+          <fa *ngIf="selectedOrganizer.direction == direction.up" class="orderIcon" name="sort-alpha-down"></fa> &#160;{{selectedOrganizer.viewValue}}
         </mat-select-trigger>
         <mat-option (click)="checkSelectedOrganizer()" *ngFor="let organizer of organizers; trackBy: trackByFn" [value]="organizer">
-          <fa *ngIf="organizer.direction == 'up'" class="plus" name="sort-alpha-down"></fa>
-          <fa *ngIf="organizer.direction == 'down'" class="plus" name="sort-alpha-up"></fa> &#160;{{organizer.viewValue}}
+          <fa *ngIf="organizer.direction == direction.up" class="orderIcon" name="sort-alpha-down"></fa>
+          <fa *ngIf="organizer.direction == direction.down" class="orderIcon" name="sort-alpha-up"></fa> &#160;{{organizer.viewValue}}
         </mat-option>
       </mat-select>
     </mat-form-field>
