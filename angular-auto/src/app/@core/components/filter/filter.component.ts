@@ -571,7 +571,54 @@ export class FilterComponent implements OnInit {
   }
 
   public checkSelectedOrganizer() {
-    console.log(this.selectedOrganizer);
+    const selectedDirection = this.selectedOrganizer.direction;
+    const organizerType = this.selectedOrganizer.value;
+    this.sortSelectedCars(this.selectedCars, organizerType, selectedDirection);
+    sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
+  }
+
+  private sortSelectedCars(selectedCars: Car[], sortBy: string, direction: Direction) {
+    selectedCars.sort(function(a, b) {
+      switch (sortBy) {
+        case 'type':
+          switch (direction) {
+            case Direction.up:
+              const ascTypeA = a.type;
+              const ascTypeB = b.type;
+              return (ascTypeA < ascTypeB) ? -1 : (ascTypeA > ascTypeB) ? 1 : 0;
+            case Direction.down:
+              const descTypeA = a.type;
+              const descTypeB = b.type;
+              return (descTypeA < descTypeB) ? 1 : (descTypeA > descTypeB) ? -1 : 0;
+          }
+          break;
+        case 'name':
+          switch (direction) {
+            case Direction.up:
+              const ascNameA = a.name;
+              const ascNameB = b.name;
+              return (ascNameA < ascNameB) ? -1 : (ascNameA > ascNameB) ? 1 : 0;
+            case Direction.down:
+              const descNameA = a.name;
+              const descNameB = b.name;
+              return (descNameA < descNameB) ? 1 : (descNameA > descNameB) ? -1 : 0;
+          }
+          break;
+        case 'plateNumber':
+          switch (direction) {
+            case Direction.up:
+              const ascPlateNumberA = a.plateNumber;
+              const ascPlateNumberB = b.plateNumber;
+              return (ascPlateNumberA < ascPlateNumberB) ? -1 : (ascPlateNumberA > ascPlateNumberB) ? 1 : 0;
+            case Direction.down:
+              const descPlateNumberA = a.plateNumber;
+              const descPlateNumberB = b.plateNumber;
+              return (descPlateNumberA < descPlateNumberB) ? 1 : (descPlateNumberA > descPlateNumberB) ? -1 : 0;
+          }
+          break;
+      }
+
+    });
   }
 
   // Filters cars in filter component by model, type or plate number.
@@ -1640,3 +1687,4 @@ export class FilterComponent implements OnInit {
     });
   }
 }
+
