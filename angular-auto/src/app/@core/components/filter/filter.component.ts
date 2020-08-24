@@ -266,6 +266,9 @@ export class FilterComponent implements OnInit {
     if (sessionStorage.getItem('creditNeedsToBeRecalculated')) {
       this.creditNeedsToBeRecalculated = JSON.parse(sessionStorage.getItem('creditNeedsToBeRecalculated'));
     }
+    if (sessionStorage.getItem('selectedOrganizer')) {
+      this.selectedOrganizer = JSON.parse(sessionStorage.getItem('selectedOrganizer'));
+    }
   }
 
   // Remove all the items from sessionStorage when other order or other route was clicked
@@ -575,45 +578,40 @@ export class FilterComponent implements OnInit {
     const organizerType = this.selectedOrganizer.value;
     this.sortSelectedCars(this.selectedCars, organizerType, selectedDirection);
     sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
+    sessionStorage.setItem('selectedOrganizer', JSON.stringify(this.selectedOrganizer));
   }
 
   private sortSelectedCars(selectedCars: Car[], sortBy: string, direction: Direction) {
     selectedCars.sort(function(a, b) {
       switch (sortBy) {
         case 'type':
+          const typeA = a.type;
+          const typeB = b.type;
           switch (direction) {
             case Direction.up:
-              const ascTypeA = a.type;
-              const ascTypeB = b.type;
-              return (ascTypeA < ascTypeB) ? -1 : (ascTypeA > ascTypeB) ? 1 : 0;
+              return (typeA < typeB) ? -1 : (typeA > typeB) ? 1 : 0;
             case Direction.down:
-              const descTypeA = a.type;
-              const descTypeB = b.type;
-              return (descTypeA < descTypeB) ? 1 : (descTypeA > descTypeB) ? -1 : 0;
+              return (typeA < typeB) ? 1 : (typeA > typeB) ? -1 : 0;
           }
           break;
         case 'name':
+          const nameA = a.name;
+          const nameB = b.name;
           switch (direction) {
             case Direction.up:
-              const ascNameA = a.name;
-              const ascNameB = b.name;
-              return (ascNameA < ascNameB) ? -1 : (ascNameA > ascNameB) ? 1 : 0;
+              return (nameA < nameB) ? -1 : (nameA > nameB) ? 1 : 0;
             case Direction.down:
-              const descNameA = a.name;
-              const descNameB = b.name;
-              return (descNameA < descNameB) ? 1 : (descNameA > descNameB) ? -1 : 0;
+              return (nameA < nameB) ? 1 : (nameA > nameB) ? -1 : 0;
           }
           break;
         case 'plateNumber':
+          const plateNumberA = a.plateNumber;
+          const plateNumberB = b.plateNumber;
           switch (direction) {
             case Direction.up:
-              const ascPlateNumberA = a.plateNumber;
-              const ascPlateNumberB = b.plateNumber;
-              return (ascPlateNumberA < ascPlateNumberB) ? -1 : (ascPlateNumberA > ascPlateNumberB) ? 1 : 0;
+              return (plateNumberA < plateNumberB) ? -1 : (plateNumberA > plateNumberB) ? 1 : 0;
             case Direction.down:
-              const descPlateNumberA = a.plateNumber;
-              const descPlateNumberB = b.plateNumber;
-              return (descPlateNumberA < descPlateNumberB) ? 1 : (descPlateNumberA > descPlateNumberB) ? -1 : 0;
+              return (plateNumberA < plateNumberB) ? 1 : (plateNumberA > plateNumberB) ? -1 : 0;
           }
           break;
       }
@@ -637,6 +635,7 @@ export class FilterComponent implements OnInit {
   // The getAllCars method gets called in the same service
 
   public filterCars(form: any) {
+    this.selectedOrganizer = null;
     if (this.validateFormFieldLength(form.value)) {
       this.clearSelectedCars();
       if (form.value.plateNumber
@@ -709,6 +708,7 @@ export class FilterComponent implements OnInit {
 
   public getAllCars(isSold: boolean) {
     this.clickedCarIndex = null;
+    this.selectedOrganizer = null;
     sessionStorage.removeItem('clickerCarIndex');
     this.clearSelectedCars();
     this.httpService.getAllCars(isSold).subscribe(data => {
