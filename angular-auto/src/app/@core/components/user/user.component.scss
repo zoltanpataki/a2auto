@@ -32,3 +32,44 @@ button:focus {
   display: flex;
   justify-content: space-between;
 }
+
+.userSearchContainer {
+  display: flex;
+  flex-flow: row wrap;
+  width: 100%;
+  margin-bottom: 5%;
+}
+
+.userFilterRightSide {
+  width: 75%;
+}
+
+.userFilterLeftSide {
+  width: 20%;
+}
+
+table {
+  width: 100%;
+}
+
+.search {
+  width: 100%;
+}
+
+mat-form-field {
+  width: 70%;
+}
+
+.searchButton {
+  width: 70%;
+  max-width: 70% !important;
+}
+
+.searchType {
+  width: 100% !important;
+}
+
+mat-divider {
+  margin-bottom: 2%;
+  margin-top: 2%;
+}

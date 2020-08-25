@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, Inject} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, Inject, ChangeDetectorRef} from '@angular/core';
 import {HttpService} from "../../services/http.service";
 import {Users} from "../../models/users";
 import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
@@ -7,6 +7,8 @@ import {filter} from "rxjs/operators";
 import {FormControl, FormGroupDirective, NgForm, Validators} from "@angular/forms";
 import {ErrorStateMatcher} from "@angular/material/core";
 import { WINDOW } from '@ng-toolkit/universal';
+import {SelectedFilter} from "../../models/selectedFilter";
+import { MatTableDataSource } from '@angular/material/table';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -66,10 +68,18 @@ export class UserComponent implements OnInit {
   public tooLongFieldValue: string = '';
   public isThereLongFieldValue: boolean = false;
 
+  public selectedUserFilter: SelectedFilter;
+  public userFilters = [{viewValue: 'Név', value: 'name'}, {viewValue: 'Város', value: 'city'}];
+  public userSearchResult = new MatTableDataSource<Users>();
+  public pickedUser: Users;
+  public indexOfPickedUser: number;
+  public userDisplayedColumns: string[] = ['name', 'city', 'taxNumber', 'symbol'];
+
   constructor(private httpService: HttpService,
               public utilService: UtilService,
               private route: ActivatedRoute,
-              public router: Router,) {
+              public router: Router,
+              private changeDetectorRefs: ChangeDetectorRef,) {
     this.route.url.subscribe(activtedUrl => {
       this.currentUrl = window.location.pathname;
     });
@@ -91,6 +101,12 @@ export class UserComponent implements OnInit {
   ngOnInit() {
     if (sessionStorage.getItem('newUser') != null) {
       this.userData = JSON.parse(sessionStorage.getItem('newUser'));
+    }
+    if (sessionStorage.getItem('pickedUserOnUserPage') != null) {
+      this.pickedUser = JSON.parse(sessionStorage.getItem('pickedUserOnUserPage'));
+    }
+    if (sessionStorage.getItem('indexOfPickedUserOnUserPage') != null) {
+      this.indexOfPickedUser = JSON.parse(sessionStorage.getItem('indexOfPickedUserOnUserPage'));
     }
     if (this.userData == null) {
       this.userData = new Users(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 'MAGYAR');
@@ -261,5 +277,61 @@ export class UserComponent implements OnInit {
       }
     }
     return true;
+  }
+
+  public filterUser(form: any) {
+    if (this.validateFormFieldLength(form.value)) {
+      this.httpService.getUser(this.setFormValuesToUpperCase(form), this.selectedUserFilter.value).subscribe(data => {
+        this.userSearchResult.data = data;
+        this.changeDetectorRefs.detectChanges();
+        sessionStorage.setItem('userSearchData', JSON.stringify(data));
+      });
+    }
+  }
+
+  private setFormValuesToUpperCase(form: any): string {
+    let formValue = null;
+    switch (Object.keys(form.value)[0]) {
+      case 'name': {
+        formValue = form.value.name.toUpperCase();
+        break;
+      }
+      case 'city': {
+        formValue = form.value.city.toUpperCase();
+        break;
+      }
+      case 'companyRegistrationNumber': {
+        formValue = form.value.companyRegistrationNumber.toUpperCase();
+        break;
+      }
+    }
+    return formValue;
+  }
+
+  public pickUser(index: number) {
+    this.indexOfPickedUser = index;
+    const pickedUserFromDataTable = this.userSearchResult.data[index];
+    this.pickedUser = new Users(
+      pickedUserFromDataTable.id,
+      pickedUserFromDataTable.fullName,
+      pickedUserFromDataTable.birthName,
+      pickedUserFromDataTable.zipCode,
+      pickedUserFromDataTable.city,
+      pickedUserFromDataTable.address,
+      pickedUserFromDataTable.birthPlace,
+      pickedUserFromDataTable.phoneNumber,
+      pickedUserFromDataTable.email,
+      pickedUserFromDataTable.nameOfMother,
+      pickedUserFromDataTable.birthDate,
+      pickedUserFromDataTable.personNumber,
+      pickedUserFromDataTable.idCardNumber,
+      pickedUserFromDataTable.dueTimeOfIdCard,
+      pickedUserFromDataTable.drivingLicenceNumber,
+      pickedUserFromDataTable.dueTimeOfDrivingLicence,
+      pickedUserFromDataTable.taxNumber,
+      pickedUserFromDataTable.healthcareNumber,
+      pickedUserFromDataTable.nationality);
+    sessionStorage.setItem('pickedUserOnUserPage', JSON.stringify(this.pickedUser));
+    sessionStorage.setItem('indexOfPickedUserOnUserPage', this.indexOfPickedUser.toString());
   }
 }
