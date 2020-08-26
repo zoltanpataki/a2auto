@@ -6,7 +6,6 @@ import {UtilService} from "../../services/util.service";
 import {filter} from "rxjs/operators";
 import {FormControl, FormGroupDirective, NgForm, Validators} from "@angular/forms";
 import {ErrorStateMatcher} from "@angular/material/core";
-import { WINDOW } from '@ng-toolkit/universal';
 import {SelectedFilter} from "../../models/selectedFilter";
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -71,7 +70,6 @@ export class UserComponent implements OnInit {
   public selectedUserFilter: SelectedFilter;
   public userFilters = [{viewValue: 'Név', value: 'name'}, {viewValue: 'Város', value: 'city'}];
   public userSearchResult = new MatTableDataSource<Users>();
-  public pickedUser: Users;
   public indexOfPickedUser: number;
   public userDisplayedColumns: string[] = ['name', 'city', 'taxNumber', 'symbol'];
 
@@ -102,11 +100,14 @@ export class UserComponent implements OnInit {
     if (sessionStorage.getItem('newUser') != null) {
       this.userData = JSON.parse(sessionStorage.getItem('newUser'));
     }
+    if (sessionStorage.getItem('userSearchDataOnUserPage') != null) {
+      this.userSearchResult.data = JSON.parse(sessionStorage.getItem('userSearchDataOnUserPage'));
+    }
     if (sessionStorage.getItem('pickedUserOnUserPage') != null) {
-      this.pickedUser = JSON.parse(sessionStorage.getItem('pickedUserOnUserPage'));
+      this.userData = JSON.parse(sessionStorage.getItem('pickedUserOnUserPage'));
     }
     if (sessionStorage.getItem('indexOfPickedUserOnUserPage') != null) {
-      this.indexOfPickedUser = JSON.parse(sessionStorage.getItem('indexOfPickedUserOnUserPage'));
+      this.indexOfPickedUser = Number(sessionStorage.getItem('indexOfPickedUserOnUserPage'));
     }
     if (this.userData == null) {
       this.userData = new Users(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 'MAGYAR');
@@ -262,8 +263,12 @@ export class UserComponent implements OnInit {
   }
 
   public clearUserData() {
+    this.userSearchResult.data = null;
+    this.indexOfPickedUser = null;
     this.userData = null;
     sessionStorage.removeItem('newUser');
+    sessionStorage.removeItem('userSearchDataOnUserPage');
+    sessionStorage.removeItem('pickedUserOnUserPage');
     this.ngOnInit();
   }
 
@@ -280,11 +285,13 @@ export class UserComponent implements OnInit {
   }
 
   public filterUser(form: any) {
+    sessionStorage.removeItem('indexOfPickedUserOnUserPage');
+    this.indexOfPickedUser = null;
     if (this.validateFormFieldLength(form.value)) {
       this.httpService.getUser(this.setFormValuesToUpperCase(form), this.selectedUserFilter.value).subscribe(data => {
         this.userSearchResult.data = data;
         this.changeDetectorRefs.detectChanges();
-        sessionStorage.setItem('userSearchData', JSON.stringify(data));
+        sessionStorage.setItem('userSearchDataOnUserPage', JSON.stringify(data));
       });
     }
   }
@@ -311,7 +318,7 @@ export class UserComponent implements OnInit {
   public pickUser(index: number) {
     this.indexOfPickedUser = index;
     const pickedUserFromDataTable = this.userSearchResult.data[index];
-    this.pickedUser = new Users(
+    this.userData = new Users(
       pickedUserFromDataTable.id,
       pickedUserFromDataTable.fullName,
       pickedUserFromDataTable.birthName,
@@ -331,7 +338,7 @@ export class UserComponent implements OnInit {
       pickedUserFromDataTable.taxNumber,
       pickedUserFromDataTable.healthcareNumber,
       pickedUserFromDataTable.nationality);
-    sessionStorage.setItem('pickedUserOnUserPage', JSON.stringify(this.pickedUser));
+    sessionStorage.setItem('pickedUserOnUserPage', JSON.stringify(this.userData));
     sessionStorage.setItem('indexOfPickedUserOnUserPage', this.indexOfPickedUser.toString());
   }
 }

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, Inject} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, Inject, ChangeDetectorRef} from '@angular/core';
 import {Company} from "../../models/company";
 import {HttpService} from "../../services/http.service";
 import {UtilService} from "../../services/util.service";
@@ -7,7 +7,8 @@ import {Address} from "../../models/address";
 import {filter} from "rxjs/operators";
 import {FormControl, FormGroupDirective, NgForm, Validators} from "@angular/forms";
 import {ErrorStateMatcher} from "@angular/material/core";
-import { WINDOW } from '@ng-toolkit/universal';
+import {SelectedFilter} from "../../models/selectedFilter";
+import { MatTableDataSource } from '@angular/material/table';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -48,10 +49,17 @@ export class CompanyComponent implements OnInit {
   public tooLongFieldValue: string = '';
   public isThereLongFieldValue: boolean = false;
 
+  public companyFilters = [{viewValue: 'Név', value: 'name'}, {viewValue: 'Cégjegyzékszám', value: 'companyRegistrationNumber'}];
+  public selectedCompanyFilter: SelectedFilter;
+  public companySearchResult = new MatTableDataSource<Company>();
+  public indexOfPickedCompany: number;
+  public companyDisplayedColumns: string[] = ['name', 'registrationNumber', 'representation', 'symbol'];
+
   constructor(private httpService: HttpService,
               private utilService: UtilService,
               private route: ActivatedRoute,
-              public router: Router,) {
+              public router: Router,
+              private changeDetectorRefs: ChangeDetectorRef,) {
     this.route.url.subscribe(activtedUrl => {
       this.currentUrl = window.location.pathname;
     });
@@ -73,6 +81,15 @@ export class CompanyComponent implements OnInit {
   ngOnInit() {
     if (sessionStorage.getItem('newCompany') != null) {
       this.companyData = JSON.parse(sessionStorage.getItem('newCompany'));
+    }
+    if (sessionStorage.getItem('companySearchDataOnCompanyPage') != null) {
+      this.companySearchResult.data = JSON.parse(sessionStorage.getItem('companySearchDataOnCompanyPage'));
+    }
+    if (sessionStorage.getItem('pickedCompanyOnCompanyPage') != null) {
+      this.companyData = JSON.parse(sessionStorage.getItem('pickedCompanyOnCompanyPage'));
+    }
+    if (sessionStorage.getItem('indexOfPickedCompanyOnCompanyPage') != null) {
+      this.indexOfPickedCompany = Number(sessionStorage.getItem('indexOfPickedCompanyOnCompanyPage'));
     }
     if (this.companyData == null) {
       this.companyData = new Company(null, null, new Address(null, null, null, null, null), null, null, null, null, null);
@@ -203,8 +220,12 @@ export class CompanyComponent implements OnInit {
   }
 
   public clearCompanyData() {
+    this.companySearchResult.data = null;
+    this.indexOfPickedCompany = null;
     this.companyData = null;
     sessionStorage.removeItem('newCompany');
+    sessionStorage.removeItem('companySearchDataOnCompanyPage');
+    sessionStorage.removeItem('pickedCompanyOnCompanyPage');
     this.ngOnInit();
   }
 
@@ -244,5 +265,52 @@ export class CompanyComponent implements OnInit {
       }
     }
     return true;
+  }
+
+  public filterCompany(form: any) {
+    sessionStorage.removeItem('indexOfPickedCompanyOnUserPage');
+    this.indexOfPickedCompany = null;
+    if (this.validateFormFieldLength(form.value)) {
+      this.httpService.getCompany(this.setFormValuesToUpperCase(form), this.selectedCompanyFilter.value).subscribe(data => {
+        this.companySearchResult.data = data;
+        this.changeDetectorRefs.detectChanges();
+        sessionStorage.setItem('companySearchDataOnCompanyPage', JSON.stringify(data));
+      });
+    }
+  }
+
+  private setFormValuesToUpperCase(form: any): string {
+    let formValue = null;
+    switch (Object.keys(form.value)[0]) {
+      case 'name': {
+        formValue = form.value.name.toUpperCase();
+        break;
+      }
+      case 'city': {
+        formValue = form.value.city.toUpperCase();
+        break;
+      }
+      case 'companyRegistrationNumber': {
+        formValue = form.value.companyRegistrationNumber.toUpperCase();
+        break;
+      }
+    }
+    return formValue;
+  }
+
+  public pickCompany(index: number) {
+    this.indexOfPickedCompany = index;
+    const pickedCompanyFromDataTable = this.companySearchResult.data[index];
+    this.companyData = new Company(
+      pickedCompanyFromDataTable.id,
+      pickedCompanyFromDataTable.name,
+      pickedCompanyFromDataTable.address,
+      pickedCompanyFromDataTable.companyRegistrationNumber,
+      pickedCompanyFromDataTable.representation,
+      pickedCompanyFromDataTable.taxNumber,
+      pickedCompanyFromDataTable.phoneNumber,
+      pickedCompanyFromDataTable.email);
+    sessionStorage.setItem('pickedCompanyOnCompanyPage', JSON.stringify(this.companyData));
+    sessionStorage.setItem('indexOfPickedCompanyOnCompanyPage', this.indexOfPickedCompany.toString());
   }
 }

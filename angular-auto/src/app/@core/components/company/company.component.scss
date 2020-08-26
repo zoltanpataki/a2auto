@@ -22,3 +22,43 @@ mat-form-field {
   justify-content: space-between;
   width: 60%;
 }
+
+mat-divider {
+  margin-bottom: 2%;
+  margin-top: 2%;
+}
+
+.searchField {
+  width: 70% !important;
+}
+
+.searchButton {
+  width: 70%;
+  max-width: 70% !important;
+}
+
+.searchType {
+  width: 100% !important;
+}
+
+table {
+  width: 100%;
+}
+
+.search {
+  width: 100%;
+}
+
+.companySearchContainer {
+  display: flex;
+  flex-flow: row wrap;
+  width: 100%;
+}
+
+.companyFilterRightSide {
+  width: 75%;
+}
+
+.companyFilterLeftSide {
+  width: 20%;
+}

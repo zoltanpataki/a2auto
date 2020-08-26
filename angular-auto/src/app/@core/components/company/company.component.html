@@ -1,4 +1,77 @@
 <div class="company-container">
+  <div *ngIf="router.url == '/newCompany'" class="companySearchContainer">
+    <div class="companyFilterLeftSide">
+      <mat-form-field class="searchField">
+        <mat-label>Szűrési feltétel</mat-label>
+        <mat-select [(ngModel)]="selectedCompanyFilter" name="companyFilter">
+          <mat-option *ngFor="let companyFilter of companyFilters; trackBy: trackByFn" [value]="companyFilter">
+            {{companyFilter.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="userFilter" *ngIf="selectedCompanyFilter">
+        <form #filterCompanyForm=ngForm (ngSubmit)="filterCompany(filterCompanyForm)" class="form filterForm">
+          <div class="search">
+            <div class="searchType" *ngIf="selectedCompanyFilter.value == 'name'">
+              <mat-form-field class="example-full-width searchField">
+                <label>
+                  <input matInput  maxlength="30" placeholder="Itt kereshetsz ({{selectedCompanyFilter.viewValue}})" ngModel name="name">
+                </label>
+              </mat-form-field>
+              <mat-error *ngIf="isThereLongFieldValue">30 karakternél hosszabb mező érték ({{tooLongFieldValue}})!</mat-error>
+            </div>
+            <div *ngIf="selectedCompanyFilter.value == 'companyRegistrationNumber'">
+              <mat-form-field class="example-full-width">
+                <label>
+                  <input matInput  maxlength="30" placeholder="Itt kereshetsz ({{selectedCompanyFilter.viewValue}})" ngModel name="companyRegistrationNumber">
+                </label>
+              </mat-form-field>
+              <mat-error *ngIf="isThereLongFieldValue">30 karakternél hosszabb mező érték ({{tooLongFieldValue}})!</mat-error>
+            </div>
+            <div class="searchButton">
+              <button mat-button class="search">Keresés</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="companyFilterRightSide">
+      <div>
+        <table *ngIf="companySearchResult && companySearchResult.data && companySearchResult.data.length > 0" mat-table [dataSource]="companySearchResult" class="mat-elevation-z8">
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Név </th>
+            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+          </ng-container>
+
+          <!-- City Column -->
+          <ng-container matColumnDef="registrationNumber">
+            <th mat-header-cell *matHeaderCellDef> Cégjegyzékszám </th>
+            <td mat-cell *matCellDef="let element"> {{element.companyRegistrationNumber}} </td>
+          </ng-container>
+
+          <!-- Tax number Column -->
+          <ng-container matColumnDef="representation">
+            <th mat-header-cell *matHeaderCellDef> Képviselő </th>
+            <td mat-cell *matCellDef="let element"> {{element.representation}} </td>
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="symbol">
+            <th mat-header-cell *matHeaderCellDef> &nbsp; </th>
+            <td mat-cell *matCellDef="let element; let compTableIndex = index;">
+              <mat-checkbox #companyTable (change)="pickCompany(compTableIndex)" [checked]="indexOfPickedCompany === compTableIndex"></mat-checkbox>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="companyDisplayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: companyDisplayedColumns;"></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <mat-divider *ngIf="router.url == '/newCompany'"></mat-divider>
   <form #companyForm=ngForm (ngSubmit)="saveCompany(companyForm)" class="companyForm" (keydown.enter)="$event.preventDefault()">
     <h5>Új céges vásárló adatai</h5>
     <div>

@@ -56,10 +56,6 @@ table {
   width: 100%;
 }
 
-mat-form-field {
-  width: 70%;
-}
-
 .searchButton {
   width: 70%;
   max-width: 70% !important;
@@ -72,4 +68,8 @@ mat-form-field {
 mat-divider {
   margin-bottom: 2%;
   margin-top: 2%;
+}
+
+.searchField {
+  width: 70% !important;
 }

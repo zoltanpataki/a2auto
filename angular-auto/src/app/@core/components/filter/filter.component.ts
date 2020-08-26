@@ -309,7 +309,15 @@ export class FilterComponent implements OnInit {
     sessionStorage.removeItem('a2Representation');
     sessionStorage.removeItem('typeOfBuying');
     sessionStorage.removeItem('nameOfBuyer');
+    sessionStorage.removeItem('url');
+    sessionStorage.removeItem('trophyClick');
     sessionStorage.removeItem('creditNeedsToBeRecalculated');
+    sessionStorage.removeItem('companySearchDataOnCompanyPage');
+    sessionStorage.removeItem('pickedCompanyOnCompanyPage');
+    sessionStorage.removeItem('indexOfPickedCompanyOnCompanyPage');
+    sessionStorage.removeItem('userSearchDataOnCompanyPage');
+    sessionStorage.removeItem('pickedUserOnUserPage');
+    sessionStorage.removeItem('indexOfPickedUserOnUserPage');
   }
 
   // Sets the data to null when expansion order is collapsed
