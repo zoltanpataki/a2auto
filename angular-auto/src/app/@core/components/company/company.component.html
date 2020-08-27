@@ -21,7 +21,7 @@
               <mat-error *ngIf="isThereLongFieldValue">30 karakternél hosszabb mező érték ({{tooLongFieldValue}})!</mat-error>
             </div>
             <div *ngIf="selectedCompanyFilter.value == 'companyRegistrationNumber'">
-              <mat-form-field class="example-full-width">
+              <mat-form-field class="example-full-width searchField">
                 <label>
                   <input matInput  maxlength="30" placeholder="Itt kereshetsz ({{selectedCompanyFilter.viewValue}})" ngModel name="companyRegistrationNumber">
                 </label>

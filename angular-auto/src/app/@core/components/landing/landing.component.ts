@@ -17,12 +17,18 @@ export class LandingComponent implements OnInit {
       .subscribe((event: NavigationEnd) => {
         if (event.url !== '/newUser') {
           sessionStorage.removeItem('newUser');
+          sessionStorage.removeItem('userSearchDataOnUserPage');
+          sessionStorage.removeItem('pickedUserOnUserPage');
+          sessionStorage.removeItem('indexOfPickedUserOnUserPage');
         }
         if (event.url !== '/newCar') {
           sessionStorage.removeItem('newCar');
         }
         if (event.url !== '/newCompany') {
           sessionStorage.removeItem('newCompany');
+          sessionStorage.removeItem('companySearchDataOnCompanyPage');
+          sessionStorage.removeItem('pickedCompanyOnCompanyPage');
+          sessionStorage.removeItem('indexOfPickedCompanyOnCompanyPage');
         }
         if (event.url !== '/filter' && event.url !== '/orderPage' && event.url !== 'sellingPage' && event.url !== '/warrantPage' && event.url !== '/insurancePage') {
           this.utilService.removeItemsFromSessionStorage();

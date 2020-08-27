@@ -72,6 +72,7 @@ export class UserComponent implements OnInit {
   public userSearchResult = new MatTableDataSource<Users>();
   public indexOfPickedUser: number;
   public userDisplayedColumns: string[] = ['name', 'city', 'taxNumber', 'symbol'];
+  public clearUserDataButtonPressed: boolean = false;
 
   constructor(private httpService: HttpService,
               public utilService: UtilService,
@@ -89,6 +90,9 @@ export class UserComponent implements OnInit {
         }
         if (event.url !== '/newCompany') {
           sessionStorage.removeItem('newCompany');
+          sessionStorage.removeItem('companySearchDataOnCompanyPage');
+          sessionStorage.removeItem('pickedCompanyOnCompanyPage');
+          sessionStorage.removeItem('indexOfPickedCompanyOnCompanyPage');
         }
         if (event.url !== '/filter' && event.url !== '/orderPage' && event.url !== 'sellingPage' && event.url !== '/warrantPage' && event.url !== '/insurancePage') {
           this.utilService.removeItemsFromSessionStorage();
@@ -223,7 +227,7 @@ export class UserComponent implements OnInit {
   }
 
   public itemChanged(form: any, fieldName: string) {
-    if (Object.entries(form.value).length === 0 && form.value.constructor === Object) {
+    if (Object.entries(form.value).length === 0 && form.value.constructor === Object || this.clearUserDataButtonPressed === true) {
       //we don't do anything, the object is empty
     } else {
       let user;
@@ -263,12 +267,15 @@ export class UserComponent implements OnInit {
   }
 
   public clearUserData() {
+    this.clearUserDataButtonPressed = true;
     this.userSearchResult.data = null;
     this.indexOfPickedUser = null;
     this.userData = null;
-    sessionStorage.removeItem('newUser');
+    this.selectedUserFilter = null;
     sessionStorage.removeItem('userSearchDataOnUserPage');
+    sessionStorage.removeItem('newUser');
     sessionStorage.removeItem('pickedUserOnUserPage');
+    sessionStorage.removeItem('indexOfPickedUserOnUserPage');
     this.ngOnInit();
   }
 

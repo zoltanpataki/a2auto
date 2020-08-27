@@ -117,12 +117,18 @@ export class FilterComponent implements OnInit {
         }
         if (event.url !== '/newUser') {
           sessionStorage.removeItem('newUser');
+          sessionStorage.removeItem('userSearchDataOnUserPage');
+          sessionStorage.removeItem('pickedUserOnUserPage');
+          sessionStorage.removeItem('indexOfPickedUserOnUserPage');
         }
         if (event.url !== '/newCar') {
           sessionStorage.removeItem('newCar');
         }
         if (event.url !== '/newCompany') {
           sessionStorage.removeItem('newCompany');
+          sessionStorage.removeItem('companySearchDataOnCompanyPage');
+          sessionStorage.removeItem('pickedCompanyOnCompanyPage');
+          sessionStorage.removeItem('indexOfPickedCompanyOnCompanyPage');
         }
       });
   }

@@ -54,6 +54,7 @@ export class CompanyComponent implements OnInit {
   public companySearchResult = new MatTableDataSource<Company>();
   public indexOfPickedCompany: number;
   public companyDisplayedColumns: string[] = ['name', 'registrationNumber', 'representation', 'symbol'];
+  public clearCompanyDataButtonPressed: boolean = false;
 
   constructor(private httpService: HttpService,
               private utilService: UtilService,
@@ -68,6 +69,9 @@ export class CompanyComponent implements OnInit {
       .subscribe((event: NavigationEnd) => {
         if (event.url !== '/newUser') {
           sessionStorage.removeItem('newUser');
+          sessionStorage.removeItem('userSearchDataOnUserPage');
+          sessionStorage.removeItem('pickedUserOnUserPage');
+          sessionStorage.removeItem('indexOfPickedUserOnUserPage');
         }
         if (event.url !== '/newCar') {
           sessionStorage.removeItem('newCar');
@@ -143,7 +147,7 @@ export class CompanyComponent implements OnInit {
   }
 
   public itemChanged(form: any) {
-    if (Object.entries(form.value).length === 0 && form.value.constructor === Object) {
+    if (Object.entries(form.value).length === 0 && form.value.constructor === Object || this.clearCompanyDataButtonPressed === true) {
       //we don't do anything, the object is empty
     } else {
       let company;
@@ -220,12 +224,15 @@ export class CompanyComponent implements OnInit {
   }
 
   public clearCompanyData() {
+    this.clearCompanyDataButtonPressed = true;
     this.companySearchResult.data = null;
     this.indexOfPickedCompany = null;
     this.companyData = null;
+    this.selectedCompanyFilter = null;
     sessionStorage.removeItem('newCompany');
     sessionStorage.removeItem('companySearchDataOnCompanyPage');
     sessionStorage.removeItem('pickedCompanyOnCompanyPage');
+    sessionStorage.removeItem('indexOfPickedCompanyOnCompanyPage');
     this.ngOnInit();
   }
 
