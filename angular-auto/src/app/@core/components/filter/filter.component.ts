@@ -34,7 +34,7 @@ export class FilterComponent implements OnInit {
   }
   public countInCarSupplementForm: FormGroup;
   public filters = [{viewValue: 'Modell', value: 'name'}, {viewValue: 'Rendszám', value: 'plateNumber'}, {viewValue: 'Márka', value: 'type'}, {viewValue: 'Összes', value: 'all'}, {viewValue: 'Eladott', value: 'sold'}];
-  public organizers = [{viewValue: 'Márka', value: 'type', direction: Direction.up}, {viewValue: 'Márka', value: 'type', direction: Direction.down}, {viewValue: 'Modell', value: 'name', direction: Direction.up}, {viewValue: 'Modell', value: 'name', direction: Direction.down}, {viewValue: 'Rendszám', value: 'plateNumber', direction: Direction.up}, {viewValue: 'Rendszám', value: 'plateNumber', direction: Direction.down}];
+  public organizers = [{viewValue: 'Márka', value: 'type', direction: Direction.up}, {viewValue: 'Márka', value: 'type', direction: Direction.down}, {viewValue: 'Vásárló', value: 'buyer', direction: Direction.up}, {viewValue: 'Vásárló', value: 'buyer', direction: Direction.down}, {viewValue: 'Modell', value: 'name', direction: Direction.up}, {viewValue: 'Modell', value: 'name', direction: Direction.down}, {viewValue: 'Rendszám', value: 'plateNumber', direction: Direction.up}, {viewValue: 'Rendszám', value: 'plateNumber', direction: Direction.down}];
   public secondaryFilters = [{viewValue: 'Modell', value: 'name'}, {viewValue: 'Rendszám', value: 'plateNumber'}, {viewValue: 'Márka', value: 'type'}];
   public userFilters = [{viewValue: 'Név', value: 'name'}, {viewValue: 'Város', value: 'city'}];
   public selectedFilter: SelectedFilter;
@@ -626,6 +626,16 @@ export class FilterComponent implements OnInit {
               return (plateNumberA < plateNumberB) ? -1 : (plateNumberA > plateNumberB) ? 1 : 0;
             case Direction.down:
               return (plateNumberA < plateNumberB) ? 1 : (plateNumberA > plateNumberB) ? -1 : 0;
+          }
+          break;
+        case 'buyer':
+          const buyerA = a.nameOfBuyer;
+          const buyerB = b.nameOfBuyer;
+          switch (direction) {
+            case Direction.up:
+              return (buyerA < buyerB) ? -1 : (buyerA > buyerB) ? 1 : 0;
+            case Direction.down:
+              return (buyerA < buyerB) ? 1 : (buyerA > buyerB) ? -1 : 0;
           }
           break;
       }
