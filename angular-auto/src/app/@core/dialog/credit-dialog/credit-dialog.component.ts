@@ -19,7 +19,7 @@ export class CreditDialogComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public data) { }
 
   ngOnInit() {
-    this.countCreditAmount(this.data.car, this.data.countInCarSupplement, this.data.downPayment, this.data.extra);
+    this.countCreditAmount(this.data.car, this.data.countInCarSupplement, this.data.downPayment, this.data.extra, this.data.credit);
     if (this.data.credit == null) {
       this.credit = new Credit(null,null, null, this.initialPayment, this.creditAmount, null, null);
     } else {
@@ -43,13 +43,23 @@ export class CreditDialogComponent implements OnInit {
     this.closeWithData()
   }
 
-  private countCreditAmount(car: Car, countInCarSupplement: CountInCarSupplement, downPayment: number, extra: number) {
+  private countCreditAmount(car: Car, countInCarSupplement: CountInCarSupplement, downPayment: number, extra: number, credit: Credit) {
     const carPrice = car.purchasingPrice ? car.purchasingPrice : 0;
     const countInPrice = countInCarSupplement && countInCarSupplement.countInPrice ? countInCarSupplement.countInPrice : 0;
     const downPaymentAmount = downPayment ? downPayment : 0;
     const extraAmount = extra ? extra : 0;
-    this.initialPayment = (countInPrice + downPaymentAmount + extraAmount) === 0 ? null : countInPrice + downPaymentAmount + extraAmount;
-    this.creditAmount = (carPrice - this.initialPayment) === 0 ? null : carPrice - this.initialPayment;
+
+    if (credit.initialPayment == null) {
+      this.initialPayment = (countInPrice + downPaymentAmount + extraAmount) === 0 ? null : countInPrice + downPaymentAmount + extraAmount;
+    } else {
+      this.initialPayment = credit.initialPayment;
+    }
+
+    if (credit.creditAmount == null) {
+      this.creditAmount = (carPrice - this.initialPayment) === 0 ? null : carPrice - this.initialPayment;
+    } else {
+      this.creditAmount = credit.creditAmount;
+    }
   }
 
 }
