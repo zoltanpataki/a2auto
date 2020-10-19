@@ -49,13 +49,13 @@ export class CreditDialogComponent implements OnInit {
     const downPaymentAmount = downPayment ? downPayment : 0;
     const extraAmount = extra ? extra : 0;
 
-    if (credit.initialPayment == null) {
+    if (credit != null && credit.initialPayment == null || credit == null) {
       this.initialPayment = (countInPrice + downPaymentAmount + extraAmount) === 0 ? null : countInPrice + downPaymentAmount + extraAmount;
     } else {
       this.initialPayment = credit.initialPayment;
     }
 
-    if (credit.creditAmount == null) {
+    if (credit != null && credit.creditAmount == null || credit == null) {
       this.creditAmount = (carPrice - this.initialPayment) === 0 ? null : carPrice - this.initialPayment;
     } else {
       this.creditAmount = credit.creditAmount;
