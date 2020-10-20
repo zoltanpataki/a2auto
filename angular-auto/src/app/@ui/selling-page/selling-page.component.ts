@@ -170,9 +170,6 @@ export class SellingPageComponent implements OnInit{
       this.orderedCar = JSON.parse(sessionStorage.getItem('orderedCar'));
     }
     this.setUserData(this.order);
-    if (this.orderedCar && !this.orderedCar.sold && this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer) {
-      this.setStateOfCarToSold(this.orderedCar);
-    }
 
     if (this.orderedCar && this.orderedCar.price) {
       this.turnPriceIntoText(this.orderedCar.price);
@@ -360,25 +357,6 @@ export class SellingPageComponent implements OnInit{
       var position = 0;
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
       pdf.save('selling.pdf'); // Generated PDF
-    });
-  }
-
-  private setStateOfCarToSold(car:Car) {
-    car.sold = true;
-    this.httpService.updateCar(car).subscribe(data => {
-      console.log(data);
-      this.orderedCar = data;
-      if (sessionStorage.getItem('clickedCarIndex') != null
-          && sessionStorage.getItem('selectedCars') != null) {
-        const clickedCarIndex = JSON.parse(sessionStorage.getItem('clickedCarIndex'));
-        const selectedCars = JSON.parse(sessionStorage.getItem('selectedCars'));
-        selectedCars[clickedCarIndex] = data;
-        sessionStorage.setItem('selectedCars', JSON.stringify(selectedCars));
-      }
-      sessionStorage.setItem('orderedCar', JSON.stringify(this.orderedCar));
-      this.utilService.openSnackBar('Az autó eladott státuszba került!', 'Szuper :)');
-    }, error => {
-      this.utilService.openSnackBar('Sajnos nem sikerült az autót eladott státuszba helyezni!', 'Hiba :(');
     });
   }
 
