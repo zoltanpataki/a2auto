@@ -362,8 +362,17 @@ export class SellingPageComponent implements OnInit{
 
   private setCarHandoverTime(dateString: any) {
     const carHandoverDate: Date = new Date(dateString);
-    this.carHandoverTime['hour'] = carHandoverDate.getHours();
-    this.carHandoverTime['minute'] = carHandoverDate.getMinutes();
+    if (null != dateString) {
+      this.carHandoverTime['hour'] = carHandoverDate.getHours();
+      this.carHandoverTime['minute'] = carHandoverDate.getMinutes();
+    } else {
+      if (carHandoverDate.getHours() === 0 ) {
+        this.carHandoverTime['hour'] = null;
+      }
+      if (carHandoverDate.getMinutes() === 0 ) {
+        this.carHandoverTime['minute'] = null;
+      }
+    }
   }
 
   private setUserData(order: Order) {

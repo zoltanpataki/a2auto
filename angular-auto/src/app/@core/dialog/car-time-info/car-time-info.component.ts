@@ -5,7 +5,6 @@ import {UtilService} from "../../services/util.service";
 import {Witness} from "../../models/witness";
 import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
 import {Description} from "../../models/description";
-import {formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-car-time-info',
@@ -53,9 +52,13 @@ export class CarTimeInfoComponent implements OnInit {
     }
     this.clickedCarIndex = this.data.clickedCarIndex;
     this.selectedCars = this.data.selectedCars;
-    const carHandoverDate: Date = new Date(this.carData.carHandover);
-    this.carHandoverTime['hour'] = carHandoverDate.getHours() === 0 ? new Date().getHours() : carHandoverDate.getHours();
-    this.carHandoverTime['minute'] = carHandoverDate.getMinutes() === 0 ? new Date().getMinutes() : carHandoverDate.getMinutes();
+    if (null != this.carData.carHandover) {
+      const carHandoverDate: Date = new Date(this.carData.carHandover);
+      this.carHandoverTime['hour'] = carHandoverDate.getHours() === 0 ? new Date().getHours() : carHandoverDate.getHours();
+      this.carHandoverTime['minute'] = carHandoverDate.getMinutes() === 0 ? new Date().getMinutes() : carHandoverDate.getMinutes();
+    } else {
+      this.carHandoverTime = null;
+    }
 
     this.createFormGroupForRemark();
     this.initiateDatesWithToday();
@@ -116,19 +119,16 @@ export class CarTimeInfoComponent implements OnInit {
   }
 
   public saveCarData(form: any) {
-    const carHandover = new Date(this.carData.carHandover);
-    if (this.carHandoverTime != null) {
-      if (this.carHandoverTime['hour'] != null && this.carHandoverTime['minute'] != null) {
+    if (this.carData.carHandover != null) {
+      const carHandover = new Date(this.carData.carHandover);
+      console.log(this.carHandoverTime);
+      if (this.carHandoverTime != null) {
         carHandover.setHours(this.carHandoverTime['hour'], this.carHandoverTime['minute'], 0, 0);
-      } else if (this.carHandoverTime['hour'] != null && this.carHandoverTime['minute'] == null) {
-        carHandover.setHours(this.carHandoverTime['hour'], 0, 0, 0);
-      } else if (this.carHandoverTime['hour'] == null && this.carHandoverTime['minute'] != null) {
-        carHandover.setHours(0, this.carHandoverTime['minute'], 0, 0);
+      } else {
+        carHandover.setHours(0, 0, 0, 0);
       }
-    } else {
-      carHandover.setHours(0, 0, 0, 0);
+      this.carData.carHandover = carHandover;
     }
-    this.carData.carHandover = carHandover;
     this.witness1 = form.value.witness1.name === 'Egyik sem' ? null : form.value.witness1;
     this.witness2 = form.value.witness2.name === 'Egyik sem' ? null : form.value.witness2;
     this.pickedRepresentation = form.value.representation;
@@ -208,6 +208,9 @@ export class CarTimeInfoComponent implements OnInit {
       this.carData.dateOfContract = new Date(date);
     } else {
       this.carData[item] = new Date(date).getFullYear() === new Date(0).getFullYear() ? null : new Date(date);
+      if (item === 'carHandover' && null == dateString) {
+        this.carHandoverTime = null;
+      }
     }
   }
 
