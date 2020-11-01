@@ -121,7 +121,6 @@ export class CarTimeInfoComponent implements OnInit {
   public saveCarData(form: any) {
     if (this.carData.carHandover != null) {
       const carHandover = new Date(this.carData.carHandover);
-      console.log(this.carHandoverTime);
       if (this.carHandoverTime != null) {
         carHandover.setHours(this.carHandoverTime['hour'], this.carHandoverTime['minute'], 0, 0);
       } else {

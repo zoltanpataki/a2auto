@@ -122,15 +122,15 @@ export class InstantBuyingDialogComponent implements OnInit {
   }
 
   public saveCarData(form: any) {
-    const carHandover = new Date(this.carData.carHandover);
-    if (this.carHandoverTime['hour'] != null && this.carHandoverTime['minute'] != null) {
-      carHandover.setHours(this.carHandoverTime['hour'], this.carHandoverTime['minute'], 0, 0);
-    } else if (this.carHandoverTime['hour'] != null && this.carHandoverTime['minute'] == null) {
-      carHandover.setHours(this.carHandoverTime['hour'], 0, 0, 0);
-    } else if (this.carHandoverTime['hour'] == null && this.carHandoverTime['minute'] != null) {
-      carHandover.setHours(0, this.carHandoverTime['minute'], 0, 0);
+    if (this.carData.carHandover != null) {
+      const carHandover = new Date(this.carData.carHandover);
+      if (this.carHandoverTime != null) {
+        carHandover.setHours(this.carHandoverTime['hour'], this.carHandoverTime['minute'], 0, 0);
+      } else {
+        carHandover.setHours(0, 0, 0, 0);
+      }
+      this.carData.carHandover = carHandover;
     }
-    this.carData.carHandover = carHandover;
     this.witness1 = form.value.witness1.name === 'Egyik sem' ? null : form.value.witness1;
     this.witness2 = form.value.witness2.name === 'Egyik sem' ? null : form.value.witness2;
     this.pickedRepresentation = form.value.representation;
@@ -186,15 +186,20 @@ export class InstantBuyingDialogComponent implements OnInit {
 
   public changeAllDateFieldIfEmptyElseOnlyThisOne(dateString: string, item: string) {
     const date = new Date(dateString);
-    if (this.carData.dateOfContract != null && this.carData.dueOfContract != null) {
-      this.carData[item] = new Date(date);
-    } else {
+    if (this.carData.dateOfContract == null &&
+      this.carData.dueOfContract == null &&
+      this.carData.carHandover == null &&
+      this.carData.documentsHandover == null) {
       this.carData.carHandover = new Date(date);
       this.carData.dueOfContract = new Date(date);
       this.carData.dateOfArrival = new Date(date);
-      this.carData.dateOfLeaving = new Date(date);
       this.carData.documentsHandover = new Date(date);
       this.carData.dateOfContract = new Date(date);
+    } else {
+      this.carData[item] = new Date(date).getFullYear() === new Date(0).getFullYear() ? null : new Date(date);
+      if (item === 'carHandover' && null == dateString) {
+        this.carHandoverTime = null;
+      }
     }
   }
 
