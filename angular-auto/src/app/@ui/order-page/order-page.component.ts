@@ -98,7 +98,7 @@ export class OrderPageComponent implements OnInit {
     if (this.order && this.orderedCar) {
       this.remainingPrice = this.countRemainingPrice(this.order, this.orderedCar);
     }
-    if (this.orderedCar && !this.orderedCar.sold) {
+    if (this.orderedCar && !this.orderedCar.sold && !this.blankPage) {
       this.setStateOfCarToSold(this.orderedCar);
     }
     if (this.order && this.order.countInCarId) {
