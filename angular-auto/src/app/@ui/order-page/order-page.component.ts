@@ -161,6 +161,7 @@ export class OrderPageComponent implements OnInit {
 
   private setStateOfCarToSold(car:Car) {
     car.sold = true;
+    car.dateOfLeaving =  new Date();
     this.httpService.updateCar(car).subscribe(data => {
       console.log(data);
       this.orderedCar = data;

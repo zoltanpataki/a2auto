@@ -164,9 +164,6 @@ export class CarTimeInfoComponent implements OnInit {
   }
 
   private setDatesToNull() {
-    if (new Date(this.carData.dateOfLeaving).getFullYear() === new Date(0).getFullYear()) {
-      this.carData.dateOfLeaving = null;
-    }
     if (new Date(this.carData.dateOfContract).getFullYear() === new Date(0).getFullYear()) {
       this.carData.dateOfContract = null;
     }
@@ -187,7 +184,6 @@ export class CarTimeInfoComponent implements OnInit {
       this.carData.carHandover = this.carData.carHandover == null ? new Date() : this.carData.carHandover;
       this.carData.dueOfContract = new Date();
       this.carData.dateOfArrival = new Date();
-      this.carData.dateOfLeaving = this.sellOrBuy === 'sell' ? new Date() : null;
       this.carData.documentsHandover = new Date();
       this.carData.dateOfContract = new Date();
     }
@@ -202,7 +198,6 @@ export class CarTimeInfoComponent implements OnInit {
       this.carData.carHandover = new Date(date);
       this.carData.dueOfContract = new Date(date);
       this.carData.dateOfArrival = new Date(date);
-      this.carData.dateOfLeaving = this.sellOrBuy === 'sell' ? new Date() : null;
       this.carData.documentsHandover = new Date(date);
       this.carData.dateOfContract = new Date(date);
     } else {
