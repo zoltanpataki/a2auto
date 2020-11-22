@@ -210,4 +210,12 @@ export class CarTimeInfoComponent implements OnInit {
 
   get formData() {return <FormArray>this.remarkForm.get('description');}
 
+  public clearAllDates() {
+    this.carData.dateOfContract = null;
+    this.carData.carHandover = null;
+    this.carHandoverTime = null;
+    this.carData.dueOfContract = null;
+    this.carData.documentsHandover = null;
+  }
+
 }

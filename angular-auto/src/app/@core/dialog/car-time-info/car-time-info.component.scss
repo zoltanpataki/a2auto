@@ -39,3 +39,15 @@ button {
 .miniFab:focus {
   outline: none;
 }
+
+.clearDates > i{
+  position:relative;
+  top: calc(50% - 10px); /* 50% - 3/4 of icon height */
+  display: flex;
+  align-items: center;
+}
+
+.inner {
+  width: 50%;
+  margin: 0 auto;
+}
