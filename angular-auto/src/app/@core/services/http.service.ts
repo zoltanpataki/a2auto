@@ -23,7 +23,7 @@ const httpOptions = {
 })
 export class HttpService {
 
-  // private carServerUrl =  'http://192.168.0.4:60000/';
+  //private carServerUrl =  'http://192.168.0.4:60000/';
   private carServerUrl =  'http://localhost:60000/';
 
   constructor(private http: HttpClient) { }

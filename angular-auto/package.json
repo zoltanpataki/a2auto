@@ -91,5 +91,8 @@
     "tslint": "~5.15.0",
     "typescript": "~3.5.3",
     "webpack-cli": "^3.3.10"
+  },
+  "resolutions": {
+    "tree-kill": "1.2.2"
   }
 }
