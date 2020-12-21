@@ -37,7 +37,6 @@ import { GdprPageComponent } from './@ui/gdpr-page/gdpr-page.component';
 import {FlexModule} from "@angular/flex-layout";
 import { CarTimeInfoComponent } from './@core/dialog/car-time-info/car-time-info.component';
 import { SettingsComponent } from './@core/components/settings/settings.component';
-import {AngularFontAwesomeModule} from "angular-font-awesome";
 import { SalesmanComponent } from './@core/dialog/salesman/salesman.component';
 import { WitnessDialogComponent } from './@core/dialog/witness-dialog/witness-dialog.component';
 import { WarrantPageComponent } from './@ui/warrant-page/warrant-page.component';
@@ -104,7 +103,6 @@ import { NgtUniversalModule } from '@ng-toolkit/universal';
     MatDividerModule,
     MatTableModule,
     FlexModule,
-    AngularFontAwesomeModule,
     MatTooltipModule,
     NgxSpinnerModule,
     NgxsModule.forRoot([LoaderState], {developmentMode: !environment.production}),

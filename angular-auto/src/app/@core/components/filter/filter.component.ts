@@ -90,7 +90,7 @@ export class FilterComponent implements OnInit {
   public listOfDescriptionsWithAmount: DescriptionWithAmount[] = [];
   public chargedBehalf = ['AJÁNDÉK', 'VEVŐ FIZETI'];
   public giftIndexList = [];
-  @ViewChild('focuser', {read: ElementRef, static: false})
+  @ViewChild('focuser', { read: ElementRef })
   public focuser: ElementRef;
   public nameOfBuyer;
   public tooLongFieldValue: string = '';

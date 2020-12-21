@@ -34,12 +34,12 @@
       <mat-label>Rendezés</mat-label>
       <mat-select [(ngModel)]="selectedOrganizer" name="organizer">
         <mat-select-trigger *ngIf="selectedOrganizer">
-          <fa *ngIf="selectedOrganizer.direction == direction.down" class="orderIcon" name="sort-alpha-up"></fa>
-          <fa *ngIf="selectedOrganizer.direction == direction.up" class="orderIcon" name="sort-alpha-down"></fa> &#160;{{selectedOrganizer.viewValue}}
+          <i *ngIf="selectedOrganizer.direction == direction.down" class="material-icons orderIcon">sort_by_alpha</i>
+          <i *ngIf="selectedOrganizer.direction == direction.up" class="material-icons orderIcon">sort_by_alpha</i> &#160;{{selectedOrganizer.viewValue}}
         </mat-select-trigger>
         <mat-option (click)="checkSelectedOrganizer()" *ngFor="let organizer of organizers; trackBy: trackByFn" [value]="organizer">
-          <fa *ngIf="organizer.direction == direction.up" class="orderIcon" name="sort-alpha-down"></fa>
-          <fa *ngIf="organizer.direction == direction.down" class="orderIcon" name="sort-alpha-up"></fa> &#160;{{organizer.viewValue}}
+          <i *ngIf="organizer.direction == direction.up" class="material-icons orderIcon">sort_by_alpha</i>
+          <i *ngIf="organizer.direction == direction.down" class="material-icons orderIcon">sort_by_alpha</i> &#160;{{organizer.viewValue}}
         </mat-option>
       </mat-select>
     </mat-form-field>
