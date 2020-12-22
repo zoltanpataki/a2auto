@@ -53,7 +53,6 @@ import { InstantBuyingDialogComponent } from './@core/dialog/instant-buying-dial
 import {CurrencyMaskModule} from "ng2-currency-mask";
 import { CommonModule } from '@angular/common';
 import { TransferHttpCacheModule } from '@nguniversal/common';
-import { NgtUniversalModule } from '@ng-toolkit/universal';
 
 @NgModule({
   declarations: [
@@ -109,7 +108,6 @@ import { NgtUniversalModule } from '@ng-toolkit/universal';
     CurrencyMaskModule,
     CommonModule,
     TransferHttpCacheModule,
-    NgtUniversalModule,
     MatIconModule
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },{ provide: 'isBrowser', useValue: true },],
