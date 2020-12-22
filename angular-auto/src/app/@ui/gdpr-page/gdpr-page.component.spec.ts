@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { GdprPageComponent } from './gdpr-page.component';
 
@@ -6,7 +6,7 @@ describe('GdprPageComponent', () => {
   let component: GdprPageComponent;
   let fixture: ComponentFixture<GdprPageComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ GdprPageComponent ]
     })

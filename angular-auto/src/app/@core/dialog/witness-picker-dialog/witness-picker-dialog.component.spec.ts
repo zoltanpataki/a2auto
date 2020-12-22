@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { WitnessPickerDialogComponent } from './witness-picker-dialog.component';
 
@@ -6,7 +6,7 @@ describe('WitnessPickerDialogComponent', () => {
   let component: WitnessPickerDialogComponent;
   let fixture: ComponentFixture<WitnessPickerDialogComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ WitnessPickerDialogComponent ]
     })
