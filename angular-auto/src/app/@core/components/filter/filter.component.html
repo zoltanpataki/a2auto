@@ -88,7 +88,7 @@
     <button mat-button>Keresés</button>
   </form>
 </div>
-<div class="selectedCars" *ngIf="selectedCars.length > 0">
+<div class="selectedCars" *ngIf="selectedCarsObs | async">
   <mat-accordion>
     <mat-card>
       <div class="selectedCarHeaders" fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
@@ -102,7 +102,7 @@
         <mat-panel-title fxFlex="5"></mat-panel-title>
       </div>
     </mat-card>
-    <mat-expansion-panel [disabled]="true" #mep="matExpansionPanel" [expanded]="i == clickedCarIndex" hideToggle *ngFor="let car of selectedCars; index as i; trackBy: trackByFn">
+    <mat-expansion-panel [disabled]="true" #mep="matExpansionPanel" [expanded]="i == clickedCarIndex" hideToggle *ngFor="let car of selectedCarsObs | async; index as i; trackBy: trackByFn">
       <mat-expansion-panel-header>
         <div fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
           <mat-panel-title fxFlex="15">

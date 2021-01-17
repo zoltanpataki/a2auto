@@ -121,3 +121,15 @@ export interface ICar {
   firstRegistration: Date;
   vehicleRegistrationCard: string;
 }
+
+export class CarFilterRequest {
+  formValue: string;
+  selectedFilterValue: string;
+  soldOrNot: string;
+
+  constructor(formValue: string, selectedFilterValue: string, soldOrNot: string) {
+    this.formValue = formValue;
+    this.selectedFilterValue = selectedFilterValue;
+    this.soldOrNot = soldOrNot;
+  }
+}

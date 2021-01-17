@@ -53,6 +53,12 @@ import { InstantBuyingDialogComponent } from './@core/dialog/instant-buying-dial
 import {CurrencyMaskModule} from "ng2-currency-mask";
 import { CommonModule } from '@angular/common';
 import { TransferHttpCacheModule } from '@nguniversal/common';
+import {StoreModule} from "@ngrx/store";
+import {appReducers} from "./@store/app.reducers";
+import {EffectsModule} from "@ngrx/effects";
+import {CarEffects} from "./@store/effects/car.effects";
+import {StoreRouterConnectingModule} from "@ngrx/router-store";
+import {StoreDevtoolsModule} from "@ngrx/store-devtools";
 
 @NgModule({
   declarations: [
@@ -105,6 +111,10 @@ import { TransferHttpCacheModule } from '@nguniversal/common';
     MatTooltipModule,
     NgxSpinnerModule,
     NgxsModule.forRoot([LoaderState], {developmentMode: !environment.production}),
+    StoreModule.forRoot(appReducers),
+    EffectsModule.forRoot([CarEffects]),
+    StoreRouterConnectingModule.forRoot({stateKey: 'router'}),
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
     CurrencyMaskModule,
     CommonModule,
     TransferHttpCacheModule,

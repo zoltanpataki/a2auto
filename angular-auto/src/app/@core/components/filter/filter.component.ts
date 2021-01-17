@@ -4,7 +4,7 @@ import {UtilService} from "../../services/util.service";
 import {SelectedFilter} from "../../models/selectedFilter";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {DialogComponent} from "../../dialog/dialog.component";
-import {Car} from "../../models/car";
+import {Car, CarFilterRequest, ICar} from "../../models/car";
 import {WarningDialogComponent} from "../../dialog/warning-dialog/warning-dialog.component";
 import {CreditDialogComponent} from "../../dialog/credit-dialog/credit-dialog.component";
 import {CountInCarSupplement} from "../../models/countInCarSupplement";
@@ -21,6 +21,12 @@ import {Witness} from "../../models/witness";
 import {WitnessPickerDialogComponent} from "../../dialog/witness-picker-dialog/witness-picker-dialog.component";
 import {DescriptionWithAmount} from "../../models/descriptionWithAmount";
 import {Direction, Organizer} from "../../models/organizer";
+import {IAppState} from "../../../@store/state/app.state";
+import {Store} from "@ngrx/store";
+import {select} from "@ngrx/store";
+import {selectCarList} from "../../../@store/selectors/car.selectors";
+import {GetCars, GetFilteredCars} from "../../../@store/actions/car.actions";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-filter',
@@ -44,6 +50,7 @@ export class FilterComponent implements OnInit {
   public companyFilters = [{viewValue: 'Név', value: 'name'}, {viewValue: 'Cégjegyzékszám', value: 'companyRegistrationNumber'}];
   public selectedCompanyFilter: SelectedFilter;
   public selectedCars = [];
+  public selectedCarsObs: Observable<ICar[]>;
   public selectedCarHeader = ['Márka', 'Modell', 'Rendszám', 'Vevő', 'Vásárlás dátuma'];
   public typeOfBuying = ['KÉSZPÉNZ', 'ÁTUTALÁS', 'HITEL'];
   public noMatch = false;
@@ -102,7 +109,8 @@ export class FilterComponent implements OnInit {
               private dialog: MatDialog,
               private formBuilder: FormBuilder,
               private changeDetectorRefs: ChangeDetectorRef,
-              public router: Router,) {
+              public router: Router,
+              private _store: Store<IAppState>,) {
     router.events
       .subscribe((event: NavigationEnd) => {
         if (event.url !== event.urlAfterRedirects && event.url !== '/filter') {
@@ -135,6 +143,11 @@ export class FilterComponent implements OnInit {
 
   // Prepare formGroups and get the necessary data from sessionStorage
   ngOnInit() {
+    this.selectedCarsObs = this._store.pipe(select(selectCarList));
+    this.selectedCarsObs.subscribe(data => {
+      console.log(data);
+    });
+
     if (this.utilService.witnesses == null) {
       this.httpService.getAllWitnesses().subscribe(data => {
         this.utilService.witnesses = data;
@@ -696,27 +709,29 @@ export class FilterComponent implements OnInit {
         if (this.selectedFilter.value !== 'all') {
           const soldOrNot = this.selectedFilter.value === 'sold';
           const selectedFilterValue = soldOrNot ? this.secondarySelectedFilter.value : this.selectedFilter.value;
-          this.httpService.getSingleCar(formValue, selectedFilterValue, soldOrNot.toString()).subscribe(data => {
-            if (!data) {
-              this.noMatch = true;
-            }
-            if (Array.isArray(data)) {
-              this.selectedCars = data;
-              sessionStorage.setItem('selectedCars', JSON.stringify(data));
-            } else {
-              this.selectedCars = [];
-              this.selectedCars.push(data);
-              sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
-            }
-          }, error => {
-            sessionStorage.clear();
-            this.selectedCars = [];
-            if (error.error.errorCode === '404') {
-              this.utilService.openSnackBar('Ilyen paraméterű autó nem található!', 'Hiba :(');
-            } else {
-              this.utilService.openSnackBar('Az adatbáziskapcsolat váratlanul megszakadt!', 'Hiba :(');
-            }
-          });
+          const carFilterRequest = new CarFilterRequest(formValue, selectedFilterValue, soldOrNot.toString());
+          this._store.dispatch(new GetFilteredCars(carFilterRequest));
+          // this.httpService.getSingleCar(formValue, selectedFilterValue, soldOrNot.toString()).subscribe(data => {
+          //   if (!data) {
+          //     this.noMatch = true;
+          //   }
+          //   if (Array.isArray(data)) {
+          //     this.selectedCars = data;
+          //     sessionStorage.setItem('selectedCars', JSON.stringify(data));
+          //   } else {
+          //     this.selectedCars = [];
+          //     this.selectedCars.push(data);
+          //     sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
+          //   }
+          // }, error => {
+          //   sessionStorage.clear();
+          //   this.selectedCars = [];
+          //   if (error.error.errorCode === '404') {
+          //     this.utilService.openSnackBar('Ilyen paraméterű autó nem található!', 'Hiba :(');
+          //   } else {
+          //     this.utilService.openSnackBar('Az adatbáziskapcsolat váratlanul megszakadt!', 'Hiba :(');
+          //   }
+          // });
         } else {
           this.httpService.getAllCars(false).subscribe(data => {
             this.selectedCars = data;
@@ -735,10 +750,11 @@ export class FilterComponent implements OnInit {
     this.selectedOrganizer = null;
     sessionStorage.removeItem('clickerCarIndex');
     this.clearSelectedCars();
-    this.httpService.getAllCars(isSold).subscribe(data => {
-      this.selectedCars = data;
-      sessionStorage.setItem('selectedCars', JSON.stringify(data));
-    });
+    this._store.dispatch(new GetCars(isSold));
+    // this.httpService.getAllCars(isSold).subscribe(data => {
+    //   this.selectedCars = data;
+    //   sessionStorage.setItem('selectedCars', JSON.stringify(data));
+    // });
   }
 
   // This is the modal section.

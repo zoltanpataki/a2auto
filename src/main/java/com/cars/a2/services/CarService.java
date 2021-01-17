@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,7 +76,7 @@ public class CarService {
                         if (!soldCar.isPresent()) {
                             throw new EntityNotFoundException("Car is not found by plate number!");
                         } else {
-                            return new ResponseEntity<>(soldCar, HttpStatus.OK);
+                            return new ResponseEntity<>(Collections.singletonList(soldCar), HttpStatus.OK);
                         }
                     } catch (Exception e) {
                         throw new EntityNotFoundException("Car is not found by plate number!");
@@ -86,7 +87,7 @@ public class CarService {
                         if (!activeCar.isPresent()) {
                             throw new EntityNotFoundException("Car is not found by plate number!");
                         } else {
-                            return new ResponseEntity<>(activeCar, HttpStatus.OK);
+                            return new ResponseEntity<>(Collections.singletonList(activeCar), HttpStatus.OK);
                         }
                     } catch (Exception e) {
                         throw new EntityNotFoundException("Car is not found by plate number!");

@@ -12,6 +12,12 @@ export const carReducers = (
         cars: action.payload
       };
     }
+    case ECarActions.GetFilteredCarsSuccess: {
+      return {
+        ...state,
+        cars: action.payload
+      }
+    }
     default:
       return state;
   }
