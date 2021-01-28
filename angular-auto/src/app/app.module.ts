@@ -53,12 +53,25 @@ import { InstantBuyingDialogComponent } from './@core/dialog/instant-buying-dial
 import {CurrencyMaskModule} from "ng2-currency-mask";
 import { CommonModule } from '@angular/common';
 import { TransferHttpCacheModule } from '@nguniversal/common';
-import {StoreModule} from "@ngrx/store";
+import {ActionReducer, MetaReducer, StoreModule} from "@ngrx/store";
 import {appReducers} from "./@store/app.reducers";
 import {EffectsModule} from "@ngrx/effects";
 import {CarEffects} from "./@store/effects/car.effects";
 import {StoreRouterConnectingModule} from "@ngrx/router-store";
 import {StoreDevtoolsModule} from "@ngrx/store-devtools";
+import {hydrationMetaReducer} from "./@store/reducers/hydration.reducer";
+
+// console.log all actions
+export function debug(reducer: ActionReducer<any>): ActionReducer<any> {
+  return function(state, action) {
+    console.log('state', state);
+    console.log('action', action);
+
+    return reducer(state, action);
+  };
+}
+
+export const metaReducers: MetaReducer<any>[] = [hydrationMetaReducer];
 
 @NgModule({
   declarations: [
@@ -111,7 +124,7 @@ import {StoreDevtoolsModule} from "@ngrx/store-devtools";
     MatTooltipModule,
     NgxSpinnerModule,
     NgxsModule.forRoot([LoaderState], {developmentMode: !environment.production}),
-    StoreModule.forRoot(appReducers),
+    StoreModule.forRoot(appReducers, {metaReducers}),
     EffectsModule.forRoot([CarEffects]),
     StoreRouterConnectingModule.forRoot({stateKey: 'router'}),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
