@@ -51,4 +51,9 @@ public class CarsControllerImpl implements CarsController {
     public ResponseEntity<Object> deleteCar(long id) {
         return carService.deleteCar(id);
     }
+
+    @Override
+    public ResponseEntity<Object> getNotSoldCarsId() {
+        return carService.getListOfNotSoldCarsId();
+    }
 }

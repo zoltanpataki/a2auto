@@ -38,4 +38,9 @@ public class OrderControllerImpl implements OrderController {
     public ResponseEntity<Object> deleteOrder(Long id) {
         return orderService.deleteOrder(id);
     }
+
+    @Override
+    public ResponseEntity<Object> getAllOrders() {
+        return orderService.getAllOrders();
+    }
 }

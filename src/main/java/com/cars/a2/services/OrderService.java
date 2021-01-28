@@ -1,5 +1,6 @@
 package com.cars.a2.services;
 
+import com.cars.a2.exceptions.ConnectionTemporarilyLostException;
 import com.cars.a2.exceptions.EntityFailedToSaveException;
 import com.cars.a2.exceptions.EntityNotFoundException;
 import com.cars.a2.models.Orders;
@@ -10,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class OrderService {
 
@@ -19,6 +22,17 @@ public class OrderService {
 
     public OrderService(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
+    }
+
+    public ResponseEntity<Object> getAllOrders() {
+        try {
+            List<Orders> orders = orderRepository.findAll();
+            return new ResponseEntity<>(orders, HttpStatus.OK);
+
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+            throw new ConnectionTemporarilyLostException("Couldn't get all orders at the moment!");
+        }
     }
 
     public ResponseEntity<Object> saveNewOrder(Orders orders) {

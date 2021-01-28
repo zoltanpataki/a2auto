@@ -18,4 +18,7 @@ public interface OrderController {
 
     @DeleteMapping("/deleteOrder/{id}")
     ResponseEntity<Object> deleteOrder(@PathVariable Long id);
+
+    @GetMapping("/getAllOrders")
+    ResponseEntity<Object> getAllOrders();
 }

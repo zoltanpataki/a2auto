@@ -25,4 +25,7 @@ public interface CarsController {
 
     @DeleteMapping("/deleteCar/{id}")
     ResponseEntity<Object> deleteCar(@PathVariable long id);
+
+    @GetMapping("/getNotSoldCarsId")
+    ResponseEntity<Object> getNotSoldCarsId();
 }

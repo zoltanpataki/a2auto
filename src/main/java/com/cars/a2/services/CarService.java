@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +39,23 @@ public class CarService {
             } else {
                 throw new EntityFailedToSaveException("New car couldn't be saved!");
             }
+        }
+    }
+
+    public ResponseEntity<Object> getListOfNotSoldCarsId() {
+        try {
+            Optional<List<Car>> notSoldCars = carRepository.findBySoldOrderByIdDesc(false);
+            List<Long> carIds = new ArrayList<>();
+            if (notSoldCars.isPresent()) {
+                List<Car> cars = notSoldCars.get();
+                cars.forEach(car -> {
+                    carIds.add(car.getId());
+                });
+            }
+            return new ResponseEntity<>(carIds, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+            throw new ConnectionTemporarilyLostException("Couldn't get car ids");
         }
     }
 

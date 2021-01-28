@@ -28,6 +28,9 @@
     <div class="databaseIcon">
       <i class="material-icons allCars soldCars" (click)="getAllCars(true)" matTooltip="Összes eladott autó betöltése">time_to_leave</i>
     </div>
+    <div class="databaseIcon">
+      <i class="material-icons inDebtCars soldCars" (click)="getCarsInDebt()" matTooltip="Kiegyenlítésre váró eladások">time_to_leave</i>
+    </div>
   </div>
   <div *ngIf="selectedCars && selectedCars.length > 0">
     <mat-form-field>
@@ -92,47 +95,53 @@
   <mat-accordion>
     <mat-card>
       <div class="selectedCarHeaders" fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
-        <mat-panel-title fxFlex="15" *ngFor="let header of selectedCarHeader; trackBy: trackByFn">
+        <mat-panel-title fxFlex="13" *ngFor="let header of selectedCarHeader; trackBy: trackByFn">
           <strong>{{header}}</strong>
         </mat-panel-title>
-        <mat-panel-title fxFlex="5"></mat-panel-title>
-        <mat-panel-title fxFlex="5"></mat-panel-title>
-        <mat-panel-title fxFlex="5"></mat-panel-title>
-        <mat-panel-title fxFlex="5"></mat-panel-title>
-        <mat-panel-title fxFlex="5"></mat-panel-title>
+        <mat-panel-title *ngIf="utilService.debtList" class="inDebtColor" fxFlex="13">
+          <strong>Tartozás</strong>
+        </mat-panel-title>
+        <mat-panel-title fxFlex="4"></mat-panel-title>
+        <mat-panel-title fxFlex="4"></mat-panel-title>
+        <mat-panel-title fxFlex="4"></mat-panel-title>
+        <mat-panel-title fxFlex="4"></mat-panel-title>
+        <mat-panel-title fxFlex="4"></mat-panel-title>
       </div>
     </mat-card>
     <mat-expansion-panel [disabled]="true" #mep="matExpansionPanel" [expanded]="i == clickedCarIndex" hideToggle *ngFor="let car of selectedCars; index as i; trackBy: trackByFn">
       <mat-expansion-panel-header>
         <div fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
-          <mat-panel-title fxFlex="15">
+          <mat-panel-title fxFlex="13">
             {{car.type}}
           </mat-panel-title>
-          <mat-panel-title fxFlex="15">
+          <mat-panel-title fxFlex="13">
             {{car.name}}
           </mat-panel-title>
-          <mat-panel-title fxFlex="15">
+          <mat-panel-title fxFlex="13">
             {{car.plateNumber}}
           </mat-panel-title>
-          <mat-panel-title fxFlex="15">
+          <mat-panel-title fxFlex="13">
             {{car.nameOfBuyer}}
           </mat-panel-title>
-          <mat-panel-title fxFlex="15">
+          <mat-panel-title fxFlex="13">
             {{car.dateOfLeaving | date:'yyyy-MM-dd'}}
           </mat-panel-title>
-          <mat-panel-title class="trophyIcon" fxFlex="5">
+          <mat-panel-title *ngIf="utilService.debtList" class="inDebtColor" fxFlex="13">
+            {{car.dateOfLeaving | date:'yyyy-MM-dd'}}
+          </mat-panel-title>
+          <mat-panel-title class="trophyIcon" fxFlex="4">
             <i *ngIf="car.sold" class="material-icons trophy" (click)="navigateToOrderPage(car)" matTooltip="Eladott autó">emoji_events</i>
           </mat-panel-title>
-          <mat-panel-title class="buyButton" fxFlex="5">
+          <mat-panel-title class="buyButton" fxFlex="4">
             <i class="material-icons" (click)="navigateToBlankOrderPage(car)" matTooltip="Üres megrendelőlap az autóhoz">spellcheck</i>
           </mat-panel-title>
-          <mat-panel-title class="buyButton" fxFlex="5">
+          <mat-panel-title class="buyButton" fxFlex="4">
             <i class="material-icons edit" (click)="openUpdateModal(car, i)" matTooltip="Autó szerkesztése">edit</i>
           </mat-panel-title>
-          <mat-panel-title class="buyButton" fxFlex="5">
+          <mat-panel-title class="buyButton" fxFlex="4">
             <i class="material-icons money" (click)="setAlreadyOrNewCustomerSelectorAndCarOfTransaction(car, i)" matTooltip="Autó megvásárlása">shopping_cart</i>
           </mat-panel-title>
-          <mat-panel-title class="buyButton" fxFlex="5">
+          <mat-panel-title class="buyButton" fxFlex="4">
             <i class="material-icons delete" (click)="openWarningModal(car.id)" matTooltip="Autó végleges törlése">clear</i>
           </mat-panel-title>
         </div>

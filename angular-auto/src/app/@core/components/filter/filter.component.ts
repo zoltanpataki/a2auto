@@ -32,16 +32,42 @@ export class FilterComponent implements OnInit {
   public get direction(): typeof Direction {
     return Direction;
   }
+
   public countInCarSupplementForm: FormGroup;
-  public filters = [{viewValue: 'Modell', value: 'name'}, {viewValue: 'Rendszám', value: 'plateNumber'}, {viewValue: 'Márka', value: 'type'}, {viewValue: 'Összes', value: 'all'}, {viewValue: 'Eladott', value: 'sold'}];
-  public organizers = [{viewValue: 'Márka', value: 'type', direction: Direction.up}, {viewValue: 'Márka', value: 'type', direction: Direction.down}, {viewValue: 'Vásárló', value: 'buyer', direction: Direction.up}, {viewValue: 'Vásárló', value: 'buyer', direction: Direction.down}, {viewValue: 'Modell', value: 'name', direction: Direction.up}, {viewValue: 'Modell', value: 'name', direction: Direction.down}, {viewValue: 'Rendszám', value: 'plateNumber', direction: Direction.up}, {viewValue: 'Rendszám', value: 'plateNumber', direction: Direction.down}];
-  public secondaryFilters = [{viewValue: 'Modell', value: 'name'}, {viewValue: 'Rendszám', value: 'plateNumber'}, {viewValue: 'Márka', value: 'type'}];
+  public filters = [{viewValue: 'Modell', value: 'name'}, {
+    viewValue: 'Rendszám',
+    value: 'plateNumber'
+  }, {viewValue: 'Márka', value: 'type'}, {viewValue: 'Összes', value: 'all'}, {viewValue: 'Eladott', value: 'sold'}];
+  public organizers = [{viewValue: 'Márka', value: 'type', direction: Direction.up}, {
+    viewValue: 'Márka',
+    value: 'type',
+    direction: Direction.down
+  }, {viewValue: 'Vásárló', value: 'buyer', direction: Direction.up}, {
+    viewValue: 'Vásárló',
+    value: 'buyer',
+    direction: Direction.down
+  }, {viewValue: 'Modell', value: 'name', direction: Direction.up}, {
+    viewValue: 'Modell',
+    value: 'name',
+    direction: Direction.down
+  }, {viewValue: 'Rendszám', value: 'plateNumber', direction: Direction.up}, {
+    viewValue: 'Rendszám',
+    value: 'plateNumber',
+    direction: Direction.down
+  }];
+  public secondaryFilters = [{viewValue: 'Modell', value: 'name'}, {
+    viewValue: 'Rendszám',
+    value: 'plateNumber'
+  }, {viewValue: 'Márka', value: 'type'}];
   public userFilters = [{viewValue: 'Név', value: 'name'}, {viewValue: 'Város', value: 'city'}];
   public selectedFilter: SelectedFilter;
   public selectedOrganizer: Organizer;
   public secondarySelectedFilter: SelectedFilter;
   public selectedUserFilter: SelectedFilter;
-  public companyFilters = [{viewValue: 'Név', value: 'name'}, {viewValue: 'Cégjegyzékszám', value: 'companyRegistrationNumber'}];
+  public companyFilters = [{viewValue: 'Név', value: 'name'}, {
+    viewValue: 'Cégjegyzékszám',
+    value: 'companyRegistrationNumber'
+  }];
   public selectedCompanyFilter: SelectedFilter;
   public selectedCars = [];
   public selectedCarHeader = ['Márka', 'Modell', 'Rendszám', 'Vevő', 'Vásárlás dátuma'];
@@ -90,7 +116,7 @@ export class FilterComponent implements OnInit {
   public listOfDescriptionsWithAmount: DescriptionWithAmount[] = [];
   public chargedBehalf = ['AJÁNDÉK', 'VEVŐ FIZETI'];
   public giftIndexList = [];
-  @ViewChild('focuser', { read: ElementRef })
+  @ViewChild('focuser', {read: ElementRef})
   public focuser: ElementRef;
   public nameOfBuyer;
   public tooLongFieldValue: string = '';
@@ -596,7 +622,7 @@ export class FilterComponent implements OnInit {
   }
 
   private sortSelectedCars(selectedCars: Car[], sortBy: string, direction: Direction) {
-    selectedCars.sort(function(a, b) {
+    selectedCars.sort(function (a, b) {
       switch (sortBy) {
         case 'type':
           const typeA = a.type;
@@ -659,11 +685,12 @@ export class FilterComponent implements OnInit {
   // The getAllCars method gets called in the same service
 
   public filterCars(form: any) {
+    this.utilService.switchOffDebtList();
     this.selectedOrganizer = null;
     if (this.validateFormFieldLength(form.value)) {
       this.clearSelectedCars();
       if (form.value.plateNumber
-        && form.value.plateNumber.length < 6 ) {
+        && form.value.plateNumber.length < 6) {
         this.utilService.validPlateNumber = false;
         this.utilService.emptySearchField = false;
       } else if (this.selectedFilter.value === 'name' && form.value.name != null && form.value.name.length === 0
@@ -731,6 +758,7 @@ export class FilterComponent implements OnInit {
   // The only parameter it gets is allOrSold with the value of 'all'.
 
   public getAllCars(isSold: boolean) {
+    this.utilService.switchOffDebtList();
     this.clickedCarIndex = null;
     this.selectedOrganizer = null;
     sessionStorage.removeItem('clickerCarIndex');
@@ -1060,7 +1088,7 @@ export class FilterComponent implements OnInit {
   // The second parameter is a boolean which can say whether a checkbox's click event was true or false =>
   // (the box is filled or not).
 
-  public selectBetweenNewAndPreviousCustomer(previousOrNew: string, selection:boolean) {
+  public selectBetweenNewAndPreviousCustomer(previousOrNew: string, selection: boolean) {
     this.changeCheckBoxValuesToNull();
     if (previousOrNew === 'previous') {
       this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = !selection;
@@ -1188,7 +1216,7 @@ export class FilterComponent implements OnInit {
   // It has only one parameter which is the car itself.
   // Calls the http.service.ts's getUtility, getChargeForInheritanceTax methods to retrieve relevant data form the db.
 
-  private countInheritanceTax (car: Car) {
+  private countInheritanceTax(car: Car) {
     const carAge = (new Date()).getFullYear() - car.vintage;
     let stringKw = null;
     let stringAge = null;
@@ -1255,7 +1283,7 @@ export class FilterComponent implements OnInit {
     if (index !== this.clickedCarIndex) {
       this.carOfTransaction = car;
       this.httpService.getOrder(car.id).subscribe(data => {
-        this.newOrder = <Order> data;
+        this.newOrder = <Order>data;
         this.setAllOrderDataAfterHttpCall(this.newOrder, car);
         sessionStorage.setItem('order', JSON.stringify(this.newOrder));
       }, error => {
@@ -1557,7 +1585,7 @@ export class FilterComponent implements OnInit {
   // After the backend call the prepareNavigationToOrderPageOrSellingPageOrWarrantPageOrInsurancePage method
   // gets called with the returned value.
 
-  public navigateToOrderOrSellingOrWarrantOrInsurancePage(car: Car, orderedCarId: number, targetRoute: string,  witness1: Witness, witness2: Witness, warrantType: string, a2Representation: string, descriptionForm: FormGroup, countInCarSupplementForm: FormGroup, pickedTypeOfBuyingForCountInCar: string) {
+  public navigateToOrderOrSellingOrWarrantOrInsurancePage(car: Car, orderedCarId: number, targetRoute: string, witness1: Witness, witness2: Witness, warrantType: string, a2Representation: string, descriptionForm: FormGroup, countInCarSupplementForm: FormGroup, pickedTypeOfBuyingForCountInCar: string) {
     if (this.downPayment != null) {
       car.downPayment = this.downPayment;
       this.updateCarOfTransaction(car);
@@ -1566,13 +1594,13 @@ export class FilterComponent implements OnInit {
     this.saveCountInCarSupplement(countInCarSupplementForm);
     let userForOrder;
     let companyForOrder;
-    if (this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready && this.newUser !=null) {
+    if (this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready && this.newUser != null) {
       userForOrder = this.newUser;
-    } else if (this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready && this.newCompany !=null) {
+    } else if (this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready && this.newCompany != null) {
       companyForOrder = this.newCompany;
-    } else if (!this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready && this.pickedUser !=null) {
+    } else if (!this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready && this.pickedUser != null) {
       userForOrder = this.pickedUser;
-    } else if (!this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready && this.pickedCompany !=null) {
+    } else if (!this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready && this.pickedCompany != null) {
       companyForOrder = this.pickedCompany;
     }
     const countInCarId = this.countInCar != null ? this.countInCar.id : null;
@@ -1615,7 +1643,7 @@ export class FilterComponent implements OnInit {
       this.newOrder.description = this.descriptionList;
       this.newOrder.descriptionsWithAmount = this.listOfDescriptionsWithAmount;
       this.httpService.updateOrder(this.newOrder).subscribe(order => {
-        this.prepareNavigationToOrderPageOrSellingPageOrWarrantPageOrInsurancePage(<Order> order, car, witness1, witness2, targetRoute, warrantType, a2Representation, pickedTypeOfBuyingForCountInCar);
+        this.prepareNavigationToOrderPageOrSellingPageOrWarrantPageOrInsurancePage(<Order>order, car, witness1, witness2, targetRoute, warrantType, a2Representation, pickedTypeOfBuyingForCountInCar);
       });
     }
   }
@@ -1626,7 +1654,9 @@ export class FilterComponent implements OnInit {
     if ('/orderPage' !== orderOrSellingOrWarrant && this.creditNeedsToBeRecalculated || !this.creditNeedsToBeRecalculated) {
       sessionStorage.setItem('order', JSON.stringify(this.newOrder));
       sessionStorage.setItem('orderedCar', JSON.stringify(car));
-      this.router.navigate([orderOrSellingOrWarrant], {state: {data: {
+      this.router.navigate([orderOrSellingOrWarrant], {
+        state: {
+          data: {
             order: order,
             orderedCar: car,
             clickedCarIndex: this.clickedCarIndex,
@@ -1643,7 +1673,9 @@ export class FilterComponent implements OnInit {
             a2Representation: a2Representation,
             typeOfBuying: pickedTypeOfBuyingForCountInCar,
             nameOfBuyer: this.nameOfBuyer,
-          }}});
+          }
+        }
+      });
     }
   }
 
@@ -1657,10 +1689,14 @@ export class FilterComponent implements OnInit {
   // Navigates to blank order page for the clicked car.
 
   public navigateToBlankOrderPage(car: Car) {
-    this.router.navigate(['/orderPage'], {state: {blankData: {
+    this.router.navigate(['/orderPage'], {
+      state: {
+        blankData: {
           orderedCar: car,
           blankPage: true
-        }}});
+        }
+      }
+    });
   }
 
   // Navigates to insurance page
@@ -1678,7 +1714,9 @@ export class FilterComponent implements OnInit {
   // This is a technical method, it collects data from form array.
   // It is used to collect descriptions.
 
-  get formData() {return <FormArray>this.descriptionForm.get('description');}
+  get formData() {
+    return <FormArray>this.descriptionForm.get('description');
+  }
 
   // Validates the length of the form fields
 
@@ -1697,18 +1735,30 @@ export class FilterComponent implements OnInit {
   public navigateToOrderPage(car: Car) {
     this.setDataToNull();
     this.httpService.getOrder(car.id).subscribe(data => {
-      this.router.navigate(['/orderPage'], {state: {data: {
+      this.router.navigate(['/orderPage'], {
+        state: {
+          data: {
             order: data,
             orderedCar: car,
             pickedUser: data.users,
             pickedCompany: data.company,
             trophyClick: true
-          }}});
+          }
+        }
+      });
     }, error => {
       if (error.error.errorCode === '404') {
         this.utilService.openSnackBar('Ehhez az autóhoz még nincs rendelés!', ':(');
       }
     });
   }
-}
 
+  // filters cars which needs extra payment in order to become fully paid and could be released
+  // to achieve that the order and the car data is necessary
+  // then it can be computed whether the car in debt or not
+
+  public getCarsInDebt() {
+    this.utilService.switchOnDebtList();
+    console.log(this.utilService.debtList);
+  }
+}

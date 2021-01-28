@@ -15,6 +15,7 @@ export class UtilService {
   public a2Company: Company;
   public salesmen: Salesmen[];
   public witnesses: Witness[];
+  public debtList: boolean = false;
 
   constructor(private _snackBar: MatSnackBar,) { }
 
@@ -64,6 +65,14 @@ export class UtilService {
 
   public createBlankWitnessToUtilServiceWitnessList(): Witness {
     return new Witness(null, null, null, 'Egyik sem');
+  }
+
+  public switchOffDebtList() {
+    this.debtList = false;
+  }
+
+  public switchOnDebtList() {
+    this.debtList = true;
   }
 
 }
