@@ -24,8 +24,8 @@ import {Direction, Organizer} from "../../models/organizer";
 import {IAppState} from "../../../@store/state/app.state";
 import {Store} from "@ngrx/store";
 import {select} from "@ngrx/store";
-import {selectCarList} from "../../../@store/selectors/car.selectors";
-import {GetCars, GetFilteredCars} from "../../../@store/actions/car.actions";
+import {selectCarError, selectCarList} from "../../../@store/selectors/car.selectors";
+import {GetCars, GetCarsSuccess, GetFilteredCars} from "../../../@store/actions/car.actions";
 import {Observable} from "rxjs";
 
 @Component({
@@ -51,6 +51,7 @@ export class FilterComponent implements OnInit {
   public selectedCompanyFilter: SelectedFilter;
   public selectedCars = [];
   public selectedCarsObs: Observable<ICar[]>;
+  public carErrorObs: Observable<string>;
   public selectedCarHeader = ['Márka', 'Modell', 'Rendszám', 'Vevő', 'Vásárlás dátuma'];
   public typeOfBuying = ['KÉSZPÉNZ', 'ÁTUTALÁS', 'HITEL'];
   public noMatch = false;
@@ -143,10 +144,10 @@ export class FilterComponent implements OnInit {
 
   // Prepare formGroups and get the necessary data from sessionStorage
   ngOnInit() {
-    this.selectedCarsObs = this._store.pipe(select(selectCarList));
-    this.selectedCarsObs.subscribe(data => {
-      console.log(data);
-    });
+    if (sessionStorage.getItem('selectedCars')) {
+      this.selectedCars = JSON.parse(sessionStorage.getItem('selectedCars'));
+      this._store.dispatch(new GetCarsSuccess(this.selectedCars));
+    }
 
     if (this.utilService.witnesses == null) {
       this.httpService.getAllWitnesses().subscribe(data => {
@@ -158,9 +159,6 @@ export class FilterComponent implements OnInit {
       this.httpService.getAllSalesmen().subscribe(data => {
         this.utilService.salesmen = data;
       });
-    }
-    if (sessionStorage.getItem('selectedCars')) {
-      this.selectedCars = JSON.parse(sessionStorage.getItem('selectedCars'));
     }
     if (sessionStorage.getItem('clickedCarIndex')) {
       this.clickedCarIndex = Number(sessionStorage.getItem('clickedCarIndex'));
@@ -197,6 +195,20 @@ export class FilterComponent implements OnInit {
       this.createDownPaymentFormWithData(this.downPayment, this.extra);
     }
     this.changeDetectorRefs.detectChanges();
+
+    this.selectedCarsObs = this._store.pipe(select(selectCarList));
+    this.carErrorObs = this._store.pipe(select(selectCarError));
+
+    this.selectedCarsObs.subscribe(selectedCars => {
+      sessionStorage.setItem('selectedCars', JSON.stringify(selectedCars));
+    });
+
+    this.carErrorObs.subscribe(errorMsg => {
+      if (null !== errorMsg) {
+        const action = 'Hiba :('
+        this.utilService.openSnackBar(errorMsg, action);
+      }
+    });
   }
 
   // Retrieve all the data after refresh
@@ -733,10 +745,11 @@ export class FilterComponent implements OnInit {
           //   }
           // });
         } else {
-          this.httpService.getAllCars(false).subscribe(data => {
-            this.selectedCars = data;
-            sessionStorage.setItem('selectedCars', JSON.stringify(data));
-          });
+          this.getAllCars(false);
+          // this.httpService.getAllCars(false).subscribe(data => {
+          //   this.selectedCars = data;
+          //   sessionStorage.setItem('selectedCars', JSON.stringify(data));
+          // });
         }
       }
     }
@@ -751,10 +764,6 @@ export class FilterComponent implements OnInit {
     sessionStorage.removeItem('clickerCarIndex');
     this.clearSelectedCars();
     this._store.dispatch(new GetCars(isSold));
-    // this.httpService.getAllCars(isSold).subscribe(data => {
-    //   this.selectedCars = data;
-    //   sessionStorage.setItem('selectedCars', JSON.stringify(data));
-    // });
   }
 
   // This is the modal section.

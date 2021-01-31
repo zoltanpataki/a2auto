@@ -59,7 +59,6 @@ import {EffectsModule} from "@ngrx/effects";
 import {CarEffects} from "./@store/effects/car.effects";
 import {StoreRouterConnectingModule} from "@ngrx/router-store";
 import {StoreDevtoolsModule} from "@ngrx/store-devtools";
-import {hydrationMetaReducer} from "./@store/reducers/hydration.reducer";
 
 // console.log all actions
 export function debug(reducer: ActionReducer<any>): ActionReducer<any> {
@@ -71,7 +70,7 @@ export function debug(reducer: ActionReducer<any>): ActionReducer<any> {
   };
 }
 
-export const metaReducers: MetaReducer<any>[] = [hydrationMetaReducer];
+export const metaReducers: MetaReducer<any>[] = [];
 
 @NgModule({
   declarations: [

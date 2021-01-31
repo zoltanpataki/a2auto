@@ -8,3 +8,8 @@ export const selectCarList = createSelector(
   selectCars,
   (state: ICarState) => state.cars
 );
+
+export const selectCarError = createSelector(
+  selectCars,
+  (state: ICarState) => state.error
+);

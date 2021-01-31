@@ -3,8 +3,15 @@ import {Actions, Effect, ofType} from "@ngrx/effects";
 import {HttpService} from "../../@core/services/http.service";
 import {IAppState} from "../state/app.state";
 import {Store} from "@ngrx/store";
-import {ECarActions, GetCars, GetCarsSuccess, GetFilteredCars, GetFilteredCarsSuccess} from "../actions/car.actions";
-import {map, switchMap} from "rxjs/operators";
+import {
+  ECarActions,
+  GetCars,
+  GetCarsSuccess,
+  GetFilteredCars,
+  GetFilteredCarsError,
+  GetFilteredCarsSuccess
+} from "../actions/car.actions";
+import {catchError, map, switchMap} from "rxjs/operators";
 import {of} from "rxjs";
 
 @Injectable()
@@ -26,10 +33,19 @@ export class CarEffects {
     switchMap(carFilterRequest => this._httpService.getSingleCar(
       carFilterRequest.formValue,
       carFilterRequest.selectedFilterValue,
-      carFilterRequest.soldOrNot)),
-    switchMap(cars => {
-      return of(new GetFilteredCarsSuccess(cars));
-    })
+      carFilterRequest.soldOrNot)
+      .pipe(
+        switchMap(cars => {
+          return of(new GetFilteredCarsSuccess(cars));
+        }),
+        catchError((error) => {
+          if (error.error.errorCode === '404') {
+            return of(new GetFilteredCarsError('Ilyen paraméterű autó nem található!'));
+          } else {
+            return of(new GetFilteredCarsError('Az adatbáziskapcsolat váratlanul megszakadt!'));
+          }
+        })
+      ))
   );
 
   constructor(

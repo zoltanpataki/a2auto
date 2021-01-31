@@ -9,13 +9,22 @@ export const carReducers = (
     case ECarActions.GetCarsSuccess: {
       return {
         ...state,
-        cars: action.payload
+        cars: action.payload,
+        error: null
       };
     }
     case ECarActions.GetFilteredCarsSuccess: {
       return {
         ...state,
-        cars: action.payload
+        cars: action.payload,
+        error: null
+      }
+    }
+    case ECarActions.GetFilteredCarsError: {
+      return {
+        ...state,
+        cars: null,
+        error: action.payload
       }
     }
     default:
