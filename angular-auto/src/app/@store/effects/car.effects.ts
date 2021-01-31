@@ -23,6 +23,9 @@ export class CarEffects {
     switchMap(isSold => this._httpService.getAllCars(isSold)),
     switchMap(cars => {
       return of(new GetCarsSuccess(cars));
+    }), 
+    catchError((error) => {
+      return of(new GetFilteredCarsError('Az adatbáziskapcsolat váratlanul megszakadt!'));
     })
   );
 
