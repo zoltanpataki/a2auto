@@ -4,7 +4,7 @@ import {UtilService} from "../../services/util.service";
 import {SelectedFilter} from "../../models/selectedFilter";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {DialogComponent} from "../../dialog/dialog.component";
-import {Car, CarFilterRequest, ICar} from "../../models/car";
+import {Car, CarFilterRequest, CarUpdateModel, ICar} from "../../models/car";
 import {WarningDialogComponent} from "../../dialog/warning-dialog/warning-dialog.component";
 import {CreditDialogComponent} from "../../dialog/credit-dialog/credit-dialog.component";
 import {CountInCarSupplement} from "../../models/countInCarSupplement";
@@ -25,7 +25,7 @@ import {IAppState} from "../../../@store/state/app.state";
 import {Store} from "@ngrx/store";
 import {select} from "@ngrx/store";
 import {selectCarError, selectCarList} from "../../../@store/selectors/car.selectors";
-import {GetCars, GetCarsSuccess, GetFilteredCars} from "../../../@store/actions/car.actions";
+import {GetCars, GetCarsSuccess, GetFilteredCars, StoreNameOfBuyer} from "../../../@store/actions/car.actions";
 import {Observable} from "rxjs";
 
 @Component({
@@ -200,6 +200,7 @@ export class FilterComponent implements OnInit {
     this.carErrorObs = this._store.pipe(select(selectCarError));
 
     this.selectedCarsObs.subscribe(selectedCars => {
+      console.log(selectedCars);
       sessionStorage.setItem('selectedCars', JSON.stringify(selectedCars));
     });
 
@@ -1008,7 +1009,9 @@ export class FilterComponent implements OnInit {
       pickedUserFromDataTable.nationality);
     sessionStorage.setItem('pickedUser', JSON.stringify(this.pickedUser));
     sessionStorage.setItem('indexOfPickedUser', this.indexOfPickedUser.toString());
-    this.carOfTransaction.nameOfBuyer = this.pickedUser.fullName;
+    //this.carOfTransaction.nameOfBuyer = this.pickedUser.fullName;
+    const carUpdateRequest = new CarUpdateModel(this.pickedUser.fullName, null, this.clickedCarIndex);
+    this._store.dispatch(new StoreNameOfBuyer(carUpdateRequest));
     this.nameOfBuyer = this.pickedUser.fullName;
     sessionStorage.setItem('nameOfBuyer', this.nameOfBuyer);
     this.updateCarOfTransaction(this.carOfTransaction);
@@ -1477,8 +1480,8 @@ export class FilterComponent implements OnInit {
     this.httpService.updateCar(car).subscribe(data => {
       if (this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer) {
         this.carOfTransaction = data;
-        this.selectedCars[this.clickedCarIndex] = data;
-        sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
+        // this.selectedCars[this.clickedCarIndex] = data;
+        // sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
       } else {
         this.countInCar = data;
         sessionStorage.setItem('countInCar', JSON.stringify(this.countInCar));

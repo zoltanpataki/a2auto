@@ -1,8 +1,8 @@
-import {ICar} from "../../@core/models/car";
+import {Car, ICar} from "../../@core/models/car";
 
 export interface ICarState {
-  cars: ICar[];
-  pickedCar: ICar;
+  cars: Car[];
+  pickedCar: Car;
   error: string;
 }
 

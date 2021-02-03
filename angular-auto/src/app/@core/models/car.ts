@@ -133,3 +133,15 @@ export class CarFilterRequest {
     this.soldOrNot = soldOrNot;
   }
 }
+
+export class CarUpdateModel {
+  nameOfBuyer: string;
+  salesman: string;
+  clickedCarIndex: number;
+
+  constructor(nameOfBuyer: string, salesman: string, clickedCarIndex: number) {
+    this.nameOfBuyer = nameOfBuyer;
+    this.salesman = salesman;
+    this.clickedCarIndex = clickedCarIndex;
+  }
+}

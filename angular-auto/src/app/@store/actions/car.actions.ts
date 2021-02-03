@@ -1,12 +1,13 @@
 import {Action} from "@ngrx/store";
-import {CarFilterRequest, ICar} from "../../@core/models/car";
+import {CarFilterRequest, CarUpdateModel, ICar} from "../../@core/models/car";
 
 export enum ECarActions {
   GetCars = '[Car] Get cars',
   GetCarsSuccess = '[Car] Get cars success',
   GetFilteredCars = '[Car] Get filtered cars',
   GetFilteredCarsSuccess = '[Car] Get filtered cars success',
-  GetFilteredCarsError = '[string] get filtered cars error'
+  GetFilteredCarsError = '[string] get filtered cars error',
+  StoreNameOfBuyer = '[CarUpdateRequest] Store name of buyer'
 }
 
 export class GetCars implements Action {
@@ -35,4 +36,16 @@ export class GetFilteredCarsError implements Action {
   }
 }
 
-export type CarActions = GetCars | GetCarsSuccess | GetFilteredCars | GetFilteredCarsSuccess | GetFilteredCarsError;
+export class StoreNameOfBuyer implements Action {
+  public readonly type = ECarActions.StoreNameOfBuyer;
+  constructor(public readonly payload: CarUpdateModel) {
+  }
+}
+
+export type CarActions =
+  GetCars |
+  GetCarsSuccess |
+  GetFilteredCars |
+  GetFilteredCarsSuccess |
+  GetFilteredCarsError |
+  StoreNameOfBuyer;

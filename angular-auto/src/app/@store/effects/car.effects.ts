@@ -2,17 +2,19 @@ import {Injectable} from "@angular/core";
 import {Actions, Effect, ofType} from "@ngrx/effects";
 import {HttpService} from "../../@core/services/http.service";
 import {IAppState} from "../state/app.state";
-import {Store} from "@ngrx/store";
+import {select, Store} from "@ngrx/store";
 import {
   ECarActions,
   GetCars,
   GetCarsSuccess,
   GetFilteredCars,
   GetFilteredCarsError,
-  GetFilteredCarsSuccess
+  GetFilteredCarsSuccess, StoreNameOfBuyer
 } from "../actions/car.actions";
-import {catchError, map, switchMap} from "rxjs/operators";
+import {catchError, map, switchMap, withLatestFrom} from "rxjs/operators";
 import {of} from "rxjs";
+import {selectCarList} from "../selectors/car.selectors";
+import cloneDeep from 'lodash.clonedeep';
 
 @Injectable()
 export class CarEffects {
@@ -23,7 +25,7 @@ export class CarEffects {
     switchMap(isSold => this._httpService.getAllCars(isSold)),
     switchMap(cars => {
       return of(new GetCarsSuccess(cars));
-    }), 
+    }),
     catchError((error) => {
       return of(new GetFilteredCarsError('Az adatbáziskapcsolat váratlanul megszakadt!'));
     })
@@ -49,6 +51,24 @@ export class CarEffects {
           }
         })
       ))
+  );
+
+  @Effect()
+  storeNameOfBuyer$ = this._actions$.pipe(
+    ofType<StoreNameOfBuyer>(ECarActions.StoreNameOfBuyer),
+    map(action => action.payload),
+    withLatestFrom(this._store.pipe(select(selectCarList))),
+    switchMap(([carUpdateModel, cars]) => {
+      let allCars = cloneDeep(cars);
+      let pickedCar = allCars[carUpdateModel.clickedCarIndex];
+      pickedCar.nameOfBuyer = carUpdateModel.nameOfBuyer;
+      allCars[carUpdateModel.clickedCarIndex] = pickedCar;
+      sessionStorage.setItem("selectedCars", allCars);
+      return of(new GetCarsSuccess(allCars));
+    }),
+    catchError((error) => {
+      return of(new GetFilteredCarsError('Az adatbáziskapcsolat váratlanul megszakadt!'));
+    })
   );
 
   constructor(
