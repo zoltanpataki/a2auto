@@ -1,13 +1,15 @@
-import {Car, ICar} from "../../@core/models/car";
+import {ICar} from "../../@core/models/car";
 
 export interface ICarState {
-  cars: Car[];
-  pickedCar: Car;
+  cars: ICar[];
+  pickedCar: ICar;
+  clickedCarIndex: number;
   error: string;
 }
 
 export const initialCarState: ICarState = {
   cars: null,
   pickedCar: null,
+  clickedCarIndex: null,
   error: null
 }

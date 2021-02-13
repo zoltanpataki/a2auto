@@ -27,6 +27,31 @@ export const carReducers = (
         error: action.payload
       }
     }
+    case ECarActions.GetCarsError: {
+      return {
+        ...state,
+        cars: null,
+        error: action.payload
+      }
+    }
+    case ECarActions.UpdateCarError: {
+      return {
+        ...state,
+        error: action.payload
+      }
+    }
+    case ECarActions.StoreClickedCarIndex: {
+      return {
+        ...state,
+        clickedCarIndex: action.payload
+      }
+    }
+    case ECarActions.StorePickedCar: {
+      return {
+        ...state,
+        pickedCar: action.payload
+      }
+    }
     default:
       return state;
   }

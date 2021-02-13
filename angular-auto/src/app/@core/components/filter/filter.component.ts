@@ -24,9 +24,21 @@ import {Direction, Organizer} from "../../models/organizer";
 import {IAppState} from "../../../@store/state/app.state";
 import {Store} from "@ngrx/store";
 import {select} from "@ngrx/store";
-import {selectCarError, selectCarList} from "../../../@store/selectors/car.selectors";
-import {GetCars, GetCarsSuccess, GetFilteredCars, StoreNameOfBuyer} from "../../../@store/actions/car.actions";
+import {
+  selectCarError,
+  selectCarList,
+  selectClickedCarIndex,
+  selectPickedCar
+} from "../../../@store/selectors/car.selectors";
+import {
+  GetCars,
+  GetCarsSuccess,
+  GetFilteredCars, StoreClickedCarIndex,
+  StoreDownPayment,
+  StoreNameOfBuyer, StorePickedCar
+} from "../../../@store/actions/car.actions";
 import {Observable} from "rxjs";
+import {Constants} from "../../models/constants";
 
 @Component({
   selector: 'app-filter',
@@ -62,6 +74,7 @@ export class FilterComponent implements OnInit {
   public previousOrNew: string;
   public individualOrCorporate: string;
   public selectedTypeOfBuying;
+  public carOfTransactionObs: Observable<ICar>;
   public carOfTransaction: Car;
   public userSearchResult = new MatTableDataSource<Users>();
   public companySearchResult = new MatTableDataSource<Company>();
@@ -72,6 +85,7 @@ export class FilterComponent implements OnInit {
   public addCountInCar: string;
   public thereIsCountInCar: boolean;
   public countInCarSupplement: CountInCarSupplement;
+  public clickedCarIndexObs: Observable<number>;
   public clickedCarIndex: number;
   public extra: number;
   public userDisplayedColumns: string[] = ['name', 'city', 'taxNumber', 'symbol'];
@@ -162,10 +176,12 @@ export class FilterComponent implements OnInit {
     }
     if (sessionStorage.getItem('clickedCarIndex')) {
       this.clickedCarIndex = Number(sessionStorage.getItem('clickedCarIndex'));
+      this._store.dispatch(new StoreClickedCarIndex(this.clickedCarIndex));
       this.carOfTransaction = this.selectedCars[this.clickedCarIndex];
       if (this.carOfTransaction && this.carOfTransaction.carHandover && new Date(this.carOfTransaction.carHandover).getFullYear() === new Date(0).getFullYear()) {
         this.carOfTransaction.carHandover = null;
       }
+      this._store.dispatch(new StorePickedCar(this.carOfTransaction));
     }
     if (sessionStorage.getItem('order')) {
       const order = JSON.parse(sessionStorage.getItem('order'));
@@ -196,12 +212,25 @@ export class FilterComponent implements OnInit {
     }
     this.changeDetectorRefs.detectChanges();
 
+    //ngrx selectors
+
+    this.clickedCarIndexObs = this._store.pipe(select(selectClickedCarIndex));
+    this.carOfTransactionObs = this._store.pipe(select(selectPickedCar));
     this.selectedCarsObs = this._store.pipe(select(selectCarList));
     this.carErrorObs = this._store.pipe(select(selectCarError));
 
     this.selectedCarsObs.subscribe(selectedCars => {
-      console.log(selectedCars);
       sessionStorage.setItem('selectedCars', JSON.stringify(selectedCars));
+    });
+
+    this.clickedCarIndexObs.subscribe(clickedCarIndex => {
+      this.clickedCarIndex = clickedCarIndex;
+      console.log(clickedCarIndex);
+    });
+
+    this.carOfTransactionObs.subscribe(carOfTransaction => {
+      this.carOfTransaction = carOfTransaction;
+      console.log(carOfTransaction);
     });
 
     this.carErrorObs.subscribe(errorMsg => {
@@ -1009,12 +1038,8 @@ export class FilterComponent implements OnInit {
       pickedUserFromDataTable.nationality);
     sessionStorage.setItem('pickedUser', JSON.stringify(this.pickedUser));
     sessionStorage.setItem('indexOfPickedUser', this.indexOfPickedUser.toString());
-    //this.carOfTransaction.nameOfBuyer = this.pickedUser.fullName;
-    const carUpdateRequest = new CarUpdateModel(this.pickedUser.fullName, null, this.clickedCarIndex);
+    const carUpdateRequest = new CarUpdateModel(this.pickedUser.fullName, Constants.NULL_SALESMAN, Constants.NULL_DOWN_PAYMENT, this.clickedCarIndex);
     this._store.dispatch(new StoreNameOfBuyer(carUpdateRequest));
-    this.nameOfBuyer = this.pickedUser.fullName;
-    sessionStorage.setItem('nameOfBuyer', this.nameOfBuyer);
-    this.updateCarOfTransaction(this.carOfTransaction);
   }
 
   // When a previous customer (corporate) wants to buy or sell a car
@@ -1054,10 +1079,8 @@ export class FilterComponent implements OnInit {
       pickedCompanyFromDataTable.email);
     sessionStorage.setItem('pickedCompany', JSON.stringify(this.pickedCompany));
     sessionStorage.setItem('indexOfPickedCompany', this.indexOfPickedCompany.toString());
-    this.carOfTransaction.nameOfBuyer = this.pickedCompany.name;
-    this.nameOfBuyer = this.pickedCompany.name;
-    sessionStorage.setItem('nameOfBuyer', this.nameOfBuyer);
-    this.updateCarOfTransaction(this.carOfTransaction);
+    const carUpdateRequest = new CarUpdateModel(this.pickedCompany.name, Constants.NULL_SALESMAN, Constants.NULL_DOWN_PAYMENT, this.clickedCarIndex);
+    this._store.dispatch(new StoreNameOfBuyer(carUpdateRequest));
   }
 
   // Converts the values of the filter form into upper case values.
@@ -1281,7 +1304,7 @@ export class FilterComponent implements OnInit {
   public setAlreadyOrNewCustomerSelectorAndCarOfTransaction(car: Car, index: number) {
     this.setDataToNull();
     if (index !== this.clickedCarIndex) {
-      this.carOfTransaction = car;
+      this._store.dispatch(new StorePickedCar(car));
       this.httpService.getOrder(car.id).subscribe(data => {
         this.newOrder = <Order> data;
         this.setAllOrderDataAfterHttpCall(this.newOrder, car);
@@ -1292,11 +1315,13 @@ export class FilterComponent implements OnInit {
         }
       });
       this.clickedCarIndex = this.clickedCarIndex !== index ? index : null;
+      this._store.dispatch(new StoreClickedCarIndex(this.clickedCarIndex));
       if (this.clickedCarIndex != null) {
         sessionStorage.setItem('clickedCarIndex', this.clickedCarIndex.toString());
       }
     } else {
       this.clickedCarIndex = this.clickedCarIndex !== index ? index : null;
+      this._store.dispatch(new StoreClickedCarIndex(this.clickedCarIndex));
     }
   }
 
@@ -1440,9 +1465,10 @@ export class FilterComponent implements OnInit {
   public saveDownPaymentAmount(form: FormGroup, car: Car) {
     this.downPayment = form.value.downPayment;
     this.extra = form.value.extra;
-    car.downPayment = this.downPayment;
+    const carUpdateRequest = new CarUpdateModel(Constants.NULL_NAME_OF_BUYER, Constants.NULL_SALESMAN, this.downPayment, this.clickedCarIndex);
+    console.log(carUpdateRequest);
+    this._store.dispatch(new StoreDownPayment(carUpdateRequest));
     this.setOrderProgressInSessionStorage(6);
-    this.updateCarOfTransaction(car);
     if (this.downPayment != null) {
       sessionStorage.setItem('downPayment', this.downPayment.toString());
     }

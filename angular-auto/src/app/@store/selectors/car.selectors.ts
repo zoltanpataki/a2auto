@@ -13,3 +13,13 @@ export const selectCarError = createSelector(
   selectCars,
   (state: ICarState) => state.error
 );
+
+export const selectPickedCar = createSelector(
+  selectCars,
+  (state: ICarState) => state.pickedCar
+);
+
+export const selectClickedCarIndex = createSelector(
+  selectCars,
+  (state: ICarState) => state.clickedCarIndex
+);

@@ -46,3 +46,23 @@ export class Order {
     this.descriptionsWithAmount = descriptionsWithAmount;
   }
 }
+
+export interface IOrder {
+  id: number;
+  alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready: boolean;
+  selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate: boolean;
+  wantInheritanceTaxCalculation: boolean;
+  inheritanceTax: number;
+  thereIsCountInCar: boolean;
+  downPayment: number;
+  extra: number;
+  selectedTypeOfBuying: string;
+  users: Users;
+  company: Company;
+  countInCarSupplement: CountInCarSupplement;
+  credit: Credit;
+  countInCarId: number;
+  carId: number;
+  description: Description[];
+  descriptionsWithAmount: DescriptionWithAmount[];
+}

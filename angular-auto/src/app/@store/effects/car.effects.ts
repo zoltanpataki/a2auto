@@ -5,11 +5,11 @@ import {IAppState} from "../state/app.state";
 import {select, Store} from "@ngrx/store";
 import {
   ECarActions,
-  GetCars,
+  GetCars, GetCarsError,
   GetCarsSuccess,
   GetFilteredCars,
   GetFilteredCarsError,
-  GetFilteredCarsSuccess, StoreNameOfBuyer
+  GetFilteredCarsSuccess, StoreDownPayment, StoreNameOfBuyer, UpdateCarError
 } from "../actions/car.actions";
 import {catchError, map, switchMap, withLatestFrom} from "rxjs/operators";
 import {of} from "rxjs";
@@ -27,7 +27,7 @@ export class CarEffects {
       return of(new GetCarsSuccess(cars));
     }),
     catchError((error) => {
-      return of(new GetFilteredCarsError('Az adatbáziskapcsolat váratlanul megszakadt!'));
+      return of(new GetCarsError('Az adatbáziskapcsolat váratlanul megszakadt!'));
     })
   );
 
@@ -63,11 +63,35 @@ export class CarEffects {
       let pickedCar = allCars[carUpdateModel.clickedCarIndex];
       pickedCar.nameOfBuyer = carUpdateModel.nameOfBuyer;
       allCars[carUpdateModel.clickedCarIndex] = pickedCar;
+      this._httpService.updateCar(pickedCar).subscribe(data => {
+        console.log(data);
+      });
       sessionStorage.setItem("selectedCars", allCars);
       return of(new GetCarsSuccess(allCars));
     }),
     catchError((error) => {
-      return of(new GetFilteredCarsError('Az adatbáziskapcsolat váratlanul megszakadt!'));
+      return of(new UpdateCarError('Az adatbáziskapcsolat váratlanul megszakadt!'));
+    })
+  );
+
+  @Effect()
+  storeDownPayment$ = this._actions$.pipe(
+    ofType<StoreDownPayment>(ECarActions.StoreDownPayment),
+    map(action => action.payload),
+    withLatestFrom(this._store.pipe(select(selectCarList))),
+    switchMap(([carUpdateModel, cars]) => {
+      let allCars = cloneDeep(cars);
+      let pickedCar = allCars[carUpdateModel.clickedCarIndex];
+      pickedCar.downPayment = carUpdateModel.downPayment;
+      allCars[carUpdateModel.clickedCarIndex] = pickedCar;
+      this._httpService.updateCar(pickedCar).subscribe(data => {
+        console.log(data);
+      });
+      sessionStorage.setItem("selectedCars", allCars);
+      return of(new GetCarsSuccess(allCars));
+    }),
+    catchError((error) => {
+      return of(new UpdateCarError('Az adatbáziskapcsolat váratlanul megszakadt!'));
     })
   );
 
