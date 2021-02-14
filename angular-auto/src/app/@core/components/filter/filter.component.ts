@@ -39,8 +39,18 @@ import {
 } from "../../../@store/actions/car.actions";
 import {Observable} from "rxjs";
 import {Constants} from "../../models/constants";
-import {selectPreviousOrNew} from "../../../@store/selectors/order.selectors";
-import {StorePreviousOrNew} from "../../../@store/actions/order.actions";
+import {
+  selectActualOrder,
+  selectAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready, selectIndividualOrCorporate,
+  selectOrderProgress,
+  selectPreviousOrNew, selectSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate
+} from "../../../@store/selectors/order.selectors";
+import {
+  StoreAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready, StoreIndividualOrCorporate,
+  StorePreviousOrNew, StoreSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate,
+  UpdateOrder,
+  UpdateOrderProgress
+} from "../../../@store/actions/order.actions";
 
 @Component({
   selector: 'app-filter',
@@ -69,12 +79,13 @@ export class FilterComponent implements OnInit {
   public selectedCarHeader = ['Márka', 'Modell', 'Rendszám', 'Vevő', 'Vásárlás dátuma'];
   public typeOfBuying = ['KÉSZPÉNZ', 'ÁTUTALÁS', 'HITEL'];
   public noMatch = false;
+  public selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporateObs: Observable<boolean>;
   public selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate: boolean;
+  public alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlreadyObs: Observable<boolean>;
   public alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready: boolean;
-  public checkedIndividual: boolean;
-  public checkedCorporate: boolean;
   public previousOrNewObs: Observable<string>;
   public previousOrNew: string;
+  public individualOrCorporateObs: Observable<string>;
   public individualOrCorporate: string;
   public selectedTypeOfBuying;
   public carOfTransactionObs: Observable<ICar>;
@@ -82,6 +93,7 @@ export class FilterComponent implements OnInit {
   public userSearchResult = new MatTableDataSource<Users>();
   public companySearchResult = new MatTableDataSource<Company>();
   public inheritanceTax: number;
+  public orderProgressObs: Observable<number>;
   public orderProgress: number = 0;
   public askForInheritanceTaxCalculation: string;
   public wantInheritanceTaxCalculation: boolean;
@@ -100,6 +112,7 @@ export class FilterComponent implements OnInit {
   public creditData: Credit;
   public countInCar: Car;
   public salesman: string;
+  public newOrderObs: Observable<Order>;
   public newOrder: Order;
   public newUser: Users;
   public newCompany: Company;
@@ -123,6 +136,8 @@ export class FilterComponent implements OnInit {
   public creditNeedsToBeRecalculated: boolean = false;
   public PREVIOUS: string = Constants.PREVIOUS;
   public NEW: string = Constants.NEW;
+  public INDIVIDUAL: string = Constants.INDIVIDUAL;
+  public CORPORATE: string = Constants.CORPORATE;
 
   constructor(private httpService: HttpService,
               public utilService: UtilService,
@@ -191,7 +206,7 @@ export class FilterComponent implements OnInit {
     if (sessionStorage.getItem('order')) {
       const order = JSON.parse(sessionStorage.getItem('order'));
       if (order.carId && order.carId === this.carOfTransaction.id) {
-        this.newOrder = JSON.parse(sessionStorage.getItem('order'));
+        this._store.dispatch(new UpdateOrder(JSON.parse(sessionStorage.getItem('order'))));
         this.setFilterComponentVariablesAccordingToOrder(this.newOrder);
         this.getDataFromSessionStorageAfterRefresh();
       }
@@ -224,6 +239,13 @@ export class FilterComponent implements OnInit {
     this.selectedCarsObs = this._store.pipe(select(selectCarList));
     this.carErrorObs = this._store.pipe(select(selectCarError));
     this.previousOrNewObs = this._store.pipe(select(selectPreviousOrNew));
+    this.individualOrCorporateObs = this._store.pipe(select(selectIndividualOrCorporate));
+    this.orderProgressObs = this._store.pipe(select(selectOrderProgress));
+    this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlreadyObs =
+      this._store.pipe(select(selectAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready));
+    this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporateObs =
+      this._store.pipe(select(selectSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate));
+    this.newOrderObs = this._store.pipe(select(selectActualOrder));
 
     this.selectedCarsObs.subscribe(selectedCars => {
       sessionStorage.setItem('selectedCars', JSON.stringify(selectedCars));
@@ -231,12 +253,10 @@ export class FilterComponent implements OnInit {
 
     this.clickedCarIndexObs.subscribe(clickedCarIndex => {
       this.clickedCarIndex = clickedCarIndex;
-      console.log(clickedCarIndex);
     });
 
     this.carOfTransactionObs.subscribe(carOfTransaction => {
       this.carOfTransaction = carOfTransaction;
-      console.log(carOfTransaction);
     });
 
     this.carErrorObs.subscribe(errorMsg => {
@@ -248,7 +268,36 @@ export class FilterComponent implements OnInit {
 
     this.previousOrNewObs.subscribe(previousOrNew => {
       this.previousOrNew = previousOrNew;
-      console.log(previousOrNew);
+    });
+
+    this.individualOrCorporateObs.subscribe(individualOrCorporate => {
+      this.individualOrCorporate = individualOrCorporate;
+    });
+
+    this.orderProgressObs.subscribe(orderProgress => {
+      this.orderProgress = orderProgress;
+      if (null != orderProgress) {
+        sessionStorage.setItem('orderProgress', this.orderProgress.toString());
+      }
+    });
+
+    this.newOrderObs.subscribe(order => {
+      this.newOrder = order;
+      console.log(order);
+    });
+
+    this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlreadyObs.subscribe(alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready => {
+      this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready;
+      if (null != alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready) {
+        sessionStorage.setItem('alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready', this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready.toString());
+      }
+    });
+
+    this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporateObs.subscribe(selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate => {
+      this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate = selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate;
+      if (null != selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate) {
+        sessionStorage.setItem('selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate', this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate.toString());
+      }
     })
   }
 
@@ -256,7 +305,7 @@ export class FilterComponent implements OnInit {
 
   private getDataFromSessionStorageAfterRefresh() {
     if (sessionStorage.getItem('orderProgress')) {
-      this.orderProgress = Number(sessionStorage.getItem('orderProgress'));
+      this._store.dispatch(new UpdateOrderProgress(Number(sessionStorage.getItem('orderProgress'))));
     }
     if (sessionStorage.getItem('userSearchData')) {
       this.userSearchResult.data = JSON.parse(sessionStorage.getItem('userSearchData'));
@@ -283,14 +332,16 @@ export class FilterComponent implements OnInit {
       this.newCompany = JSON.parse(sessionStorage.getItem('newCompanyDuringSell'));
     }
     if (sessionStorage.getItem('alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready')) {
-      this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = JSON.parse(sessionStorage.getItem('alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready'));
+      this._store.dispatch(new StoreAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready(JSON.parse(sessionStorage.getItem('alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready'))))
       this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready ?
         this._store.dispatch(new StorePreviousOrNew(Constants.NEW)) :
         this._store.dispatch(new StorePreviousOrNew(Constants.PREVIOUS));
     }
     if (sessionStorage.getItem('selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate')) {
-      this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate = JSON.parse(sessionStorage.getItem('selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate'));
-      this.individualOrCorporate = this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate ? 'individual' : 'corporate';
+      this._store.dispatch(new StoreSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate(JSON.parse(sessionStorage.getItem('selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate'))));
+      this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate ?
+        this._store.dispatch(new StoreIndividualOrCorporate(Constants.INDIVIDUAL)) :
+        this._store.dispatch(new StoreIndividualOrCorporate(Constants.CORPORATE));
     }
     if (sessionStorage.getItem('wantInheritanceTaxCalculation')) {
       this.wantInheritanceTaxCalculation = JSON.parse(sessionStorage.getItem('wantInheritanceTaxCalculation'));
@@ -397,10 +448,14 @@ export class FilterComponent implements OnInit {
   // Sets the data to null when expansion order is collapsed
 
   private setDataToNull() {
-    this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = null;
-    this.previousOrNew = null;
-    this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate = null;
-    this.individualOrCorporate = null;
+    this._store.dispatch(new StoreAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready(null));
+    //this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = null;
+    this._store.dispatch(new StorePreviousOrNew(null));
+    //this.previousOrNew = null;
+    this._store.dispatch(new StoreSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate(null));
+    //this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate = null;
+    this._store.dispatch(new StoreIndividualOrCorporate(null));
+    //this.individualOrCorporate = null;
     this.userSearchResult.data = null;
     this.companySearchResult.data = null;
     this.pickedUser = null;
@@ -1126,28 +1181,27 @@ export class FilterComponent implements OnInit {
 
   public selectBetweenNewAndPreviousCustomer(previousOrNew: string, selection:boolean) {
     this.changeCheckBoxValuesToNull();
-    if (previousOrNew === 'previous') {
-      this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = !selection;
+    if (previousOrNew === Constants.PREVIOUS) {
+      this._store.dispatch(new StoreAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready(!selection));
       selection ?
         this._store.dispatch(new StorePreviousOrNew(Constants.PREVIOUS)) :
         this._store.dispatch(new StorePreviousOrNew(Constants.NEW));
-    } else if (previousOrNew === 'new') {
-      this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = selection;
+    } else if (previousOrNew === Constants.NEW) {
+      this._store.dispatch(new StoreAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready(selection));
       selection ?
         this._store.dispatch(new StorePreviousOrNew(Constants.NEW)) :
         this._store.dispatch(new StorePreviousOrNew(Constants.PREVIOUS));
     }
-    this.orderProgress = this.orderProgress > 1 ? this.orderProgress : 1;
+    this.orderProgress > 1 ?
+      this._store.dispatch(new UpdateOrderProgress(this.orderProgress)) :
+      this._store.dispatch(new UpdateOrderProgress(1));
     this.setOrderProgressInSessionStorage(this.orderProgress);
-    sessionStorage.setItem('alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready', this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready.toString());
   }
 
   // Sets the checkbox values to null.
 
   private changeCheckBoxValuesToNull() {
     this.individualOrCorporate = Constants.NULL_INDIVIDUAL_OR_CORPORATE;
-    this.checkedIndividual = Constants.NULL_CHECKED_INDIVIDUAL;
-    this.checkedCorporate = Constants.NULL_CHECKED_CORPORATE;
     this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate =
       Constants.NULL_SELECTED_BETWEEN_INDIVIDUAL_AND_CORPORATE_TRUE_IF_INDIVIDUAL_FALSE_IF_CORPORATE;
   }
@@ -1158,30 +1212,17 @@ export class FilterComponent implements OnInit {
   // (the box is filled or not).
 
   public setIndOrCorpCheckboxValue(indOrCorp: string, selection: boolean) {
-    if (indOrCorp === 'individual') {
-      this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate = selection;
-      if (selection) {
-        this.checkedIndividual = true;
-        this.checkedCorporate = false;
-        this.individualOrCorporate = 'individual';
-      } else {
-        this.checkedIndividual = false;
-        this.checkedCorporate = true;
-        this.individualOrCorporate = 'corporate';
-      }
-    } else if (indOrCorp === 'corporate') {
-      this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate = !selection;
-      if (selection) {
-        this.checkedIndividual = false;
-        this.checkedCorporate = true;
-        this.individualOrCorporate = 'corporate';
-      } else {
-        this.checkedIndividual = true;
-        this.checkedCorporate = false;
-        this.individualOrCorporate = 'individual';
-      }
+    if (indOrCorp === Constants.INDIVIDUAL) {
+      this._store.dispatch(new StoreSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate(selection));
+      selection ?
+        this._store.dispatch(new StoreIndividualOrCorporate(Constants.INDIVIDUAL)) :
+        this._store.dispatch(new StoreIndividualOrCorporate(Constants.CORPORATE));
+    } else if (indOrCorp === Constants.CORPORATE) {
+      this._store.dispatch(new StoreSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate(!selection));
+      selection ?
+        this._store.dispatch(new StoreIndividualOrCorporate(Constants.CORPORATE)) :
+        this._store.dispatch(new StoreIndividualOrCorporate(Constants.INDIVIDUAL));
     }
-    sessionStorage.setItem('selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate', this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate.toString());
   }
 
   // Basically it helps to coordinate the checkbox for the customers who
@@ -1409,8 +1450,7 @@ export class FilterComponent implements OnInit {
 
   private setOrderProgressInSessionStorage(stage: number) {
     if (this.newOrder == null || stage === 10) {
-      this.orderProgress = stage;
-      sessionStorage.setItem('orderProgress', this.orderProgress.toString());
+      this._store.dispatch(new UpdateOrderProgress(stage));
     }
   }
 

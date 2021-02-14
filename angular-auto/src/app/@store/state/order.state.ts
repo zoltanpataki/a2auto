@@ -7,6 +7,8 @@ export interface IOrderState {
   individualOrCorporate: string
   checkedIndividual: boolean
   checkedCorporate: boolean
+  alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready: boolean
+  selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate: boolean
 }
 
 export const initialOrderState: IOrderState = {
@@ -16,4 +18,6 @@ export const initialOrderState: IOrderState = {
   individualOrCorporate: null,
   checkedIndividual: null,
   checkedCorporate: null,
+  alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready: null,
+  selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate: null,
 }

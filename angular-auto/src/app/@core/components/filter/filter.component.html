@@ -153,10 +153,10 @@
       <div *ngIf="orderProgress > 0" class="indOrCorpCheckbox">
         <mat-divider></mat-divider>
         <div>
-          <mat-checkbox #ind (change)="setIndOrCorpCheckboxValue('individual', ind.checked)" [checked]="individualOrCorporate === 'individual'">Természetes személy</mat-checkbox>
+          <mat-checkbox #ind (change)="setIndOrCorpCheckboxValue(INDIVIDUAL, ind.checked)" [checked]="individualOrCorporate === INDIVIDUAL">Természetes személy</mat-checkbox>
         </div>
         <div>
-          <mat-checkbox #corp (change)="setIndOrCorpCheckboxValue('corporate', corp.checked)" [checked]="individualOrCorporate === 'corporate'">Jogi személy</mat-checkbox>
+          <mat-checkbox #corp (change)="setIndOrCorpCheckboxValue(CORPORATE, corp.checked)" [checked]="individualOrCorporate === CORPORATE">Jogi személy</mat-checkbox>
         </div>
       </div>
       <div *ngIf="alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready == false && selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate">
