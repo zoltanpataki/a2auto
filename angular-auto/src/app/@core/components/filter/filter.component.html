@@ -144,10 +144,10 @@
       <div>
         <mat-divider></mat-divider>
         <div>
-          <mat-checkbox #previous (change)="selectBetweenNewAndPreviousCustomer('previous', previous.checked)" [checked]="previousOrNew === 'previous'">Korábbi vásárló</mat-checkbox>
+          <mat-checkbox #previous (change)="selectBetweenNewAndPreviousCustomer(PREVIOUS, previous.checked)" [checked]="previousOrNew === PREVIOUS">Korábbi vásárló</mat-checkbox>
         </div>
         <div>
-          <mat-checkbox #new (change)="selectBetweenNewAndPreviousCustomer('new', new.checked)" [checked]="previousOrNew === 'new'">Új vásárló</mat-checkbox>
+          <mat-checkbox #new (change)="selectBetweenNewAndPreviousCustomer(NEW, new.checked)" [checked]="previousOrNew === NEW">Új vásárló</mat-checkbox>
         </div>
       </div>
       <div *ngIf="orderProgress > 0" class="indOrCorpCheckbox">

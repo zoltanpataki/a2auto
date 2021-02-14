@@ -39,6 +39,8 @@ import {
 } from "../../../@store/actions/car.actions";
 import {Observable} from "rxjs";
 import {Constants} from "../../models/constants";
+import {selectPreviousOrNew} from "../../../@store/selectors/order.selectors";
+import {StorePreviousOrNew} from "../../../@store/actions/order.actions";
 
 @Component({
   selector: 'app-filter',
@@ -71,6 +73,7 @@ export class FilterComponent implements OnInit {
   public alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready: boolean;
   public checkedIndividual: boolean;
   public checkedCorporate: boolean;
+  public previousOrNewObs: Observable<string>;
   public previousOrNew: string;
   public individualOrCorporate: string;
   public selectedTypeOfBuying;
@@ -118,6 +121,8 @@ export class FilterComponent implements OnInit {
   public tooLongFieldValue: string = '';
   public isThereLongFieldValue: boolean = false;
   public creditNeedsToBeRecalculated: boolean = false;
+  public PREVIOUS: string = Constants.PREVIOUS;
+  public NEW: string = Constants.NEW;
 
   constructor(private httpService: HttpService,
               public utilService: UtilService,
@@ -218,6 +223,7 @@ export class FilterComponent implements OnInit {
     this.carOfTransactionObs = this._store.pipe(select(selectPickedCar));
     this.selectedCarsObs = this._store.pipe(select(selectCarList));
     this.carErrorObs = this._store.pipe(select(selectCarError));
+    this.previousOrNewObs = this._store.pipe(select(selectPreviousOrNew));
 
     this.selectedCarsObs.subscribe(selectedCars => {
       sessionStorage.setItem('selectedCars', JSON.stringify(selectedCars));
@@ -239,6 +245,11 @@ export class FilterComponent implements OnInit {
         this.utilService.openSnackBar(errorMsg, action);
       }
     });
+
+    this.previousOrNewObs.subscribe(previousOrNew => {
+      this.previousOrNew = previousOrNew;
+      console.log(previousOrNew);
+    })
   }
 
   // Retrieve all the data after refresh
@@ -273,7 +284,9 @@ export class FilterComponent implements OnInit {
     }
     if (sessionStorage.getItem('alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready')) {
       this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = JSON.parse(sessionStorage.getItem('alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready'));
-      this.previousOrNew = this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready ? 'new' : 'previous';
+      this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready ?
+        this._store.dispatch(new StorePreviousOrNew(Constants.NEW)) :
+        this._store.dispatch(new StorePreviousOrNew(Constants.PREVIOUS));
     }
     if (sessionStorage.getItem('selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate')) {
       this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate = JSON.parse(sessionStorage.getItem('selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate'));
@@ -1115,10 +1128,14 @@ export class FilterComponent implements OnInit {
     this.changeCheckBoxValuesToNull();
     if (previousOrNew === 'previous') {
       this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = !selection;
-      this.previousOrNew = selection ? 'previous' : 'new';
+      selection ?
+        this._store.dispatch(new StorePreviousOrNew(Constants.PREVIOUS)) :
+        this._store.dispatch(new StorePreviousOrNew(Constants.NEW));
     } else if (previousOrNew === 'new') {
       this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = selection;
-      this.previousOrNew = selection ? 'new' : 'previous';
+      selection ?
+        this._store.dispatch(new StorePreviousOrNew(Constants.NEW)) :
+        this._store.dispatch(new StorePreviousOrNew(Constants.PREVIOUS));
     }
     this.orderProgress = this.orderProgress > 1 ? this.orderProgress : 1;
     this.setOrderProgressInSessionStorage(this.orderProgress);
@@ -1128,10 +1145,11 @@ export class FilterComponent implements OnInit {
   // Sets the checkbox values to null.
 
   private changeCheckBoxValuesToNull() {
-    this.individualOrCorporate = null;
-    this.checkedIndividual = null;
-    this.checkedCorporate = null;
-    this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate = null;
+    this.individualOrCorporate = Constants.NULL_INDIVIDUAL_OR_CORPORATE;
+    this.checkedIndividual = Constants.NULL_CHECKED_INDIVIDUAL;
+    this.checkedCorporate = Constants.NULL_CHECKED_CORPORATE;
+    this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate =
+      Constants.NULL_SELECTED_BETWEEN_INDIVIDUAL_AND_CORPORATE_TRUE_IF_INDIVIDUAL_FALSE_IF_CORPORATE;
   }
 
   // Basically it helps to coordinate the checkbox of the private and corporate customer.
