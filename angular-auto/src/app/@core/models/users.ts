@@ -43,3 +43,35 @@ export class Users {
     this.nationality = nationality;
   }
 }
+
+export interface IUser {
+  id: number;
+  fullName: string;
+  birthName: string;
+  zipCode: string;
+  city: string;
+  address: string;
+  birthPlace: string;
+  phoneNumber: string;
+  email: string;
+  nameOfMother: string;
+  birthDate: Date;
+  personNumber: string;
+  idCardNumber: string;
+  dueTimeOfIdCard: string;
+  drivingLicenceNumber: string;
+  dueTimeOfDrivingLicence: string;
+  taxNumber: string;
+  healthcareNumber: string;
+  nationality: string;
+}
+
+export class UserFilterRequest {
+  filter: string;
+  filterType: string;
+
+  constructor(filter: string, filterType: string) {
+    this.filter = filter;
+    this.filterType = filterType;
+  }
+}

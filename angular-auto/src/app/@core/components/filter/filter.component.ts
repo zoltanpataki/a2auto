@@ -10,9 +10,9 @@ import {CreditDialogComponent} from "../../dialog/credit-dialog/credit-dialog.co
 import {CountInCarSupplement} from "../../models/countInCarSupplement";
 import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
 import {MatTableDataSource} from "@angular/material/table";
-import {Users} from "../../models/users";
+import {IUser, Users} from "../../models/users";
 import {Credit} from "../../models/credit";
-import {Company} from "../../models/company";
+import {Company, ICompany} from "../../models/company";
 import {NavigationEnd, Router} from "@angular/router";
 import {Order} from "../../models/order";
 import {Description} from "../../models/description";
@@ -51,6 +51,8 @@ import {
   UpdateOrder,
   UpdateOrderProgress
 } from "../../../@store/actions/order.actions";
+import {selectUserSearchData} from "../../../@store/selectors/user.selectors";
+import {selectCompanySearchData} from "../../../@store/selectors/company.selectors";
 
 @Component({
   selector: 'app-filter',
@@ -90,7 +92,9 @@ export class FilterComponent implements OnInit {
   public selectedTypeOfBuying;
   public carOfTransactionObs: Observable<ICar>;
   public carOfTransaction: Car;
+  public userSearchResultObs: Observable<IUser[]>;
   public userSearchResult = new MatTableDataSource<Users>();
+  public companySearchResultObs: Observable<ICompany[]>;
   public companySearchResult = new MatTableDataSource<Company>();
   public inheritanceTax: number;
   public orderProgressObs: Observable<number>;
@@ -246,6 +250,8 @@ export class FilterComponent implements OnInit {
     this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporateObs =
       this._store.pipe(select(selectSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate));
     this.newOrderObs = this._store.pipe(select(selectActualOrder));
+    this.userSearchResultObs = this._store.pipe(select(selectUserSearchData));
+    this.companySearchResultObs = this._store.pipe(select(selectCompanySearchData));
 
     this.selectedCarsObs.subscribe(selectedCars => {
       sessionStorage.setItem('selectedCars', JSON.stringify(selectedCars));
@@ -298,7 +304,23 @@ export class FilterComponent implements OnInit {
       if (null != selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate) {
         sessionStorage.setItem('selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate', this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate.toString());
       }
-    })
+    });
+
+    this.userSearchResultObs.subscribe(userSearchData => {
+      this.userSearchResult.data = userSearchData;
+      this.changeDetectorRefs.detectChanges();
+      if (null != userSearchData) {
+        sessionStorage.setItem('userSearchData', JSON.stringify(userSearchData));
+      }
+    });
+
+    this.companySearchResultObs.subscribe(companySearchData => {
+      this.companySearchResult.data = companySearchData;
+      this.changeDetectorRefs.detectChanges();
+      if (null != companySearchData) {
+        sessionStorage.setItem('companySearchData', JSON.stringify(companySearchData));
+      }
+    });
   }
 
   // Retrieve all the data after refresh
