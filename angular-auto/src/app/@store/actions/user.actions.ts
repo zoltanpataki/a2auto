@@ -6,6 +6,7 @@ export enum EUserActions {
   GetUsersSuccess = '[Users] Get users success',
   GetUsersError = '[string] Get users error',
   StorePickedUser = '[Users] Store picked user',
+  StorePickedUserIndex = '[number] Store picked user index',
 }
 
 export class GetUsers implements Action {
@@ -28,12 +29,19 @@ export class GetUsersError implements Action {
 
 export class StorePickedUser implements Action {
   public readonly type = EUserActions.StorePickedUser;
-  constructor(public payload: IUser) {
+  constructor(public readonly payload: IUser) {
+  }
+}
+
+export class StorePickedUserIndex implements Action {
+  public readonly type = EUserActions.StorePickedUserIndex;
+  constructor(public readonly payload: number) {
   }
 }
 
 export type UserActions =
   GetUsers |
   StorePickedUser |
+  StorePickedUserIndex |
   GetUsersSuccess |
   GetUsersError;

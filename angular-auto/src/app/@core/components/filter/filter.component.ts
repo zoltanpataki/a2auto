@@ -51,8 +51,22 @@ import {
   UpdateOrder,
   UpdateOrderProgress
 } from "../../../@store/actions/order.actions";
-import {selectUserSearchData} from "../../../@store/selectors/user.selectors";
-import {selectCompanySearchData} from "../../../@store/selectors/company.selectors";
+import {
+  selectIndexOfPickedUser,
+  selectPickedUser,
+  selectUserSearchData
+} from "../../../@store/selectors/user.selectors";
+import {
+  selectCompanySearchData,
+  selectIndexOfPickedCompany,
+  selectPickedCompany
+} from "../../../@store/selectors/company.selectors";
+import {GetUsersSuccess, StorePickedUser, StorePickedUserIndex} from "../../../@store/actions/user.actions";
+import {
+  GetCompaniesSuccess,
+  StorePickedCompany,
+  StorePickedCompanyIndex
+} from "../../../@store/actions/company.actions";
 
 @Component({
   selector: 'app-filter',
@@ -109,9 +123,13 @@ export class FilterComponent implements OnInit {
   public extra: number;
   public userDisplayedColumns: string[] = ['name', 'city', 'taxNumber', 'symbol'];
   public companyDisplayedColumns: string[] = ['name', 'registrationNumber', 'representation', 'symbol'];
+  public pickedUserObs: Observable<IUser>;
   public pickedUser: Users;
+  public pickedCompanyObs: Observable<ICompany>;
   public pickedCompany: Company;
+  public indexOfPickedUserObs: Observable<number>;
   public indexOfPickedUser: number;
+  public indexOfPickedCompanyObs: Observable<number>;
   public indexOfPickedCompany: number;
   public creditData: Credit;
   public countInCar: Car;
@@ -251,7 +269,11 @@ export class FilterComponent implements OnInit {
       this._store.pipe(select(selectSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate));
     this.newOrderObs = this._store.pipe(select(selectActualOrder));
     this.userSearchResultObs = this._store.pipe(select(selectUserSearchData));
+    this.pickedUserObs = this._store.pipe(select(selectPickedUser));
+    this.indexOfPickedUserObs = this._store.pipe(select(selectIndexOfPickedUser));
     this.companySearchResultObs = this._store.pipe(select(selectCompanySearchData));
+    this.pickedCompanyObs = this._store.pipe(select(selectPickedCompany));
+    this.indexOfPickedCompanyObs = this._store.pipe(select(selectIndexOfPickedCompany));
 
     this.selectedCarsObs.subscribe(selectedCars => {
       sessionStorage.setItem('selectedCars', JSON.stringify(selectedCars));
@@ -314,11 +336,43 @@ export class FilterComponent implements OnInit {
       }
     });
 
+    this.pickedUserObs.subscribe(pickedUser => {
+      this.pickedUser = pickedUser;
+      this.changeDetectorRefs.detectChanges();
+      if (null != pickedUser) {
+        sessionStorage.setItem('pickedUser', JSON.stringify(pickedUser));
+      }
+    });
+
+    this.indexOfPickedUserObs.subscribe(index => {
+      this.indexOfPickedUser = index;
+      this.changeDetectorRefs.detectChanges();
+      if (null != index) {
+        sessionStorage.setItem('indexOfPickedUser', index.toString());
+      }
+    });
+
     this.companySearchResultObs.subscribe(companySearchData => {
       this.companySearchResult.data = companySearchData;
       this.changeDetectorRefs.detectChanges();
       if (null != companySearchData) {
         sessionStorage.setItem('companySearchData', JSON.stringify(companySearchData));
+      }
+    });
+
+    this.pickedCompanyObs.subscribe(pickedCompany => {
+      this.pickedCompany = pickedCompany;
+      this.changeDetectorRefs.detectChanges();
+      if (null != pickedCompany) {
+        sessionStorage.setItem('pickedCompany', JSON.stringify(pickedCompany));
+      }
+    });
+
+    this.indexOfPickedCompanyObs.subscribe(index => {
+      this.indexOfPickedCompany = index;
+      this.changeDetectorRefs.detectChanges();
+      if (null != index) {
+        sessionStorage.setItem('indexOfPickedCompany', index.toString());
       }
     });
   }
@@ -330,25 +384,25 @@ export class FilterComponent implements OnInit {
       this._store.dispatch(new UpdateOrderProgress(Number(sessionStorage.getItem('orderProgress'))));
     }
     if (sessionStorage.getItem('userSearchData')) {
-      this.userSearchResult.data = JSON.parse(sessionStorage.getItem('userSearchData'));
+      this._store.dispatch(new GetUsersSuccess(JSON.parse(sessionStorage.getItem('userSearchData'))));
     }
     if (sessionStorage.getItem('companySearchData')) {
-      this.companySearchResult.data = JSON.parse(sessionStorage.getItem('companySearchData'));
+      this._store.dispatch(new GetCompaniesSuccess(JSON.parse(sessionStorage.getItem('companySearchData'))));
     }
     if (sessionStorage.getItem('indexOfPickedUser')) {
-      this.indexOfPickedUser = Number(sessionStorage.getItem('indexOfPickedUser'));
+      this._store.dispatch(new StorePickedUserIndex(Number(sessionStorage.getItem('indexOfPickedUser'))));
     }
     if (sessionStorage.getItem('indexOfPickedCompany')) {
-      this.indexOfPickedCompany = Number(sessionStorage.getItem('indexOfPickedCompany'));
+      this._store.dispatch(new StorePickedCompanyIndex(Number(sessionStorage.getItem('indexOfPickedCompany'))));
     }
     if (sessionStorage.getItem('pickedUser')) {
-      this.pickedUser = JSON.parse(sessionStorage.getItem('pickedUser'));
+      this._store.dispatch(new StorePickedUser(JSON.parse(sessionStorage.getItem('pickedUser'))));
     }
     if (sessionStorage.getItem('newUserDuringSell')) {
       this.newUser = JSON.parse(sessionStorage.getItem('newUserDuringSell'));
     }
     if (sessionStorage.getItem('pickedCompany')) {
-      this.pickedCompany = JSON.parse(sessionStorage.getItem('pickedCompany'));
+      this._store.dispatch(new StorePickedCompany(JSON.parse(sessionStorage.getItem('pickedCompany'))));
     }
     if (sessionStorage.getItem('newCompanyDuringSell')) {
       this.newCompany = JSON.parse(sessionStorage.getItem('newCompanyDuringSell'));

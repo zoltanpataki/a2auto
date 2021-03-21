@@ -6,6 +6,7 @@ export enum ECompanyActions {
   GetCompaniesSuccess = '[Company] Get companies success',
   GetCompaniesError = '[string] Get company error',
   StorePickedCompany = '[Company] Store picked company',
+  StorePickedCompanyIndex = '[number] Store picked company index',
 }
 
 export class GetCompanies implements Action {
@@ -32,7 +33,14 @@ export class GetCompaniesError implements Action {
 export class StorePickedCompany implements Action {
   public readonly type = ECompanyActions.StorePickedCompany;
 
-  constructor(public payload: ICompany) {
+  constructor(public readonly payload: ICompany) {
+  }
+}
+
+export class StorePickedCompanyIndex implements Action {
+  public readonly type = ECompanyActions.StorePickedCompanyIndex;
+
+  constructor(public readonly payload: number) {
   }
 }
 
@@ -40,4 +48,5 @@ export type CompanyActions =
   GetCompanies |
   GetCompaniesSuccess |
   GetCompaniesError |
-  StorePickedCompany;
+  StorePickedCompany |
+  StorePickedCompanyIndex;

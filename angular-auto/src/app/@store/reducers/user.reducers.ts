@@ -20,5 +20,22 @@ export const userReducers = (
         error: action.payload
       };
     }
+    case EUserActions.StorePickedUser: {
+      return {
+        ...state,
+        pickedUser: action.payload,
+        error: null
+      };
+    }
+    case EUserActions.StorePickedUserIndex: {
+      return {
+        ...state,
+        indexOfPickedUser: action.payload,
+        error: null
+      };
+    }
+    default : {
+      return state;
+    }
   }
 }

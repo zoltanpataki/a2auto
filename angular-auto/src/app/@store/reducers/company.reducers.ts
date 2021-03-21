@@ -20,5 +20,22 @@ export const companyReducers = (
         error: action.payload
       };
     }
+    case ECompanyActions.StorePickedCompany: {
+      return {
+        ...state,
+        pickedCompany: action.payload,
+        error: null
+      };
+    }
+    case ECompanyActions.StorePickedCompanyIndex: {
+      return {
+        ...state,
+        indexOfPickedCompany: action.payload,
+        error: null
+      };
+    }
+    default : {
+      return state;
+    }
   }
 }

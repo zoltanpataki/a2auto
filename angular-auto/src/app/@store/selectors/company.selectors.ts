@@ -9,7 +9,17 @@ export const selectCompanySearchData = createSelector(
   (state: ICompanyState) => state.companySearchData
 );
 
-export const selectPickedUser = createSelector(
+export const selectPickedCompany = createSelector(
   selectCompanies,
   (state: ICompanyState) => state.pickedCompany
+);
+
+export const selectIndexOfPickedCompany = createSelector(
+  selectCompanies,
+  (state: ICompanyState) => state.indexOfPickedCompany
+);
+
+export const selectCompanyError = createSelector(
+  selectCompanies,
+  (state: ICompanyState) => state.error
 );
