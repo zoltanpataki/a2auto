@@ -7,3 +7,8 @@ export class Salesmen {
     this.name = name;
   }
 }
+
+export interface ISalesman {
+  id: number;
+  name: string;
+}

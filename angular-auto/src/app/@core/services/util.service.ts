@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Company} from "../models/company";
-import {Salesmen} from "../models/salesmen";
-import {Witness} from "../models/witness";
+import {ISalesman, Salesmen} from "../models/salesmen";
+import {IWitness, Witness} from "../models/witness";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,9 @@ export class UtilService {
   public emptySearchField = false;
   public carUpdate = false;
   public a2Company: Company;
+  public salesmenObs: Observable<ISalesman[]>;
   public salesmen: Salesmen[];
+  public witnessesObs: Observable<IWitness[]>;
   public witnesses: Witness[];
 
   constructor(private _snackBar: MatSnackBar,) { }

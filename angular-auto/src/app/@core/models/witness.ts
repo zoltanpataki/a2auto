@@ -13,3 +13,10 @@ export class Witness {
     this.name = name;
   }
 }
+
+export interface IWitness {
+  id: number;
+  witnessAddress: WitnessAddress;
+  idCardNumber: string;
+  name: string;
+}

@@ -59,6 +59,10 @@ import {EffectsModule} from "@ngrx/effects";
 import {CarEffects} from "./@store/effects/car.effects";
 import {StoreRouterConnectingModule} from "@ngrx/router-store";
 import {StoreDevtoolsModule} from "@ngrx/store-devtools";
+import {UserEffects} from "./@store/effects/user.effects";
+import {CompanyEffects} from "./@store/effects/company.effects";
+import {WitnessEffects} from "./@store/effects/witness.effects";
+import {SalesmanEffects} from "./@store/effects/salesman.effects";
 
 // console.log all actions
 export function debug(reducer: ActionReducer<any>): ActionReducer<any> {
@@ -123,8 +127,11 @@ export const metaReducers: MetaReducer<any>[] = [];
     MatTooltipModule,
     NgxSpinnerModule,
     NgxsModule.forRoot([LoaderState], {developmentMode: !environment.production}),
-    StoreModule.forRoot(appReducers, {metaReducers}),
-    EffectsModule.forRoot([CarEffects]),
+    StoreModule.forRoot(appReducers, {metaReducers, runtimeChecks: {
+        strictStateImmutability: false,
+        strictActionImmutability: false,
+      }}),
+    EffectsModule.forRoot([CarEffects, UserEffects, CompanyEffects, WitnessEffects, SalesmanEffects]),
     StoreRouterConnectingModule.forRoot({stateKey: 'router'}),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     CurrencyMaskModule,

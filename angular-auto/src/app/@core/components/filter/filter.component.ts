@@ -67,6 +67,10 @@ import {
   StorePickedCompany,
   StorePickedCompanyIndex
 } from "../../../@store/actions/company.actions";
+import {GetWitnesses} from "../../../@store/actions/witness.actions";
+import {selectSalesmenList} from "../../../@store/selectors/salesman.selectors";
+import {selectWitnessList} from "../../../@store/selectors/witness.selectors";
+import {GetSalesmen} from "../../../@store/actions/salesman.actions";
 
 @Component({
   selector: 'app-filter',
@@ -206,15 +210,11 @@ export class FilterComponent implements OnInit {
     }
 
     if (this.utilService.witnesses == null) {
-      this.httpService.getAllWitnesses().subscribe(data => {
-        this.utilService.witnesses = data;
-        this.utilService.witnesses.push(this.utilService.createBlankWitnessToUtilServiceWitnessList());
-      });
+      this._store.dispatch(new GetWitnesses());
+      //this.utilService.witnesses.push(this.utilService.createBlankWitnessToUtilServiceWitnessList());
     }
     if (this.utilService.salesmen == null) {
-      this.httpService.getAllSalesmen().subscribe(data => {
-        this.utilService.salesmen = data;
-      });
+      this._store.dispatch(new  GetSalesmen());
     }
     if (sessionStorage.getItem('clickedCarIndex')) {
       this.clickedCarIndex = Number(sessionStorage.getItem('clickedCarIndex'));
@@ -256,6 +256,8 @@ export class FilterComponent implements OnInit {
 
     //ngrx selectors
 
+    this.utilService.salesmenObs = this._store.pipe(select(selectSalesmenList));
+    this.utilService.witnessesObs = this._store.pipe(select(selectWitnessList));
     this.clickedCarIndexObs = this._store.pipe(select(selectClickedCarIndex));
     this.carOfTransactionObs = this._store.pipe(select(selectPickedCar));
     this.selectedCarsObs = this._store.pipe(select(selectCarList));
@@ -1623,6 +1625,7 @@ export class FilterComponent implements OnInit {
   // Save the chosen salesman and update the car of transaction with it.
 
   public saveSalesman(salesman: any, car: Car) {
+    console.log(salesman);
     this.salesman = salesman;
     car.salesman = this.salesman;
     this.updateCarOfTransaction(car);
