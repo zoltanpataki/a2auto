@@ -1,10 +1,14 @@
 import {Action} from "@ngrx/store";
-import {ISalesman} from "../../@core/models/salesmen";
+import {ISalesmen} from "../../@core/models/salesmen";
 
 export enum ESalesmanActions {
   GetSalesmen = '[Salesmen] Get salesmen',
   GetSalesmenSuccess = '[Salesmen] Get salesmen success',
-  GetSalesmenError = '[string] Get salesmen error',
+  SalesmenError = '[string] salesmen error',
+  StoreSalesman = '[Salesmen] Store salesman',
+  StoreSalesmanSuccess = '[Salesmen] Store salesman success',
+  DeleteSalesman = '[number] Delete salesman',
+  DeleteSalesmanSuccess = '[number] Delete salesman success',
 }
 
 export class GetSalesmen implements Action {
@@ -13,17 +17,45 @@ export class GetSalesmen implements Action {
 
 export class GetSalesmenSuccess implements Action {
   public readonly type = ESalesmanActions.GetSalesmenSuccess;
-  constructor(public payload: ISalesman[]) {
+  constructor(public payload: ISalesmen[]) {
   }
 }
 
-export class GetSalesmenError implements Action {
-  public readonly type = ESalesmanActions.GetSalesmenError;
+export class SalesmenError implements Action {
+  public readonly type = ESalesmanActions.SalesmenError;
   constructor(public readonly payload: string) {
+  }
+}
+
+export class StoreSalesman implements Action {
+  public readonly type = ESalesmanActions.StoreSalesman;
+  constructor(public payload: ISalesmen) {
+  }
+}
+
+export class StoreSalesmanSuccess implements Action {
+  public readonly type = ESalesmanActions.StoreSalesmanSuccess;
+  constructor(public payload: ISalesmen) {
+  }
+}
+
+export class DeleteSalesman implements Action {
+  public readonly type = ESalesmanActions.DeleteSalesman;
+  constructor(public payload: number) {
+  }
+}
+
+export class DeleteSalesmanSuccess implements Action {
+  public readonly type = ESalesmanActions.DeleteSalesmanSuccess;
+  constructor(public payload: number) {
   }
 }
 
 export type SalesmanActions =
   GetSalesmen |
   GetSalesmenSuccess |
-  GetSalesmenError;
+  SalesmenError |
+  StoreSalesman |
+  StoreSalesmanSuccess |
+  DeleteSalesman |
+  DeleteSalesmanSuccess;

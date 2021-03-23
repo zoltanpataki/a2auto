@@ -62,7 +62,7 @@ public class SalesmenService {
     public ResponseEntity<Object> deleteSalesman(Long id) {
         try {
             salesmanRepository.deleteById(id);
-            return new ResponseEntity<>("Salesman is deleted!", HttpStatus.OK);
+            return new ResponseEntity<>(id, HttpStatus.OK);
         } catch (Exception e) {
             logger.info(e.getMessage());
             throw new EntityNotFoundException("Salesman couldn't be deleted!");

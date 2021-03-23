@@ -8,7 +8,7 @@ export class Salesmen {
   }
 }
 
-export interface ISalesman {
+export interface ISalesmen {
   id: number;
   name: string;
 }

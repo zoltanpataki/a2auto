@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Company} from "../models/company";
-import {ISalesman, Salesmen} from "../models/salesmen";
+import {ISalesmen, Salesmen} from "../models/salesmen";
 import {IWitness, Witness} from "../models/witness";
 import {Observable} from "rxjs";
 
@@ -14,10 +14,8 @@ export class UtilService {
   public emptySearchField = false;
   public carUpdate = false;
   public a2Company: Company;
-  public salesmenObs: Observable<ISalesman[]>;
-  public salesmen: Salesmen[];
+  public salesmenObs: Observable<ISalesmen[]>;
   public witnessesObs: Observable<IWitness[]>;
-  public witnesses: Witness[];
 
   constructor(private _snackBar: MatSnackBar,) { }
 
@@ -67,6 +65,10 @@ export class UtilService {
 
   public createBlankWitnessToUtilServiceWitnessList(): Witness {
     return new Witness(null, null, null, 'Egyik sem');
+  }
+
+  public ignoreBlankWitnessOnSettingsPage(): Witness {
+    return new Witness(null, null, null, 'NOT');
   }
 
 }

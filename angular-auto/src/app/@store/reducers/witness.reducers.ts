@@ -13,11 +13,27 @@ export const witnessReducers = (
         error: null
       };
     }
-    case EWitnessActions.GetWitnessesError: {
+    case EWitnessActions.WitnessError: {
       return {
         ...state,
         witnesses: null,
         error: action.payload
+      };
+    }
+    case EWitnessActions.StoreWitnessSuccess: {
+      return {
+        ...state,
+        witnesses: [...state.witnesses, action.payload],
+        error: null
+
+      };
+    }
+    case EWitnessActions.DeleteWitnessSuccess: {
+      return {
+        ...state,
+        witnesses: state.witnesses.filter(witness => witness.id !== action.payload),
+        error: null
+
       };
     }
     default : {

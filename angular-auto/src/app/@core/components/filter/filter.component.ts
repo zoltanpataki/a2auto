@@ -67,7 +67,7 @@ import {
   StorePickedCompany,
   StorePickedCompanyIndex
 } from "../../../@store/actions/company.actions";
-import {GetWitnesses} from "../../../@store/actions/witness.actions";
+import {GetWitnesses, StoreWitness} from "../../../@store/actions/witness.actions";
 import {selectSalesmenList} from "../../../@store/selectors/salesman.selectors";
 import {selectWitnessList} from "../../../@store/selectors/witness.selectors";
 import {GetSalesmen} from "../../../@store/actions/salesman.actions";
@@ -209,13 +209,14 @@ export class FilterComponent implements OnInit {
       this._store.dispatch(new GetCarsSuccess(this.selectedCars));
     }
 
-    if (this.utilService.witnesses == null) {
-      this._store.dispatch(new GetWitnesses());
-      //this.utilService.witnesses.push(this.utilService.createBlankWitnessToUtilServiceWitnessList());
+    if (this.utilService.witnessesObs == null) {
+      this._store.dispatch(new GetWitnesses(this.utilService.createBlankWitnessToUtilServiceWitnessList()));
     }
-    if (this.utilService.salesmen == null) {
+
+    if (this.utilService.salesmenObs == null) {
       this._store.dispatch(new  GetSalesmen());
     }
+
     if (sessionStorage.getItem('clickedCarIndex')) {
       this.clickedCarIndex = Number(sessionStorage.getItem('clickedCarIndex'));
       this._store.dispatch(new StoreClickedCarIndex(this.clickedCarIndex));

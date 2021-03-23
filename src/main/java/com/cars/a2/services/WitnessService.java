@@ -63,7 +63,7 @@ public class WitnessService {
     public ResponseEntity<Object> deleteWitness(Long id) {
         try {
             witnessRepository.deleteById(id);
-            return new ResponseEntity<>("Witness is deleted!", HttpStatus.OK);
+            return new ResponseEntity<>(id, HttpStatus.OK);
         } catch (Exception e) {
             logger.info(e.getMessage());
             throw new EntityNotFoundException("Witness couldn't be deleted!");

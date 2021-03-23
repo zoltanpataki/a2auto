@@ -36,7 +36,7 @@
               <mat-form-field class="example-full-width">
                 <mat-label>Tanú 1</mat-label>
                 <mat-select ngModel placeholder="Név" name="witness1">
-                  <mat-option *ngFor="let witness of utilService.witnesses; trackBy: trackByFn" [value]="witness">
+                  <mat-option *ngFor="let witness of utilService.witnessesObs | async; trackBy: trackByFn" [value]="witness">
                     {{witness.name}}
                   </mat-option>
                 </mat-select>
@@ -48,7 +48,7 @@
               <mat-form-field class="example-full-width">
                 <mat-label>Tanú 2</mat-label>
                 <mat-select ngModel placeholder="Név" name="witness2">
-                  <mat-option *ngFor="let witness of utilService.witnesses; trackBy: trackByFn" [value]="witness">
+                  <mat-option *ngFor="let witness of utilService.witnessesObs | async; trackBy: trackByFn" [value]="witness">
                     {{witness.name}}
                   </mat-option>
                 </mat-select>
@@ -77,7 +77,7 @@
               <mat-form-field class="example-full-width">
                 <mat-label>Tanú 1</mat-label>
                 <mat-select ngModel placeholder="Név" name="witness1">
-                  <mat-option *ngFor="let witness of utilService.witnesses; trackBy: trackByFn" [value]="witness">
+                  <mat-option *ngFor="let witness of utilService.witnessesObs | async; trackBy: trackByFn" [value]="witness">
                     {{witness.name}}
                   </mat-option>
                 </mat-select>
@@ -101,7 +101,7 @@
               <mat-form-field class="example-full-width">
                 <mat-label>Tanú 2</mat-label>
                 <mat-select ngModel placeholder="Név" name="witness2">
-                  <mat-option *ngFor="let witness of utilService.witnesses; trackBy: trackByFn" [value]="witness">
+                  <mat-option *ngFor="let witness of utilService.witnessesObs | async; trackBy: trackByFn" [value]="witness">
                     {{witness.name}}
                   </mat-option>
                 </mat-select>

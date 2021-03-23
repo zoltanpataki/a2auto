@@ -11,6 +11,12 @@ import {WitnessDialogComponent} from "../../dialog/witness-dialog/witness-dialog
 import {NavigationEnd, Router} from "@angular/router";
 import {filter} from "rxjs/operators";
 import {InheritanceTax} from "../../models/inheritanceTax";
+import {DeleteWitness, GetWitnesses, StoreWitness} from "../../../@store/actions/witness.actions";
+import {DeleteSalesman, GetSalesmen, StoreSalesman} from "../../../@store/actions/salesman.actions";
+import {select, Store} from "@ngrx/store";
+import {IAppState} from "../../../@store/state/app.state";
+import {selectSalesmenList} from "../../../@store/selectors/salesman.selectors";
+import {selectWitnessList} from "../../../@store/selectors/witness.selectors";
 
 
 @Component({
@@ -36,7 +42,8 @@ export class SettingsComponent implements OnInit {
               private changeDetectorRefs: ChangeDetectorRef,
               private utilService: UtilService,
               private httpService: HttpService,
-              private router: Router) {
+              private router: Router,
+              private _store: Store<IAppState>,) {
     router.events
       .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
@@ -62,9 +69,25 @@ export class SettingsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.httpService.getAllSalesmen().subscribe(data => {
-      this.salesmen.data = data;
-      this.utilService.salesmen = data;
+
+    if (this.utilService.witnessesObs == null) {
+      this._store.dispatch(new GetWitnesses(this.utilService.ignoreBlankWitnessOnSettingsPage()));
+    }
+
+    if (this.utilService.salesmenObs == null) {
+      this._store.dispatch(new  GetSalesmen());
+    }
+
+    this.utilService.salesmenObs = this._store.pipe(select(selectSalesmenList));
+    this.utilService.witnessesObs = this._store.pipe(select(selectWitnessList));
+
+    this.utilService.salesmenObs.subscribe(salesmen => {
+      console.log(salesmen)
+      this.salesmen.data = salesmen;
+    });
+
+    this.utilService.witnessesObs.subscribe(witnesses => {
+      this.witnesses.data = witnesses;
     });
 
     this.httpService.getAllUtilities().subscribe(data => {
@@ -73,12 +96,6 @@ export class SettingsComponent implements OnInit {
         this.inheritanceInfoList = data;
         this.inheritanceTax1.data = this.createTableDataForInheritanceTax1(this.utilityList, this.inheritanceInfoList);
       });
-    });
-
-    this.httpService.getAllWitnesses().subscribe(data => {
-      this.witnesses.data = data;
-      this.utilService.witnesses = data;
-      this.utilService.witnesses.push(this.utilService.createBlankWitnessToUtilServiceWitnessList());
     });
   }
 
@@ -164,53 +181,21 @@ export class SettingsComponent implements OnInit {
   }
 
   public deleteSalesman(id: number) {
-    this.prepareSalesmanListForChange();
-    this.httpService.deleteSalesman(id).subscribe(data => {
-      this.carSalesmen.forEach((salesman, index) => {
-        if (salesman.id === id) {
-          this.carSalesmen.splice(index, 1);
-        }
-      });
-      this.salesmen.data = this.carSalesmen;
-      this.utilService.salesmen = this.carSalesmen;
-      this.changeDetectorRefs.detectChanges();
-    });
+    this._store.dispatch(new DeleteSalesman(id));
   }
 
   public deleteWitness(id: number) {
-    this.prepareWitnessListForChange();
-    this.httpService.deleteWitness(id).subscribe(data => {
-      this.witnessList.forEach((witness, index) => {
-        if (witness.id === id) {
-          this.witnessList.splice(index, 1);
-        }
-      });
-      this.witnesses.data = this.witnessList;
-      this.utilService.witnesses = this.witnessList;
-      this.changeDetectorRefs.detectChanges();
-    });
+    this._store.dispatch(new DeleteWitness(id));
   }
 
   public addSalesman(salesman: any) {
     const newSalesman = new Salesmen(null, salesman);
-    this.prepareSalesmanListForChange();
-    this.httpService.saveSalesman(newSalesman).subscribe(data => {
-      this.carSalesmen.push(data);
-      this.salesmen.data = this.carSalesmen;
-      this.utilService.salesmen = this.carSalesmen;
-      this.changeDetectorRefs.detectChanges();
-    });
+    this._store.dispatch(new StoreSalesman(newSalesman));
   }
 
   public addWitness(witness: any) {
     const newWitness = new Witness(null, new WitnessAddress(null, witness.zipcode, witness.city, witness.address), witness.idCardNumber, witness.name);
-    this.prepareWitnessListForChange();
-    this.httpService.saveWitness(newWitness).subscribe(data => {
-      this.witnessList.push(data);
-      this.witnesses.data = this.witnessList;
-      this.utilService.witnesses = this.witnessList;
-      this.changeDetectorRefs.detectChanges();
-    });
+    this._store.dispatch(new StoreWitness(newWitness));
   }
 
   public openSalesmanModal(): void {

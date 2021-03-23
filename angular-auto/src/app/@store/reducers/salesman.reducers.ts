@@ -7,19 +7,31 @@ export const salesmanReducers = (
 ): ISalesmanState => {
   switch (action.type) {
     case ESalesmanActions.GetSalesmenSuccess: {
-      console.log("valami");
-      console.log(action.payload);
       return {
         ...state,
         salesmen: action.payload,
         error: null
       };
     }
-    case ESalesmanActions.GetSalesmenError: {
+    case ESalesmanActions.SalesmenError: {
       return {
         ...state,
         salesmen: null,
         error: action.payload
+      };
+    }
+    case ESalesmanActions.StoreSalesmanSuccess: {
+      return {
+        ...state,
+        salesmen: [...state.salesmen, action.payload],
+        error: null
+      };
+    }
+    case ESalesmanActions.DeleteSalesmanSuccess: {
+      return {
+        ...state,
+        salesmen: state.salesmen.filter(salesman => salesman.id !== action.payload),
+        error: null
       };
     }
     default : {
