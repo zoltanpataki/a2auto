@@ -41,13 +41,20 @@ import {Observable} from "rxjs";
 import {Constants} from "../../models/constants";
 import {
   selectActualOrder,
-  selectAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready, selectIndividualOrCorporate,
+  selectAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready,
+  selectAskForInheritanceTaxCalculation,
+  selectIndividualOrCorporate, selectInheritanceTax, selectInheritanceTaxError,
   selectOrderProgress,
-  selectPreviousOrNew, selectSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate
+  selectPreviousOrNew,
+  selectSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate, selectWantInheritanceTaxCalculation
 } from "../../../@store/selectors/order.selectors";
 import {
-  StoreAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready, StoreIndividualOrCorporate,
-  StorePreviousOrNew, StoreSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate,
+  GetCapacity,
+  StoreAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready, StoreAskForInheritanceTaxCalculation,
+  StoreIndividualOrCorporate,
+  StorePreviousOrNew,
+  StoreSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate,
+  StoreWantInheritanceTaxCalculation,
   UpdateOrder,
   UpdateOrderProgress
 } from "../../../@store/actions/order.actions";
@@ -71,6 +78,7 @@ import {GetWitnesses, StoreWitness} from "../../../@store/actions/witness.action
 import {selectSalesmenList} from "../../../@store/selectors/salesman.selectors";
 import {selectWitnessList} from "../../../@store/selectors/witness.selectors";
 import {GetSalesmen} from "../../../@store/actions/salesman.actions";
+import {InheritanceChargeRequest, InheritanceTaxInfoForChainedApiCall} from "../../models/inheritanceTax";
 
 @Component({
   selector: 'app-filter',
@@ -96,6 +104,7 @@ export class FilterComponent implements OnInit {
   public selectedCars = [];
   public selectedCarsObs: Observable<ICar[]>;
   public carErrorObs: Observable<string>;
+  public inheritanceTaxErrorObs: Observable<string>;
   public selectedCarHeader = ['Márka', 'Modell', 'Rendszám', 'Vevő', 'Vásárlás dátuma'];
   public typeOfBuying = ['KÉSZPÉNZ', 'ÁTUTALÁS', 'HITEL'];
   public noMatch = false;
@@ -114,10 +123,13 @@ export class FilterComponent implements OnInit {
   public userSearchResult = new MatTableDataSource<Users>();
   public companySearchResultObs: Observable<ICompany[]>;
   public companySearchResult = new MatTableDataSource<Company>();
+  public inheritanceTaxObs: Observable<number>;
   public inheritanceTax: number;
   public orderProgressObs: Observable<number>;
   public orderProgress: number = 0;
+  public askForInheritanceTaxCalculationObs: Observable<string>;
   public askForInheritanceTaxCalculation: string;
+  public wantInheritanceTaxCalculationObs: Observable<boolean>;
   public wantInheritanceTaxCalculation: boolean;
   public addCountInCar: string;
   public thereIsCountInCar: boolean;
@@ -164,6 +176,8 @@ export class FilterComponent implements OnInit {
   public NEW: string = Constants.NEW;
   public INDIVIDUAL: string = Constants.INDIVIDUAL;
   public CORPORATE: string = Constants.CORPORATE;
+  public WANT_CALCULATION: string = Constants.WANT_CALCULATION;
+  public DONT_WANT_CALCULATION: string = Constants.DONT_WANT_CALCULATION;
 
   constructor(private httpService: HttpService,
               public utilService: UtilService,
@@ -263,13 +277,16 @@ export class FilterComponent implements OnInit {
     this.carOfTransactionObs = this._store.pipe(select(selectPickedCar));
     this.selectedCarsObs = this._store.pipe(select(selectCarList));
     this.carErrorObs = this._store.pipe(select(selectCarError));
+    this.inheritanceTaxErrorObs = this._store.pipe(select(selectInheritanceTaxError));
     this.previousOrNewObs = this._store.pipe(select(selectPreviousOrNew));
     this.individualOrCorporateObs = this._store.pipe(select(selectIndividualOrCorporate));
+    this.askForInheritanceTaxCalculationObs = this._store.pipe(select(selectAskForInheritanceTaxCalculation));
     this.orderProgressObs = this._store.pipe(select(selectOrderProgress));
     this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlreadyObs =
       this._store.pipe(select(selectAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready));
     this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporateObs =
       this._store.pipe(select(selectSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate));
+    this.wantInheritanceTaxCalculationObs = this._store.pipe(select(selectWantInheritanceTaxCalculation));
     this.newOrderObs = this._store.pipe(select(selectActualOrder));
     this.userSearchResultObs = this._store.pipe(select(selectUserSearchData));
     this.pickedUserObs = this._store.pipe(select(selectPickedUser));
@@ -277,6 +294,7 @@ export class FilterComponent implements OnInit {
     this.companySearchResultObs = this._store.pipe(select(selectCompanySearchData));
     this.pickedCompanyObs = this._store.pipe(select(selectPickedCompany));
     this.indexOfPickedCompanyObs = this._store.pipe(select(selectIndexOfPickedCompany));
+    this.inheritanceTaxObs = this._store.pipe(select(selectInheritanceTax));
 
     this.selectedCarsObs.subscribe(selectedCars => {
       sessionStorage.setItem('selectedCars', JSON.stringify(selectedCars));
@@ -297,12 +315,25 @@ export class FilterComponent implements OnInit {
       }
     });
 
+    this.inheritanceTaxErrorObs.subscribe(errorMsg => {
+      if (null !== errorMsg) {
+        const action = 'Hiba :('
+        this.utilService.openSnackBar(errorMsg, action);
+      }
+    });
+
     this.previousOrNewObs.subscribe(previousOrNew => {
       this.previousOrNew = previousOrNew;
     });
 
     this.individualOrCorporateObs.subscribe(individualOrCorporate => {
       this.individualOrCorporate = individualOrCorporate;
+    });
+
+    this.askForInheritanceTaxCalculationObs.subscribe(askForInheritanceTaxCalculation => {
+      this.askForInheritanceTaxCalculation = askForInheritanceTaxCalculation;
+      this.orderProgress = this.orderProgress > 3 ? this.orderProgress : 3;
+      this.setOrderProgressInSessionStorage(this.orderProgress);
     });
 
     this.orderProgressObs.subscribe(orderProgress => {
@@ -314,7 +345,6 @@ export class FilterComponent implements OnInit {
 
     this.newOrderObs.subscribe(order => {
       this.newOrder = order;
-      console.log(order);
     });
 
     this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlreadyObs.subscribe(alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready => {
@@ -328,6 +358,13 @@ export class FilterComponent implements OnInit {
       this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate = selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate;
       if (null != selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate) {
         sessionStorage.setItem('selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate', this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate.toString());
+      }
+    });
+
+    this.wantInheritanceTaxCalculationObs.subscribe(wantInheritanceTaxCalculation => {
+      this.wantInheritanceTaxCalculation = wantInheritanceTaxCalculation;
+      if (null != wantInheritanceTaxCalculation) {
+        sessionStorage.setItem('wantInheritanceTaxCalculation', this.wantInheritanceTaxCalculation.toString());
       }
     });
 
@@ -378,6 +415,14 @@ export class FilterComponent implements OnInit {
         sessionStorage.setItem('indexOfPickedCompany', index.toString());
       }
     });
+
+    this.inheritanceTaxObs.subscribe(inheritanceTax => {
+      console.log(inheritanceTax);
+      this.inheritanceTax = inheritanceTax;
+      if (null != inheritanceTax) {
+        sessionStorage.setItem('inheritanceTax', this.inheritanceTax.toString());
+      }
+    });
   }
 
   // Retrieve all the data after refresh
@@ -423,8 +468,10 @@ export class FilterComponent implements OnInit {
         this._store.dispatch(new StoreIndividualOrCorporate(Constants.CORPORATE));
     }
     if (sessionStorage.getItem('wantInheritanceTaxCalculation')) {
-      this.wantInheritanceTaxCalculation = JSON.parse(sessionStorage.getItem('wantInheritanceTaxCalculation'));
-      this.askForInheritanceTaxCalculation = this.wantInheritanceTaxCalculation ? 'wantCalculation' : 'dontWantCalculation';
+      this._store.dispatch(new StoreWantInheritanceTaxCalculation(JSON.parse(sessionStorage.getItem('wantInheritanceTaxCalculation'))));
+      this.wantInheritanceTaxCalculation ?
+        this._store.dispatch(new StoreAskForInheritanceTaxCalculation(Constants.WANT_CALCULATION)) :
+        this._store.dispatch(new StoreAskForInheritanceTaxCalculation(Constants.DONT_WANT_CALCULATION));
     }
     if (sessionStorage.getItem('thereIsCountInCar')) {
       this.thereIsCountInCar = JSON.parse(sessionStorage.getItem('thereIsCountInCar'));
@@ -1280,9 +1327,9 @@ export class FilterComponent implements OnInit {
   // Sets the checkbox values to null.
 
   private changeCheckBoxValuesToNull() {
-    this.individualOrCorporate = Constants.NULL_INDIVIDUAL_OR_CORPORATE;
-    this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate =
-      Constants.NULL_SELECTED_BETWEEN_INDIVIDUAL_AND_CORPORATE_TRUE_IF_INDIVIDUAL_FALSE_IF_CORPORATE;
+    this._store.dispatch(new StoreIndividualOrCorporate(Constants.NULL_INDIVIDUAL_OR_CORPORATE));
+    this._store.dispatch(new StoreSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate(
+      Constants.NULL_SELECTED_BETWEEN_INDIVIDUAL_AND_CORPORATE_TRUE_IF_INDIVIDUAL_FALSE_IF_CORPORATE));
   }
 
   // Basically it helps to coordinate the checkbox of the private and corporate customer.
@@ -1311,32 +1358,47 @@ export class FilterComponent implements OnInit {
   // (the box is filled or not).
 
   public setInheritanceTaxCheckboxValue(wantOrNotCalculation: string, car: Car, selection: boolean) {
-    if (wantOrNotCalculation === 'wantCalculation') {
+    if (wantOrNotCalculation === Constants.WANT_CALCULATION) {
+      this._store.dispatch(new StoreWantInheritanceTaxCalculation(selection));
       if (selection) {
-        this.askForInheritanceTaxCalculation = 'wantCalculation';
-        this.wantInheritanceTaxCalculation = true;
+        this._store.dispatch(new StoreAskForInheritanceTaxCalculation(Constants.WANT_CALCULATION));
         this.countInheritanceTax(car);
       } else {
-        this.inheritanceTax = null;
-        this.askForInheritanceTaxCalculation = 'dontWantCalculation';
-        this.wantInheritanceTaxCalculation = false;
-        this.orderProgress = this.orderProgress > 3 ? this.orderProgress : 3;
-        this.setOrderProgressInSessionStorage(this.orderProgress);
+        this._store.dispatch(new StoreAskForInheritanceTaxCalculation(Constants.DONT_WANT_CALCULATION));
       }
+
+      // if (selection) {
+      //   this.askForInheritanceTaxCalculation = 'wantCalculation';
+      //   this.wantInheritanceTaxCalculation = true;
+      //   this.countInheritanceTax(car);
+      // } else {
+      //   this.inheritanceTax = null;
+      //   this.askForInheritanceTaxCalculation = 'dontWantCalculation';
+      //   this.wantInheritanceTaxCalculation = false;
+      //   this.orderProgress = this.orderProgress > 3 ? this.orderProgress : 3;
+      //   this.setOrderProgressInSessionStorage(this.orderProgress);
+      // }
     } else if (wantOrNotCalculation === 'dontWantCalculation') {
+      this._store.dispatch(new StoreWantInheritanceTaxCalculation(!selection));
       if (selection) {
-        this.inheritanceTax = null;
-        this.askForInheritanceTaxCalculation = 'dontWantCalculation';
-        this.wantInheritanceTaxCalculation = false;
-        this.orderProgress = this.orderProgress > 3 ? this.orderProgress : 3;
-        this.setOrderProgressInSessionStorage(this.orderProgress);
+        this._store.dispatch(new StoreAskForInheritanceTaxCalculation(Constants.DONT_WANT_CALCULATION))
       } else {
-        this.askForInheritanceTaxCalculation = 'wantCalculation';
-        this.wantInheritanceTaxCalculation = true;
+        this._store.dispatch(new StoreAskForInheritanceTaxCalculation(Constants.WANT_CALCULATION));
         this.countInheritanceTax(car);
       }
+
+      // if (selection) {
+      //   this.inheritanceTax = null;
+      //   this.askForInheritanceTaxCalculation = 'dontWantCalculation';
+      //   this.wantInheritanceTaxCalculation = false;
+      //   this.orderProgress = this.orderProgress > 3 ? this.orderProgress : 3;
+      //   this.setOrderProgressInSessionStorage(this.orderProgress);
+      // } else {
+      //   this.askForInheritanceTaxCalculation = 'wantCalculation';
+      //   this.wantInheritanceTaxCalculation = true;
+      //   this.countInheritanceTax(car);
+      // }
     }
-    sessionStorage.setItem('wantInheritanceTaxCalculation', this.wantInheritanceTaxCalculation.toString());
   }
 
   // Basically it helps to coordinate the checkbox for scenario when there is or there isn't count in car.
@@ -1378,59 +1440,19 @@ export class FilterComponent implements OnInit {
   // Calls the http.service.ts's getUtility, getChargeForInheritanceTax methods to retrieve relevant data form the db.
 
   private countInheritanceTax (car: Car) {
-    const carAge = (new Date()).getFullYear() - car.vintage;
-    let stringKw = null;
-    let stringAge = null;
-    let stringCapacity = null;
-
-    if (car.kwh < 41) {
-      stringKw = 'S';
-    } else if (car.kwh > 40 && car.kwh < 81) {
-      stringKw = 'M';
-    } else if (car.kwh > 80 && car.kwh < 121) {
-      stringKw = 'L';
-    } else if (car.kwh > 120) {
-      stringKw = 'XL';
-    }
-
-    if (carAge < 4) {
-      stringAge = 'young';
-    } else if (carAge > 3 && carAge < 9) {
-      stringAge = 'mediumAged';
-    } else if (carAge > 8) {
-      stringAge = 'old';
-    }
-
-    if (car.carOrTruck === 'SZEMÉLYGÉPJÁRMŰ' || car.carOrTruck == null) {
-      if (car.capacity < 1401) {
-        stringCapacity = 'smallCapacity';
-      } else if (car.capacity > 1400 && car.capacity < 2001) {
-        stringCapacity = 'mediumCapacity';
-      } else if (car.capacity > 2000) {
-        stringCapacity = 'largeCapacity';
-      }
-    } else {
-      stringCapacity = 'largeCapacity';
-    }
-
-    this.httpService.getUtility(stringCapacity).subscribe(utility => {
-      this.httpService.getChargeForInheritanceTax(stringKw, stringAge).subscribe(chargeForInheritanceTax => {
-        this.httpService.getUtility('carRegistry').subscribe(carReg => {
-          this.httpService.getUtility('extraChargeAtSelling').subscribe(charge => {
-            const carRegistry = Number(carReg.value);
-            const extraCharge = Number(charge.value);
-            this.inheritanceTax = Number(utility.value) + (chargeForInheritanceTax * car.kwh) + carRegistry + extraCharge;
-            sessionStorage.setItem('inheritanceTax', this.inheritanceTax.toString());
-            this.orderProgress = this.orderProgress > 3 ? this.orderProgress : 3;
-            this.setOrderProgressInSessionStorage(this.orderProgress);
-          });
-        });
-      }, error1 => {
-        this.utilService.openSnackBar('Sajnos az autó évjárata vagy lökettérfogata hiányzik!', 'Hiba :(');
-      });
-    }, error1 => {
-      this.utilService.openSnackBar('Sajnos az autó hengerűrtartalma hiányzik!', 'Hiba :(');
-    });
+    const infoForInheritanceCalculation = this.utilService.gatherInfoForInheritanceCalculation(car);
+    this._store.dispatch(new GetCapacity(new InheritanceTaxInfoForChainedApiCall(
+      null,
+      null,
+      null,
+      null,
+      car.kwh,
+      new InheritanceChargeRequest(
+        infoForInheritanceCalculation.stringKw,
+        infoForInheritanceCalculation.stringAge),
+      infoForInheritanceCalculation.stringCapacity,
+      Constants.CAR_REGISTRY,
+      Constants.EXTRA_CHARGE_AT_SELLING)));
   }
 
   // This is the first method gets called when somebody wants to buy a car.

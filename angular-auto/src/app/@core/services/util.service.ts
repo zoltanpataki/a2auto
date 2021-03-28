@@ -4,6 +4,8 @@ import {Company} from "../models/company";
 import {ISalesmen, Salesmen} from "../models/salesmen";
 import {IWitness, Witness} from "../models/witness";
 import {Observable} from "rxjs";
+import {ICar} from "../models/car";
+import {InfoForInheritanceCalculation} from "../models/inheritanceTax";
 
 @Injectable({
   providedIn: 'root'
@@ -69,6 +71,45 @@ export class UtilService {
 
   public ignoreBlankWitnessOnSettingsPage(): Witness {
     return new Witness(null, null, null, 'NOT');
+  }
+
+  public gatherInfoForInheritanceCalculation(car: ICar): InfoForInheritanceCalculation {
+    const carAge = (new Date()).getFullYear() - car.vintage;
+    let stringKw = null;
+    let stringAge = null;
+    let stringCapacity = null;
+
+    if (car.kwh < 41) {
+      stringKw = 'S';
+    } else if (car.kwh > 40 && car.kwh < 81) {
+      stringKw = 'M';
+    } else if (car.kwh > 80 && car.kwh < 121) {
+      stringKw = 'L';
+    } else if (car.kwh > 120) {
+      stringKw = 'XL';
+    }
+
+    if (carAge < 4) {
+      stringAge = 'young';
+    } else if (carAge > 3 && carAge < 9) {
+      stringAge = 'mediumAged';
+    } else if (carAge > 8) {
+      stringAge = 'old';
+    }
+
+    if (car.carOrTruck === 'SZEMÉLYGÉPJÁRMŰ' || car.carOrTruck == null) {
+      if (car.capacity < 1401) {
+        stringCapacity = 'smallCapacity';
+      } else if (car.capacity > 1400 && car.capacity < 2001) {
+        stringCapacity = 'mediumCapacity';
+      } else if (car.capacity > 2000) {
+        stringCapacity = 'largeCapacity';
+      }
+    } else {
+      stringCapacity = 'largeCapacity';
+    }
+
+    return new InfoForInheritanceCalculation(stringKw, stringAge, stringCapacity);
   }
 
 }

@@ -1,7 +1,7 @@
-import {ISalesman} from "../../@core/models/salesmen";
+import {ISalesmen} from "../../@core/models/salesmen";
 
 export interface ISalesmanState {
-  salesmen: ISalesman[];
+  salesmen: ISalesmen[];
   error: string;
 }
 

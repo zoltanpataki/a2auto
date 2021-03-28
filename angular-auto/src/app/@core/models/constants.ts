@@ -5,6 +5,10 @@ export abstract class Constants {
   static readonly NEW: string = 'new';
   static readonly INDIVIDUAL: string = 'individual';
   static readonly CORPORATE: string = 'corporate';
+  static readonly WANT_CALCULATION: string = 'wantCalculation';
+  static readonly DONT_WANT_CALCULATION: string = 'dontWantCalculation';
+  static readonly CAR_REGISTRY: string = 'carRegistry';
+  static readonly EXTRA_CHARGE_AT_SELLING: string = 'extraChargeAtSelling';
 
   // null constants
 

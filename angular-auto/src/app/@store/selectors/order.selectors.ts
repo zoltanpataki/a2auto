@@ -14,6 +14,21 @@ export const selectIndividualOrCorporate = createSelector(
   (state: IOrderState) => state.individualOrCorporate
 );
 
+export const selectAskForInheritanceTaxCalculation = createSelector(
+  selectOrder,
+  (state: IOrderState) => state.askForInheritanceTaxCalculation
+);
+
+export const selectInheritanceTax = createSelector(
+  selectOrder,
+  (state: IOrderState) => state.inheritanceTax
+);
+
+export const selectInheritanceTaxError = createSelector(
+  selectOrder,
+  (state: IOrderState) => state.error
+);
+
 export const selectOrderProgress = createSelector(
   selectOrder,
   (state: IOrderState) => state.orderProgress
@@ -32,4 +47,9 @@ export const selectAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = createS
 export const selectSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate = createSelector(
   selectOrder,
   (state: IOrderState) => state.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate
+);
+
+export const selectWantInheritanceTaxCalculation = createSelector(
+  selectOrder,
+  (state: IOrderState) => state.wantInheritanceTaxCalculation
 );

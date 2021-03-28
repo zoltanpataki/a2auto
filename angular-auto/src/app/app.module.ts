@@ -63,6 +63,7 @@ import {UserEffects} from "./@store/effects/user.effects";
 import {CompanyEffects} from "./@store/effects/company.effects";
 import {WitnessEffects} from "./@store/effects/witness.effects";
 import {SalesmanEffects} from "./@store/effects/salesman.effects";
+import {OrderEffects} from "./@store/effects/order.effects";
 
 // console.log all actions
 export function debug(reducer: ActionReducer<any>): ActionReducer<any> {
@@ -131,7 +132,7 @@ export const metaReducers: MetaReducer<any>[] = [];
         strictStateImmutability: false,
         strictActionImmutability: false,
       }}),
-    EffectsModule.forRoot([CarEffects, UserEffects, CompanyEffects, WitnessEffects, SalesmanEffects]),
+    EffectsModule.forRoot([CarEffects, UserEffects, CompanyEffects, WitnessEffects, SalesmanEffects, OrderEffects]),
     StoreRouterConnectingModule.forRoot({stateKey: 'router'}),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     CurrencyMaskModule,

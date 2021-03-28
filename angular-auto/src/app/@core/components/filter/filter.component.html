@@ -323,10 +323,10 @@
         <div class="inheritanceTax">
           <div class="inheritanceTaxLeftSide">
             <div>
-              <mat-checkbox #inhtax (change)="setInheritanceTaxCheckboxValue('wantCalculation', car, inhtax.checked)" [checked]="askForInheritanceTaxCalculation === 'wantCalculation'">Kérek átírási költség számítást</mat-checkbox>
+              <mat-checkbox #inhtax (change)="setInheritanceTaxCheckboxValue('wantCalculation', car, inhtax.checked)" [checked]="askForInheritanceTaxCalculation === WANT_CALCULATION">Kérek átírási költség számítást</mat-checkbox>
             </div>
             <div>
-              <mat-checkbox #noinhtax (change)="setInheritanceTaxCheckboxValue('dontWantCalculation', car, noinhtax.checked)" [checked]="askForInheritanceTaxCalculation === 'dontWantCalculation'">Nem kérek átírási költség számítást</mat-checkbox>
+              <mat-checkbox #noinhtax (change)="setInheritanceTaxCheckboxValue('dontWantCalculation', car, noinhtax.checked)" [checked]="askForInheritanceTaxCalculation === DONT_WANT_CALCULATION">Nem kérek átírási költség számítást</mat-checkbox>
             </div>
           </div>
           <div class="inheritanceTaxRightSide" *ngIf="inheritanceTax">

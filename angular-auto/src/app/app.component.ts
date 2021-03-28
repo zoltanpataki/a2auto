@@ -28,14 +28,6 @@ export class AppComponent implements OnInit {
       this.utilService.a2Company = data[0];
     });
 
-    this.httpService.getAllSalesmen().subscribe(data => {
-      this.utilService.salesmen = data;
-    });
-
-    this.httpService.getAllWitnesses().subscribe(data => {
-      this.utilService.witnesses = data;
-      this.utilService.witnesses.push(this.utilService.createBlankWitnessToUtilServiceWitnessList());
-    });
   if (!isPlatformBrowser(this.platformId)) {
     const bases = this.document.getElementsByTagName('base');
 

@@ -18,6 +18,12 @@ export const orderReducers = (
         individualOrCorporate: action.payload
       }
     }
+    case EOrderActions.StoreAskForInheritanceTaxCalculation: {
+      return {
+        ...state,
+        askForInheritanceTaxCalculation: action.payload
+      }
+    }
     case EOrderActions.UpdateOrderProgress: {
       return {
         ...state,
@@ -40,6 +46,26 @@ export const orderReducers = (
       return {
         ...state,
         selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate: action.payload
+      }
+    }
+    case EOrderActions.StoreWantInheritanceTaxCalculation: {
+      return {
+        ...state,
+        wantInheritanceTaxCalculation: action.payload
+      }
+    }
+    case EOrderActions.GetInheritanceTaxSuccess: {
+      return {
+        ...state,
+        inheritanceTax: action.payload
+      }
+    }
+    case EOrderActions.GetInheritanceTaxError: {
+      return {
+        ...state,
+        error: action.payload.errorMsg,
+        wantInheritanceTaxCalculation: action.payload.wantInheritanceTaxCalculation,
+        askForInheritanceTaxCalculation: action.payload.askForInheritanceTaxCalculation
       }
     }
     default:
