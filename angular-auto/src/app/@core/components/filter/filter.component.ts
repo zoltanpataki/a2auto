@@ -41,19 +41,30 @@ import {Observable} from "rxjs";
 import {Constants} from "../../models/constants";
 import {
   selectActualOrder,
+  selectAddCountInCar,
   selectAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready,
-  selectAskForInheritanceTaxCalculation,
-  selectIndividualOrCorporate, selectInheritanceTax, selectInheritanceTaxError,
+  selectAskForInheritanceTaxCalculation, selectCountInCar, selectCountInCarSupplement,
+  selectIndividualOrCorporate,
+  selectInheritanceTax,
+  selectInheritanceTaxError,
   selectOrderProgress,
   selectPreviousOrNew,
-  selectSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate, selectWantInheritanceTaxCalculation
+  selectSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate,
+  selectThereIsCountInCar,
+  selectWantInheritanceTaxCalculation
 } from "../../../@store/selectors/order.selectors";
 import {
-  GetCapacity, GetInheritanceTaxSuccess,
-  StoreAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready, StoreAskForInheritanceTaxCalculation,
+  GetCapacity,
+  GetInheritanceTaxSuccess,
+  StoreAddCountInCar,
+  StoreAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready,
+  StoreAskForInheritanceTaxCalculation,
+  StoreCountInCar,
+  StoreCountInCarSupplement,
   StoreIndividualOrCorporate,
   StorePreviousOrNew,
   StoreSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate,
+  StoreThereIsCountInCar,
   StoreWantInheritanceTaxCalculation,
   UpdateOrder,
   UpdateOrderProgress
@@ -74,7 +85,7 @@ import {
   StorePickedCompany,
   StorePickedCompanyIndex
 } from "../../../@store/actions/company.actions";
-import {GetWitnesses, StoreWitness} from "../../../@store/actions/witness.actions";
+import {GetWitnesses} from "../../../@store/actions/witness.actions";
 import {selectSalesmenList} from "../../../@store/selectors/salesman.selectors";
 import {selectWitnessList} from "../../../@store/selectors/witness.selectors";
 import {GetSalesmen} from "../../../@store/actions/salesman.actions";
@@ -131,8 +142,11 @@ export class FilterComponent implements OnInit {
   public askForInheritanceTaxCalculation: string;
   public wantInheritanceTaxCalculationObs: Observable<boolean>;
   public wantInheritanceTaxCalculation: boolean;
+  public addCountInCarObs: Observable<string>;
   public addCountInCar: string;
+  public thereIsCountInCarObs: Observable<boolean>;
   public thereIsCountInCar: boolean;
+  public countInCarSupplementObs: Observable<CountInCarSupplement>;
   public countInCarSupplement: CountInCarSupplement;
   public clickedCarIndexObs: Observable<number>;
   public clickedCarIndex: number;
@@ -148,6 +162,7 @@ export class FilterComponent implements OnInit {
   public indexOfPickedCompanyObs: Observable<number>;
   public indexOfPickedCompany: number;
   public creditData: Credit;
+  public countInCarObs: Observable<ICar>;
   public countInCar: Car;
   public salesman: string;
   public newOrderObs: Observable<Order>;
@@ -178,6 +193,8 @@ export class FilterComponent implements OnInit {
   public CORPORATE: string = Constants.CORPORATE;
   public WANT_CALCULATION: string = Constants.WANT_CALCULATION;
   public DONT_WANT_CALCULATION: string = Constants.DONT_WANT_CALCULATION;
+  public COUNT_IN: string = Constants.COUNT_IN;
+  public NO_COUNT_IN: string = Constants.NO_COUNT_IN;
 
   constructor(private httpService: HttpService,
               public utilService: UtilService,
@@ -281,12 +298,14 @@ export class FilterComponent implements OnInit {
     this.previousOrNewObs = this._store.pipe(select(selectPreviousOrNew));
     this.individualOrCorporateObs = this._store.pipe(select(selectIndividualOrCorporate));
     this.askForInheritanceTaxCalculationObs = this._store.pipe(select(selectAskForInheritanceTaxCalculation));
+    this.addCountInCarObs = this._store.pipe(select(selectAddCountInCar));
     this.orderProgressObs = this._store.pipe(select(selectOrderProgress));
     this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlreadyObs =
       this._store.pipe(select(selectAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready));
     this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporateObs =
       this._store.pipe(select(selectSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate));
     this.wantInheritanceTaxCalculationObs = this._store.pipe(select(selectWantInheritanceTaxCalculation));
+    this.thereIsCountInCarObs = this._store.pipe(select(selectThereIsCountInCar));
     this.newOrderObs = this._store.pipe(select(selectActualOrder));
     this.userSearchResultObs = this._store.pipe(select(selectUserSearchData));
     this.pickedUserObs = this._store.pipe(select(selectPickedUser));
@@ -295,6 +314,10 @@ export class FilterComponent implements OnInit {
     this.pickedCompanyObs = this._store.pipe(select(selectPickedCompany));
     this.indexOfPickedCompanyObs = this._store.pipe(select(selectIndexOfPickedCompany));
     this.inheritanceTaxObs = this._store.pipe(select(selectInheritanceTax));
+    this.countInCarObs = this._store.pipe(select(selectCountInCar));
+    this.countInCarSupplementObs = this._store.pipe(select(selectCountInCarSupplement));
+
+    //subscriptions
 
     this.selectedCarsObs.subscribe(selectedCars => {
       sessionStorage.setItem('selectedCars', JSON.stringify(selectedCars));
@@ -332,8 +355,14 @@ export class FilterComponent implements OnInit {
 
     this.askForInheritanceTaxCalculationObs.subscribe(askForInheritanceTaxCalculation => {
       this.askForInheritanceTaxCalculation = askForInheritanceTaxCalculation;
-      this.orderProgress = this.orderProgress > 3 ? this.orderProgress : 3;
-      this.setOrderProgressInSessionStorage(this.orderProgress);
+      if (null != this.askForInheritanceTaxCalculation) {
+        this.orderProgress = this.orderProgress > 3 ? this.orderProgress : 3;
+        this.setOrderProgressInSessionStorage(this.orderProgress);
+      }
+    });
+
+    this.addCountInCarObs.subscribe(addCountInCar => {
+      this.addCountInCar = addCountInCar;
     });
 
     this.orderProgressObs.subscribe(orderProgress => {
@@ -349,9 +378,12 @@ export class FilterComponent implements OnInit {
 
     this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlreadyObs.subscribe(alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready => {
       this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready;
-      this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready ?
-        this._store.dispatch(new StorePreviousOrNew(Constants.NEW)) :
-        this._store.dispatch(new StorePreviousOrNew(Constants.PREVIOUS));
+      if (null != this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready) {
+        this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready ?
+          this._store.dispatch(new StorePreviousOrNew(Constants.NEW)) :
+          this._store.dispatch(new StorePreviousOrNew(Constants.PREVIOUS));
+      }
+
       if (null != alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready) {
         sessionStorage.setItem('alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready', this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready.toString());
       }
@@ -359,9 +391,12 @@ export class FilterComponent implements OnInit {
 
     this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporateObs.subscribe(selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate => {
       this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate = selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate;
-      this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate ?
-        this._store.dispatch(new StoreIndividualOrCorporate(Constants.INDIVIDUAL)) :
-        this._store.dispatch(new StoreIndividualOrCorporate(Constants.CORPORATE));
+      if (null != this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate) {
+        this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate ?
+          this._store.dispatch(new StoreIndividualOrCorporate(Constants.INDIVIDUAL)) :
+          this._store.dispatch(new StoreIndividualOrCorporate(Constants.CORPORATE));
+      }
+
       if (null != selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate) {
         sessionStorage.setItem('selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate', this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate.toString());
       }
@@ -369,11 +404,34 @@ export class FilterComponent implements OnInit {
 
     this.wantInheritanceTaxCalculationObs.subscribe(wantInheritanceTaxCalculation => {
       this.wantInheritanceTaxCalculation = wantInheritanceTaxCalculation;
-      this.wantInheritanceTaxCalculation ?
-        this._store.dispatch(new StoreAskForInheritanceTaxCalculation(Constants.WANT_CALCULATION)) :
-        this._store.dispatch(new StoreAskForInheritanceTaxCalculation(Constants.DONT_WANT_CALCULATION));
+      if (null != this.wantInheritanceTaxCalculation) {
+        this.wantInheritanceTaxCalculation ?
+          this._store.dispatch(new StoreAskForInheritanceTaxCalculation(Constants.WANT_CALCULATION)) :
+          this._store.dispatch(new StoreAskForInheritanceTaxCalculation(Constants.DONT_WANT_CALCULATION));
+      }
+
       if (null != wantInheritanceTaxCalculation) {
         sessionStorage.setItem('wantInheritanceTaxCalculation', this.wantInheritanceTaxCalculation.toString());
+      }
+    });
+
+    this.thereIsCountInCarObs.subscribe(thereIsCountInCar => {
+      this.thereIsCountInCar = thereIsCountInCar;
+      if (null != this.thereIsCountInCar) {
+        if (this.thereIsCountInCar) {
+          this._store.dispatch(new StoreAddCountInCar(Constants.COUNT_IN));
+        } else {
+          this._store.dispatch(new StoreAddCountInCar(Constants.NO_COUNT_IN));
+          this._store.dispatch(new StoreCountInCar(null));
+          this._store.dispatch(new StoreCountInCarSupplement(null));
+          if (this.orderProgress <= 5) {
+            this.setOrderProgressInSessionStorage(5);
+          }
+        }
+      }
+
+      if (null != thereIsCountInCar) {
+        sessionStorage.setItem('thereIsCountInCar', this.thereIsCountInCar.toString());
       }
     });
 
@@ -426,9 +484,24 @@ export class FilterComponent implements OnInit {
     });
 
     this.inheritanceTaxObs.subscribe(inheritanceTax => {
+      console.log(inheritanceTax)
       this.inheritanceTax = inheritanceTax;
       if (null != inheritanceTax) {
         sessionStorage.setItem('inheritanceTax', this.inheritanceTax.toString());
+      }
+    });
+
+    this.countInCarObs.subscribe(countInCar => {
+      this.countInCar = countInCar;
+      if (null != countInCar) {
+        sessionStorage.setItem('countInCar', this.countInCar.toString());
+      }
+    });
+
+    this.countInCarSupplementObs.subscribe(countInCarSupplement => {
+      this.countInCarSupplement = countInCarSupplement;
+      if (null != countInCarSupplement) {
+        sessionStorage.setItem('countInCarSupplement', this.countInCarSupplement.toString());
       }
     });
   }
@@ -438,6 +511,9 @@ export class FilterComponent implements OnInit {
   private getDataFromSessionStorageAfterRefresh() {
     if (sessionStorage.getItem('orderProgress')) {
       this._store.dispatch(new UpdateOrderProgress(Number(sessionStorage.getItem('orderProgress'))));
+    }
+    if (sessionStorage.getItem('inheritanceTax')) {
+      this._store.dispatch(new GetInheritanceTaxSuccess(Number(sessionStorage.getItem('inheritanceTax'))));
     }
     if (sessionStorage.getItem('userSearchData')) {
       this._store.dispatch(new GetUsersSuccess(JSON.parse(sessionStorage.getItem('userSearchData'))));
@@ -473,8 +549,7 @@ export class FilterComponent implements OnInit {
       this._store.dispatch(new StoreWantInheritanceTaxCalculation(JSON.parse(sessionStorage.getItem('wantInheritanceTaxCalculation'))));
     }
     if (sessionStorage.getItem('thereIsCountInCar')) {
-      this.thereIsCountInCar = JSON.parse(sessionStorage.getItem('thereIsCountInCar'));
-      this.addCountInCar = this.thereIsCountInCar ? 'countIn' : 'noCountIn';
+      this._store.dispatch(new StoreThereIsCountInCar(JSON.parse(sessionStorage.getItem('thereIsCountInCar'))));
     }
     if (sessionStorage.getItem('countInCar')) {
       this.countInCar = JSON.parse(sessionStorage.getItem('countInCar'));
@@ -503,9 +578,6 @@ export class FilterComponent implements OnInit {
     }
     if (sessionStorage.getItem('salesman')) {
       this.salesman = sessionStorage.getItem('salesman');
-    }
-    if (sessionStorage.getItem('inheritanceTax')) {
-      this._store.dispatch(new GetInheritanceTaxSuccess(Number(sessionStorage.getItem('inheritanceTax'))));
     }
     if (sessionStorage.getItem('credit')) {
       this.creditData = JSON.parse(sessionStorage.getItem('credit'));
@@ -1365,12 +1437,14 @@ export class FilterComponent implements OnInit {
       } else {
         this._store.dispatch(new StoreAskForInheritanceTaxCalculation(Constants.DONT_WANT_CALCULATION));
         this._store.dispatch(new GetInheritanceTaxSuccess(null));
+        sessionStorage.removeItem('inheritanceTax');
       }
     } else if (wantOrNotCalculation === 'dontWantCalculation') {
       this._store.dispatch(new StoreWantInheritanceTaxCalculation(!selection));
       if (selection) {
         this._store.dispatch(new StoreAskForInheritanceTaxCalculation(Constants.DONT_WANT_CALCULATION))
         this._store.dispatch(new GetInheritanceTaxSuccess(null));
+        sessionStorage.removeItem('inheritanceTax');
       } else {
         this._store.dispatch(new StoreAskForInheritanceTaxCalculation(Constants.WANT_CALCULATION));
         this.countInheritanceTax(car);
@@ -1384,30 +1458,17 @@ export class FilterComponent implements OnInit {
   // (the box is filled or not).
 
   public setCountInCar(isOrNotCountIn: string, selection: boolean) {
-    if (isOrNotCountIn === 'countIn') {
-      if (selection) {
-        this.addCountInCar = 'countIn';
-        this.thereIsCountInCar = true;
-      } else {
-        this.addCountInCar = 'noCountIn';
-        this.thereIsCountInCar = false;
-        this.countInCar = null;
-        this.countInCarSupplement = null;
-        this.setOrderProgressInSessionStorage(5);
-      }
-    } else if (isOrNotCountIn === 'noCountIn') {
-      if (selection) {
-        this.addCountInCar = 'noCountIn';
-        this.thereIsCountInCar = false;
-        this.countInCar = null;
-        this.countInCarSupplement = null;
-        this.setOrderProgressInSessionStorage(5);
-      } else {
-        this.addCountInCar = 'countIn';
-        this.thereIsCountInCar = true;
-      }
+    if (isOrNotCountIn === Constants.COUNT_IN) {
+      this._store.dispatch(new StoreThereIsCountInCar(selection));
+      selection ?
+        this._store.dispatch(new StoreAddCountInCar(Constants.COUNT_IN)) :
+        this._store.dispatch(new StoreAddCountInCar(Constants.NO_COUNT_IN));
+    } else if (isOrNotCountIn === Constants.NO_COUNT_IN) {
+      this._store.dispatch(new StoreThereIsCountInCar(!selection));
+      selection ?
+        this._store.dispatch(new StoreAddCountInCar(Constants.NO_COUNT_IN)) :
+        this._store.dispatch(new StoreAddCountInCar(Constants.COUNT_IN));
     }
-    sessionStorage.setItem('thereIsCountInCar', this.thereIsCountInCar.toString());
   }
 
   //TODO: reorganize the values of the count into setting component

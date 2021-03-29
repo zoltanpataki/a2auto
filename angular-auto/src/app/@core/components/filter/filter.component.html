@@ -323,10 +323,10 @@
         <div class="inheritanceTax">
           <div class="inheritanceTaxLeftSide">
             <div>
-              <mat-checkbox #inhtax (change)="setInheritanceTaxCheckboxValue('wantCalculation', car, inhtax.checked)" [checked]="askForInheritanceTaxCalculation === WANT_CALCULATION">Kérek átírási költség számítást</mat-checkbox>
+              <mat-checkbox #inhtax (change)="setInheritanceTaxCheckboxValue(WANT_CALCULATION, car, inhtax.checked)" [checked]="askForInheritanceTaxCalculation === WANT_CALCULATION">Kérek átírási költség számítást</mat-checkbox>
             </div>
             <div>
-              <mat-checkbox #noinhtax (change)="setInheritanceTaxCheckboxValue('dontWantCalculation', car, noinhtax.checked)" [checked]="askForInheritanceTaxCalculation === DONT_WANT_CALCULATION">Nem kérek átírási költség számítást</mat-checkbox>
+              <mat-checkbox #noinhtax (change)="setInheritanceTaxCheckboxValue(DONT_WANT_CALCULATION, car, noinhtax.checked)" [checked]="askForInheritanceTaxCalculation === DONT_WANT_CALCULATION">Nem kérek átírási költség számítást</mat-checkbox>
             </div>
           </div>
           <div class="inheritanceTaxRightSide" *ngIf="inheritanceTax">
@@ -337,10 +337,10 @@
       <div *ngIf="orderProgress > 2">
         <mat-divider></mat-divider>
         <div>
-          <mat-checkbox #countIn (change)="setCountInCar('countIn', countIn.checked)" [checked]="addCountInCar === 'countIn'">Van beszámított autó</mat-checkbox>
+          <mat-checkbox #countIn (change)="setCountInCar(COUNT_IN, countIn.checked)" [checked]="addCountInCar === COUNT_IN">Van beszámított autó</mat-checkbox>
         </div>
         <div>
-          <mat-checkbox #noCountIn (change)="setCountInCar('noCountIn', noCountIn.checked)" [checked]="addCountInCar === 'noCountIn'">Nincs beszámított autó</mat-checkbox>
+          <mat-checkbox #noCountIn (change)="setCountInCar(NO_COUNT_IN, noCountIn.checked)" [checked]="addCountInCar === NO_COUNT_IN">Nincs beszámított autó</mat-checkbox>
         </div>
       </div>
       <div *ngIf="thereIsCountInCar && clickedCarIndex == i">

@@ -24,6 +24,12 @@ export const orderReducers = (
         askForInheritanceTaxCalculation: action.payload
       }
     }
+    case EOrderActions.StoreAddCountInCar: {
+      return {
+        ...state,
+        addCountInCar: action.payload
+      }
+    }
     case EOrderActions.UpdateOrderProgress: {
       return {
         ...state,
@@ -52,6 +58,12 @@ export const orderReducers = (
       return {
         ...state,
         wantInheritanceTaxCalculation: action.payload
+      }
+    }
+    case EOrderActions.StoreThereIsCountInCar: {
+      return {
+        ...state,
+        thereIsCountInCar: action.payload
       }
     }
     case EOrderActions.GetInheritanceTaxSuccess: {

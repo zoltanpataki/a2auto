@@ -4,22 +4,29 @@ import {
   InheritanceTaxErrorResponse,
   InheritanceTaxInfoForChainedApiCall
 } from "../../@core/models/inheritanceTax";
+import {ICar} from "../../@core/models/car";
+import {CountInCarSupplement} from "../../@core/models/countInCarSupplement";
 
 export enum EOrderActions {
   StorePreviousOrNew = '[string] Store previous or new customer flag',
   StoreIndividualOrCorporate = '[string] Store individual or corporate customer flag',
   StoreAskForInheritanceTaxCalculation = '[string] Store with or without calculation flag and calls backend for calculation data',
+  StoreAddCountInCar = '[string] Store whether with or without count in car',
   UpdateOrderProgress = '[number] Update order progress',
   UpdateOrder = '[Order] Update order',
   StoreAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = '[boolean] Store alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready flag',
   StoreSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate = '[boolean] Store selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate flag',
   StoreWantInheritanceTaxCalculation = '[boolean] Store wantInheritanceTaxCalculation flag',
+  StoreThereIsCountInCar = '[boolean] Store if there is count in car',
   GetCapacity = '[InheritanceTaxInfoForChainedApiCall] Get capacity',
   GetCarRegistry = '[InheritanceTaxInfoForChainedApiCall] Get car registry',
   GetInheritanceTaxError = '[InheritanceTaxErrorResponse] Get utility error',
   GetChargeForInheritanceTax = '[InheritanceTaxInfoForChainedApiCall] Get charge for inheritance tax',
   GetExtraChargeAtSelling = '[InheritanceTaxInfoForChainedApiCall] Get extra charge at selling for inheritance tax',
   GetInheritanceTaxSuccess = '[number] Get inheritance tax success',
+  StoreCountInCar = '[Car] Store count in car',
+  StoreCountInCarSupplement = '[CountInCarSupplement] Store count in car supplement',
+
 }
 
 export class StorePreviousOrNew implements Action {
@@ -34,6 +41,11 @@ export class StoreIndividualOrCorporate implements Action {
 
 export class StoreAskForInheritanceTaxCalculation implements Action {
   public readonly type = EOrderActions.StoreAskForInheritanceTaxCalculation;
+  constructor(public payload: string) {}
+}
+
+export class StoreAddCountInCar implements Action {
+  public readonly type = EOrderActions.StoreAddCountInCar;
   constructor(public payload: string) {}
 }
 
@@ -54,6 +66,21 @@ export class StoreSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorp
 export class StoreWantInheritanceTaxCalculation implements Action {
   public readonly type = EOrderActions.StoreWantInheritanceTaxCalculation;
   constructor(public payload: boolean) {}
+}
+
+export class StoreThereIsCountInCar implements Action {
+  public readonly type = EOrderActions.StoreThereIsCountInCar;
+  constructor(public payload: boolean) {}
+}
+
+export class StoreCountInCar implements Action {
+  public readonly type = EOrderActions.StoreCountInCar;
+  constructor(public readonly payload: ICar) {}
+}
+
+export class StoreCountInCarSupplement implements Action {
+  public readonly type = EOrderActions.StoreCountInCarSupplement;
+  constructor(public readonly payload : CountInCarSupplement) {}
 }
 
 export class UpdateOrder implements Action {
@@ -105,4 +132,8 @@ export type OrderActions =
   GetExtraChargeAtSelling |
   GetInheritanceTaxError |
   GetChargeForInheritanceTax |
-  GetInheritanceTaxSuccess;
+  GetInheritanceTaxSuccess |
+  StoreAddCountInCar |
+  StoreThereIsCountInCar |
+  StoreCountInCar |
+  StoreCountInCarSupplement;

@@ -19,6 +19,11 @@ export const selectAskForInheritanceTaxCalculation = createSelector(
   (state: IOrderState) => state.askForInheritanceTaxCalculation
 );
 
+export const selectAddCountInCar = createSelector(
+  selectOrder,
+  (state: IOrderState) => state.addCountInCar
+);
+
 export const selectInheritanceTax = createSelector(
   selectOrder,
   (state: IOrderState) => state.inheritanceTax
@@ -52,4 +57,19 @@ export const selectSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCor
 export const selectWantInheritanceTaxCalculation = createSelector(
   selectOrder,
   (state: IOrderState) => state.wantInheritanceTaxCalculation
+);
+
+export const selectThereIsCountInCar = createSelector(
+  selectOrder,
+  (state: IOrderState) => state.thereIsCountInCar
+);
+
+export const selectCountInCar = createSelector(
+  selectOrder,
+  (state: IOrderState) => state.countInCar
+);
+
+export const selectCountInCarSupplement = createSelector(
+  selectOrder,
+  (state: IOrderState) => state.countInCarSupplement
 );
