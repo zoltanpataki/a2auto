@@ -49,7 +49,7 @@ import {
   selectSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate, selectWantInheritanceTaxCalculation
 } from "../../../@store/selectors/order.selectors";
 import {
-  GetCapacity,
+  GetCapacity, GetInheritanceTaxSuccess,
   StoreAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready, StoreAskForInheritanceTaxCalculation,
   StoreIndividualOrCorporate,
   StorePreviousOrNew,
@@ -349,6 +349,9 @@ export class FilterComponent implements OnInit {
 
     this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlreadyObs.subscribe(alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready => {
       this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready;
+      this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready ?
+        this._store.dispatch(new StorePreviousOrNew(Constants.NEW)) :
+        this._store.dispatch(new StorePreviousOrNew(Constants.PREVIOUS));
       if (null != alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready) {
         sessionStorage.setItem('alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready', this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready.toString());
       }
@@ -356,6 +359,9 @@ export class FilterComponent implements OnInit {
 
     this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporateObs.subscribe(selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate => {
       this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate = selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate;
+      this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate ?
+        this._store.dispatch(new StoreIndividualOrCorporate(Constants.INDIVIDUAL)) :
+        this._store.dispatch(new StoreIndividualOrCorporate(Constants.CORPORATE));
       if (null != selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate) {
         sessionStorage.setItem('selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate', this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate.toString());
       }
@@ -363,6 +369,9 @@ export class FilterComponent implements OnInit {
 
     this.wantInheritanceTaxCalculationObs.subscribe(wantInheritanceTaxCalculation => {
       this.wantInheritanceTaxCalculation = wantInheritanceTaxCalculation;
+      this.wantInheritanceTaxCalculation ?
+        this._store.dispatch(new StoreAskForInheritanceTaxCalculation(Constants.WANT_CALCULATION)) :
+        this._store.dispatch(new StoreAskForInheritanceTaxCalculation(Constants.DONT_WANT_CALCULATION));
       if (null != wantInheritanceTaxCalculation) {
         sessionStorage.setItem('wantInheritanceTaxCalculation', this.wantInheritanceTaxCalculation.toString());
       }
@@ -417,7 +426,6 @@ export class FilterComponent implements OnInit {
     });
 
     this.inheritanceTaxObs.subscribe(inheritanceTax => {
-      console.log(inheritanceTax);
       this.inheritanceTax = inheritanceTax;
       if (null != inheritanceTax) {
         sessionStorage.setItem('inheritanceTax', this.inheritanceTax.toString());
@@ -457,21 +465,12 @@ export class FilterComponent implements OnInit {
     }
     if (sessionStorage.getItem('alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready')) {
       this._store.dispatch(new StoreAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready(JSON.parse(sessionStorage.getItem('alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready'))))
-      this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready ?
-        this._store.dispatch(new StorePreviousOrNew(Constants.NEW)) :
-        this._store.dispatch(new StorePreviousOrNew(Constants.PREVIOUS));
     }
     if (sessionStorage.getItem('selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate')) {
       this._store.dispatch(new StoreSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate(JSON.parse(sessionStorage.getItem('selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate'))));
-      this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate ?
-        this._store.dispatch(new StoreIndividualOrCorporate(Constants.INDIVIDUAL)) :
-        this._store.dispatch(new StoreIndividualOrCorporate(Constants.CORPORATE));
     }
     if (sessionStorage.getItem('wantInheritanceTaxCalculation')) {
       this._store.dispatch(new StoreWantInheritanceTaxCalculation(JSON.parse(sessionStorage.getItem('wantInheritanceTaxCalculation'))));
-      this.wantInheritanceTaxCalculation ?
-        this._store.dispatch(new StoreAskForInheritanceTaxCalculation(Constants.WANT_CALCULATION)) :
-        this._store.dispatch(new StoreAskForInheritanceTaxCalculation(Constants.DONT_WANT_CALCULATION));
     }
     if (sessionStorage.getItem('thereIsCountInCar')) {
       this.thereIsCountInCar = JSON.parse(sessionStorage.getItem('thereIsCountInCar'));
@@ -506,7 +505,7 @@ export class FilterComponent implements OnInit {
       this.salesman = sessionStorage.getItem('salesman');
     }
     if (sessionStorage.getItem('inheritanceTax')) {
-      this.inheritanceTax = Number(sessionStorage.getItem('inheritanceTax'));
+      this._store.dispatch(new GetInheritanceTaxSuccess(Number(sessionStorage.getItem('inheritanceTax'))));
     }
     if (sessionStorage.getItem('credit')) {
       this.creditData = JSON.parse(sessionStorage.getItem('credit'));
@@ -1365,39 +1364,17 @@ export class FilterComponent implements OnInit {
         this.countInheritanceTax(car);
       } else {
         this._store.dispatch(new StoreAskForInheritanceTaxCalculation(Constants.DONT_WANT_CALCULATION));
+        this._store.dispatch(new GetInheritanceTaxSuccess(null));
       }
-
-      // if (selection) {
-      //   this.askForInheritanceTaxCalculation = 'wantCalculation';
-      //   this.wantInheritanceTaxCalculation = true;
-      //   this.countInheritanceTax(car);
-      // } else {
-      //   this.inheritanceTax = null;
-      //   this.askForInheritanceTaxCalculation = 'dontWantCalculation';
-      //   this.wantInheritanceTaxCalculation = false;
-      //   this.orderProgress = this.orderProgress > 3 ? this.orderProgress : 3;
-      //   this.setOrderProgressInSessionStorage(this.orderProgress);
-      // }
     } else if (wantOrNotCalculation === 'dontWantCalculation') {
       this._store.dispatch(new StoreWantInheritanceTaxCalculation(!selection));
       if (selection) {
         this._store.dispatch(new StoreAskForInheritanceTaxCalculation(Constants.DONT_WANT_CALCULATION))
+        this._store.dispatch(new GetInheritanceTaxSuccess(null));
       } else {
         this._store.dispatch(new StoreAskForInheritanceTaxCalculation(Constants.WANT_CALCULATION));
         this.countInheritanceTax(car);
       }
-
-      // if (selection) {
-      //   this.inheritanceTax = null;
-      //   this.askForInheritanceTaxCalculation = 'dontWantCalculation';
-      //   this.wantInheritanceTaxCalculation = false;
-      //   this.orderProgress = this.orderProgress > 3 ? this.orderProgress : 3;
-      //   this.setOrderProgressInSessionStorage(this.orderProgress);
-      // } else {
-      //   this.askForInheritanceTaxCalculation = 'wantCalculation';
-      //   this.wantInheritanceTaxCalculation = true;
-      //   this.countInheritanceTax(car);
-      // }
     }
   }
 

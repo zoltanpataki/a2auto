@@ -20,15 +20,11 @@ export class OrderEffects {
   @Effect()
   getCapacity$ = this._actions$.pipe(
     ofType<GetCapacity>(EOrderActions.GetCapacity),
-    map(action => {
-      console.log(action.payload)
-      return action.payload
-    }),
+    map(action => action.payload),
     switchMap(inheritanceTaxInfoForChainedApiCall =>
       this._httpService.getUtility(inheritanceTaxInfoForChainedApiCall.capacityRequest)
         .pipe(
           switchMap(capacity => {
-            console.log(capacity);
             return of(new GetChargeForInheritanceTax(
               new InheritanceTaxInfoForChainedApiCall(
                 Number(capacity.value),
