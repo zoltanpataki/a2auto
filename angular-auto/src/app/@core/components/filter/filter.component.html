@@ -347,7 +347,7 @@
         <mat-divider></mat-divider>
         <app-car (orderProgress)="orderOnProgressWithCar($event)"
                  (countInCar)="getCountInCarData($event)"
-                 [carData] = countInCar
+                 [carData] = "countInCar"
         ></app-car>
       </div>
       <div *ngIf="orderProgress > 3 && thereIsCountInCar && clickedCarIndex == i">

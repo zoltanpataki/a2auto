@@ -66,6 +66,18 @@ export const orderReducers = (
         thereIsCountInCar: action.payload
       }
     }
+    case EOrderActions.StoreCountInCar: {
+      return {
+        ...state,
+        countInCar: action.payload
+      }
+    }
+    case EOrderActions.StoreCountInCarSupplement: {
+      return {
+        ...state,
+        countInCarSupplement: action.payload
+      }
+    }
     case EOrderActions.GetInheritanceTaxSuccess: {
       return {
         ...state,

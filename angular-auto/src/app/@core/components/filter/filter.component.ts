@@ -356,7 +356,7 @@ export class FilterComponent implements OnInit {
     this.askForInheritanceTaxCalculationObs.subscribe(askForInheritanceTaxCalculation => {
       this.askForInheritanceTaxCalculation = askForInheritanceTaxCalculation;
       if (null != this.askForInheritanceTaxCalculation) {
-        this.orderProgress = this.orderProgress > 3 ? this.orderProgress : 3;
+        this.orderProgress = this.utilService.getRelevantOrderProgress(this.orderProgress, 3, 3);
         this.setOrderProgressInSessionStorage(this.orderProgress);
       }
     });
@@ -420,13 +420,14 @@ export class FilterComponent implements OnInit {
       if (null != this.thereIsCountInCar) {
         if (this.thereIsCountInCar) {
           this._store.dispatch(new StoreAddCountInCar(Constants.COUNT_IN));
+          this.orderProgress = this.utilService.getRelevantOrderProgress(this.orderProgress, 5, 3);
+          this.setOrderProgressInSessionStorage(this.orderProgress);
         } else {
           this._store.dispatch(new StoreAddCountInCar(Constants.NO_COUNT_IN));
           this._store.dispatch(new StoreCountInCar(null));
           this._store.dispatch(new StoreCountInCarSupplement(null));
-          if (this.orderProgress <= 5) {
-            this.setOrderProgressInSessionStorage(5);
-          }
+          this.orderProgress = this.utilService.getRelevantOrderProgress(this.orderProgress, 5, 5);
+          this.setOrderProgressInSessionStorage(this.orderProgress);
         }
       }
 
@@ -492,16 +493,17 @@ export class FilterComponent implements OnInit {
     });
 
     this.countInCarObs.subscribe(countInCar => {
+      console.log(countInCar)
       this.countInCar = countInCar;
       if (null != countInCar) {
-        sessionStorage.setItem('countInCar', this.countInCar.toString());
+        sessionStorage.setItem('countInCar', JSON.stringify(this.countInCar));
       }
     });
 
     this.countInCarSupplementObs.subscribe(countInCarSupplement => {
       this.countInCarSupplement = countInCarSupplement;
       if (null != countInCarSupplement) {
-        sessionStorage.setItem('countInCarSupplement', this.countInCarSupplement.toString());
+        sessionStorage.setItem('countInCarSupplement', JSON.stringify(this.countInCarSupplement));
       }
     });
   }
@@ -552,7 +554,7 @@ export class FilterComponent implements OnInit {
       this._store.dispatch(new StoreThereIsCountInCar(JSON.parse(sessionStorage.getItem('thereIsCountInCar'))));
     }
     if (sessionStorage.getItem('countInCar')) {
-      this.countInCar = JSON.parse(sessionStorage.getItem('countInCar'));
+      this._store.dispatch(new StoreCountInCar(JSON.parse(sessionStorage.getItem('countInCar'))));
     }
     if (sessionStorage.getItem('countInCarSupplement')) {
       this.countInCarSupplement = JSON.parse(sessionStorage.getItem('countInCarSupplement'));
@@ -1651,7 +1653,7 @@ export class FilterComponent implements OnInit {
         form.value.previousLoan,
         form.value.previousBank,
         form.value.loanType);
-      sessionStorage.setItem('countInCarSupplement', JSON.stringify(this.countInCarSupplement));
+      this._store.dispatch(new StoreCountInCarSupplement(this.countInCarSupplement));
       this.setOrderProgressInSessionStorage(5);
     }
   }
@@ -1678,9 +1680,9 @@ export class FilterComponent implements OnInit {
   // the car object is given as a value for the countInCar variable and saved into sessionStorage
   // and later on it will be saved along with the order.
 
-  public getCountInCarData(event: Car) {
-    this.countInCar = event;
-    sessionStorage.setItem('countInCar', JSON.stringify(this.countInCar));
+  public getCountInCarData(car: Car) {
+    const countInCarToStore = car as ICar;
+    this._store.dispatch(new StoreCountInCar(countInCarToStore));
   }
 
   // Save the chosen salesman and update the car of transaction with it.

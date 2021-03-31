@@ -26,7 +26,6 @@ export enum EOrderActions {
   GetInheritanceTaxSuccess = '[number] Get inheritance tax success',
   StoreCountInCar = '[Car] Store count in car',
   StoreCountInCarSupplement = '[CountInCarSupplement] Store count in car supplement',
-
 }
 
 export class StorePreviousOrNew implements Action {

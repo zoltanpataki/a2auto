@@ -112,4 +112,8 @@ export class UtilService {
     return new InfoForInheritanceCalculation(stringKw, stringAge, stringCapacity);
   }
 
+  public getRelevantOrderProgress(orderProgressAtTheMoment: number, largerThan: number, ifSmaller: number): number {
+    return orderProgressAtTheMoment > largerThan ? orderProgressAtTheMoment : ifSmaller;
+  }
+
 }
