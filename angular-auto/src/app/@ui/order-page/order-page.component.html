@@ -112,8 +112,8 @@
           <p class="sectionLiner">Fizetve:</p>
         </div>
         <div class="border">
-          <p *ngIf="orderedCar.downPayment" class="texts">Foglaló (Fizetve): <strong>{{orderedCar.downPayment | number: '2.'}} Ft</strong></p>
-          <p *ngIf="!orderedCar.downPayment" class="texts">Foglaló (Fizetve):</p>
+          <p *ngIf="order && order.downPayment" class="texts">Foglaló (Fizetve): <strong>{{order.downPayment | number: '2.'}} Ft</strong></p>
+          <p *ngIf="!order || order && !order.downPayment" class="texts">Foglaló (Fizetve):</p>
         </div>
         <div class="border">
           <p *ngIf="order && order.countInCarSupplement && order.countInCarSupplement.countInPrice" class="texts">Beszámítási érték: <strong>{{order.countInCarSupplement.countInPrice | number: '2.'}} Ft</strong></p>

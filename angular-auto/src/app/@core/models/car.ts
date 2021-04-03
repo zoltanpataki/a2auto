@@ -138,12 +138,10 @@ export class CarUpdateModel {
   nameOfBuyer: string;
   salesman: string;
   clickedCarIndex: number;
-  downPayment: number;
 
-  constructor(nameOfBuyer: string, salesman: string, downPayment: number, clickedCarIndex: number) {
+  constructor(nameOfBuyer: string, salesman: string, clickedCarIndex: number) {
     this.nameOfBuyer = nameOfBuyer;
     this.salesman = salesman;
     this.clickedCarIndex = clickedCarIndex;
-    this.downPayment = downPayment;
   }
 }

@@ -92,6 +92,18 @@ export const orderReducers = (
         askForInheritanceTaxCalculation: action.payload.askForInheritanceTaxCalculation
       }
     }
+    case EOrderActions.StoreDownPayment: {
+      return {
+        ...state,
+        downPayment: action.payload
+      }
+    }
+    case EOrderActions.StoreExtraPayment: {
+      return {
+        ...state,
+        extraPayment: action.payload
+      }
+    }
     default:
       return state;
   }

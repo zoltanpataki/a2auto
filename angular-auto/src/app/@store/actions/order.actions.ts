@@ -26,6 +26,8 @@ export enum EOrderActions {
   GetInheritanceTaxSuccess = '[number] Get inheritance tax success',
   StoreCountInCar = '[Car] Store count in car',
   StoreCountInCarSupplement = '[CountInCarSupplement] Store count in car supplement',
+  StoreDownPayment = '[number] Store down payment',
+  StoreExtraPayment = '[number] Store extra payment',
 }
 
 export class StorePreviousOrNew implements Action {
@@ -117,6 +119,18 @@ export class GetInheritanceTaxSuccess implements Action {
   constructor(public readonly payload: number) {}
 }
 
+export class StoreDownPayment implements Action {
+  public readonly type = EOrderActions.StoreDownPayment;
+  constructor(public readonly payload: number) {
+  }
+}
+
+export class StoreExtraPayment implements Action {
+  public readonly type = EOrderActions.StoreExtraPayment;
+  constructor(public readonly payload: number) {
+  }
+}
+
 export type OrderActions =
   StorePreviousOrNew |
   UpdateOrderProgress |
@@ -135,4 +149,6 @@ export type OrderActions =
   StoreAddCountInCar |
   StoreThereIsCountInCar |
   StoreCountInCar |
-  StoreCountInCarSupplement;
+  StoreCountInCarSupplement |
+  StoreDownPayment |
+  StoreExtraPayment;

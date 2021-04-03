@@ -10,9 +10,9 @@ import {CreditDialogComponent} from "../../dialog/credit-dialog/credit-dialog.co
 import {CountInCarSupplement} from "../../models/countInCarSupplement";
 import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
 import {MatTableDataSource} from "@angular/material/table";
-import {IUser, Users} from "../../models/users";
+import {IUser, UserFilterRequest, Users} from "../../models/users";
 import {Credit} from "../../models/credit";
-import {Company, ICompany} from "../../models/company";
+import {Company, CompanyFilterRequest, ICompany} from "../../models/company";
 import {NavigationEnd, Router} from "@angular/router";
 import {Order} from "../../models/order";
 import {Description} from "../../models/description";
@@ -34,7 +34,6 @@ import {
   GetCars,
   GetCarsSuccess,
   GetFilteredCars, StoreClickedCarIndex,
-  StoreDownPayment,
   StoreNameOfBuyer, StorePickedCar
 } from "../../../@store/actions/car.actions";
 import {Observable} from "rxjs";
@@ -43,7 +42,11 @@ import {
   selectActualOrder,
   selectAddCountInCar,
   selectAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready,
-  selectAskForInheritanceTaxCalculation, selectCountInCar, selectCountInCarSupplement,
+  selectAskForInheritanceTaxCalculation,
+  selectCountInCar,
+  selectCountInCarSupplement,
+  selectDownPayment,
+  selectExtraPayment,
   selectIndividualOrCorporate,
   selectInheritanceTax,
   selectInheritanceTaxError,
@@ -60,7 +63,7 @@ import {
   StoreAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready,
   StoreAskForInheritanceTaxCalculation,
   StoreCountInCar,
-  StoreCountInCarSupplement,
+  StoreCountInCarSupplement, StoreDownPayment, StoreExtraPayment,
   StoreIndividualOrCorporate,
   StorePreviousOrNew,
   StoreSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate,
@@ -79,8 +82,9 @@ import {
   selectIndexOfPickedCompany,
   selectPickedCompany
 } from "../../../@store/selectors/company.selectors";
-import {GetUsersSuccess, StorePickedUser, StorePickedUserIndex} from "../../../@store/actions/user.actions";
+import {GetUsers, GetUsersSuccess, StorePickedUser, StorePickedUserIndex} from "../../../@store/actions/user.actions";
 import {
+  GetCompanies,
   GetCompaniesSuccess,
   StorePickedCompany,
   StorePickedCompanyIndex
@@ -150,6 +154,7 @@ export class FilterComponent implements OnInit {
   public countInCarSupplement: CountInCarSupplement;
   public clickedCarIndexObs: Observable<number>;
   public clickedCarIndex: number;
+  public extraObs: Observable<number>;
   public extra: number;
   public userDisplayedColumns: string[] = ['name', 'city', 'taxNumber', 'symbol'];
   public companyDisplayedColumns: string[] = ['name', 'registrationNumber', 'representation', 'symbol'];
@@ -173,6 +178,7 @@ export class FilterComponent implements OnInit {
   public switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer: boolean = true;
   // Downpayment form variables
   public downPaymentForm: FormGroup;
+  public downPaymentObs: Observable<number>;
   public downPayment: number;
   // Description with amount form variables
   public descriptionForm: FormGroup;
@@ -316,6 +322,8 @@ export class FilterComponent implements OnInit {
     this.inheritanceTaxObs = this._store.pipe(select(selectInheritanceTax));
     this.countInCarObs = this._store.pipe(select(selectCountInCar));
     this.countInCarSupplementObs = this._store.pipe(select(selectCountInCarSupplement));
+    this.downPaymentObs = this._store.pipe(select(selectDownPayment));
+    this.extraObs = this._store.pipe(select(selectExtraPayment));
 
     //subscriptions
 
@@ -441,6 +449,8 @@ export class FilterComponent implements OnInit {
       this.changeDetectorRefs.detectChanges();
       if (null != userSearchData) {
         sessionStorage.setItem('userSearchData', JSON.stringify(userSearchData));
+        this.orderProgress = this.utilService.getRelevantOrderProgress(this.orderProgress, 2, 2);
+        this.setOrderProgressInSessionStorage(this.orderProgress);
       }
     });
 
@@ -465,6 +475,8 @@ export class FilterComponent implements OnInit {
       this.changeDetectorRefs.detectChanges();
       if (null != companySearchData) {
         sessionStorage.setItem('companySearchData', JSON.stringify(companySearchData));
+        this.orderProgress = this.utilService.getRelevantOrderProgress(this.orderProgress, 2, 2);
+        this.setOrderProgressInSessionStorage(this.orderProgress);
       }
     });
 
@@ -485,16 +497,16 @@ export class FilterComponent implements OnInit {
     });
 
     this.inheritanceTaxObs.subscribe(inheritanceTax => {
-      console.log(inheritanceTax)
       this.inheritanceTax = inheritanceTax;
+      this.changeDetectorRefs.detectChanges();
       if (null != inheritanceTax) {
         sessionStorage.setItem('inheritanceTax', this.inheritanceTax.toString());
       }
     });
 
     this.countInCarObs.subscribe(countInCar => {
-      console.log(countInCar)
       this.countInCar = countInCar;
+      this.changeDetectorRefs.detectChanges();
       if (null != countInCar) {
         sessionStorage.setItem('countInCar', JSON.stringify(this.countInCar));
       }
@@ -504,6 +516,32 @@ export class FilterComponent implements OnInit {
       this.countInCarSupplement = countInCarSupplement;
       if (null != countInCarSupplement) {
         sessionStorage.setItem('countInCarSupplement', JSON.stringify(this.countInCarSupplement));
+      }
+    });
+
+    this.downPaymentObs.subscribe(downPayment => {
+      this.downPayment = downPayment;
+      if (null != downPayment) {
+        sessionStorage.setItem('downPayment', this.downPayment.toString());
+        this.orderProgress = this.utilService.getRelevantOrderProgress(this.orderProgress, 6, 6);
+        this.setOrderProgressInSessionStorage(this.orderProgress);
+        if (null != this.newOrder) {
+          this.newOrder.downPayment = this.downPayment;
+          sessionStorage.setItem('order', JSON.stringify(this.newOrder));
+        }
+      }
+    });
+
+    this.extraObs.subscribe(extra => {
+      this.extra = extra;
+      if (null != extra) {
+        if (null != this.newOrder) {
+          this.newOrder.extra = this.extra;
+          sessionStorage.setItem('order', JSON.stringify(this.newOrder));
+        }
+        sessionStorage.setItem('extra', this.extra.toString());
+        this.orderProgress = this.utilService.getRelevantOrderProgress(this.orderProgress, 6, 6);
+        this.setOrderProgressInSessionStorage(this.orderProgress);
       }
     });
   }
@@ -648,28 +686,23 @@ export class FilterComponent implements OnInit {
 
   private setDataToNull() {
     this._store.dispatch(new StoreAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready(null));
-    //this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = null;
     this._store.dispatch(new StorePreviousOrNew(null));
-    //this.previousOrNew = null;
     this._store.dispatch(new StoreSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate(null));
-    //this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate = null;
     this._store.dispatch(new StoreIndividualOrCorporate(null));
-    //this.individualOrCorporate = null;
-    this.userSearchResult.data = null;
-    this.companySearchResult.data = null;
-    this.pickedUser = null;
+    this._store.dispatch(new GetUsersSuccess(null));
+    this._store.dispatch(new GetCompaniesSuccess(null));
+    this._store.dispatch(new StorePickedUser(null));
     this.newUser = null;
-    this.indexOfPickedUser = null;
-    this.pickedCompany = null;
+    this._store.dispatch(new StorePickedUserIndex(null));
+    this._store.dispatch(new StorePickedCompany(null));
     this.newCompany = null;
-    this.indexOfPickedCompany = null;
+    this._store.dispatch(new StorePickedCompanyIndex(null));
     this.selectedUserFilter = null;
     this.selectedCompanyFilter = null;
-    this.orderProgress = 0;
-    this.wantInheritanceTaxCalculation = null;
-    this.askForInheritanceTaxCalculation = null;
-    this.thereIsCountInCar = null;
-    this.addCountInCar = null;
+    this._store.dispatch(new StoreWantInheritanceTaxCalculation(null));
+    this._store.dispatch(new StoreAskForInheritanceTaxCalculation(null));
+    this._store.dispatch(new StoreThereIsCountInCar(null));
+    this._store.dispatch(new StoreAddCountInCar(null));
     this.downPayment = null;
     this.createEmptyDownPaymentForm();
     this.descriptionList = [];
@@ -683,9 +716,9 @@ export class FilterComponent implements OnInit {
     this.salesman = null;
     this.selectedTypeOfBuying = null;
     this.newOrder = null;
-    this.inheritanceTax = null;
-    this.countInCar = null;
-    this.countInCarSupplement = null;
+    this._store.dispatch(new GetInheritanceTaxSuccess(null));
+    this._store.dispatch(new StoreCountInCar(null));
+    this._store.dispatch(new StoreCountInCarSupplement(null));
     this.setOrderProgressInSessionStorage(0);
     this.removeItemsFromSessionStorage();
     this.creditData = null;
@@ -1264,12 +1297,7 @@ export class FilterComponent implements OnInit {
 
   public filterUser(form: any) {
     if (this.validateFormFieldLength(form.value)) {
-      this.httpService.getUser(this.setFormValuesToUpperCase(form), this.selectedUserFilter.value).subscribe(data => {
-        this.userSearchResult.data = data;
-        this.changeDetectorRefs.detectChanges();
-        sessionStorage.setItem('userSearchData', JSON.stringify(data));
-      });
-      this.setOrderProgressInSessionStorage(2);
+      this._store.dispatch(new GetUsers(new UserFilterRequest(this.setFormValuesToUpperCase(form), this.selectedUserFilter.value)));
     }
   }
 
@@ -1281,31 +1309,32 @@ export class FilterComponent implements OnInit {
   // the nameOfBuyer play its part as a column value in the filter component
 
   public pickUser(index: number) {
-    this.indexOfPickedUser = index;
+    this._store.dispatch(new StorePickedUserIndex(index));
     const pickedUserFromDataTable = this.userSearchResult.data[index];
-    this.pickedUser = new Users(
-      pickedUserFromDataTable.id,
-      pickedUserFromDataTable.fullName,
-      pickedUserFromDataTable.birthName,
-      pickedUserFromDataTable.zipCode,
-      pickedUserFromDataTable.city,
-      pickedUserFromDataTable.address,
-      pickedUserFromDataTable.birthPlace,
-      pickedUserFromDataTable.phoneNumber,
-      pickedUserFromDataTable.email,
-      pickedUserFromDataTable.nameOfMother,
-      pickedUserFromDataTable.birthDate,
-      pickedUserFromDataTable.personNumber,
-      pickedUserFromDataTable.idCardNumber,
-      pickedUserFromDataTable.dueTimeOfIdCard,
-      pickedUserFromDataTable.drivingLicenceNumber,
-      pickedUserFromDataTable.dueTimeOfDrivingLicence,
-      pickedUserFromDataTable.taxNumber,
-      pickedUserFromDataTable.healthcareNumber,
-      pickedUserFromDataTable.nationality);
-    sessionStorage.setItem('pickedUser', JSON.stringify(this.pickedUser));
-    sessionStorage.setItem('indexOfPickedUser', this.indexOfPickedUser.toString());
-    const carUpdateRequest = new CarUpdateModel(this.pickedUser.fullName, Constants.NULL_SALESMAN, Constants.NULL_DOWN_PAYMENT, this.clickedCarIndex);
+    this._store.dispatch(new StorePickedUser(
+      new Users(
+        pickedUserFromDataTable.id,
+        pickedUserFromDataTable.fullName,
+        pickedUserFromDataTable.birthName,
+        pickedUserFromDataTable.zipCode,
+        pickedUserFromDataTable.city,
+        pickedUserFromDataTable.address,
+        pickedUserFromDataTable.birthPlace,
+        pickedUserFromDataTable.phoneNumber,
+        pickedUserFromDataTable.email,
+        pickedUserFromDataTable.nameOfMother,
+        pickedUserFromDataTable.birthDate,
+        pickedUserFromDataTable.personNumber,
+        pickedUserFromDataTable.idCardNumber,
+        pickedUserFromDataTable.dueTimeOfIdCard,
+        pickedUserFromDataTable.drivingLicenceNumber,
+        pickedUserFromDataTable.dueTimeOfDrivingLicence,
+        pickedUserFromDataTable.taxNumber,
+        pickedUserFromDataTable.healthcareNumber,
+        pickedUserFromDataTable.nationality
+      )));
+
+    const carUpdateRequest = new CarUpdateModel(this.pickedUser.fullName, Constants.NULL_SALESMAN, this.clickedCarIndex);
     this._store.dispatch(new StoreNameOfBuyer(carUpdateRequest));
   }
 
@@ -1316,12 +1345,7 @@ export class FilterComponent implements OnInit {
 
   public filterCompany(form: any) {
     if (this.validateFormFieldLength(form.value)) {
-      this.httpService.getCompany(this.setFormValuesToUpperCase(form), this.selectedCompanyFilter.value).subscribe(data => {
-        this.companySearchResult.data = data;
-        this.changeDetectorRefs.detectChanges();
-        sessionStorage.setItem('companySearchData', JSON.stringify(data));
-      });
-      this.setOrderProgressInSessionStorage(2);
+      this._store.dispatch(new GetCompanies(new CompanyFilterRequest(this.setFormValuesToUpperCase(form), this.selectedUserFilter.value)));
     }
   }
 
@@ -1333,20 +1357,21 @@ export class FilterComponent implements OnInit {
   // the nameOfBuyer play its part as a column value in the filter component
 
   public pickCompany(index: number) {
-    this.indexOfPickedCompany = index;
+    this._store.dispatch(new StorePickedCompanyIndex(index));
     const pickedCompanyFromDataTable = this.companySearchResult.data[index];
-    this.pickedCompany = new Company(
-      pickedCompanyFromDataTable.id,
-      pickedCompanyFromDataTable.name,
-      pickedCompanyFromDataTable.address,
-      pickedCompanyFromDataTable.companyRegistrationNumber,
-      pickedCompanyFromDataTable.representation,
-      pickedCompanyFromDataTable.taxNumber,
-      pickedCompanyFromDataTable.phoneNumber,
-      pickedCompanyFromDataTable.email);
-    sessionStorage.setItem('pickedCompany', JSON.stringify(this.pickedCompany));
-    sessionStorage.setItem('indexOfPickedCompany', this.indexOfPickedCompany.toString());
-    const carUpdateRequest = new CarUpdateModel(this.pickedCompany.name, Constants.NULL_SALESMAN, Constants.NULL_DOWN_PAYMENT, this.clickedCarIndex);
+    this._store.dispatch(new StorePickedCompany(
+      new Company(
+        pickedCompanyFromDataTable.id,
+        pickedCompanyFromDataTable.name,
+        pickedCompanyFromDataTable.address,
+        pickedCompanyFromDataTable.companyRegistrationNumber,
+        pickedCompanyFromDataTable.representation,
+        pickedCompanyFromDataTable.taxNumber,
+        pickedCompanyFromDataTable.phoneNumber,
+        pickedCompanyFromDataTable.email
+      )));
+
+    const carUpdateRequest = new CarUpdateModel(this.pickedCompany.name, Constants.NULL_SALESMAN, this.clickedCarIndex);
     this._store.dispatch(new StoreNameOfBuyer(carUpdateRequest));
   }
 
@@ -1661,19 +1686,9 @@ export class FilterComponent implements OnInit {
   // Down payment and extra payment are saved into the sessionStorage
   // later on it will be part of the saved order
 
-  public saveDownPaymentAmount(form: FormGroup, car: Car) {
-    this.downPayment = form.value.downPayment;
-    this.extra = form.value.extra;
-    const carUpdateRequest = new CarUpdateModel(Constants.NULL_NAME_OF_BUYER, Constants.NULL_SALESMAN, this.downPayment, this.clickedCarIndex);
-    console.log(carUpdateRequest);
-    this._store.dispatch(new StoreDownPayment(carUpdateRequest));
-    this.setOrderProgressInSessionStorage(6);
-    if (this.downPayment != null) {
-      sessionStorage.setItem('downPayment', this.downPayment.toString());
-    }
-    if (this.extra != null) {
-      sessionStorage.setItem('extra', this.extra.toString());
-    }
+  public saveDownPaymentAmount(form: FormGroup) {
+    this._store.dispatch(new StoreDownPayment(form.value.downPayment));
+    this._store.dispatch(new StoreExtraPayment(form.value.extra));
   }
 
   // Gets a car object through the car component as a result of an eventEmitter
@@ -1706,8 +1721,6 @@ export class FilterComponent implements OnInit {
     this.httpService.updateCar(car).subscribe(data => {
       if (this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer) {
         this.carOfTransaction = data;
-        // this.selectedCars[this.clickedCarIndex] = data;
-        // sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
       } else {
         this.countInCar = data;
         sessionStorage.setItem('countInCar', JSON.stringify(this.countInCar));
@@ -1740,28 +1753,14 @@ export class FilterComponent implements OnInit {
   // and the new value gets updated in sessionStorage, and later on it will be part of the order.
 
   public saveChangedDownPayment(form: FormGroup) {
-    this.downPayment = form.value.downPayment;
-    if (this.downPayment != null) {
-      sessionStorage.setItem('downPayment', this.downPayment.toString());
-      if (null != this.newOrder) {
-        this.newOrder.downPayment = this.downPayment;
-        sessionStorage.setItem('order', JSON.stringify(this.newOrder));
-      }
-    }
+    this._store.dispatch(new StoreDownPayment(form.value.downPayment));
   }
 
   // If any changes happens on the extra form then ngModelChange triggers this method
   // and the new value gets updated in sessionStorage, and later on it will be part of the order.
 
   public saveChangedExtra(form: FormGroup) {
-    this.extra = form.value.extra;
-    if (this.extra != null) {
-      sessionStorage.setItem('extra', this.extra.toString());
-      if (null != this.newOrder) {
-        this.newOrder.extra = this.extra;
-        sessionStorage.setItem('order', JSON.stringify(this.newOrder));
-      }
-    }
+    this._store.dispatch(new StoreExtraPayment(form.value.extra));
   }
 
   // After the description with amount was filled and submitted, this method gets triggered.

@@ -73,3 +73,13 @@ export const selectCountInCarSupplement = createSelector(
   selectOrder,
   (state: IOrderState) => state.countInCarSupplement
 );
+
+export const selectDownPayment = createSelector(
+  selectOrder,
+  (state: IOrderState) => state.downPayment
+);
+
+export const selectExtraPayment = createSelector(
+  selectOrder,
+  (state: IOrderState) => state.extraPayment
+);

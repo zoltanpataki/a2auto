@@ -401,7 +401,7 @@
       <div *ngIf="orderProgress > 4">
         <mat-divider></mat-divider>
         <h5>Foglaló + előleg</h5>
-        <form [formGroup]="downPaymentForm" (submit)="saveDownPaymentAmount(downPaymentForm, car)">
+        <form [formGroup]="downPaymentForm" (submit)="saveDownPaymentAmount(downPaymentForm)">
           <div>
             <mat-form-field class="example-full-width">
               <label>
