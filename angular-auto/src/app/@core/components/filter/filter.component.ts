@@ -684,7 +684,7 @@ export class FilterComponent implements OnInit {
 
   // Sets the data to null when expansion order is collapsed
 
-  private setDataToNull() {
+  private setDataToNull(carIndex: number) {
     this._store.dispatch(new StoreAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready(null));
     this._store.dispatch(new StorePreviousOrNew(null));
     this._store.dispatch(new StoreSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate(null));
@@ -703,7 +703,7 @@ export class FilterComponent implements OnInit {
     this._store.dispatch(new StoreAskForInheritanceTaxCalculation(null));
     this._store.dispatch(new StoreThereIsCountInCar(null));
     this._store.dispatch(new StoreAddCountInCar(null));
-    this.downPayment = null;
+    this._store.dispatch(new StoreDownPayment(null));
     this.createEmptyDownPaymentForm();
     this.descriptionList = [];
     this.description = null;
@@ -712,7 +712,7 @@ export class FilterComponent implements OnInit {
     this.listOfDescriptionsWithAmount = [];
     this.createFormGroupForDescriptionWithAmount();
     this.createEmptyCarSupplementForm();
-    this.extra = null;
+    this._store.dispatch(new StoreExtraPayment(null));
     this.salesman = null;
     this.selectedTypeOfBuying = null;
     this.newOrder = null;
@@ -724,6 +724,13 @@ export class FilterComponent implements OnInit {
     this.creditData = null;
     this.nameOfBuyer = null;
     this.creditNeedsToBeRecalculated = false;
+    if (Constants.NO_CAR_INDEX !== carIndex) {
+      this._store.dispatch(new StoreNameOfBuyer(
+        new CarUpdateModel(
+          Constants.NULL_NAME_OF_BUYER,
+          Constants.NULL_SALESMAN,
+          carIndex)));
+    }
   }
 
   // Sets variables regarding the order for the component
@@ -1526,9 +1533,9 @@ export class FilterComponent implements OnInit {
   // If there is order for the picked car then the previously filled data gets loaded
   // otherwise a new order can be initiated
 
-  public setAlreadyOrNewCustomerSelectorAndCarOfTransaction(car: Car, index: number) {
-    this.setDataToNull();
-    if (index !== this.clickedCarIndex) {
+  public setAlreadyOrNewCustomerSelectorAndCarOfTransaction(car: Car, carIndex: number) {
+    this.setDataToNull(carIndex);
+    if (carIndex !== this.clickedCarIndex) {
       this._store.dispatch(new StorePickedCar(car));
       this.httpService.getOrder(car.id).subscribe(data => {
         this.newOrder = <Order> data;
@@ -1539,13 +1546,13 @@ export class FilterComponent implements OnInit {
           this.utilService.openSnackBar('Ehhez az autóhoz még nincs rendelés!', ':(');
         }
       });
-      this.clickedCarIndex = this.clickedCarIndex !== index ? index : null;
+      this.clickedCarIndex = this.clickedCarIndex !== carIndex ? carIndex : null;
       this._store.dispatch(new StoreClickedCarIndex(this.clickedCarIndex));
       if (this.clickedCarIndex != null) {
         sessionStorage.setItem('clickedCarIndex', this.clickedCarIndex.toString());
       }
     } else {
-      this.clickedCarIndex = this.clickedCarIndex !== index ? index : null;
+      this.clickedCarIndex = this.clickedCarIndex !== carIndex ? carIndex : null;
       this._store.dispatch(new StoreClickedCarIndex(this.clickedCarIndex));
     }
   }
@@ -1605,7 +1612,7 @@ export class FilterComponent implements OnInit {
   // Initiate a fresh start.
 
   private clearSelectedCars() {
-    this.setDataToNull();
+    this.setDataToNull(Constants.NO_CAR_INDEX);
     this.selectedCars = [];
     this.setOrderProgressInSessionStorage(0);
   }
@@ -1947,8 +1954,8 @@ export class FilterComponent implements OnInit {
     return true;
   }
 
-  public navigateToOrderPage(car: Car) {
-    this.setDataToNull();
+  public navigateToOrderPage(car: Car, carIndex: number) {
+    this.setDataToNull(carIndex);
     this.httpService.getOrder(car.id).subscribe(data => {
       this.router.navigate(['/orderPage'], {state: {data: {
             order: data,

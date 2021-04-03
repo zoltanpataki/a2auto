@@ -125,7 +125,7 @@
             {{car.dateOfLeaving | date:'yyyy-MM-dd'}}
           </mat-panel-title>
           <mat-panel-title class="trophyIcon" fxFlex="5">
-            <i *ngIf="car.sold" class="material-icons trophy" (click)="navigateToOrderPage(car)" matTooltip="Eladott autó">emoji_events</i>
+            <i *ngIf="car.sold" class="material-icons trophy" (click)="navigateToOrderPage(car, i)" matTooltip="Eladott autó">emoji_events</i>
           </mat-panel-title>
           <mat-panel-title class="buyButton" fxFlex="5">
             <i class="material-icons" (click)="navigateToBlankOrderPage(car)" matTooltip="Üres megrendelőlap az autóhoz">spellcheck</i>
