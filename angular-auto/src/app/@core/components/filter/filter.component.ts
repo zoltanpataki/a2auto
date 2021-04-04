@@ -536,6 +536,7 @@ export class FilterComponent implements OnInit {
     });
 
     this.downPaymentObs.subscribe(downPayment => {
+      console.log(downPayment)
       this.downPayment = downPayment;
       if (null != downPayment) {
         sessionStorage.setItem('downPayment', this.downPayment.toString());
@@ -546,6 +547,9 @@ export class FilterComponent implements OnInit {
           this.newOrder.downPayment = this.downPayment;
           sessionStorage.setItem('order', JSON.stringify(this.newOrder));
         }
+      } else {
+        sessionStorage.removeItem('downPayment');
+        this.createDownPaymentFormWithData(Constants.NULL_DOWN_PAYMENT, this.extra);
       }
     });
 
@@ -560,6 +564,9 @@ export class FilterComponent implements OnInit {
         this.orderProgress = this.utilService.getRelevantOrderProgress(this.orderProgress, 6, 6);
         this.setOrderProgressInSessionStorage(this.orderProgress);
         this.createDownPaymentFormWithData(this.downPayment, this.extra);
+      } else {
+        sessionStorage.removeItem('extra');
+        this.createDownPaymentFormWithData(this.downPayment, Constants.NULL_EXTRA_PAYMENT);
       }
     });
   }
@@ -1742,6 +1749,7 @@ export class FilterComponent implements OnInit {
   // and the new value gets updated in sessionStorage, and later on it will be part of the order.
 
   public saveChangedDownPayment(form: FormGroup) {
+    console.log(form.value)
     this._store.dispatch(new StoreDownPayment(form.value.downPayment));
   }
 
