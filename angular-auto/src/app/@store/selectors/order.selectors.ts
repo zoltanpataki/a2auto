@@ -29,9 +29,14 @@ export const selectInheritanceTax = createSelector(
   (state: IOrderState) => state.inheritanceTax
 );
 
+export const selectOrderError = createSelector(
+  selectOrder,
+  (state: IOrderState) => state.orderError
+);
+
 export const selectInheritanceTaxError = createSelector(
   selectOrder,
-  (state: IOrderState) => state.error
+  (state: IOrderState) => state.inheritanceTaxError
 );
 
 export const selectOrderProgress = createSelector(

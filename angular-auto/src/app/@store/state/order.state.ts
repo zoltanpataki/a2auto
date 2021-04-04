@@ -20,7 +20,8 @@ export interface IOrderState {
   countInCarSupplement: CountInCarSupplement
   downPayment: number
   extraPayment: number
-  error: string
+  orderError: string
+  inheritanceTaxError: string
 }
 
 export const initialOrderState: IOrderState = {
@@ -41,5 +42,6 @@ export const initialOrderState: IOrderState = {
   countInCarSupplement: null,
   downPayment: null,
   extraPayment: null,
-  error: null
+  orderError: null,
+  inheritanceTaxError: null,
 }

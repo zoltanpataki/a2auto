@@ -15,7 +15,9 @@ export abstract class Constants {
   // null constants
 
   static readonly NO_CAR_INDEX: number = -1;
+  static readonly NULL_ERROR: string = null;
   static readonly NULL_DOWN_PAYMENT: number = null;
+  static readonly NULL_EXTRA_PAYMENT: number = null;
   static readonly NULL_SALESMAN: string = null;
   static readonly NULL_NAME_OF_BUYER: string = null;
   static readonly NULL_INDIVIDUAL_OR_CORPORATE: string = null;

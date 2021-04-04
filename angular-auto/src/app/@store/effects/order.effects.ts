@@ -10,7 +10,7 @@ import {
   GetCapacity,
   GetCarRegistry,
   GetChargeForInheritanceTax, GetExtraChargeAtSelling,
-  GetInheritanceTaxError, GetInheritanceTaxSuccess
+  GetInheritanceTaxError, GetInheritanceTaxSuccess, GetOrder, GetOrderError, GetOrderSuccess
 } from "../actions/order.actions";
 import {InheritanceTaxErrorResponse, InheritanceTaxInfoForChainedApiCall} from "../../@core/models/inheritanceTax";
 import {Constants} from "../../@core/models/constants";
@@ -124,6 +124,26 @@ export class OrderEffects {
               'Sajnos az adatbázis kapcsolat megszakadt!',
               false,
               Constants.DONT_WANT_CALCULATION)));
+          })
+        )),
+  );
+
+  @Effect()
+  getOrder$ = this._actions$.pipe(
+    ofType<GetOrder>(EOrderActions.GetOrder),
+    map(action => action.payload),
+    switchMap(carId =>
+      this._httpService.getOrder(carId)
+        .pipe(
+          switchMap(order => {
+            return of(new GetOrderSuccess(order));
+          }),
+          catchError((error) => {
+            if (error.error.errorCode === '404') {
+              return of(new GetOrderError('Ehhez az autóhoz még nincs rendelés!'));
+            } else {
+              return of(new GetOrderError('Sajnos az adatbázis kapcsolat megszakadt!'));
+            }
           })
         )),
   );

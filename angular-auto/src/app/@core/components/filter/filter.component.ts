@@ -48,8 +48,8 @@ import {
   selectDownPayment,
   selectExtraPayment,
   selectIndividualOrCorporate,
-  selectInheritanceTax,
-  selectInheritanceTaxError,
+  selectInheritanceTax, selectInheritanceTaxError,
+  selectOrderError,
   selectOrderProgress,
   selectPreviousOrNew,
   selectSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate,
@@ -58,7 +58,7 @@ import {
 } from "../../../@store/selectors/order.selectors";
 import {
   GetCapacity,
-  GetInheritanceTaxSuccess,
+  GetInheritanceTaxSuccess, GetOrder, GetOrderError,
   StoreAddCountInCar,
   StoreAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready,
   StoreAskForInheritanceTaxCalculation,
@@ -119,6 +119,7 @@ export class FilterComponent implements OnInit {
   public selectedCars = [];
   public selectedCarsObs: Observable<ICar[]>;
   public carErrorObs: Observable<string>;
+  public orderErrorObs: Observable<string>;
   public inheritanceTaxErrorObs: Observable<string>;
   public selectedCarHeader = ['Márka', 'Modell', 'Rendszám', 'Vevő', 'Vásárlás dátuma'];
   public typeOfBuying = ['KÉSZPÉNZ', 'ÁTUTALÁS', 'HITEL'];
@@ -300,6 +301,7 @@ export class FilterComponent implements OnInit {
     this.carOfTransactionObs = this._store.pipe(select(selectPickedCar));
     this.selectedCarsObs = this._store.pipe(select(selectCarList));
     this.carErrorObs = this._store.pipe(select(selectCarError));
+    this.orderErrorObs = this._store.pipe(select(selectOrderError));
     this.inheritanceTaxErrorObs = this._store.pipe(select(selectInheritanceTaxError));
     this.previousOrNewObs = this._store.pipe(select(selectPreviousOrNew));
     this.individualOrCorporateObs = this._store.pipe(select(selectIndividualOrCorporate));
@@ -333,6 +335,9 @@ export class FilterComponent implements OnInit {
 
     this.clickedCarIndexObs.subscribe(clickedCarIndex => {
       this.clickedCarIndex = clickedCarIndex;
+      if (null != this.clickedCarIndex) {
+        sessionStorage.setItem('clickedCarIndex', this.clickedCarIndex.toString());
+      }
     });
 
     this.carOfTransactionObs.subscribe(carOfTransaction => {
@@ -340,6 +345,13 @@ export class FilterComponent implements OnInit {
     });
 
     this.carErrorObs.subscribe(errorMsg => {
+      if (null !== errorMsg) {
+        const action = 'Hiba :('
+        this.utilService.openSnackBar(errorMsg, action);
+      }
+    });
+
+    this.orderErrorObs.subscribe(errorMsg => {
       if (null !== errorMsg) {
         const action = 'Hiba :('
         this.utilService.openSnackBar(errorMsg, action);
@@ -382,6 +394,10 @@ export class FilterComponent implements OnInit {
 
     this.newOrderObs.subscribe(order => {
       this.newOrder = order;
+      if (null != this.newOrder) {
+        this.setAllOrderDataAfterHttpCall(this.newOrder, this.carOfTransaction);
+        sessionStorage.setItem('order', JSON.stringify(this.newOrder));
+      }
     });
 
     this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlreadyObs.subscribe(alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready => {
@@ -525,6 +541,7 @@ export class FilterComponent implements OnInit {
         sessionStorage.setItem('downPayment', this.downPayment.toString());
         this.orderProgress = this.utilService.getRelevantOrderProgress(this.orderProgress, 6, 6);
         this.setOrderProgressInSessionStorage(this.orderProgress);
+        this.createDownPaymentFormWithData(this.downPayment, this.extra);
         if (null != this.newOrder) {
           this.newOrder.downPayment = this.downPayment;
           sessionStorage.setItem('order', JSON.stringify(this.newOrder));
@@ -542,6 +559,7 @@ export class FilterComponent implements OnInit {
         sessionStorage.setItem('extra', this.extra.toString());
         this.orderProgress = this.utilService.getRelevantOrderProgress(this.orderProgress, 6, 6);
         this.setOrderProgressInSessionStorage(this.orderProgress);
+        this.createDownPaymentFormWithData(this.downPayment, this.extra);
       }
     });
   }
@@ -595,17 +613,16 @@ export class FilterComponent implements OnInit {
       this._store.dispatch(new StoreCountInCar(JSON.parse(sessionStorage.getItem('countInCar'))));
     }
     if (sessionStorage.getItem('countInCarSupplement')) {
-      this.countInCarSupplement = JSON.parse(sessionStorage.getItem('countInCarSupplement'));
+      this._store.dispatch(new StoreCountInCarSupplement(JSON.parse(sessionStorage.getItem('countInCarSupplement'))));
     }
     if (sessionStorage.getItem('downPayment')) {
-      this.downPayment = Number(sessionStorage.getItem('downPayment'));
-      console.log(this.downPayment);
+      this._store.dispatch(new StoreDownPayment(Number(sessionStorage.getItem('downPayment'))));
     }
     if (sessionStorage.getItem('descriptionList')) {
       this.descriptionList = JSON.parse(sessionStorage.getItem('descriptionList'));
     }
     if (sessionStorage.getItem('extra')) {
-      this.extra = Number(sessionStorage.getItem('extra'));
+      this._store.dispatch(new StoreExtraPayment(Number(sessionStorage.getItem('extra'))));
     }
     if (sessionStorage.getItem('descriptionsWithAmount')) {
       this.listOfDescriptionsWithAmount = JSON.parse(sessionStorage.getItem('descriptionsWithAmount'));
@@ -1060,33 +1077,8 @@ export class FilterComponent implements OnInit {
           const selectedFilterValue = soldOrNot ? this.secondarySelectedFilter.value : this.selectedFilter.value;
           const carFilterRequest = new CarFilterRequest(formValue, selectedFilterValue, soldOrNot.toString());
           this._store.dispatch(new GetFilteredCars(carFilterRequest));
-          // this.httpService.getSingleCar(formValue, selectedFilterValue, soldOrNot.toString()).subscribe(data => {
-          //   if (!data) {
-          //     this.noMatch = true;
-          //   }
-          //   if (Array.isArray(data)) {
-          //     this.selectedCars = data;
-          //     sessionStorage.setItem('selectedCars', JSON.stringify(data));
-          //   } else {
-          //     this.selectedCars = [];
-          //     this.selectedCars.push(data);
-          //     sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
-          //   }
-          // }, error => {
-          //   sessionStorage.clear();
-          //   this.selectedCars = [];
-          //   if (error.error.errorCode === '404') {
-          //     this.utilService.openSnackBar('Ilyen paraméterű autó nem található!', 'Hiba :(');
-          //   } else {
-          //     this.utilService.openSnackBar('Az adatbáziskapcsolat váratlanul megszakadt!', 'Hiba :(');
-          //   }
-          // });
         } else {
           this.getAllCars(false);
-          // this.httpService.getAllCars(false).subscribe(data => {
-          //   this.selectedCars = data;
-          //   sessionStorage.setItem('selectedCars', JSON.stringify(data));
-          // });
         }
       }
     }
@@ -1537,23 +1529,13 @@ export class FilterComponent implements OnInit {
     this.setDataToNull(carIndex);
     if (carIndex !== this.clickedCarIndex) {
       this._store.dispatch(new StorePickedCar(car));
-      this.httpService.getOrder(car.id).subscribe(data => {
-        this.newOrder = <Order> data;
-        this.setAllOrderDataAfterHttpCall(this.newOrder, car);
-        sessionStorage.setItem('order', JSON.stringify(this.newOrder));
-      }, error => {
-        if (error.error.errorCode === '404') {
-          this.utilService.openSnackBar('Ehhez az autóhoz még nincs rendelés!', ':(');
-        }
-      });
-      this.clickedCarIndex = this.clickedCarIndex !== carIndex ? carIndex : null;
-      this._store.dispatch(new StoreClickedCarIndex(this.clickedCarIndex));
-      if (this.clickedCarIndex != null) {
-        sessionStorage.setItem('clickedCarIndex', this.clickedCarIndex.toString());
-      }
+      this._store.dispatch(new GetOrder(car.id));
+      const indexOfPickedCar = this.clickedCarIndex !== carIndex ? carIndex : null;
+      this._store.dispatch(new StoreClickedCarIndex(indexOfPickedCar));
     } else {
       this.clickedCarIndex = this.clickedCarIndex !== carIndex ? carIndex : null;
       this._store.dispatch(new StoreClickedCarIndex(this.clickedCarIndex));
+      this._store.dispatch(new GetOrderError(Constants.NULL_ERROR));
     }
   }
 

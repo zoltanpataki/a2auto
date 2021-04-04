@@ -87,7 +87,7 @@ export const orderReducers = (
     case EOrderActions.GetInheritanceTaxError: {
       return {
         ...state,
-        error: action.payload.errorMsg,
+        inheritanceTaxError: action.payload.errorMsg,
         wantInheritanceTaxCalculation: action.payload.wantInheritanceTaxCalculation,
         askForInheritanceTaxCalculation: action.payload.askForInheritanceTaxCalculation
       }
@@ -102,6 +102,18 @@ export const orderReducers = (
       return {
         ...state,
         extraPayment: action.payload
+      }
+    }
+    case EOrderActions.GetOrderSuccess: {
+      return {
+        ...state,
+        order: action.payload
+      }
+    }
+    case EOrderActions.GetOrderError: {
+      return {
+        ...state,
+        orderError: action.payload
       }
     }
     default:

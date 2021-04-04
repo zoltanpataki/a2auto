@@ -1,5 +1,5 @@
 import {Action} from "@ngrx/store";
-import {IOrder} from "../../@core/models/order";
+import {IOrder, Order} from "../../@core/models/order";
 import {
   InheritanceTaxErrorResponse,
   InheritanceTaxInfoForChainedApiCall
@@ -28,6 +28,9 @@ export enum EOrderActions {
   StoreCountInCarSupplement = '[CountInCarSupplement] Store count in car supplement',
   StoreDownPayment = '[number] Store down payment',
   StoreExtraPayment = '[number] Store extra payment',
+  GetOrder = '[number] Get order',
+  GetOrderSuccess = '[Order] Get order success',
+  GetOrderError = '[string] Get order error',
 }
 
 export class StorePreviousOrNew implements Action {
@@ -131,6 +134,24 @@ export class StoreExtraPayment implements Action {
   }
 }
 
+export class GetOrder implements Action {
+  public readonly type = EOrderActions.GetOrder;
+  constructor(public readonly payload: number) {
+  }
+}
+
+export class GetOrderSuccess implements Action {
+  public readonly type = EOrderActions.GetOrderSuccess;
+  constructor(public readonly payload: IOrder) {
+  }
+}
+
+export class GetOrderError implements Action {
+  public readonly type = EOrderActions.GetOrderError;
+  constructor(public readonly payload: string) {
+  }
+}
+
 export type OrderActions =
   StorePreviousOrNew |
   UpdateOrderProgress |
@@ -151,4 +172,7 @@ export type OrderActions =
   StoreCountInCar |
   StoreCountInCarSupplement |
   StoreDownPayment |
-  StoreExtraPayment;
+  StoreExtraPayment |
+  GetOrder |
+  GetOrderSuccess |
+  GetOrderError;
