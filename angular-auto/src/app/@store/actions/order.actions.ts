@@ -35,7 +35,7 @@ export enum EOrderActions {
   GetOrderError = '[string] Get order error',
   StoreNewUser = '[Users] Store new user',
   StoreNewCompany = '[Company] Store new company',
-
+  StoreSalesman = '[string] Store salesman',
 }
 
 export class StorePreviousOrNew implements Action {
@@ -151,6 +151,12 @@ export class StoreNewCompany implements Action {
   }
 }
 
+export class StoreSalesman implements Action {
+  public readonly type = EOrderActions.StoreSalesman;
+  constructor(public readonly payload: string) {
+  }
+}
+
 export class GetOrder implements Action {
   public readonly type = EOrderActions.GetOrder;
   constructor(public readonly payload: number) {
@@ -194,4 +200,5 @@ export type OrderActions =
   StoreExtraPayment |
   GetOrder |
   GetOrderSuccess |
-  GetOrderError;
+  GetOrderError |
+  StoreSalesman;

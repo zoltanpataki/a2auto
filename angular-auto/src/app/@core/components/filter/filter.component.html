@@ -426,7 +426,7 @@
           <div>
             <mat-form-field class="example-full-width">
               <mat-label>Értékesítő</mat-label>
-              <mat-select [(ngModel)]="salesman" (ngModelChange)="saveSalesman($event, car)" placeholder="Név">
+              <mat-select [(ngModel)]="salesman" (ngModelChange)="saveSalesman($event)" placeholder="Név">
                 <mat-option *ngFor="let salesman of utilService.salesmenObs | async; trackBy: trackByFn" [value]="salesman.name">
                   {{salesman.name}}
                 </mat-option>

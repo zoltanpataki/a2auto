@@ -34,7 +34,7 @@ import {
   GetCars,
   GetCarsSuccess,
   GetFilteredCars, StoreClickedCarIndex,
-  StoreNameOfBuyer, StorePickedCar
+  StoreNameOfBuyer, StorePickedCar, UpdateCarSalesman
 } from "../../../@store/actions/car.actions";
 import {Observable} from "rxjs";
 import {Constants} from "../../models/constants";
@@ -51,7 +51,7 @@ import {
   selectInheritanceTax, selectInheritanceTaxError, selectNewCompany, selectNewUser,
   selectOrderError,
   selectOrderProgress,
-  selectPreviousOrNew,
+  selectPreviousOrNew, selectSalesman,
   selectSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate,
   selectThereIsCountInCar,
   selectWantInheritanceTaxCalculation
@@ -65,7 +65,7 @@ import {
   StoreCountInCar,
   StoreCountInCarSupplement, StoreDownPayment, StoreExtraPayment,
   StoreIndividualOrCorporate, StoreNewCompany, StoreNewUser,
-  StorePreviousOrNew,
+  StorePreviousOrNew, StoreSalesman,
   StoreSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate,
   StoreThereIsCountInCar,
   StoreWantInheritanceTaxCalculation,
@@ -170,6 +170,7 @@ export class FilterComponent implements OnInit {
   public creditData: Credit;
   public countInCarObs: Observable<ICar>;
   public countInCar: Car;
+  public salesmanObs: Observable<string>;
   public salesman: string;
   public newOrderObs: Observable<Order>;
   public newOrder: Order;
@@ -329,6 +330,7 @@ export class FilterComponent implements OnInit {
     this.extraObs = this._store.pipe(select(selectExtraPayment));
     this.newUserObs = this._store.pipe(select(selectNewUser));
     this.newCompanyObs = this._store.pipe(select(selectNewCompany));
+    this.salesmanObs = this._store.pipe(select(selectSalesman));
 
     //subscriptions
 
@@ -586,6 +588,15 @@ export class FilterComponent implements OnInit {
         sessionStorage.setItem('newCompanyDuringSell', JSON.stringify(this.newCompany));
       }
     });
+
+    this.salesmanObs.subscribe(salesman => {
+      this.salesman = salesman;
+      if (null != salesman) {
+        sessionStorage.setItem('salesman', salesman);
+        this.orderProgress = this.utilService.getRelevantOrderProgress(this.orderProgress, 7, 7);
+        this.setOrderProgressInSessionStorage(this.orderProgress);
+      }
+    });
   }
 
   // Retrieve all the data after refresh
@@ -658,7 +669,7 @@ export class FilterComponent implements OnInit {
       this.selectedTypeOfBuying = sessionStorage.getItem('selectedTypeOfBuying');
     }
     if (sessionStorage.getItem('salesman')) {
-      this.salesman = sessionStorage.getItem('salesman');
+      this._store.dispatch(new StoreSalesman(sessionStorage.getItem('salesman')));
     }
     if (sessionStorage.getItem('credit')) {
       this.creditData = JSON.parse(sessionStorage.getItem('credit'));
@@ -1704,7 +1715,11 @@ export class FilterComponent implements OnInit {
 
   // Save the chosen salesman and update the car of transaction with it.
 
-  public saveSalesman(salesman: any, car: Car) {
+  public saveSalesman(salesman: string) {
+    this._store.dispatch(new StoreSalesman(salesman));
+    const carUpdateRequest = new CarUpdateModel(Constants.NULL_NAME_OF_BUYER, salesman, this.clickedCarIndex);
+    this._store.dispatch(new UpdateCarSalesman(carUpdateRequest));
+    gtgtgt
     console.log(salesman);
     this.salesman = salesman;
     car.salesman = this.salesman;

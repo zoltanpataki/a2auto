@@ -98,3 +98,8 @@ export const selectNewCompany = createSelector(
   selectOrder,
   (state: IOrderState) => state.newCompany
 );
+
+export const selectSalesman = createSelector(
+  selectOrder,
+  (state: IOrderState) => state.salesman
+);

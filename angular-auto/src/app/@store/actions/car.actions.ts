@@ -12,6 +12,7 @@ export enum ECarActions {
   StorePickedCar = '[Car] Store picked car',
   UpdateCarError = '[string] Update car error',
   StoreNameOfBuyer = '[CarUpdateRequest] Store name of buyer',
+  UpdateCarSalesman = '[CarUpdateRequest] Update car salesman',
 }
 
 export class GetCars implements Action {
@@ -70,6 +71,12 @@ export class StoreNameOfBuyer implements Action {
   }
 }
 
+export class UpdateCarSalesman implements Action {
+  public readonly type = ECarActions.UpdateCarSalesman;
+  constructor(public readonly payload: CarUpdateModel) {
+  }
+}
+
 export type CarActions =
   GetCars |
   GetCarsSuccess |
@@ -80,4 +87,5 @@ export type CarActions =
   StoreClickedCarIndex |
   StorePickedCar |
   UpdateCarError |
-  StoreNameOfBuyer;
+  StoreNameOfBuyer |
+  UpdateCarSalesman;

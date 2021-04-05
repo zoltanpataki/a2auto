@@ -9,7 +9,7 @@ import {
   GetCarsSuccess,
   GetFilteredCars,
   GetFilteredCarsError,
-  GetFilteredCarsSuccess, StoreNameOfBuyer, UpdateCarError
+  GetFilteredCarsSuccess, StoreNameOfBuyer, UpdateCarError, UpdateCarSalesman
 } from "../actions/car.actions";
 import {catchError, map, switchMap, withLatestFrom} from "rxjs/operators";
 import {of} from "rxjs";
@@ -62,6 +62,27 @@ export class CarEffects {
       let allCars = cloneDeep(cars);
       let pickedCar = allCars[carUpdateModel.clickedCarIndex];
       pickedCar.nameOfBuyer = carUpdateModel.nameOfBuyer;
+      allCars[carUpdateModel.clickedCarIndex] = pickedCar;
+      this._httpService.updateCar(pickedCar).subscribe(data => {
+        console.log(data);
+      });
+      sessionStorage.setItem("selectedCars", allCars);
+      return of(new GetCarsSuccess(allCars));
+    }),
+    catchError((error) => {
+      return of(new UpdateCarError('Az adatbáziskapcsolat váratlanul megszakadt!'));
+    })
+  );
+
+  @Effect()
+  updateCarSalesman$ = this._actions$.pipe(
+    ofType<UpdateCarSalesman>(ECarActions.UpdateCarSalesman),
+    map(action => action.payload),
+    withLatestFrom(this._store.pipe(select(selectCarList))),
+    switchMap(([carUpdateModel, cars]) => {
+      let allCars = cloneDeep(cars);
+      let pickedCar = allCars[carUpdateModel.clickedCarIndex];
+      pickedCar.salesman = carUpdateModel.salesman;
       allCars[carUpdateModel.clickedCarIndex] = pickedCar;
       this._httpService.updateCar(pickedCar).subscribe(data => {
         console.log(data);

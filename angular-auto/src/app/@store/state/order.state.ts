@@ -26,6 +26,7 @@ export interface IOrderState {
   inheritanceTaxError: string
   newUser: IUser
   newCompany: ICompany
+  salesman: string
 }
 
 export const initialOrderState: IOrderState = {
@@ -50,4 +51,5 @@ export const initialOrderState: IOrderState = {
   inheritanceTaxError: null,
   newUser: null,
   newCompany: null,
+  salesman: null,
 }

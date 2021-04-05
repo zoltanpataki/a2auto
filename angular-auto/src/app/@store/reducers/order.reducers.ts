@@ -116,6 +116,12 @@ export const orderReducers = (
         newCompany: action.payload
       }
     }
+    case EOrderActions.StoreSalesman: {
+      return {
+        ...state,
+        salesman: action.payload
+      }
+    }
     case EOrderActions.GetOrderSuccess: {
       return {
         ...state,
