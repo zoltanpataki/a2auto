@@ -104,6 +104,18 @@ export const orderReducers = (
         extraPayment: action.payload
       }
     }
+    case EOrderActions.StoreNewUser: {
+      return {
+        ...state,
+        newUser: action.payload
+      }
+    }
+    case EOrderActions.StoreNewCompany: {
+      return {
+        ...state,
+        newCompany: action.payload
+      }
+    }
     case EOrderActions.GetOrderSuccess: {
       return {
         ...state,

@@ -48,7 +48,7 @@ import {
   selectDownPayment,
   selectExtraPayment,
   selectIndividualOrCorporate,
-  selectInheritanceTax, selectInheritanceTaxError,
+  selectInheritanceTax, selectInheritanceTaxError, selectNewCompany, selectNewUser,
   selectOrderError,
   selectOrderProgress,
   selectPreviousOrNew,
@@ -64,7 +64,7 @@ import {
   StoreAskForInheritanceTaxCalculation,
   StoreCountInCar,
   StoreCountInCarSupplement, StoreDownPayment, StoreExtraPayment,
-  StoreIndividualOrCorporate,
+  StoreIndividualOrCorporate, StoreNewCompany, StoreNewUser,
   StorePreviousOrNew,
   StoreSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate,
   StoreThereIsCountInCar,
@@ -173,7 +173,9 @@ export class FilterComponent implements OnInit {
   public salesman: string;
   public newOrderObs: Observable<Order>;
   public newOrder: Order;
+  public newUserObs: Observable<IUser>;
   public newUser: Users;
+  public newCompanyObs: Observable<ICompany>;
   public newCompany: Company;
   public descriptionList: Description[] = [];
   public switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer: boolean = true;
@@ -190,7 +192,6 @@ export class FilterComponent implements OnInit {
   public giftIndexList = [];
   @ViewChild('focuser', { read: ElementRef })
   public focuser: ElementRef;
-  public nameOfBuyer;
   public tooLongFieldValue: string = '';
   public isThereLongFieldValue: boolean = false;
   public creditNeedsToBeRecalculated: boolean = false;
@@ -326,6 +327,8 @@ export class FilterComponent implements OnInit {
     this.countInCarSupplementObs = this._store.pipe(select(selectCountInCarSupplement));
     this.downPaymentObs = this._store.pipe(select(selectDownPayment));
     this.extraObs = this._store.pipe(select(selectExtraPayment));
+    this.newUserObs = this._store.pipe(select(selectNewUser));
+    this.newCompanyObs = this._store.pipe(select(selectNewCompany));
 
     //subscriptions
 
@@ -569,6 +572,20 @@ export class FilterComponent implements OnInit {
         this.createDownPaymentFormWithData(this.downPayment, Constants.NULL_EXTRA_PAYMENT);
       }
     });
+
+    this.newUserObs.subscribe(newUser => {
+      this.newUser = newUser;
+      if (null != newUser) {
+        sessionStorage.setItem('newUserDuringSell', JSON.stringify(this.newUser));
+      }
+    });
+
+    this.newCompanyObs.subscribe(newCompany => {
+      this.newCompany = newCompany;
+      if (null != newCompany) {
+        sessionStorage.setItem('newCompanyDuringSell', JSON.stringify(this.newCompany));
+      }
+    });
   }
 
   // Retrieve all the data after refresh
@@ -596,13 +613,13 @@ export class FilterComponent implements OnInit {
       this._store.dispatch(new StorePickedUser(JSON.parse(sessionStorage.getItem('pickedUser'))));
     }
     if (sessionStorage.getItem('newUserDuringSell')) {
-      this.newUser = JSON.parse(sessionStorage.getItem('newUserDuringSell'));
+      this._store.dispatch(new StoreNewUser(JSON.parse(sessionStorage.getItem('newUserDuringSell'))));
     }
     if (sessionStorage.getItem('pickedCompany')) {
       this._store.dispatch(new StorePickedCompany(JSON.parse(sessionStorage.getItem('pickedCompany'))));
     }
     if (sessionStorage.getItem('newCompanyDuringSell')) {
-      this.newCompany = JSON.parse(sessionStorage.getItem('newCompanyDuringSell'));
+      this._store.dispatch(new StoreNewCompany(JSON.parse(sessionStorage.getItem('newCompanyDuringSell'))));
     }
     if (sessionStorage.getItem('alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready')) {
       this._store.dispatch(new StoreAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready(JSON.parse(sessionStorage.getItem('alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready'))))
@@ -645,9 +662,6 @@ export class FilterComponent implements OnInit {
     }
     if (sessionStorage.getItem('credit')) {
       this.creditData = JSON.parse(sessionStorage.getItem('credit'));
-    }
-    if (sessionStorage.getItem('nameOfBuyer')) {
-      this.nameOfBuyer = sessionStorage.getItem('nameOfBuyer');
     }
     if (sessionStorage.getItem('creditNeedsToBeRecalculated')) {
       this.creditNeedsToBeRecalculated = JSON.parse(sessionStorage.getItem('creditNeedsToBeRecalculated'));
@@ -694,7 +708,6 @@ export class FilterComponent implements OnInit {
     sessionStorage.removeItem('newCompanyDuringSell');
     sessionStorage.removeItem('a2Representation');
     sessionStorage.removeItem('typeOfBuying');
-    sessionStorage.removeItem('nameOfBuyer');
     sessionStorage.removeItem('url');
     sessionStorage.removeItem('trophyClick');
     sessionStorage.removeItem('creditNeedsToBeRecalculated');
@@ -746,7 +759,6 @@ export class FilterComponent implements OnInit {
     this.setOrderProgressInSessionStorage(0);
     this.removeItemsFromSessionStorage();
     this.creditData = null;
-    this.nameOfBuyer = null;
     this.creditNeedsToBeRecalculated = false;
     if (Constants.NO_CAR_INDEX !== carIndex) {
       this._store.dispatch(new StoreNameOfBuyer(
@@ -1130,9 +1142,9 @@ export class FilterComponent implements OnInit {
       if (this.carOfTransaction != null) {
         this.carOfTransaction = result;
       }
-      if (null != this.nameOfBuyer && null != this.carOfTransaction) {
-        this.carOfTransaction.nameOfBuyer = this.nameOfBuyer;
-      }
+      // if (null != this.nameOfBuyer && null != this.carOfTransaction) {
+      //   this.carOfTransaction.nameOfBuyer = this.nameOfBuyer;
+      // }
       if (null != this.carOfTransaction) {
         this.selectedCars[this.clickedCarIndex] = this.carOfTransaction;
         sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
@@ -1311,8 +1323,8 @@ export class FilterComponent implements OnInit {
   // It has only one parameter which is a number(index).
   // After that the chosen user will be set as pickedUser and put into the sessionStorage
   // and will be saved as the part of the order
-  // Also the nameOfBuyer variable is set and saved into sessionStorage
-  // the nameOfBuyer play its part as a column value in the filter component
+  // Also the nameOfBuyer variable is set for the car and updated in the database.
+  // The nameOfBuyer play its part as a column value in the filter component
 
   public pickUser(index: number) {
     this._store.dispatch(new StorePickedUserIndex(index));
@@ -1631,26 +1643,20 @@ export class FilterComponent implements OnInit {
   // and sets it in the sessionStorage
   // later on it will be saved along with the order.
 
-  public addNewUserToOrder(event: Users) {
-    this.newUser = event;
-    this.carOfTransaction.nameOfBuyer = this.newUser.fullName;
-    this.nameOfBuyer = this.newUser.fullName;
-    sessionStorage.setItem('nameOfBuyer', this.nameOfBuyer);
-    this.updateCarOfTransaction(this.carOfTransaction);
-    sessionStorage.setItem('newUserDuringSell', JSON.stringify(this.newUser));
+  public addNewUserToOrder(user: Users) {
+    this._store.dispatch(new StoreNewUser(user));
+    const carUpdateRequest = new CarUpdateModel(user.fullName, Constants.NULL_SALESMAN, this.clickedCarIndex);
+    this._store.dispatch(new StoreNameOfBuyer(carUpdateRequest));
   }
 
   // Gets a company object through the company component as a result of an eventEmitter
   // and sets it in the sessionStorage
   // later on it will be saved along with the order.
 
-  public addNewCompanyToOrder(event: Company) {
-    this.newCompany = event;
-    this.carOfTransaction.nameOfBuyer = this.newCompany.name;
-    this.nameOfBuyer = this.newCompany.name;
-    sessionStorage.setItem('nameOfBuyer', this.nameOfBuyer);
-    this.updateCarOfTransaction(this.carOfTransaction);
-    sessionStorage.setItem('newCompanyDuringSell', JSON.stringify(this.newCompany));
+  public addNewCompanyToOrder(company: Company) {
+    this._store.dispatch(new StoreNewCompany(company));
+    const carUpdateRequest = new CarUpdateModel(company.name, Constants.NULL_SALESMAN, this.clickedCarIndex);
+    this._store.dispatch(new StoreNameOfBuyer(carUpdateRequest));
   }
 
   // Gets a string object through the car component as a result of an eventEmitter
@@ -1892,7 +1898,6 @@ export class FilterComponent implements OnInit {
             warrantType: warrantType,
             a2Representation: a2Representation,
             typeOfBuying: pickedTypeOfBuyingForCountInCar,
-            nameOfBuyer: this.nameOfBuyer,
           }}});
     }
   }

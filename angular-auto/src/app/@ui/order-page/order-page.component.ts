@@ -31,7 +31,6 @@ export class OrderPageComponent implements OnInit {
   public blankPage: boolean;
   public extraAmountChargedForTheUser: number;
   public countInCar: Car;
-  public nameOfBuyer: string;
   public trophyClick: boolean = false;
 
 
@@ -62,7 +61,6 @@ export class OrderPageComponent implements OnInit {
       this.indexOfPickedCompany = history.state.data.indexOfPickedCompany;
       this.pickedUser = history.state.data.pickedUser;
       this.pickedCompany = history.state.data.pickedCompany;
-      this.nameOfBuyer = history.state.data.nameOfBuyer;
       if (null != history.state.data.trophyClick) {
         this.trophyClick = history.state.data.trophyClick;
         sessionStorage.setItem('trophyClick', JSON.stringify(this.trophyClick));
@@ -72,7 +70,6 @@ export class OrderPageComponent implements OnInit {
       sessionStorage.setItem('order', JSON.stringify(this.order));
       sessionStorage.setItem('userSearchData', JSON.stringify(this.userSearchResult));
       sessionStorage.setItem('companySearchData', JSON.stringify(this.companySearchResult));
-      sessionStorage.setItem('nameOfBuyer', this.nameOfBuyer);
       if (this.indexOfPickedUser != null) {
         sessionStorage.setItem('indexOfPickedUser', JSON.stringify(this.indexOfPickedUser));
       }

@@ -28,7 +28,6 @@ export class WarrantPageComponent implements OnInit {
   public witness1: Witness;
   public witness2: Witness;
   public warrantType: string;
-  public nameOfBuyer: string;
 
   constructor(public router: Router) { }
 
@@ -61,7 +60,6 @@ export class WarrantPageComponent implements OnInit {
       this.witness1 = history.state.data.witness1;
       this.witness2 = history.state.data.witness2;
       this.warrantType = history.state.data.warrantType;
-      this.nameOfBuyer = history.state.data.nameOfBuyer;
       sessionStorage.setItem('clickedCarIndex', history.state.data.clickedCarIndex);
       sessionStorage.setItem('orderedCar', JSON.stringify(this.orderedCar));
       sessionStorage.setItem('order', JSON.stringify(this.order));
@@ -70,7 +68,6 @@ export class WarrantPageComponent implements OnInit {
       sessionStorage.setItem('witness1', JSON.stringify(this.witness1));
       sessionStorage.setItem('witness2', JSON.stringify(this.witness2));
       sessionStorage.setItem('warrantType', JSON.stringify(this.warrantType));
-      sessionStorage.setItem('nameOfBuyer', this.nameOfBuyer);
       if (this.indexOfPickedUser != null) {
         sessionStorage.setItem('indexOfPickedUser', JSON.stringify(this.indexOfPickedUser));
       }

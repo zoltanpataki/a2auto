@@ -88,3 +88,13 @@ export const selectExtraPayment = createSelector(
   selectOrder,
   (state: IOrderState) => state.extraPayment
 );
+
+export const selectNewUser = createSelector(
+  selectOrder,
+  (state: IOrderState) => state.newUser
+);
+
+export const selectNewCompany = createSelector(
+  selectOrder,
+  (state: IOrderState) => state.newCompany
+);

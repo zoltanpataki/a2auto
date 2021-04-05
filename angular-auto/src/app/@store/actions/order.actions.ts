@@ -6,6 +6,8 @@ import {
 } from "../../@core/models/inheritanceTax";
 import {ICar} from "../../@core/models/car";
 import {CountInCarSupplement} from "../../@core/models/countInCarSupplement";
+import {IUser} from "../../@core/models/users";
+import {ICompany} from "../../@core/models/company";
 
 export enum EOrderActions {
   StorePreviousOrNew = '[string] Store previous or new customer flag',
@@ -31,6 +33,9 @@ export enum EOrderActions {
   GetOrder = '[number] Get order',
   GetOrderSuccess = '[Order] Get order success',
   GetOrderError = '[string] Get order error',
+  StoreNewUser = '[Users] Store new user',
+  StoreNewCompany = '[Company] Store new company',
+
 }
 
 export class StorePreviousOrNew implements Action {
@@ -134,6 +139,18 @@ export class StoreExtraPayment implements Action {
   }
 }
 
+export class StoreNewUser implements Action {
+  public readonly type = EOrderActions.StoreNewUser;
+  constructor(public readonly payload: IUser) {
+  }
+}
+
+export class StoreNewCompany implements Action {
+  public readonly type = EOrderActions.StoreNewCompany;
+  constructor(public readonly payload: ICompany) {
+  }
+}
+
 export class GetOrder implements Action {
   public readonly type = EOrderActions.GetOrder;
   constructor(public readonly payload: number) {
@@ -172,6 +189,8 @@ export type OrderActions =
   StoreCountInCar |
   StoreCountInCarSupplement |
   StoreDownPayment |
+  StoreNewUser |
+  StoreNewCompany |
   StoreExtraPayment |
   GetOrder |
   GetOrderSuccess |

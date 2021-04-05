@@ -48,7 +48,6 @@ export class SellingPageComponent implements OnInit{
   private million = 'millió';
   private hyphen = '-';
   public priceInString = '';
-  public nameOfBuyer: string;
   public url: string;
 
   constructor(private utilService: UtilService,
@@ -110,7 +109,6 @@ export class SellingPageComponent implements OnInit{
       this.witness1 = history.state.data.witness1;
       this.witness2 = history.state.data.witness2;
       this.a2Representation = history.state.data.a2Representation;
-      this.nameOfBuyer = history.state.data.nameOfBuyer;
       this.url = history.state.data.url;
 
       if (history.state.data.url != null) {
@@ -133,9 +131,6 @@ export class SellingPageComponent implements OnInit{
       }
       if (this.companySearchResult != null) {
         sessionStorage.setItem('companySearchData', JSON.stringify(this.companySearchResult));
-      }
-      if (this.nameOfBuyer != null) {
-        sessionStorage.setItem('nameOfBuyer', this.nameOfBuyer);
       }
       if (this.typeOfBuying != null) {
         sessionStorage.setItem('typeOfBuying', this.typeOfBuying);
