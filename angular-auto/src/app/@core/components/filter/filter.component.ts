@@ -14,7 +14,7 @@ import {IUser, UserFilterRequest, Users} from "../../models/users";
 import {Credit} from "../../models/credit";
 import {Company, CompanyFilterRequest, ICompany} from "../../models/company";
 import {NavigationEnd, Router} from "@angular/router";
-import {Order} from "../../models/order";
+import {Order, UpdateDescriptionWithAmountRequest} from "../../models/order";
 import {Description} from "../../models/description";
 import {CarTimeInfoComponent} from "../../dialog/car-time-info/car-time-info.component";
 import {Witness} from "../../models/witness";
@@ -44,7 +44,7 @@ import {
   selectAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready,
   selectAskForInheritanceTaxCalculation,
   selectCountInCar,
-  selectCountInCarSupplement,
+  selectCountInCarSupplement, selectDescriptionsWithAmount,
   selectDownPayment,
   selectExtraPayment,
   selectIndividualOrCorporate,
@@ -63,12 +63,12 @@ import {
   StoreAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready,
   StoreAskForInheritanceTaxCalculation,
   StoreCountInCar,
-  StoreCountInCarSupplement, StoreDownPayment, StoreExtraPayment,
+  StoreCountInCarSupplement, StoreDescriptionsWithAmount, StoreDownPayment, StoreExtraPayment,
   StoreIndividualOrCorporate, StoreNewCompany, StoreNewUser,
   StorePreviousOrNew, StoreSalesman,
   StoreSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate,
   StoreThereIsCountInCar,
-  StoreWantInheritanceTaxCalculation,
+  StoreWantInheritanceTaxCalculation, UpdateDescriptionWithAmount,
   UpdateOrder,
   UpdateOrderProgress
 } from "../../../@store/actions/order.actions";
@@ -188,6 +188,7 @@ export class FilterComponent implements OnInit {
   public descriptionForm: FormGroup;
   public description: FormArray;
   public descriptions: FormArray;
+  public listOfDescriptionsWithAmountObs: Observable<DescriptionWithAmount[]>;
   public listOfDescriptionsWithAmount: DescriptionWithAmount[] = [];
   public chargedBehalf = ['AJÁNDÉK', 'VEVŐ FIZETI'];
   public giftIndexList = [];
@@ -285,9 +286,8 @@ export class FilterComponent implements OnInit {
       this.descriptionForm = this.formBuilder.group({
         description: this.formBuilder.array([this.createDescriptionWithAmountRow(null)])
       });
-    } else {
-      this.setDescriptionForm();
     }
+
     if (this.downPayment == null) {
       this.createEmptyDownPaymentForm();
     } else {
@@ -331,6 +331,7 @@ export class FilterComponent implements OnInit {
     this.newUserObs = this._store.pipe(select(selectNewUser));
     this.newCompanyObs = this._store.pipe(select(selectNewCompany));
     this.salesmanObs = this._store.pipe(select(selectSalesman));
+    this.listOfDescriptionsWithAmountObs = this._store.pipe(select(selectDescriptionsWithAmount));
 
     //subscriptions
 
@@ -541,7 +542,6 @@ export class FilterComponent implements OnInit {
     });
 
     this.downPaymentObs.subscribe(downPayment => {
-      console.log(downPayment)
       this.downPayment = downPayment;
       if (null != downPayment) {
         sessionStorage.setItem('downPayment', this.downPayment.toString());
@@ -597,6 +597,18 @@ export class FilterComponent implements OnInit {
         this.setOrderProgressInSessionStorage(this.orderProgress);
       }
     });
+
+    this.listOfDescriptionsWithAmountObs.subscribe( descriptionsWithAmount => {
+      this.listOfDescriptionsWithAmount = descriptionsWithAmount;
+      console.log(descriptionsWithAmount);
+      if (null != descriptionsWithAmount) {
+        sessionStorage.setItem('descriptionsWithAmount', JSON.stringify(this.listOfDescriptionsWithAmount));
+        sessionStorage.setItem('giftIndexList', JSON.stringify(this.giftIndexList));
+        this.orderProgress = this.utilService.getRelevantOrderProgress(this.orderProgress, 9, 9);
+        this.setOrderProgressInSessionStorage(this.orderProgress);
+        this.createFormGroupForDescriptionWithAmount();
+      }
+    })
   }
 
   // Retrieve all the data after refresh
@@ -660,7 +672,12 @@ export class FilterComponent implements OnInit {
       this._store.dispatch(new StoreExtraPayment(Number(sessionStorage.getItem('extra'))));
     }
     if (sessionStorage.getItem('descriptionsWithAmount')) {
-      this.listOfDescriptionsWithAmount = JSON.parse(sessionStorage.getItem('descriptionsWithAmount'));
+      console.log(JSON.parse(sessionStorage.getItem('descriptionsWithAmount')))
+      const descriptionsWithAmountList = JSON.parse(sessionStorage.getItem('descriptionsWithAmount'))
+      descriptionsWithAmountList.forEach((item, index) => {
+        const descriptionWithAmountRequest = new UpdateDescriptionWithAmountRequest(index, item);
+        this._store.dispatch(new UpdateDescriptionWithAmount(descriptionWithAmountRequest));
+      })
     }
     if (sessionStorage.getItem('giftIndexList')) {
       this.giftIndexList = JSON.parse(sessionStorage.getItem('giftIndexList'));
@@ -740,10 +757,10 @@ export class FilterComponent implements OnInit {
     this._store.dispatch(new GetUsersSuccess(null));
     this._store.dispatch(new GetCompaniesSuccess(null));
     this._store.dispatch(new StorePickedUser(null));
-    this.newUser = null;
+    this._store.dispatch(new StoreNewUser(null));
     this._store.dispatch(new StorePickedUserIndex(null));
     this._store.dispatch(new StorePickedCompany(null));
-    this.newCompany = null;
+    this._store.dispatch(new StoreNewCompany(null));
     this._store.dispatch(new StorePickedCompanyIndex(null));
     this.selectedUserFilter = null;
     this.selectedCompanyFilter = null;
@@ -757,7 +774,7 @@ export class FilterComponent implements OnInit {
     this.description = null;
     this.descriptions = null;
     this.giftIndexList = [];
-    this.listOfDescriptionsWithAmount = [];
+    this._store.dispatch(new StoreDescriptionsWithAmount([]));
     this.createFormGroupForDescriptionWithAmount();
     this.createEmptyCarSupplementForm();
     this._store.dispatch(new StoreExtraPayment(null));
@@ -1782,7 +1799,6 @@ export class FilterComponent implements OnInit {
   // and the new value gets updated in sessionStorage, and later on it will be part of the order.
 
   public saveChangedDownPayment(form: FormGroup) {
-    console.log(form.value)
     this._store.dispatch(new StoreDownPayment(form.value.downPayment));
   }
 
@@ -1991,6 +2007,19 @@ export class FilterComponent implements OnInit {
         this.utilService.openSnackBar('Ehhez az autóhoz még nincs rendelés!', ':(');
       }
     });
+  }
+
+  public saveChangedDescription(form: FormGroup, index: number) {
+    const descriptionAmount = form.value.description[index].charged === 'AJÁNDÉK' ? 0 : form.value.description[index].amount;
+    const updatedDescriptionWithAmount = new DescriptionWithAmount(
+      form.value.description[index].id,
+      form.value.description[index].descriptionText,
+      descriptionAmount,
+      form.value.description[index].charged
+    )
+    const updateRequest = new UpdateDescriptionWithAmountRequest(index, updatedDescriptionWithAmount);
+    console.log(updateRequest);
+    this._store.dispatch(new UpdateDescriptionWithAmount(updateRequest));
   }
 }
 

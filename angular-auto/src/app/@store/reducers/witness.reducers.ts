@@ -25,7 +25,6 @@ export const witnessReducers = (
         ...state,
         witnesses: [...state.witnesses, action.payload],
         error: null
-
       };
     }
     case EWitnessActions.DeleteWitnessSuccess: {
@@ -33,7 +32,6 @@ export const witnessReducers = (
         ...state,
         witnesses: state.witnesses.filter(witness => witness.id !== action.payload),
         error: null
-
       };
     }
     default : {

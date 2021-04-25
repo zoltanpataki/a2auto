@@ -134,6 +134,28 @@ export const orderReducers = (
         orderError: action.payload
       }
     }
+    case EOrderActions.StoreDescriptionsWithAmount: {
+      return {
+        ...state,
+        descriptionsWithAmount: action.payload
+      }
+    }
+    case EOrderActions.UpdateDescriptionWithAmount: {
+      return {
+        ...state,
+        descriptionsWithAmount: [
+          ...state.descriptionsWithAmount.slice(0, action.payload.index),
+          {
+            ...state.descriptionsWithAmount[action.payload.index],
+            id: action.payload.descriptionWithAmount.id,
+            description: action.payload.descriptionWithAmount.description,
+            amount: action.payload.descriptionWithAmount.amount,
+            charged: action.payload.descriptionWithAmount.charged
+          },
+          ...state.descriptionsWithAmount.slice(action.payload.index + 1)
+        ]
+      }
+    }
     default:
       return state;
   }

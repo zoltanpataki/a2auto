@@ -1,5 +1,5 @@
 import {Action} from "@ngrx/store";
-import {IOrder, Order} from "../../@core/models/order";
+import {IOrder, Order, UpdateDescriptionWithAmountRequest} from "../../@core/models/order";
 import {
   InheritanceTaxErrorResponse,
   InheritanceTaxInfoForChainedApiCall
@@ -37,7 +37,8 @@ export enum EOrderActions {
   StoreNewUser = '[Users] Store new user',
   StoreNewCompany = '[Company] Store new company',
   StoreSalesman = '[string] Store salesman',
-  AddDescriptionWithAMount = '[DescriptionWithAmount] Store description with amount'
+  StoreDescriptionsWithAmount = '[DescriptionWithAmount] Add description with amount',
+  UpdateDescriptionWithAmount = '[UpdateDescriptionWithAmountRequest] Update description with amount',
 }
 
 export class StorePreviousOrNew implements Action {
@@ -159,9 +160,15 @@ export class StoreSalesman implements Action {
   }
 }
 
-export class AddDescriptionWithAMount implements Action {
-  public readonly type = EOrderActions.AddDescriptionWithAMount;
-  constructor(public readonly payload: DescriptionWithAmount) {
+export class StoreDescriptionsWithAmount implements Action {
+  public readonly type = EOrderActions.StoreDescriptionsWithAmount;
+  constructor(public readonly payload: DescriptionWithAmount[]) {
+  }
+}
+
+export class UpdateDescriptionWithAmount implements Action {
+  public readonly type = EOrderActions.UpdateDescriptionWithAmount;
+  constructor(public readonly payload: UpdateDescriptionWithAmountRequest) {
   }
 }
 
@@ -209,4 +216,6 @@ export type OrderActions =
   GetOrder |
   GetOrderSuccess |
   GetOrderError |
-  StoreSalesman;
+  StoreSalesman |
+  StoreDescriptionsWithAmount |
+  UpdateDescriptionWithAmount;

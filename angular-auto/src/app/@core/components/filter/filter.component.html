@@ -467,17 +467,17 @@
         </div>
         <div>
           <form [formGroup]="descriptionForm" (submit)="saveDescriptions(descriptionForm)" class="descriptionForm">
-            <div class="descriptions" formArrayName="description" *ngFor="let singleDescription of formData.controls; let indexNum = index">
+            <div class="descriptions" formArrayName="description" *ngFor="let singleDescription of formData.controls; let indexNum = index; trackBy:trackByFn">
               <div class="descriptions">
                 <mat-form-field class="example-full-width" [formGroupName]="indexNum">
                   <label>
-                    <input matInput maxlength="30" placeholder="Szöveg" formControlName="descriptionText">
+                    <input matInput maxlength="30" placeholder="Szöveg" formControlName="descriptionText" (ngModelChange)="saveChangedDescription(descriptionForm, indexNum)">
                   </label>
                 </mat-form-field>
               </div>
               <div class="descriptions">
                 <mat-form-field class="example-full-width" [formGroupName]="indexNum">
-                  <mat-select placeholder="Terhelt fél" formControlName="charged">
+                  <mat-select placeholder="Terhelt fél" formControlName="charged" (ngModelChange)="saveChangedDescription(descriptionForm, indexNum)">
                     <mat-option *ngFor="let item of chargedBehalf; trackBy: trackByFn" value="{{item}}" (click)="item == 'AJÁNDÉK' && addToGiftIndexList(indexNum) || item == 'VEVŐ FIZETI' && removeFromGiftIndexList(indexNum)">
                       {{item}}
                     </mat-option>
@@ -487,7 +487,7 @@
               <div class="descriptions" *ngIf="!giftIndexList.includes(indexNum)">
                 <mat-form-field class="example-full-width" [formGroupName]="indexNum">
                   <label>
-                    <input currencyMask matInput placeholder="Összeg" formControlName="amount" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false, suffix: ' Ft'}">
+                    <input currencyMask matInput placeholder="Összeg" formControlName="amount" (ngModelChange)="saveChangedDescription(descriptionForm, indexNum)" [options]="{ precision: 0, thousands: '.', prefix: '', align: 'left', allowNegative: false, suffix: ' Ft'}">
                   </label>
                 </mat-form-field>
               </div>

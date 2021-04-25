@@ -66,3 +66,13 @@ export interface IOrder {
   description: Description[];
   descriptionsWithAmount: DescriptionWithAmount[];
 }
+
+export class UpdateDescriptionWithAmountRequest {
+  index: number
+  descriptionWithAmount: DescriptionWithAmount
+
+  constructor(index: number, descriptionWithAmount: DescriptionWithAmount) {
+    this.index = index;
+    this.descriptionWithAmount = descriptionWithAmount;
+  }
+}

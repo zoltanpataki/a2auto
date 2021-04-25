@@ -3,6 +3,7 @@ import {ICar} from "../../@core/models/car";
 import {CountInCarSupplement} from "../../@core/models/countInCarSupplement";
 import {IUser} from "../../@core/models/users";
 import {ICompany} from "../../@core/models/company";
+import {DescriptionWithAmount} from "../../@core/models/descriptionWithAmount";
 
 export interface IOrderState {
   order: Order
@@ -27,6 +28,7 @@ export interface IOrderState {
   newUser: IUser
   newCompany: ICompany
   salesman: string
+  descriptionsWithAmount: DescriptionWithAmount[]
 }
 
 export const initialOrderState: IOrderState = {
@@ -52,4 +54,5 @@ export const initialOrderState: IOrderState = {
   newUser: null,
   newCompany: null,
   salesman: null,
+  descriptionsWithAmount: [],
 }

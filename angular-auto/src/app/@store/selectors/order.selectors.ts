@@ -103,3 +103,8 @@ export const selectSalesman = createSelector(
   selectOrder,
   (state: IOrderState) => state.salesman
 );
+
+export const selectDescriptionsWithAmount = createSelector(
+  selectOrder,
+  (state: IOrderState) => state.descriptionsWithAmount
+);
