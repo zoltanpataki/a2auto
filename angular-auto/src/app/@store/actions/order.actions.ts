@@ -8,6 +8,7 @@ import {ICar} from "../../@core/models/car";
 import {CountInCarSupplement} from "../../@core/models/countInCarSupplement";
 import {IUser} from "../../@core/models/users";
 import {ICompany} from "../../@core/models/company";
+import {DescriptionWithAmount} from "../../@core/models/descriptionWithAmount";
 
 export enum EOrderActions {
   StorePreviousOrNew = '[string] Store previous or new customer flag',
@@ -36,6 +37,7 @@ export enum EOrderActions {
   StoreNewUser = '[Users] Store new user',
   StoreNewCompany = '[Company] Store new company',
   StoreSalesman = '[string] Store salesman',
+  AddDescriptionWithAMount = '[DescriptionWithAmount] Store description with amount'
 }
 
 export class StorePreviousOrNew implements Action {
@@ -154,6 +156,12 @@ export class StoreNewCompany implements Action {
 export class StoreSalesman implements Action {
   public readonly type = EOrderActions.StoreSalesman;
   constructor(public readonly payload: string) {
+  }
+}
+
+export class AddDescriptionWithAMount implements Action {
+  public readonly type = EOrderActions.AddDescriptionWithAMount;
+  constructor(public readonly payload: DescriptionWithAmount) {
   }
 }
 

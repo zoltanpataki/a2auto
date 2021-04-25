@@ -22,4 +22,5 @@ export abstract class Constants {
   static readonly NULL_NAME_OF_BUYER: string = null;
   static readonly NULL_INDIVIDUAL_OR_CORPORATE: string = null;
   static readonly NULL_SELECTED_BETWEEN_INDIVIDUAL_AND_CORPORATE_TRUE_IF_INDIVIDUAL_FALSE_IF_CORPORATE: boolean = null;
+  static readonly NULL_CAR_HAND_OVER_DATE: Date = null;
 }

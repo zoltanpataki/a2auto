@@ -34,7 +34,7 @@ import {
   GetCars,
   GetCarsSuccess,
   GetFilteredCars, StoreClickedCarIndex,
-  StoreNameOfBuyer, StorePickedCar, UpdateCarSalesman
+  StoreNameOfBuyer, StorePickedCar, UpdateCarHandOverDate, UpdateCarSalesman
 } from "../../../@store/actions/car.actions";
 import {Observable} from "rxjs";
 import {Constants} from "../../models/constants";
@@ -761,7 +761,7 @@ export class FilterComponent implements OnInit {
     this.createFormGroupForDescriptionWithAmount();
     this.createEmptyCarSupplementForm();
     this._store.dispatch(new StoreExtraPayment(null));
-    this.salesman = null;
+    this._store.dispatch(new StoreSalesman(null));
     this.selectedTypeOfBuying = null;
     this.newOrder = null;
     this._store.dispatch(new GetInheritanceTaxSuccess(null));
@@ -776,7 +776,8 @@ export class FilterComponent implements OnInit {
         new CarUpdateModel(
           Constants.NULL_NAME_OF_BUYER,
           Constants.NULL_SALESMAN,
-          carIndex)));
+          carIndex,
+          Constants.NULL_CAR_HAND_OVER_DATE)));
     }
   }
 
@@ -1363,7 +1364,11 @@ export class FilterComponent implements OnInit {
         pickedUserFromDataTable.nationality
       )));
 
-    const carUpdateRequest = new CarUpdateModel(this.pickedUser.fullName, Constants.NULL_SALESMAN, this.clickedCarIndex);
+    const carUpdateRequest = new CarUpdateModel(
+      this.pickedUser.fullName,
+      Constants.NULL_SALESMAN,
+      this.clickedCarIndex,
+      Constants.NULL_CAR_HAND_OVER_DATE);
     this._store.dispatch(new StoreNameOfBuyer(carUpdateRequest));
   }
 
@@ -1400,7 +1405,11 @@ export class FilterComponent implements OnInit {
         pickedCompanyFromDataTable.email
       )));
 
-    const carUpdateRequest = new CarUpdateModel(this.pickedCompany.name, Constants.NULL_SALESMAN, this.clickedCarIndex);
+    const carUpdateRequest = new CarUpdateModel(
+      this.pickedCompany.name,
+      Constants.NULL_SALESMAN,
+      this.clickedCarIndex,
+      Constants.NULL_CAR_HAND_OVER_DATE);
     this._store.dispatch(new StoreNameOfBuyer(carUpdateRequest));
   }
 
@@ -1656,7 +1665,11 @@ export class FilterComponent implements OnInit {
 
   public addNewUserToOrder(user: Users) {
     this._store.dispatch(new StoreNewUser(user));
-    const carUpdateRequest = new CarUpdateModel(user.fullName, Constants.NULL_SALESMAN, this.clickedCarIndex);
+    const carUpdateRequest = new CarUpdateModel(
+      user.fullName,
+      Constants.NULL_SALESMAN,
+      this.clickedCarIndex,
+      Constants.NULL_CAR_HAND_OVER_DATE);
     this._store.dispatch(new StoreNameOfBuyer(carUpdateRequest));
   }
 
@@ -1666,7 +1679,11 @@ export class FilterComponent implements OnInit {
 
   public addNewCompanyToOrder(company: Company) {
     this._store.dispatch(new StoreNewCompany(company));
-    const carUpdateRequest = new CarUpdateModel(company.name, Constants.NULL_SALESMAN, this.clickedCarIndex);
+    const carUpdateRequest = new CarUpdateModel(
+      company.name,
+      Constants.NULL_SALESMAN,
+      this.clickedCarIndex,
+      Constants.NULL_CAR_HAND_OVER_DATE);
     this._store.dispatch(new StoreNameOfBuyer(carUpdateRequest));
   }
 
@@ -1716,16 +1733,13 @@ export class FilterComponent implements OnInit {
   // Save the chosen salesman and update the car of transaction with it.
 
   public saveSalesman(salesman: string) {
-    this._store.dispatch(new StoreSalesman(salesman));
-    const carUpdateRequest = new CarUpdateModel(Constants.NULL_NAME_OF_BUYER, salesman, this.clickedCarIndex);
+    const carUpdateRequest = new CarUpdateModel(
+      Constants.NULL_NAME_OF_BUYER,
+      salesman,
+      this.clickedCarIndex,
+      Constants.NULL_CAR_HAND_OVER_DATE);
     this._store.dispatch(new UpdateCarSalesman(carUpdateRequest));
-    gtgtgt
-    console.log(salesman);
-    this.salesman = salesman;
-    car.salesman = this.salesman;
-    this.updateCarOfTransaction(car);
-    this.setOrderProgressInSessionStorage(7);
-    sessionStorage.setItem('salesman', this.salesman);
+    this._store.dispatch(new StoreSalesman(salesman));
   }
 
   // Called many times throughout the filter component
@@ -1749,21 +1763,19 @@ export class FilterComponent implements OnInit {
 
   // This is a simple one field form where the value of the field contains the date
   // which is agreed by the buyer and the seller to hand over the car.
+  // The date gets updated by the relevant car in the database.
 
-  public submitHandOver(form: any, car: Car) {
-    this.updateCarWithHandoverDate(form, car);
+  public submitHandOver(form: any) {
+    let carHandOverDate = new Date(form.value.handover);
+    carHandOverDate.setHours(0);
+    carHandOverDate.setMinutes(0);
+    const carUpdateRequest = new CarUpdateModel(
+      Constants.NULL_NAME_OF_BUYER,
+      Constants.NULL_SALESMAN,
+      this.clickedCarIndex,
+      carHandOverDate);
+    this._store.dispatch(new UpdateCarHandOverDate(carUpdateRequest));
     this.setOrderProgressInSessionStorage(8);
-  }
-
-  // Called in the submitHandOver method
-  // It updates the carHandOver field of the car object
-  // and updates that car.
-
-  public updateCarWithHandoverDate(form: any, car: Car) {
-    car.carHandover = new Date(form.value.handover);
-    car.carHandover.setHours(0);
-    car.carHandover.setMinutes(0);
-    this.updateCarOfTransaction(car);
   }
 
   // If any changes happens on the down payment form then ngModelChange triggers this method
