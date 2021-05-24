@@ -125,12 +125,16 @@ export class CarComponent implements OnInit {
         this.utilService.validPlateNumber = false;
       } else if (isNaN(Number(form.value.vintage))) {
         this.notValidVintage = true;
+      } else if (null == form.value.dateOfArrival || form.value.dateOfArrival.length === 0) {
+        this.utilService.validArrivalDate = false;
       } else if (this.utilService.carUpdate) {
         this.notValidVintage = false;
+        this.setValidArrivalDate();
         this.setValidPlateNumber();
         this.updateCar(form, this.carData.id);
       } else {
         this.notValidVintage = false;
+        this.setValidArrivalDate();
         this.setValidPlateNumber();
         this.saveOrUpdateCar(form);
       }
@@ -265,7 +269,7 @@ export class CarComponent implements OnInit {
           this.utilService.openSnackBar('Az autót sikerült elmenteni!', 'Szuper :)');
         }, error => {
           if ('Duplication' === error.error.errorDescription) {
-            this.utilService.openSnackBar('Ez a rendszám már szerepel az adatbázisban!', 'Hiba :(');
+            this.utilService.openSnackBar('Ez a rendszám és vételi dátum már szerepel az adatbázisban!', 'Hiba :(');
           } else {
             this.utilService.openSnackBar('Az adatbáziskapcsolat váratlanul megszakadt!', 'Hiba :(');
           }
@@ -358,6 +362,10 @@ export class CarComponent implements OnInit {
 
   private setValidPlateNumber() {
     this.utilService.validPlateNumber = true;
+  }
+
+  private setValidArrivalDate() {
+    this.utilService.validArrivalDate = true;
   }
 
   private addTimeToCarHandoverDate(carHandover: Date): Date {
@@ -489,7 +497,6 @@ export class CarComponent implements OnInit {
     this.dialogCloser.emit('close');
     if (this.carData.id != null) {
       const carForInsurance = this.createCarObjectWithId(form, this.transformToCapitalData(form), this.carData.id);
-      console.log(carForInsurance);
       this.httpService.saveCar(carForInsurance).subscribe(data => {
         this.router.navigate(['/insurance'], {
           state: {
