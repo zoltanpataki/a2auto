@@ -13,6 +13,7 @@ import {InfoForInheritanceCalculation} from "../models/inheritanceTax";
 export class UtilService {
 
   public validPlateNumber = true;
+  public validArrivalDate = true;
   public emptySearchField = false;
   public carUpdate = false;
   public a2Company: Company;
