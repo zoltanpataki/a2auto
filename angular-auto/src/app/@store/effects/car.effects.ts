@@ -5,14 +5,20 @@ import {IAppState} from "../state/app.state";
 import {select, Store} from "@ngrx/store";
 import {
   ECarActions,
-  GetCars, GetCarsError,
+  GetCars,
+  GetCarsError,
   GetCarsSuccess,
   GetFilteredCars,
   GetFilteredCarsError,
-  GetFilteredCarsSuccess, StoreNameOfBuyer, UpdateCarError, UpdateCarHandOverDate, UpdateCarSalesman
+  GetFilteredCarsSuccess,
+  StoreNameOfBuyer,
+  UpdateCarError,
+  UpdateCarHandOverDate,
+  UpdateCarSalesman,
+  UpdateCarTypeOfBuying
 } from "../actions/car.actions";
 import {catchError, map, switchMap, withLatestFrom} from "rxjs/operators";
-import {of} from "rxjs";
+import {Observable, of} from "rxjs";
 import {selectCarList} from "../selectors/car.selectors";
 import cloneDeep from 'lodash.clonedeep';
 
@@ -104,6 +110,27 @@ export class CarEffects {
       let allCars = cloneDeep(cars);
       let pickedCar = allCars[carUpdateModel.clickedCarIndex];
       pickedCar.carHandover = carUpdateModel.carHandOverDate;
+      allCars[carUpdateModel.clickedCarIndex] = pickedCar;
+      this._httpService.updateCar(pickedCar).subscribe(data => {
+        console.log(data);
+      });
+      sessionStorage.setItem("selectedCars", allCars);
+      return of(new GetCarsSuccess(allCars));
+    }),
+    catchError((error) => {
+      return of(new UpdateCarError('Az adatbáziskapcsolat váratlanul megszakadt!'));
+    })
+  );
+
+  @Effect()
+  updateCarTypeOfBuying$ = this._actions$.pipe(
+    ofType<UpdateCarTypeOfBuying>(ECarActions.UpdateCarTypeOfBuying),
+    map(action => action.payload),
+    withLatestFrom(this._store.pipe(select(selectCarList))),
+    switchMap(([carUpdateModel, cars]) => {
+      let allCars = cloneDeep(cars);
+      let pickedCar = allCars[carUpdateModel.clickedCarIndex];
+      pickedCar.typeOfBuying = carUpdateModel.typeOfBuying;
       allCars[carUpdateModel.clickedCarIndex] = pickedCar;
       this._httpService.updateCar(pickedCar).subscribe(data => {
         console.log(data);

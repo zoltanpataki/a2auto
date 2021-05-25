@@ -140,6 +140,12 @@ export const orderReducers = (
         descriptionsWithAmount: action.payload
       }
     }
+    case EOrderActions.StoreGiftIndexListSuccess: {
+      return {
+        ...state,
+        giftIndexList: action.payload
+      }
+    }
     case EOrderActions.UpdateDescriptionWithAmount: {
       return {
         ...state,
@@ -154,6 +160,21 @@ export const orderReducers = (
           },
           ...state.descriptionsWithAmount.slice(action.payload.index + 1)
         ]
+      }
+    }
+    case EOrderActions.RemoveDescriptionWithAmount: {
+      return {
+        ...state,
+        descriptionsWithAmount: [
+          ...state.descriptionsWithAmount.slice(0, action.payload),
+          ...state.descriptionsWithAmount.slice(action.payload + 1)
+        ]
+      }
+    }
+    case EOrderActions.StoreTypeOfBuying: {
+      return {
+        ...state,
+        typeOfBuying: action.payload
       }
     }
     default:

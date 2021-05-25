@@ -76,3 +76,15 @@ export class UpdateDescriptionWithAmountRequest {
     this.descriptionWithAmount = descriptionWithAmount;
   }
 }
+
+export class UpdateGiftIndexListRequest {
+  index: number
+  isAdding: boolean
+  isDeletedDescription: boolean
+
+  constructor(index: number, isAdding: boolean, isDeletedDescription: boolean) {
+    this.index = index;
+    this.isAdding = isAdding;
+    this.isDeletedDescription = isDeletedDescription;
+  }
+}

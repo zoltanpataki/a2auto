@@ -506,7 +506,7 @@
           <div>
             <mat-form-field class="example-full-width">
               <mat-label>Vásárlás típusa</mat-label>
-              <mat-select [(ngModel)]="selectedTypeOfBuying" (ngModelChange)="selectTypeOfBuying($event, car)" name="typeOfBuying">
+              <mat-select [(ngModel)]="selectedTypeOfBuying" (ngModelChange)="selectTypeOfBuying($event)" name="typeOfBuying">
                 <mat-option *ngFor="let type of typeOfBuying; trackBy: trackByFn" [value]="type">
                   {{type}}
                 </mat-option>

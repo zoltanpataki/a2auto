@@ -1,5 +1,9 @@
 import {Action} from "@ngrx/store";
-import {IOrder, Order, UpdateDescriptionWithAmountRequest} from "../../@core/models/order";
+import {
+  IOrder,
+  UpdateDescriptionWithAmountRequest,
+  UpdateGiftIndexListRequest
+} from "../../@core/models/order";
 import {
   InheritanceTaxErrorResponse,
   InheritanceTaxInfoForChainedApiCall
@@ -39,6 +43,10 @@ export enum EOrderActions {
   StoreSalesman = '[string] Store salesman',
   StoreDescriptionsWithAmount = '[DescriptionWithAmount] Add description with amount',
   UpdateDescriptionWithAmount = '[UpdateDescriptionWithAmountRequest] Update description with amount',
+  RemoveDescriptionWithAmount = '[number] Remove description with amount',
+  StoreGiftIndexList = '[UpdateGiftIndexList] Store gift index list',
+  StoreGiftIndexListSuccess = '[UpdateGiftIndexList] Store gift index list success',
+  StoreTypeOfBuying = '[string] Store type of buying',
 }
 
 export class StorePreviousOrNew implements Action {
@@ -172,6 +180,12 @@ export class UpdateDescriptionWithAmount implements Action {
   }
 }
 
+export class RemoveDescriptionWithAmount implements Action {
+  public readonly type = EOrderActions.RemoveDescriptionWithAmount;
+  constructor(public readonly payload: number) {
+  }
+}
+
 export class GetOrder implements Action {
   public readonly type = EOrderActions.GetOrder;
   constructor(public readonly payload: number) {
@@ -186,6 +200,24 @@ export class GetOrderSuccess implements Action {
 
 export class GetOrderError implements Action {
   public readonly type = EOrderActions.GetOrderError;
+  constructor(public readonly payload: string) {
+  }
+}
+
+export class StoreGiftIndexList implements Action {
+  public readonly type = EOrderActions.StoreGiftIndexList;
+  constructor(public readonly payload: UpdateGiftIndexListRequest) {
+  }
+}
+
+export class StoreGiftIndexListSuccess implements Action {
+  public readonly type = EOrderActions.StoreGiftIndexListSuccess;
+  constructor(public readonly payload: number[]) {
+  }
+}
+
+export class StoreTypeOfBuying implements Action {
+  public readonly type = EOrderActions.StoreTypeOfBuying;
   constructor(public readonly payload: string) {
   }
 }
@@ -218,4 +250,8 @@ export type OrderActions =
   GetOrderError |
   StoreSalesman |
   StoreDescriptionsWithAmount |
-  UpdateDescriptionWithAmount;
+  UpdateDescriptionWithAmount |
+  RemoveDescriptionWithAmount |
+  StoreGiftIndexList |
+  StoreGiftIndexListSuccess |
+  StoreTypeOfBuying;

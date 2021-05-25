@@ -108,3 +108,13 @@ export const selectDescriptionsWithAmount = createSelector(
   selectOrder,
   (state: IOrderState) => state.descriptionsWithAmount
 );
+
+export const selectGiftIndexList = createSelector(
+  selectOrder,
+  (state: IOrderState) => state.giftIndexList
+);
+
+export const selectTypeOfBuying = createSelector(
+  selectOrder,
+  (state: IOrderState) => state.typeOfBuying
+);

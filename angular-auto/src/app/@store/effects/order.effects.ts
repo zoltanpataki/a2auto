@@ -1,19 +1,28 @@
 import {Injectable} from "@angular/core";
 import {Actions, Effect, ofType} from "@ngrx/effects";
-import {catchError, map, switchMap} from "rxjs/operators";
+import {catchError, map, switchMap, withLatestFrom} from "rxjs/operators";
 import {of} from "rxjs";
 import {HttpService} from "../../@core/services/http.service";
-import {Store} from "@ngrx/store";
+import {select, Store} from "@ngrx/store";
 import {IAppState} from "../state/app.state";
 import {
   EOrderActions,
   GetCapacity,
   GetCarRegistry,
-  GetChargeForInheritanceTax, GetExtraChargeAtSelling,
-  GetInheritanceTaxError, GetInheritanceTaxSuccess, GetOrder, GetOrderError, GetOrderSuccess
+  GetChargeForInheritanceTax,
+  GetExtraChargeAtSelling,
+  GetInheritanceTaxError,
+  GetInheritanceTaxSuccess,
+  GetOrder,
+  GetOrderError,
+  GetOrderSuccess,
+  StoreGiftIndexList,
+  StoreGiftIndexListSuccess
 } from "../actions/order.actions";
 import {InheritanceTaxErrorResponse, InheritanceTaxInfoForChainedApiCall} from "../../@core/models/inheritanceTax";
 import {Constants} from "../../@core/models/constants";
+import {selectGiftIndexList} from "../selectors/order.selectors";
+import cloneDeep from 'lodash.clonedeep';
 
 @Injectable()
 export class OrderEffects {
@@ -146,6 +155,31 @@ export class OrderEffects {
             }
           })
         )),
+  );
+
+  @Effect()
+  storeGiftIndexList$ = this._actions$.pipe(
+    ofType<StoreGiftIndexList>(EOrderActions.StoreGiftIndexList),
+    map(action => action.payload),
+    withLatestFrom(this._store.pipe(select(selectGiftIndexList))),
+    switchMap(([updateGiftIndexListRequest, giftIndexes]) => {
+      let allGiftIndexes = cloneDeep(giftIndexes);
+      if (updateGiftIndexListRequest.isAdding) {
+        allGiftIndexes.push(updateGiftIndexListRequest.index);
+      }
+      if (!updateGiftIndexListRequest.isAdding) {
+        allGiftIndexes.splice(updateGiftIndexListRequest.index, 1);
+      }
+      if (updateGiftIndexListRequest.isDeletedDescription) {
+        allGiftIndexes.forEach(function (item, indexOfItem, array) {
+          if (item > updateGiftIndexListRequest.index) {
+            item -= 1;
+            array[indexOfItem] = item;
+          }
+        });
+      }
+      return of(new StoreGiftIndexListSuccess(allGiftIndexes));
+    })
   );
 
   constructor(

@@ -29,6 +29,8 @@ export interface IOrderState {
   newCompany: ICompany
   salesman: string
   descriptionsWithAmount: DescriptionWithAmount[]
+  giftIndexList: number[]
+  typeOfBuying: string
 }
 
 export const initialOrderState: IOrderState = {
@@ -55,4 +57,6 @@ export const initialOrderState: IOrderState = {
   newCompany: null,
   salesman: null,
   descriptionsWithAmount: [],
+  giftIndexList: [],
+  typeOfBuying: null,
 }
