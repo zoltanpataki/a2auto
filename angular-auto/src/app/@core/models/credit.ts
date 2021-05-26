@@ -18,3 +18,13 @@ export class Credit {
     this.repayment = repayment;
   }
 }
+
+export interface ICredit {
+  id: number;
+  bank: string;
+  creditType: string;
+  initialPayment: number;
+  creditAmount: number;
+  creditLength: number;
+  repayment: number;
+}

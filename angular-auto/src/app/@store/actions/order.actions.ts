@@ -13,6 +13,8 @@ import {CountInCarSupplement} from "../../@core/models/countInCarSupplement";
 import {IUser} from "../../@core/models/users";
 import {ICompany} from "../../@core/models/company";
 import {DescriptionWithAmount} from "../../@core/models/descriptionWithAmount";
+import {ICredit} from "../../@core/models/credit";
+import {Description} from "../../@core/models/description";
 
 export enum EOrderActions {
   StorePreviousOrNew = '[string] Store previous or new customer flag',
@@ -41,12 +43,15 @@ export enum EOrderActions {
   StoreNewUser = '[Users] Store new user',
   StoreNewCompany = '[Company] Store new company',
   StoreSalesman = '[string] Store salesman',
+  StoreRemarks = '[Description] Store remarks',
   StoreDescriptionsWithAmount = '[DescriptionWithAmount] Add description with amount',
   UpdateDescriptionWithAmount = '[UpdateDescriptionWithAmountRequest] Update description with amount',
   RemoveDescriptionWithAmount = '[number] Remove description with amount',
   StoreGiftIndexList = '[UpdateGiftIndexList] Store gift index list',
   StoreGiftIndexListSuccess = '[UpdateGiftIndexList] Store gift index list success',
   StoreTypeOfBuying = '[string] Store type of buying',
+  StoreCredit = '[Credit] Store credit',
+  StoreCreditNeedsToBeRecalculated = '[boolean] Store credit needs to be recalculated',
 }
 
 export class StorePreviousOrNew implements Action {
@@ -168,6 +173,12 @@ export class StoreSalesman implements Action {
   }
 }
 
+export class StoreRemarks implements Action {
+  public readonly type = EOrderActions.StoreRemarks;
+  constructor(public readonly payload: Description[]) {
+  }
+}
+
 export class StoreDescriptionsWithAmount implements Action {
   public readonly type = EOrderActions.StoreDescriptionsWithAmount;
   constructor(public readonly payload: DescriptionWithAmount[]) {
@@ -222,6 +233,18 @@ export class StoreTypeOfBuying implements Action {
   }
 }
 
+export class StoreCredit implements Action {
+  public readonly type = EOrderActions.StoreCredit;
+  constructor(public readonly payload: ICredit) {
+  }
+}
+
+export class StoreCreditNeedsToBeRecalculated implements Action {
+  public readonly type = EOrderActions.StoreCreditNeedsToBeRecalculated;
+  constructor(public readonly payload: boolean) {
+  }
+}
+
 export type OrderActions =
   StorePreviousOrNew |
   UpdateOrderProgress |
@@ -254,4 +277,7 @@ export type OrderActions =
   RemoveDescriptionWithAmount |
   StoreGiftIndexList |
   StoreGiftIndexListSuccess |
-  StoreTypeOfBuying;
+  StoreTypeOfBuying |
+  StoreCredit |
+  StoreCreditNeedsToBeRecalculated |
+  StoreRemarks;

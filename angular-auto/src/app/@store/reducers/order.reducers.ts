@@ -177,6 +177,24 @@ export const orderReducers = (
         typeOfBuying: action.payload
       }
     }
+    case EOrderActions.StoreCredit: {
+      return {
+        ...state,
+        credit: action.payload
+      }
+    }
+    case EOrderActions.StoreCreditNeedsToBeRecalculated: {
+      return {
+        ...state,
+        creditNeedsToBeRecalculated: action.payload
+      }
+    }
+    case EOrderActions.StoreRemarks: {
+      return {
+        ...state,
+        remarks: action.payload
+      }
+    }
     default:
       return state;
   }

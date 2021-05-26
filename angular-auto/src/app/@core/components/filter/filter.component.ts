@@ -44,14 +44,14 @@ import {
   selectAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready,
   selectAskForInheritanceTaxCalculation,
   selectCountInCar,
-  selectCountInCarSupplement, selectDescriptionsWithAmount,
+  selectCountInCarSupplement, selectCredit, selectCreditNeedsToBeRecalculated, selectDescriptionsWithAmount,
   selectDownPayment,
   selectExtraPayment, selectGiftIndexList,
   selectIndividualOrCorporate,
   selectInheritanceTax, selectInheritanceTaxError, selectNewCompany, selectNewUser,
   selectOrderError,
   selectOrderProgress,
-  selectPreviousOrNew, selectSalesman,
+  selectPreviousOrNew, selectRemarks, selectSalesman,
   selectSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate,
   selectThereIsCountInCar, selectTypeOfBuying,
   selectWantInheritanceTaxCalculation
@@ -65,7 +65,7 @@ import {
   StoreAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready,
   StoreAskForInheritanceTaxCalculation,
   StoreCountInCar,
-  StoreCountInCarSupplement,
+  StoreCountInCarSupplement, StoreCredit, StoreCreditNeedsToBeRecalculated,
   StoreDescriptionsWithAmount,
   StoreDownPayment,
   StoreExtraPayment,
@@ -74,7 +74,7 @@ import {
   StoreIndividualOrCorporate,
   StoreNewCompany,
   StoreNewUser,
-  StorePreviousOrNew,
+  StorePreviousOrNew, StoreRemarks,
   StoreSalesman,
   StoreSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate,
   StoreThereIsCountInCar, StoreTypeOfBuying,
@@ -179,6 +179,7 @@ export class FilterComponent implements OnInit {
   public indexOfPickedUser: number;
   public indexOfPickedCompanyObs: Observable<number>;
   public indexOfPickedCompany: number;
+  public creditDataObs: Observable<Credit>;
   public creditData: Credit;
   public countInCarObs: Observable<ICar>;
   public countInCar: Car;
@@ -190,6 +191,7 @@ export class FilterComponent implements OnInit {
   public newUser: Users;
   public newCompanyObs: Observable<ICompany>;
   public newCompany: Company;
+  public descriptionListObs: Observable<Description[]>;
   public descriptionList: Description[] = [];
   public switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer: boolean = true;
   // Downpayment form variables
@@ -209,6 +211,7 @@ export class FilterComponent implements OnInit {
   public focuser: ElementRef;
   public tooLongFieldValue: string = '';
   public isThereLongFieldValue: boolean = false;
+  public creditNeedsToBeRecalculatedObs: Observable<boolean>;
   public creditNeedsToBeRecalculated: boolean = false;
   public PREVIOUS: string = Constants.PREVIOUS;
   public NEW: string = Constants.NEW;
@@ -347,6 +350,9 @@ export class FilterComponent implements OnInit {
     this.listOfDescriptionsWithAmountObs = this._store.pipe(select(selectDescriptionsWithAmount));
     this.giftIndexListObs = this._store.pipe(select(selectGiftIndexList));
     this.selectedTypeOfBuyingObs = this._store.pipe(select(selectTypeOfBuying));
+    this.creditDataObs = this._store.pipe(select(selectCredit));
+    this.creditNeedsToBeRecalculatedObs = this._store.pipe(select(selectCreditNeedsToBeRecalculated));
+    this.descriptionListObs = this._store.pipe(select(selectRemarks));
 
     //subscriptions
 
@@ -613,6 +619,13 @@ export class FilterComponent implements OnInit {
       }
     });
 
+    this.descriptionListObs.subscribe(remarks => {
+      this.descriptionList = remarks;
+      if (null != remarks) {
+        sessionStorage.setItem('descriptionList', JSON.stringify(this.descriptionList));
+      }
+    });
+
     this.listOfDescriptionsWithAmountObs.subscribe( descriptionsWithAmount => {
       this.listOfDescriptionsWithAmount = descriptionsWithAmount;
       if (null != descriptionsWithAmount) {
@@ -637,6 +650,20 @@ export class FilterComponent implements OnInit {
         sessionStorage.setItem('selectedTypeOfBuying', this.selectedTypeOfBuying);
         this.orderProgress = this.utilService.getRelevantOrderProgress(this.orderProgress, 10, 10);
         this.setOrderProgressInSessionStorage(this.orderProgress);
+      }
+    });
+
+    this.creditDataObs.subscribe(credit => {
+      this.creditData = credit;
+      if (null != credit) {
+        sessionStorage.setItem('credit', JSON.stringify(credit));
+      }
+    });
+
+    this.creditNeedsToBeRecalculatedObs.subscribe(creditNeedsToBeRecalculated => {
+      this.creditNeedsToBeRecalculated = creditNeedsToBeRecalculated;
+      if (null != creditNeedsToBeRecalculated) {
+        sessionStorage.setItem('creditNeedsToBeRecalculated', JSON.stringify(creditNeedsToBeRecalculated));
       }
     });
   }
@@ -718,10 +745,10 @@ export class FilterComponent implements OnInit {
       this._store.dispatch(new StoreSalesman(sessionStorage.getItem('salesman')));
     }
     if (sessionStorage.getItem('credit')) {
-      this.creditData = JSON.parse(sessionStorage.getItem('credit'));
+      this._store.dispatch(new StoreCredit(JSON.parse(sessionStorage.getItem('credit'))));
     }
     if (sessionStorage.getItem('creditNeedsToBeRecalculated')) {
-      this.creditNeedsToBeRecalculated = JSON.parse(sessionStorage.getItem('creditNeedsToBeRecalculated'));
+      this._store.dispatch(new StoreCreditNeedsToBeRecalculated(JSON.parse(sessionStorage.getItem('creditNeedsToBeRecalculated'))));
     }
     if (sessionStorage.getItem('selectedOrganizer')) {
       this.selectedOrganizer = JSON.parse(sessionStorage.getItem('selectedOrganizer'));
@@ -802,21 +829,21 @@ export class FilterComponent implements OnInit {
     this.descriptionList = [];
     this.description = null;
     this.descriptions = null;
-    this.giftIndexList = [];
+    this._store.dispatch(new StoreGiftIndexListSuccess([]));
     this._store.dispatch(new StoreDescriptionsWithAmount([]));
     this.createFormGroupForDescriptionWithAmount();
     this.createEmptyCarSupplementForm();
     this._store.dispatch(new StoreExtraPayment(null));
     this._store.dispatch(new StoreSalesman(null));
-    this.selectedTypeOfBuying = null;
-    this.newOrder = null;
+    this._store.dispatch(new StoreTypeOfBuying(null));
+    this._store.dispatch(new UpdateOrder(null));
     this._store.dispatch(new GetInheritanceTaxSuccess(null));
     this._store.dispatch(new StoreCountInCar(null));
     this._store.dispatch(new StoreCountInCarSupplement(null));
     this.setOrderProgressInSessionStorage(0);
     this.removeItemsFromSessionStorage();
-    this.creditData = null;
-    this.creditNeedsToBeRecalculated = false;
+    this._store.dispatch(new StoreCredit(null));
+    this._store.dispatch(new StoreCreditNeedsToBeRecalculated(false));
     if (Constants.NO_CAR_INDEX !== carIndex) {
       this._store.dispatch(new StoreNameOfBuyer(
         new CarUpdateModel(
@@ -979,7 +1006,11 @@ export class FilterComponent implements OnInit {
 
   public removeDescriptionWithAmountRow(index: number) {
     if (this.giftIndexList.includes(index)) {
-      this._store.dispatch(new StoreGiftIndexList(new UpdateGiftIndexListRequest(index, false, true)));
+      this._store.dispatch(new StoreGiftIndexList(
+        new UpdateGiftIndexListRequest(
+          index,
+          Constants.IT_IS_NOT_ADDING,
+          Constants.IT_IS_DESCRIPTION_DELETE)));
     }
     this._store.dispatch(new RemoveDescriptionWithAmount(index));
   }
@@ -1246,11 +1277,8 @@ export class FilterComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       if (result != null) {
-        this.creditData = result;
-        this.creditNeedsToBeRecalculated = false;
-      }
-      if (this.creditData != null) {
-        sessionStorage.setItem("credit", JSON.stringify(this.creditData));
+        this._store.dispatch(new StoreCredit(result));
+        this._store.dispatch(new StoreCreditNeedsToBeRecalculated(false));
       }
     });
   }
@@ -1290,7 +1318,6 @@ export class FilterComponent implements OnInit {
         this.updateCarOfTransaction(result.car);
         if (result.remarkList != null) {
           this.reOrderDescriptionList(result, sellOrBuy);
-          sessionStorage.setItem('descriptionList', JSON.stringify(this.descriptionList));
         }
         this.evaluateCarOfContract(result, orderedCarId, descriptionForm, countInCarSupplementForm);
       }
@@ -1332,7 +1359,7 @@ export class FilterComponent implements OnInit {
       });
     }
     newDescriptionList.push(...remarkList);
-    this.descriptionList = newDescriptionList;
+    this._store.dispatch(new StoreRemarks(newDescriptionList));
   }
 
   // Navigates to the clicked document and structure it depends on the transaction is sell or buy from the A2 company perspective.
@@ -1659,8 +1686,8 @@ export class FilterComponent implements OnInit {
     if (this.selectedTypeOfBuying === 'HITEL') {
       this.openCreditModal(this.carOfTransaction);
     } else {
-      this.creditData = null;
-      this.creditNeedsToBeRecalculated = false;
+      this._store.dispatch(new StoreCredit(null));
+      this._store.dispatch(new StoreCreditNeedsToBeRecalculated(false));
       sessionStorage.removeItem('credit');
     }
     this.setOrderProgressInSessionStorage(10);
@@ -1863,7 +1890,11 @@ export class FilterComponent implements OnInit {
   // If the customer gets the item as a gift, then this item's index gets saved in a list called giftIndexList
 
   public addToGiftIndexList(index: number): boolean {
-    this._store.dispatch(new StoreGiftIndexList(new UpdateGiftIndexListRequest(index, true, false)));
+    this._store.dispatch(new StoreGiftIndexList(
+      new UpdateGiftIndexListRequest(
+        index,
+        Constants.IT_IS_ADDING,
+        Constants.IT_IS_NOT_DESCRIPTION_DELETE)));
     return true;
   }
 
@@ -1872,7 +1903,11 @@ export class FilterComponent implements OnInit {
   // then this item index gets removed from the giftIndexList
 
   public removeFromGiftIndexList(index: number): boolean {
-    this._store.dispatch(new StoreGiftIndexList(new UpdateGiftIndexListRequest(index, false, false)));
+    this._store.dispatch(new StoreGiftIndexList(
+      new UpdateGiftIndexListRequest(
+        index,
+        Constants.IT_IS_NOT_ADDING,
+        Constants.IT_IS_NOT_DESCRIPTION_DELETE)));
     return true;
   }
 

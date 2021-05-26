@@ -11,6 +11,10 @@ export abstract class Constants {
   static readonly EXTRA_CHARGE_AT_SELLING: string = 'extraChargeAtSelling';
   static readonly COUNT_IN: string = 'countIn';
   static readonly NO_COUNT_IN: string = 'noCountIn';
+  static readonly IT_IS_ADDING: boolean = true;
+  static readonly IT_IS_NOT_ADDING: boolean = false;
+  static readonly IT_IS_DESCRIPTION_DELETE: boolean = true;
+  static readonly IT_IS_NOT_DESCRIPTION_DELETE: boolean = false;
 
   // null constants
 

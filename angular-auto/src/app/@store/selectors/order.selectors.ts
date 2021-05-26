@@ -118,3 +118,18 @@ export const selectTypeOfBuying = createSelector(
   selectOrder,
   (state: IOrderState) => state.typeOfBuying
 );
+
+export const selectCredit = createSelector(
+  selectOrder,
+  (state: IOrderState) => state.credit
+);
+
+export const selectCreditNeedsToBeRecalculated = createSelector(
+  selectOrder,
+  (state: IOrderState) => state.creditNeedsToBeRecalculated
+);
+
+export const selectRemarks = createSelector(
+  selectOrder,
+  (state: IOrderState) => state.remarks
+);
