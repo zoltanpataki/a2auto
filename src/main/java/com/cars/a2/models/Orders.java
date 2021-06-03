@@ -44,8 +44,7 @@ public class Orders {
     @ManyToOne
     private Users users;
 
-    @OneToOne(cascade = CascadeType.MERGE, orphanRemoval = true)
-    @JoinColumn(name = "company", referencedColumnName = "id")
+    @ManyToOne
     private Company company;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
