@@ -33,8 +33,8 @@ public class CarsControllerImpl implements CarsController {
     }
 
     @Override
-    public ResponseEntity<Object> getSingleCar(String filter, String filterType, String soldOrNot) {
-        return carService.getSingleCar(filter, filterType, Boolean.parseBoolean(soldOrNot));
+    public ResponseEntity<Object> getFilteredCars(String filter, String filterType, String isSold) {
+        return carService.getFilteredCars(filter, filterType, Boolean.parseBoolean(isSold));
     }
 
     @Override

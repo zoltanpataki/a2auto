@@ -365,6 +365,7 @@ export class SellingPageComponent implements OnInit{
     if (null != dateString) {
       this.carHandoverTime['hour'] = carHandoverDate.getHours();
       this.carHandoverTime['minute'] = carHandoverDate.getMinutes();
+      console.log(this.carHandoverTime['minute']);
     } else {
       if (carHandoverDate.getHours() === 0 ) {
         this.carHandoverTime['hour'] = null;
@@ -381,7 +382,6 @@ export class SellingPageComponent implements OnInit{
       this.sellerCompanyRepresentation = this.a2Representation;
       if (order.users != null) {
         this.buyerIndividual = order.users;
-        console.log(this.buyerIndividual);
       } else if (order.company != null) {
         this.buyerCompany = order.company;
         this.buyerCompanyRepresentation = order.company.representation;

@@ -14,8 +14,8 @@ public interface CarsController {
     @PostMapping("/saveCar")
     ResponseEntity<Object> saveCar(@RequestBody Car car);
 
-    @GetMapping("/getSingleCar")
-    ResponseEntity<Object> getSingleCar(@RequestParam String filter, @RequestParam String filterType, @RequestParam String soldOrNot);
+    @GetMapping("/getFilteredCars")
+    ResponseEntity<Object> getFilteredCars(@RequestParam String filter, @RequestParam String filterType, @RequestParam String isSold);
 
     @GetMapping("/getSingleCarById/{id}")
     ResponseEntity<Object> getSingleCarById(@PathVariable long id);

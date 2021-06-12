@@ -272,12 +272,12 @@
           <p class="dateBoxRowText" *ngIf="!orderedCar.carHandover">nap:</p>
         </div>
         <div fxFlex="8">
-          <p class="dateBoxRowText" *ngIf="carHandoverTime['hour']">óra: &#160;<strong>{{carHandoverTime['hour']}}</strong></p>
-          <p class="dateBoxRowText" *ngIf="!carHandoverTime['hour']">óra:</p>
+          <p class="dateBoxRowText" *ngIf="carHandoverTime['hour'] != null">óra: &#160;<strong>{{carHandoverTime['hour']}}</strong></p>
+          <p class="dateBoxRowText" *ngIf="!carHandoverTime['hour'] == null">óra:</p>
         </div>
         <div fxFlex="8">
-          <p class="dateBoxRowText" *ngIf="carHandoverTime['minute']">perc: &#160;<strong>{{carHandoverTime['minute']}}</strong></p>
-          <p class="dateBoxRowText" *ngIf="!carHandoverTime['minute']">perc:</p>
+          <p class="dateBoxRowText" *ngIf="carHandoverTime['minute'] != null">perc: &#160;<strong>{{carHandoverTime['minute']}}</strong></p>
+          <p class="dateBoxRowText" *ngIf="carHandoverTime['minute'] == null">perc:</p>
         </div>
       </div>
       <div class="dateBoxRow" fxLayout="row">

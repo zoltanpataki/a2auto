@@ -265,7 +265,7 @@ export class CompanyComponent implements OnInit {
   private validateFormFieldLength(formValue: any): boolean {
     const formValues = Object.values(formValue);
     for (const value of formValues) {
-      if (typeof value === "string" && value.length > 30) {
+      if (typeof value === "string" && value.length > 50) {
         this.tooLongFieldValue = value;
         this.isThereLongFieldValue = true;
         return false;

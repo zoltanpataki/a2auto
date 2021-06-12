@@ -66,34 +66,34 @@ public class CarService {
         }
     }
 
-    public ResponseEntity<Object> getSingleCar(String filter, String filterType, Boolean soldOrNot) {
+    public ResponseEntity<Object> getFilteredCars(String filter, String filterType, Boolean isSold) {
         switch (filterType) {
             case "plateNumber":
-                if (soldOrNot) {
+                if (isSold) {
                     try {
-                        Optional<Car> soldCar = carRepository.findByPlateNumberAndSoldTrue(filter);
-                        if (!soldCar.isPresent()) {
-                            throw new EntityNotFoundException("Car is not found by plate number!");
+                        Optional<List<Car>> soldCarsByPlateNumber = carRepository.findByPlateNumberAndSoldTrue(filter);
+                        if (!soldCarsByPlateNumber.isPresent()) {
+                            throw new EntityNotFoundException("Cars are not found by plate number!");
                         } else {
-                            return new ResponseEntity<>(soldCar, HttpStatus.OK);
+                            return new ResponseEntity<>(soldCarsByPlateNumber, HttpStatus.OK);
                         }
                     } catch (Exception e) {
-                        throw new EntityNotFoundException("Car is not found by plate number!");
+                        throw new EntityNotFoundException("Cars are not found by plate number!");
                     }
                 } else {
                     try {
-                        Optional<Car> activeCar = carRepository.findByPlateNumberAndSoldFalse(filter);
-                        if (!activeCar.isPresent()) {
-                            throw new EntityNotFoundException("Car is not found by plate number!");
+                        Optional<List<Car>> activeCarsByPlateNumber = carRepository.findByPlateNumberAndSoldFalse(filter);
+                        if (!activeCarsByPlateNumber.isPresent()) {
+                            throw new EntityNotFoundException("Cars are not found by plate number!");
                         } else {
-                            return new ResponseEntity<>(activeCar, HttpStatus.OK);
+                            return new ResponseEntity<>(activeCarsByPlateNumber, HttpStatus.OK);
                         }
                     } catch (Exception e) {
-                        throw new EntityNotFoundException("Car is not found by plate number!");
+                        throw new EntityNotFoundException("Cars are not found by plate number!");
                     }
                 }
             case "type":
-                if (soldOrNot) {
+                if (isSold) {
                     List<Car> soldCarsByType = carRepository.findByTypeContainingAndSoldTrue(filter, createPageRequest()).orElseThrow(() -> new EntityNotFoundException("Car is not found by type!"));
                     return new ResponseEntity<>(soldCarsByType, HttpStatus.OK);
                 } else {
@@ -101,7 +101,7 @@ public class CarService {
                     return new ResponseEntity<>(activeCarsByType, HttpStatus.OK);
                 }
             case "name":
-                if (soldOrNot) {
+                if (isSold) {
                     Optional<List<Car>> soldCar = carRepository.findByNameContainingAndSoldTrue(filter, createPageRequest());
                     if (!soldCar.isPresent()) {
                         throw new EntityNotFoundException("Car is not found by name!");

@@ -696,7 +696,7 @@ export class FilterComponent implements OnInit {
         if (this.selectedFilter.value !== 'all') {
           const soldOrNot = this.selectedFilter.value === 'sold';
           const selectedFilterValue = soldOrNot ? this.secondarySelectedFilter.value : this.selectedFilter.value;
-          this.httpService.getSingleCar(formValue, selectedFilterValue, soldOrNot.toString()).subscribe(data => {
+          this.httpService.getFilteredCars(formValue, selectedFilterValue, soldOrNot.toString()).subscribe(data => {
             if (!data) {
               this.noMatch = true;
             }

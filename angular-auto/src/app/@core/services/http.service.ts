@@ -98,12 +98,12 @@ export class HttpService {
     });
   }
 
-  public getSingleCar(filter: string, filterType: string, soldOrNot: string): Observable<any> {
-    const urlPostFix = 'getSingleCar';
+  public getFilteredCars(filter: string, filterType: string, isSold: string): Observable<any> {
+    const urlPostFix = 'getFilteredCars';
     const params = new HttpParams()
       .set('filter', filter)
       .set('filterType', filterType)
-      .set('soldOrNot', soldOrNot);
+      .set('isSold', isSold);
     return this.http.get(this.carServerUrl + urlPostFix, {
       headers: httpOptions.headers,
       params: params
