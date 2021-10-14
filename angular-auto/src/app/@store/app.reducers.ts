@@ -7,6 +7,7 @@ import {userReducers} from "./reducers/user.reducers";
 import {companyReducers} from "./reducers/company.reducers";
 import {witnessReducers} from "./reducers/witness.reducers";
 import {salesmanReducers} from "./reducers/salesman.reducers";
+import {utilReducers} from "./reducers/util.reducers";
 
 export const appReducers: ActionReducerMap<IAppState, any> = {
   router: routerReducer,
@@ -16,4 +17,5 @@ export const appReducers: ActionReducerMap<IAppState, any> = {
   company: companyReducers,
   witness: witnessReducers,
   salesman: salesmanReducers,
+  util: utilReducers
 };

@@ -105,6 +105,7 @@ import {selectSalesmenList} from "../../../@store/selectors/salesman.selectors";
 import {selectWitnessList} from "../../../@store/selectors/witness.selectors";
 import {GetSalesmen} from "../../../@store/actions/salesman.actions";
 import {InheritanceChargeRequest, InheritanceTaxInfoForChainedApiCall} from "../../models/inheritanceTax";
+import {StoreIsBlankPage} from "../../../@store/actions/util.actions";
 
 @Component({
   selector: 'app-filter',
@@ -2020,10 +2021,9 @@ export class FilterComponent implements OnInit {
   // Navigates to blank order page for the clicked car.
 
   public navigateToBlankOrderPage(car: Car) {
-    this.router.navigate(['/orderPage'], {state: {blankData: {
-          orderedCar: car,
-          blankPage: true
-        }}});
+    this._store.dispatch(new StoreIsBlankPage(true));
+    this._store.dispatch(new StorePickedCar(car));
+    this.router.navigate(['/orderPage']);
   }
 
   // Navigates to insurance page

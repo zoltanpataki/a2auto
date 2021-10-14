@@ -5,6 +5,7 @@ import {initialUserState, IUserState} from "./user.state";
 import {ICompanyState, initialCompanyState} from "./company.state";
 import {initialWitnessState, IWitnessState} from "./witness.state";
 import {initialSalesmanState, ISalesmanState} from "./salesman.state";
+import {initialUtilState, IUtilState} from "./util.state";
 
 export interface IAppState {
   router?: RouterReducerState;
@@ -13,7 +14,8 @@ export interface IAppState {
   user: IUserState;
   company: ICompanyState;
   witness: IWitnessState;
-  salesman: ISalesmanState
+  salesman: ISalesmanState;
+  util: IUtilState;
 }
 
 export const initialAppState: IAppState = {
@@ -23,6 +25,7 @@ export const initialAppState: IAppState = {
   company: initialCompanyState,
   witness: initialWitnessState,
   salesman: initialSalesmanState,
+  util: initialUtilState
 }
 
 export function getInitialState(): IAppState {

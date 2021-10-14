@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {Order} from "../../@core/models/order";
 import {Car} from "../../@core/models/car";
 import {Users} from "../../@core/models/users";
@@ -10,17 +10,29 @@ import html2canvas from 'html2canvas';
 import {HttpService} from "../../@core/services/http.service";
 import {Router} from "@angular/router";
 import {UtilService} from "../../@core/services/util.service";
+import {Observable, Subscription} from "rxjs";
+import {select, Store} from "@ngrx/store";
+import {selectActualOrder} from "../../@store/selectors/order.selectors";
+import {IAppState} from "../../@store/state/app.state";
+import {selectPickedCar} from "../../@store/selectors/car.selectors";
+import {selectIsBlankPage, selectIsTrophyClicked} from "../../@store/selectors/util.selectors";
+import {StoreIsBlankPage, StoreIsTrophyClicked} from "../../@store/actions/util.actions";
+import {UpdateOrder} from "../../@store/actions/order.actions";
+import {StorePickedCar} from "../../@store/actions/car.actions";
 
 @Component({
   selector: 'app-order-page',
   templateUrl: './order-page.component.html',
   styleUrls: ['./order-page.component.scss']
 })
-export class OrderPageComponent implements OnInit {
+export class OrderPageComponent implements OnInit, OnDestroy {
 
+  public orderedCar$: Observable<Car>;
   public orderedCar: Car;
+  public order$: Observable<Order>;
   public order: Order;
-  public today: Date;
+  public today: Date = new Date();
+
   public userSearchResult: Users[];
   public companySearchResult: Company[];
   public indexOfPickedUser: number;
@@ -28,33 +40,86 @@ export class OrderPageComponent implements OnInit {
   public pickedUser: Users;
   public pickedCompany: Company;
   public remainingPrice: number;
-  public blankPage: boolean;
+  public isBlankPage$: Observable<boolean>;
+  public isBlankPage: boolean;
   public extraAmountChargedForTheUser: number;
   public countInCar: Car;
-  public trophyClick: boolean = false;
+  public isTrophyClicked$: Observable<boolean>;
+  public isTrophyClicked: boolean;
+
+  public subscriptionOrderedCar$: Subscription;
+  public subscriptionOrder$: Subscription;
+  public subscriptionIsBlankPage$: Subscription;
+  public subscriptionIsTrophyClicked$: Subscription;
+  public subscriptions: Subscription[] = [];
 
 
   constructor(private httpService: HttpService,
               private utilService: UtilService,
-              private router: Router) { }
+              private router: Router,
+              private _store: Store<IAppState>,) { }
 
-  ngOnInit() {
-    if (sessionStorage.getItem('order') != null) {
-      this.order = JSON.parse(sessionStorage.getItem('order'));
-    }
-    if (sessionStorage.getItem('orderedCar') != null) {
-      this.orderedCar = JSON.parse(sessionStorage.getItem('orderedCar'));
-    }
-    if (sessionStorage.getItem('blankPage') != null) {
-      this.blankPage = JSON.parse(sessionStorage.getItem('blankPage'));
-    }
-    if (sessionStorage.getItem('trophyClick') != null) {
-      this.trophyClick = JSON.parse(sessionStorage.getItem('trophyClick'));
-    }
-    this.today = new Date();
+
+  ngOnInit(): void {
+
+
+
+
+    //ngrx selectors
+
+    this.order$ = this._store.pipe(select(selectActualOrder));
+    this.orderedCar$ = this._store.pipe(select(selectPickedCar));
+    this.isBlankPage$ = this._store.pipe(select(selectIsBlankPage));
+    this.isTrophyClicked$ = this._store.pipe(select(selectIsTrophyClicked));
+
+    this.subscriptionOrder$ = this.order$.subscribe(order => {
+      this.order = order;
+      if (null != this.order) {
+        sessionStorage.setItem('order', JSON.stringify(this.order));
+      }
+    });
+
+    this.subscriptionOrderedCar$ = this.orderedCar$.subscribe(car => {
+      this.orderedCar = car;
+      if (null != this.orderedCar) {
+        sessionStorage.setItem('orderedCar', JSON.stringify(this.orderedCar));
+      }
+    });
+
+    this.subscriptionIsBlankPage$ = this.isBlankPage$.subscribe(isBlankPage => {
+      this.isBlankPage = isBlankPage;
+      if (null != this.isBlankPage) {
+        sessionStorage.setItem('isBlankPage', JSON.stringify(this.isBlankPage));
+      }
+    });
+
+    this.subscriptionIsTrophyClicked$ = this.isTrophyClicked$.subscribe(isTrophyClicked => {
+      this.isTrophyClicked = isTrophyClicked;
+      if (null != this.isTrophyClicked) {
+        sessionStorage.setItem('isTrophyClicked', JSON.stringify(this.isTrophyClicked));
+      }
+    });
+
+    this.subscriptions.push(this.subscriptionOrder$);
+    this.subscriptions.push(this.subscriptionOrderedCar$);
+    this.subscriptions.push(this.subscriptionIsBlankPage$);
+    this.subscriptions.push(this.subscriptionIsTrophyClicked$);
+
+    // if (sessionStorage.getItem('order') != null) {
+    //   this.order = JSON.parse(sessionStorage.getItem('order'));
+    // }
+    // if (sessionStorage.getItem('orderedCar') != null) {
+    //   this.orderedCar = JSON.parse(sessionStorage.getItem('orderedCar'));
+    // }
+    // if (sessionStorage.getItem('blankPage') != null) {
+    //   this.isBlankPage = JSON.parse(sessionStorage.getItem('blankPage'));
+    // }
+    // if (sessionStorage.getItem('trophyClick') != null) {
+    //   this.isTrophyClicked = JSON.parse(sessionStorage.getItem('trophyClick'));
+    // }
     if (history.state.data) {
-      this.order = history.state.data.order;
-      this.orderedCar = history.state.data.orderedCar;
+      // this.order = history.state.data.order;
+      // this.orderedCar = history.state.data.orderedCar;
       this.userSearchResult = history.state.data.userSearchResult;
       this.companySearchResult = history.state.data.companySearchResult;
       this.indexOfPickedUser = history.state.data.indexOfPickedUser;
@@ -62,8 +127,8 @@ export class OrderPageComponent implements OnInit {
       this.pickedUser = history.state.data.pickedUser;
       this.pickedCompany = history.state.data.pickedCompany;
       if (null != history.state.data.trophyClick) {
-        this.trophyClick = history.state.data.trophyClick;
-        sessionStorage.setItem('trophyClick', JSON.stringify(this.trophyClick));
+        this.isTrophyClicked = history.state.data.trophyClick;
+        sessionStorage.setItem('trophyClick', JSON.stringify(this.isTrophyClicked));
       }
       sessionStorage.setItem('clickedCarIndex', history.state.data.clickedCarIndex);
       sessionStorage.setItem('orderedCar', JSON.stringify(this.orderedCar));
@@ -86,8 +151,8 @@ export class OrderPageComponent implements OnInit {
     } else if (history.state.blankData) {
       this.orderedCar = history.state.blankData.orderedCar;
       sessionStorage.setItem('orderedCar', JSON.stringify(this.orderedCar));
-      this.blankPage = history.state.blankData.blankPage;
-      sessionStorage.setItem('blankPage', this.blankPage.toString());
+      this.isBlankPage = history.state.blankData.blankPage;
+      sessionStorage.setItem('blankPage', this.isBlankPage.toString());
     } else {
       this.order = JSON.parse(sessionStorage.getItem('order'));
       this.orderedCar = JSON.parse(sessionStorage.getItem('orderedCar'));
@@ -95,14 +160,36 @@ export class OrderPageComponent implements OnInit {
     if (this.order && this.orderedCar) {
       this.remainingPrice = this.countRemainingPrice(this.order, this.orderedCar);
     }
-    if (this.orderedCar && !this.orderedCar.sold && !this.blankPage) {
+    if (this.orderedCar && !this.orderedCar.sold && !this.isBlankPage) {
       this.setStateOfCarToSold(this.orderedCar);
     }
     if (this.order && this.order.countInCarId) {
       this.httpService.getSingleCarById(this.order.countInCarId.toString()).subscribe(data => {
-        console.log(data);
         this.countInCar = data;
       });
+    }
+  }
+
+  private getDataFromSessionStorageAfterRefresh() {
+    //Set initial value for isTrophyClicked and isBlankPage
+    if (sessionStorage.getItem('isTrophyClicked')) {
+      this._store.dispatch(new StoreIsTrophyClicked(JSON.parse(sessionStorage.getItem('isTrophyClicked'))));
+    } else {
+      this._store.dispatch(new StoreIsTrophyClicked(false));
+    }
+
+    if (sessionStorage.getItem('isBlankPage')) {
+      this._store.dispatch(new StoreIsBlankPage(JSON.parse(sessionStorage.getItem('isBlankPage'))));
+    } else {
+      this._store.dispatch(new StoreIsBlankPage(false));
+    }
+
+    if (sessionStorage.getItem('order')) {
+      this._store.dispatch(new UpdateOrder(JSON.parse(sessionStorage.getItem('order'))));
+    }
+
+    if (sessionStorage.getItem('orderedCar')) {
+      this._store.dispatch(new StorePickedCar(JSON.parse(sessionStorage.getItem('orderedCar'))));
     }
   }
 
@@ -148,7 +235,7 @@ export class OrderPageComponent implements OnInit {
   }
 
   public navigateBack() {
-    if (this.trophyClick) {
+    if (this.isTrophyClicked) {
       this.utilService.removeItemsFromSessionStorage();
       this.router.navigate(['/filter']);
     } else {
@@ -176,4 +263,9 @@ export class OrderPageComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => {
+      subscription.unsubscribe();
+    });
+  }
 }
