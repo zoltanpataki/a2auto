@@ -22,8 +22,7 @@ import {WitnessPickerDialogComponent} from "../../dialog/witness-picker-dialog/w
 import {DescriptionWithAmount} from "../../models/descriptionWithAmount";
 import {Direction, Organizer} from "../../models/organizer";
 import {IAppState} from "../../../@store/state/app.state";
-import {Store} from "@ngrx/store";
-import {select} from "@ngrx/store";
+import {select, Store} from "@ngrx/store";
 import {
   selectCarError,
   selectCarList,
@@ -33,8 +32,12 @@ import {
 import {
   GetCars,
   GetCarsSuccess,
-  GetFilteredCars, StoreClickedCarIndex,
-  StoreNameOfBuyer, StorePickedCar, UpdateCarHandOverDate, UpdateCarSalesman
+  GetFilteredCars,
+  StoreClickedCarIndex,
+  StoreNameOfBuyer,
+  StorePickedCar,
+  UpdateCarHandOverDate,
+  UpdateCarSalesman, UpdateCarTypeOfBuying
 } from "../../../@store/actions/car.actions";
 import {Observable} from "rxjs";
 import {Constants} from "../../models/constants";
@@ -44,28 +47,42 @@ import {
   selectAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready,
   selectAskForInheritanceTaxCalculation,
   selectCountInCar,
-  selectCountInCarSupplement, selectCredit, selectCreditNeedsToBeRecalculated, selectDescriptionsWithAmount,
+  selectCountInCarSupplement,
+  selectCredit,
+  selectCreditNeedsToBeRecalculated,
+  selectDescriptionsWithAmount,
   selectDownPayment,
-  selectExtraPayment, selectGiftIndexList,
+  selectExtraPayment,
+  selectGiftIndexList,
   selectIndividualOrCorporate,
-  selectInheritanceTax, selectInheritanceTaxError, selectNewCompany, selectNewUser,
+  selectInheritanceTax,
+  selectInheritanceTaxError,
+  selectNewCompany,
+  selectNewUser,
   selectOrderError,
   selectOrderProgress,
-  selectPreviousOrNew, selectRemarks, selectSalesman,
+  selectPreviousOrNew,
+  selectRemarks,
+  selectSalesman,
   selectSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate,
-  selectThereIsCountInCar, selectTypeOfBuying,
+  selectThereIsCountInCar,
+  selectTypeOfBuying,
   selectWantInheritanceTaxCalculation
 } from "../../../@store/selectors/order.selectors";
 import {
   GetCapacity,
   GetInheritanceTaxSuccess,
   GetOrder,
-  GetOrderError, RemoveDescriptionWithAmount,
+  OrderError,
+  RemoveDescriptionWithAmount,
+  SaveOrder,
   StoreAddCountInCar,
   StoreAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready,
   StoreAskForInheritanceTaxCalculation,
   StoreCountInCar,
-  StoreCountInCarSupplement, StoreCredit, StoreCreditNeedsToBeRecalculated,
+  StoreCountInCarSupplement,
+  StoreCredit,
+  StoreCreditNeedsToBeRecalculated,
   StoreDescriptionsWithAmount,
   StoreDownPayment,
   StoreExtraPayment,
@@ -74,10 +91,12 @@ import {
   StoreIndividualOrCorporate,
   StoreNewCompany,
   StoreNewUser,
-  StorePreviousOrNew, StoreRemarks,
+  StorePreviousOrNew,
+  StoreRemarks,
   StoreSalesman,
   StoreSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate,
-  StoreThereIsCountInCar, StoreTypeOfBuying,
+  StoreThereIsCountInCar,
+  StoreTypeOfBuying,
   StoreWantInheritanceTaxCalculation,
   UpdateDescriptionWithAmount,
   UpdateOrder,
@@ -128,7 +147,7 @@ export class FilterComponent implements OnInit {
   public selectedUserFilter: SelectedFilter;
   public companyFilters = [{viewValue: 'Név', value: 'name'}, {viewValue: 'Cégjegyzékszám', value: 'companyRegistrationNumber'}];
   public selectedCompanyFilter: SelectedFilter;
-  public selectedCars = [];
+  public selectedCars: Car[] = [];
   public selectedCarsObs: Observable<ICar[]>;
   public carErrorObs: Observable<string>;
   public orderErrorObs: Observable<string>;
@@ -358,7 +377,10 @@ export class FilterComponent implements OnInit {
     //subscriptions
 
     this.selectedCarsObs.subscribe(selectedCars => {
-      sessionStorage.setItem('selectedCars', JSON.stringify(selectedCars));
+      this.selectedCars = selectedCars;
+      if (null != selectedCars) {
+        sessionStorage.setItem('selectedCars', JSON.stringify(selectedCars));
+      }
     });
 
     this.clickedCarIndexObs.subscribe(clickedCarIndex => {
@@ -1638,7 +1660,7 @@ export class FilterComponent implements OnInit {
     } else {
       this.clickedCarIndex = this.clickedCarIndex !== carIndex ? carIndex : null;
       this._store.dispatch(new StoreClickedCarIndex(this.clickedCarIndex));
-      this._store.dispatch(new GetOrderError(Constants.NULL_ERROR));
+      this._store.dispatch(new OrderError(Constants.NULL_ERROR));
     }
   }
 
@@ -1681,7 +1703,7 @@ export class FilterComponent implements OnInit {
       this.clickedCarIndex,
       Constants.NULL_CAR_HAND_OVER_DATE,
       type);
-    this._store.dispatch(new UpdateCarSalesman(carUpdateRequest));
+    this._store.dispatch(new UpdateCarTypeOfBuying(carUpdateRequest));
     this._store.dispatch(new StoreTypeOfBuying(type));
 
     if (this.selectedTypeOfBuying === 'HITEL') {
@@ -1959,9 +1981,6 @@ export class FilterComponent implements OnInit {
         orderedCarId,
         this.descriptionList,
         this.listOfDescriptionsWithAmount);
-      this.httpService.saveOrder(this.newOrder).subscribe(order => {
-        this.prepareNavigationToOrderPageOrSellingPageOrWarrantPageOrInsurancePage(order, car, witness1, witness2, targetRoute, warrantType, a2Representation, pickedTypeOfBuyingForCountInCar);
-      });
     } else {
       this.newOrder.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready;
       this.newOrder.selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate = this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate;
@@ -1979,10 +1998,9 @@ export class FilterComponent implements OnInit {
       this.newOrder.carId = orderedCarId;
       this.newOrder.description = this.descriptionList;
       this.newOrder.descriptionsWithAmount = this.listOfDescriptionsWithAmount;
-      this.httpService.updateOrder(this.newOrder).subscribe(order => {
-        this.prepareNavigationToOrderPageOrSellingPageOrWarrantPageOrInsurancePage(<Order> order, car, witness1, witness2, targetRoute, warrantType, a2Representation, pickedTypeOfBuyingForCountInCar);
-      });
     }
+    this._store.dispatch(new SaveOrder(this.newOrder));
+    this.prepareNavigationToOrderPageOrSellingPageOrWarrantPageOrInsurancePage(this.newOrder, car, witness1, witness2, targetRoute, warrantType, a2Representation, pickedTypeOfBuyingForCountInCar);
   }
 
   // Prepares the navigation to the clicked page. All the data traverse through the router.navigate method
@@ -1990,10 +2008,10 @@ export class FilterComponent implements OnInit {
   private prepareNavigationToOrderPageOrSellingPageOrWarrantPageOrInsurancePage(order: Order, car: Car, witness1: Witness, witness2: Witness, orderOrSellingOrWarrant: string, warrantType: string, a2Representation: string, pickedTypeOfBuyingForCountInCar: string) {
     if ('/orderPage' !== orderOrSellingOrWarrant && this.creditNeedsToBeRecalculated || !this.creditNeedsToBeRecalculated) {
       sessionStorage.setItem('order', JSON.stringify(this.newOrder));
-      sessionStorage.setItem('orderedCar', JSON.stringify(car));
+      const orderedCar = this.selectedCars.find(carItem => carItem.id === this.newOrder.carId);
+      sessionStorage.setItem('orderedCar', JSON.stringify(orderedCar));
+      this._store.dispatch(new StorePickedCar(orderedCar));
       this.router.navigate([orderOrSellingOrWarrant], {state: {data: {
-            order: order,
-            orderedCar: car,
             clickedCarIndex: this.clickedCarIndex,
             userSearchResult: this.userSearchResult.data,
             companySearchResult: this.companySearchResult.data,

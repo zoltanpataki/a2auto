@@ -62,8 +62,7 @@ export class OrderPageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-
-
+    this.getDataFromSessionStorageAfterRefresh();
 
     //ngrx selectors
 
@@ -74,16 +73,18 @@ export class OrderPageComponent implements OnInit, OnDestroy {
 
     this.subscriptionOrder$ = this.order$.subscribe(order => {
       this.order = order;
-      if (null != this.order) {
-        sessionStorage.setItem('order', JSON.stringify(this.order));
-      }
+      console.log(this.order);
+      // if (null != this.order) {
+      //   sessionStorage.setItem('order', JSON.stringify(this.order));
+      // }
     });
 
     this.subscriptionOrderedCar$ = this.orderedCar$.subscribe(car => {
       this.orderedCar = car;
-      if (null != this.orderedCar) {
-        sessionStorage.setItem('orderedCar', JSON.stringify(this.orderedCar));
-      }
+      console.log(this.orderedCar);
+      // if (null != this.orderedCar) {
+      //   sessionStorage.setItem('orderedCar', JSON.stringify(this.orderedCar));
+      // }
     });
 
     this.subscriptionIsBlankPage$ = this.isBlankPage$.subscribe(isBlankPage => {
@@ -131,8 +132,8 @@ export class OrderPageComponent implements OnInit, OnDestroy {
         sessionStorage.setItem('trophyClick', JSON.stringify(this.isTrophyClicked));
       }
       sessionStorage.setItem('clickedCarIndex', history.state.data.clickedCarIndex);
-      sessionStorage.setItem('orderedCar', JSON.stringify(this.orderedCar));
-      sessionStorage.setItem('order', JSON.stringify(this.order));
+      // sessionStorage.setItem('orderedCar', JSON.stringify(this.orderedCar));
+      // sessionStorage.setItem('order', JSON.stringify(this.order));
       sessionStorage.setItem('userSearchData', JSON.stringify(this.userSearchResult));
       sessionStorage.setItem('companySearchData', JSON.stringify(this.companySearchResult));
       if (this.indexOfPickedUser != null) {

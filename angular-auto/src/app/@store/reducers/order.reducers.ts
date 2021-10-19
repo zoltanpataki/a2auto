@@ -128,7 +128,13 @@ export const orderReducers = (
         order: action.payload
       }
     }
-    case EOrderActions.GetOrderError: {
+    case EOrderActions.SaveOrderSuccess: {
+      return {
+        ...state,
+        order: action.payload
+      }
+    }
+    case EOrderActions.OrderError: {
       return {
         ...state,
         orderError: action.payload

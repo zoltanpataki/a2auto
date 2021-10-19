@@ -39,7 +39,9 @@ export enum EOrderActions {
   StoreExtraPayment = '[number] Store extra payment',
   GetOrder = '[number] Get order',
   GetOrderSuccess = '[Order] Get order success',
-  GetOrderError = '[string] Get order error',
+  SaveOrder = '[Order] Save order',
+  SaveOrderSuccess = '[Order] Save order success',
+  OrderError = '[string] Get order error',
   StoreNewUser = '[Users] Store new user',
   StoreNewCompany = '[Company] Store new company',
   StoreSalesman = '[string] Store salesman',
@@ -209,8 +211,20 @@ export class GetOrderSuccess implements Action {
   }
 }
 
-export class GetOrderError implements Action {
-  public readonly type = EOrderActions.GetOrderError;
+export class SaveOrder implements Action {
+  public readonly type = EOrderActions.SaveOrder;
+  constructor(public readonly payload: IOrder) {
+  }
+}
+
+export class SaveOrderSuccess implements Action {
+  public readonly type = EOrderActions.SaveOrderSuccess;
+  constructor(public readonly payload: IOrder) {
+  }
+}
+
+export class OrderError implements Action {
+  public readonly type = EOrderActions.OrderError;
   constructor(public readonly payload: string) {
   }
 }
@@ -270,7 +284,7 @@ export type OrderActions =
   StoreExtraPayment |
   GetOrder |
   GetOrderSuccess |
-  GetOrderError |
+  OrderError |
   StoreSalesman |
   StoreDescriptionsWithAmount |
   UpdateDescriptionWithAmount |
@@ -280,4 +294,6 @@ export type OrderActions =
   StoreTypeOfBuying |
   StoreCredit |
   StoreCreditNeedsToBeRecalculated |
-  StoreRemarks;
+  StoreRemarks |
+  SaveOrder |
+  SaveOrderSuccess;

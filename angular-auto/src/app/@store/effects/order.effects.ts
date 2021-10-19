@@ -14,8 +14,7 @@ import {
   GetInheritanceTaxError,
   GetInheritanceTaxSuccess,
   GetOrder,
-  GetOrderError,
-  GetOrderSuccess,
+  GetOrderSuccess, OrderError, SaveOrder, SaveOrderSuccess,
   StoreGiftIndexList,
   StoreGiftIndexListSuccess
 } from "../actions/order.actions";
@@ -149,10 +148,26 @@ export class OrderEffects {
           }),
           catchError((error) => {
             if (error.error.errorCode === '404') {
-              return of(new GetOrderError('Ehhez az autóhoz még nincs rendelés!'));
+              return of(new OrderError('Ehhez az autóhoz még nincs rendelés!'));
             } else {
-              return of(new GetOrderError('Sajnos az adatbázis kapcsolat megszakadt!'));
+              return of(new OrderError('Sajnos az adatbázis kapcsolat megszakadt!'));
             }
+          })
+        )),
+  );
+
+  @Effect()
+  saveOrder$ = this._actions$.pipe(
+    ofType<SaveOrder>(EOrderActions.SaveOrder),
+    map(action => action.payload),
+    switchMap(order =>
+      this._httpService.saveOrder(order)
+        .pipe(
+          switchMap(order => {
+            return of(new SaveOrderSuccess(order));
+          }),
+          catchError((error) => {
+            return of(new OrderError('Hiba a rendelés mentése közben! :('));
           })
         )),
   );
