@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 public interface CarsController {
 
     @GetMapping("/getAllCars")
-    ResponseEntity<Object> getAllCars(@RequestParam String isSold);
+    ResponseEntity<Object> getAllCars(@RequestParam String isSold, @RequestParam String limit, @RequestParam String offset);
 
     @PostMapping("/saveCar")
     ResponseEntity<Object> saveCar(@RequestBody Car car);

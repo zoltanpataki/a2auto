@@ -21,6 +21,7 @@ import {Witness} from "../../models/witness";
 import {WitnessPickerDialogComponent} from "../../dialog/witness-picker-dialog/witness-picker-dialog.component";
 import {DescriptionWithAmount} from "../../models/descriptionWithAmount";
 import {Direction, Organizer} from "../../models/organizer";
+import {SearchParameters} from "../../models/searchParameters";
 
 @Component({
   selector: 'app-filter',
@@ -96,6 +97,8 @@ export class FilterComponent implements OnInit {
   public tooLongFieldValue: string = '';
   public isThereLongFieldValue: boolean = false;
   public creditNeedsToBeRecalculated: boolean = false;
+  public pageNumber: number = 0;
+  public recentPage: number = 1;
 
   constructor(private httpService: HttpService,
               public utilService: UtilService,
@@ -718,9 +721,12 @@ export class FilterComponent implements OnInit {
             }
           });
         } else {
-          this.httpService.getAllCars(false).subscribe(data => {
-            this.selectedCars = data;
-            sessionStorage.setItem('selectedCars', JSON.stringify(data));
+          this.httpService.getAllCars(false, 20, 0).subscribe(data => {
+            this.selectedCars = data.cars;
+            const searchParameters = new SearchParameters(null, null, false, 1, data.quantity);
+            sessionStorage.setItem('searchParameters', JSON.stringify(searchParameters));
+            this.pageNumber = Math.floor(data.quantity / 10);
+            sessionStorage.setItem('selectedCars', JSON.stringify(data.cars));
           });
         }
       }
@@ -735,9 +741,12 @@ export class FilterComponent implements OnInit {
     this.selectedOrganizer = null;
     sessionStorage.removeItem('clickerCarIndex');
     this.clearSelectedCars();
-    this.httpService.getAllCars(isSold).subscribe(data => {
-      this.selectedCars = data;
-      sessionStorage.setItem('selectedCars', JSON.stringify(data));
+    this.httpService.getAllCars(isSold, 20, 0).subscribe(data => {
+      this.selectedCars = data.cars;
+      const searchParameters = new SearchParameters(null, null, isSold, 1, data.quantity);
+      sessionStorage.setItem('searchParameters', JSON.stringify(searchParameters));
+      this.pageNumber = Math.floor(data.quantity / 10);
+      sessionStorage.setItem('selectedCars', JSON.stringify(data.cars));
     });
   }
 
@@ -1709,6 +1718,11 @@ export class FilterComponent implements OnInit {
         this.utilService.openSnackBar('Ehhez az autóhoz még nincs rendelés!', ':(');
       }
     });
+  }
+
+  public goToPage(pageNumber: number) {
+    this.recentPage = pageNumber;
+    console.log(pageNumber);
   }
 }
 

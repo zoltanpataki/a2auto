@@ -53,6 +53,7 @@ import { InstantBuyingDialogComponent } from './@core/dialog/instant-buying-dial
 import {CurrencyMaskModule} from "ng2-currency-mask";
 import { CommonModule } from '@angular/common';
 import { TransferHttpCacheModule } from '@nguniversal/common';
+import {NumberPipe} from "./@core/components/filter/numberPipe";
 
 @NgModule({
   declarations: [
@@ -79,6 +80,7 @@ import { TransferHttpCacheModule } from '@nguniversal/common';
     LoaderComponent,
     InsurancePageComponent,
     InstantBuyingDialogComponent,
+    NumberPipe
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
@@ -110,6 +112,7 @@ import { TransferHttpCacheModule } from '@nguniversal/common';
     TransferHttpCacheModule,
     MatIconModule
   ],
+  exports: [NumberPipe],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },{ provide: 'isBrowser', useValue: true },],
   bootstrap: [AppComponent],
   entryComponents: [DialogComponent, InstantBuyingDialogComponent, WarningDialogComponent, CreditDialogComponent, CarTimeInfoComponent, SalesmanComponent, WitnessDialogComponent, WitnessPickerDialogComponent]

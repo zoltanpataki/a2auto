@@ -4,6 +4,7 @@ import com.cars.a2.exceptions.ConnectionTemporarilyLostException;
 import com.cars.a2.exceptions.EntityFailedToSaveException;
 import com.cars.a2.exceptions.EntityNotFoundException;
 import com.cars.a2.models.Car;
+import com.cars.a2.models.CarsAndQuantity;
 import com.cars.a2.repositories.CarRepository;
 import com.cars.a2.utility.OffsetBasedPageRequest;
 import org.slf4j.Logger;
@@ -41,15 +42,25 @@ public class CarService {
         }
     }
 
-    public ResponseEntity<Object> getAllCars(Boolean isSold) {
+    public ResponseEntity<Object> getAllCars(Boolean isSold, int limit, int offset) {
         try {
             if (!isSold) {
                 Optional<List<Car>> cars = carRepository.findBySoldOrderByIdDesc(isSold);
+                Optional<List<Car>> pagedCars = carRepository.findBySoldOrderByIdDesc(isSold, createPageRequest(limit, offset));
+                if (cars.isPresent() && pagedCars.isPresent()) {
+                    CarsAndQuantity carsAndQuantity = new CarsAndQuantity(cars.get().size(), pagedCars.get());
+                    return new ResponseEntity<>(carsAndQuantity, HttpStatus.OK);
+                }
                 return new ResponseEntity<>(cars, HttpStatus.OK);
             } else {
                 Optional<List<Car>> cars = carRepository.findBySoldOrderByDateOfLeavingDesc(isSold);
-                return new ResponseEntity<>(cars, HttpStatus.OK);
+                Optional<List<Car>> pagedCars = carRepository.findBySoldOrderByDateOfLeavingDesc(isSold, createPageRequest(limit, offset));
+                if (cars.isPresent() && pagedCars.isPresent()) {
+                    CarsAndQuantity carsAndQuantity = new CarsAndQuantity(cars.get().size(), pagedCars.get());
+                    return new ResponseEntity<>(carsAndQuantity, HttpStatus.OK);
+                }
             }
+            return null;
         } catch (Exception e) {
             logger.info(e.getMessage());
             throw new ConnectionTemporarilyLostException("Couldn't get all cars at the moment!");
@@ -94,7 +105,7 @@ public class CarService {
                 }
             case "type":
                 if (isSold) {
-                    List<Car> soldCarsByType = carRepository.findByTypeContainingAndSoldTrue(filter, createPageRequest()).orElseThrow(() -> new EntityNotFoundException("Car is not found by type!"));
+                    List<Car> soldCarsByType = carRepository.findByTypeContainingAndSoldTrue(filter, createPageRequest(50, 0)).orElseThrow(() -> new EntityNotFoundException("Car is not found by type!"));
                     return new ResponseEntity<>(soldCarsByType, HttpStatus.OK);
                 } else {
                     List<Car> activeCarsByType = carRepository.findByTypeContainingAndSoldFalse(filter).orElseThrow(() -> new EntityNotFoundException("Car is not found by type!"));
@@ -102,7 +113,7 @@ public class CarService {
                 }
             case "name":
                 if (isSold) {
-                    Optional<List<Car>> soldCar = carRepository.findByNameContainingAndSoldTrue(filter, createPageRequest());
+                    Optional<List<Car>> soldCar = carRepository.findByNameContainingAndSoldTrue(filter, createPageRequest(50, 0));
                     if (!soldCar.isPresent()) {
                         throw new EntityNotFoundException("Car is not found by name!");
                     } else {
@@ -140,7 +151,7 @@ public class CarService {
         }
     }
 
-    private OffsetBasedPageRequest createPageRequest() {
-        return new OffsetBasedPageRequest(50, 0);
+    private OffsetBasedPageRequest createPageRequest(int limit, int offset) {
+        return new OffsetBasedPageRequest(limit, offset);
     }
 }

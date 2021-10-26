@@ -539,4 +539,12 @@
     </mat-expansion-panel>
   </mat-accordion>
 </div>
+<div class="pageNumbersContainer">
+  <div class="pageNumbers" *ngIf="pageNumber>0" fxLayout="row" fxFlex="60" fxLayoutAlign="space-between">
+    <mat-panel-title class="pageNumbers" fxFlex="12" *ngFor="let num of pageNumber | numberList: recentPage; trackBy: trackByFn">
+      <button *ngIf="num == recentPage" type="button" (click)="goToPage(num)" class="recentPage" mat-mini-fab><b>{{num}}</b></button>
+      <button *ngIf="num != recentPage" type="button" (click)="goToPage(num)" class="miniFab" mat-mini-fab><b>{{num}}</b></button>
+    </mat-panel-title>
+  </div>
+</div>
 

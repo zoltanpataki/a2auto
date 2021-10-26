@@ -222,3 +222,20 @@ table {
 .secondaryFilter {
   width: 140%;
 }
+
+.pageNumbers {
+  display: flex;
+  justify-content: space-evenly;
+  width: 70%;
+}
+
+.pageNumbersContainer {
+  margin-top: 3%;
+  display: flex;
+  justify-content: center;
+}
+
+.recentPage {
+  background-color: black;
+  color: white;
+}
