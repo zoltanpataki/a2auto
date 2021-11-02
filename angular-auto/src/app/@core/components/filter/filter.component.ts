@@ -99,6 +99,8 @@ export class FilterComponent implements OnInit {
   public creditNeedsToBeRecalculated: boolean = false;
   public pageNumber: number = 0;
   public recentPage: number = 1;
+  public searchParameters: SearchParameters;
+  public PAGE_LIMIT: number = 10;
 
   constructor(private httpService: HttpService,
               public utilService: UtilService,
@@ -278,6 +280,11 @@ export class FilterComponent implements OnInit {
     if (sessionStorage.getItem('selectedOrganizer')) {
       this.selectedOrganizer = JSON.parse(sessionStorage.getItem('selectedOrganizer'));
     }
+    if (sessionStorage.getItem('searchParameters')) {
+      this.searchParameters = JSON.parse(sessionStorage.getItem('searchParameters'));
+      this.pageNumber = Math.floor(this.searchParameters.totalQuantity / this.PAGE_LIMIT);
+      this.recentPage = this.searchParameters.page;
+    }
   }
 
   // Remove all the items from sessionStorage when other order or other route was clicked
@@ -327,6 +334,7 @@ export class FilterComponent implements OnInit {
     sessionStorage.removeItem('userSearchDataOnCompanyPage');
     sessionStorage.removeItem('pickedUserOnUserPage');
     sessionStorage.removeItem('indexOfPickedUserOnUserPage');
+    sessionStorage.removeItem('searchParameters');
   }
 
   // Sets the data to null when expansion order is collapsed
@@ -584,7 +592,7 @@ export class FilterComponent implements OnInit {
 
   public checkSelectedFilter() {
     this.clickedCarIndex = null;
-    sessionStorage.removeItem('clickerCarIndex');
+    sessionStorage.removeItem('clickedCarIndex');
     if ('sold' !== this.selectedFilter.value && this.secondarySelectedFilter != null) {
       this.secondarySelectedFilter = null;
     }
@@ -658,7 +666,7 @@ export class FilterComponent implements OnInit {
   // The getSingleCar call gets called through the http.service.ts with three parameters,
   // the first is the actual string searched in that type,
   // the second is the name of the search type eg.: 'type', 'name', 'plateNumber'
-  // the third is the soldOrNot, which helps distinguish between sold and active cars.
+  // the third is the isSold, which helps distinguish between sold and active cars.
   // The getAllCars method gets called in the same service
 
   public filterCars(form: any) {
@@ -669,6 +677,8 @@ export class FilterComponent implements OnInit {
         && form.value.plateNumber.length < 6 ) {
         this.utilService.validPlateNumber = false;
         this.utilService.emptySearchField = false;
+        this.pageNumber = 0;
+        this.recentPage = 1;
       } else if (this.selectedFilter.value === 'name' && form.value.name != null && form.value.name.length === 0
         || this.selectedFilter.value === 'type' && form.value.type != null && form.value.type.length === 0
         || this.selectedFilter.value === 'plateNumber' && form.value.plateNumber != null && form.value.plateNumber.length === 0
@@ -676,6 +686,8 @@ export class FilterComponent implements OnInit {
         || this.secondarySelectedFilter != null && this.secondarySelectedFilter.value === 'type' && form.value.type != null && form.value.type.length === 0
         || this.secondarySelectedFilter != null && this.secondarySelectedFilter.value === 'plateNumber' && form.value.plateNumber != null && form.value.plateNumber.length === 0) {
         this.utilService.emptySearchField = true;
+        this.pageNumber = 0;
+        this.recentPage = 1;
       } else {
         sessionStorage.clear();
         let formValue = null;
@@ -697,18 +709,18 @@ export class FilterComponent implements OnInit {
         }
 
         if (this.selectedFilter.value !== 'all') {
-          const soldOrNot = this.selectedFilter.value === 'sold';
-          const selectedFilterValue = soldOrNot ? this.secondarySelectedFilter.value : this.selectedFilter.value;
-          this.httpService.getFilteredCars(formValue, selectedFilterValue, soldOrNot.toString()).subscribe(data => {
+          this.pageNumber = 0;
+          this.recentPage = 1
+          const isSold = this.selectedFilter.value === 'sold';
+          const selectedFilterValue = isSold ? this.secondarySelectedFilter.value : this.selectedFilter.value;
+          this.httpService.getFilteredCars(formValue, selectedFilterValue, isSold.toString(), this.PAGE_LIMIT.toString(), '0').subscribe(data => {
             if (!data) {
               this.noMatch = true;
-            }
-            if (Array.isArray(data)) {
-              this.selectedCars = data;
-              sessionStorage.setItem('selectedCars', JSON.stringify(data));
             } else {
-              this.selectedCars = [];
-              this.selectedCars.push(data);
+              this.selectedCars = data.cars;
+              this.searchParameters = new SearchParameters(formValue, selectedFilterValue, isSold, 1, data.quantity);
+              sessionStorage.setItem('searchParameters', JSON.stringify(this.searchParameters));
+              this.pageNumber = Math.floor(data.quantity / this.PAGE_LIMIT);
               sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
             }
           }, error => {
@@ -721,12 +733,12 @@ export class FilterComponent implements OnInit {
             }
           });
         } else {
-          this.httpService.getAllCars(false, 20, 0).subscribe(data => {
+          this.httpService.getAllCars(false, this.PAGE_LIMIT, 0).subscribe(data => {
             this.selectedCars = data.cars;
-            const searchParameters = new SearchParameters(null, null, false, 1, data.quantity);
-            sessionStorage.setItem('searchParameters', JSON.stringify(searchParameters));
-            this.pageNumber = Math.floor(data.quantity / 10);
-            sessionStorage.setItem('selectedCars', JSON.stringify(data.cars));
+            this.searchParameters = new SearchParameters(null, null, false, 1, data.quantity);
+            sessionStorage.setItem('searchParameters', JSON.stringify(this.searchParameters));
+            this.pageNumber = Math.floor(data.quantity / this.PAGE_LIMIT);
+            sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
           });
         }
       }
@@ -737,15 +749,17 @@ export class FilterComponent implements OnInit {
   // The only parameter it gets is allOrSold with the value of 'all'.
 
   public getAllCars(isSold: boolean) {
+    this.pageNumber = 0;
+    this.recentPage = 1
     this.clickedCarIndex = null;
     this.selectedOrganizer = null;
-    sessionStorage.removeItem('clickerCarIndex');
+    sessionStorage.removeItem('clickedCarIndex');
     this.clearSelectedCars();
-    this.httpService.getAllCars(isSold, 20, 0).subscribe(data => {
+    this.httpService.getAllCars(isSold, this.PAGE_LIMIT, 0).subscribe(data => {
       this.selectedCars = data.cars;
-      const searchParameters = new SearchParameters(null, null, isSold, 1, data.quantity);
-      sessionStorage.setItem('searchParameters', JSON.stringify(searchParameters));
-      this.pageNumber = Math.floor(data.quantity / 10);
+      this.searchParameters = new SearchParameters(null, null, isSold, 1, data.quantity);
+      sessionStorage.setItem('searchParameters', JSON.stringify(this.searchParameters));
+      this.pageNumber = Math.floor(data.quantity / this.PAGE_LIMIT);
       sessionStorage.setItem('selectedCars', JSON.stringify(data.cars));
     });
   }
@@ -1722,7 +1736,45 @@ export class FilterComponent implements OnInit {
 
   public goToPage(pageNumber: number) {
     this.recentPage = pageNumber;
-    console.log(pageNumber);
+    const OFFSET = (pageNumber - 1) * this.PAGE_LIMIT;
+    if (null == this.searchParameters.searchedText && null == this.searchParameters.searchBy) {
+      this.httpService.getAllCars(this.searchParameters.isSold, this.PAGE_LIMIT, OFFSET).subscribe(data => {
+        this.selectedCars = data.cars;
+        this.searchParameters = new SearchParameters(null, null, this.searchParameters.isSold, pageNumber, data.quantity);
+        sessionStorage.setItem('searchParameters', JSON.stringify(this.searchParameters));
+        sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
+      });
+    } else {
+      this.httpService.getFilteredCars(
+          this.searchParameters.searchedText,
+          this.searchParameters.searchBy,
+          this.searchParameters.isSold.toString(),
+          this.PAGE_LIMIT.toString(),
+          OFFSET.toString()).subscribe(data => {
+        if (!data) {
+          this.noMatch = true;
+        } else {
+          this.selectedCars = data.cars;
+          this.searchParameters = new SearchParameters(
+            this.searchParameters.searchedText,
+            this.searchParameters.searchBy,
+            this.searchParameters.isSold,
+            pageNumber,
+            data.quantity
+          );
+          sessionStorage.setItem('searchParameters', JSON.stringify(this.searchParameters));
+          sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
+        }
+      }, error => {
+        sessionStorage.clear();
+        this.selectedCars = [];
+        if (error.error.errorCode === '404') {
+          this.utilService.openSnackBar('Ilyen paraméterű autó nem található!', 'Hiba :(');
+        } else {
+          this.utilService.openSnackBar('Az adatbáziskapcsolat váratlanul megszakadt!', 'Hiba :(');
+        }
+      });
+    }
   }
 }
 

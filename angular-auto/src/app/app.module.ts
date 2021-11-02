@@ -54,6 +54,7 @@ import {CurrencyMaskModule} from "ng2-currency-mask";
 import { CommonModule } from '@angular/common';
 import { TransferHttpCacheModule } from '@nguniversal/common';
 import {NumberPipe} from "./@core/components/filter/numberPipe";
+import {MatChipsModule} from '@angular/material/chips';
 
 @NgModule({
   declarations: [
@@ -96,6 +97,7 @@ import {NumberPipe} from "./@core/components/filter/numberPipe";
     MatDatepickerModule,
     MatNativeDateModule,
     MatExpansionModule,
+    MatChipsModule,
     NgbModule,
     MatCardModule,
     MatDialogModule,

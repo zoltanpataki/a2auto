@@ -18,14 +18,11 @@
 
 .databaseIcon {
   padding-left: 10%;
-  text-align: center;
+  font-size: 140%;
   cursor: pointer;
 }
 
-.databaseIcon > i {
-  position:relative;
-  top: calc(50% - 18px); /* 50% - 3/4 of icon height */
-}
+
 
 .search {
   width: 70%;
@@ -238,4 +235,23 @@ table {
 .recentPage {
   background-color: black;
   color: white;
+}
+
+.quantity {
+  font-size: 110%;
+  font-weight: bolder;
+  border-radius: 10px;
+  border: 3px solid deeppink;
+  background-color: deeppink;
+  color: white;
+  padding: 10%;
+}
+
+.quantityContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 5%;
+  padding-right: 5%;
+  margin-left: 20%;
 }

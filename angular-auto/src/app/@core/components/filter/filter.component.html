@@ -28,6 +28,9 @@
     <div class="databaseIcon">
       <i class="material-icons allCars soldCars" (click)="getAllCars(true)" matTooltip="Összes eladott autó betöltése">time_to_leave</i>
     </div>
+    <div class="quantityContainer" *ngIf="searchParameters && searchParameters.totalQuantity">
+      <p class="quantity" mat-flat-button color="accent">{{searchParameters.totalQuantity}}&#160;db</p>
+    </div>
   </div>
   <div *ngIf="selectedCars && selectedCars.length > 0">
     <mat-form-field>
@@ -87,6 +90,14 @@
   <form *ngIf="selectedFilter && selectedFilter.value == 'all'" #filterForm=ngForm (ngSubmit)="filterCars(filterForm); filterForm.reset()" class="form filterForm">
     <button mat-button>Keresés</button>
   </form>
+</div>
+<div class="pageNumbersContainer">
+  <div class="pageNumbers" *ngIf="pageNumber>0" fxLayout="row" fxFlex="100" fxLayoutAlign="end">
+    <mat-panel-title class="pageNumbers" fxFlex="5" *ngFor="let num of pageNumber | numberList: recentPage; trackBy: trackByFn">
+      <button *ngIf="num == recentPage" type="button" (click)="goToPage(num)" class="recentPage" mat-mini-fab><b>{{num}}</b></button>
+      <button *ngIf="num != recentPage" type="button" (click)="goToPage(num)" class="miniFab" mat-mini-fab><b>{{num}}</b></button>
+    </mat-panel-title>
+  </div>
 </div>
 <div class="selectedCars" *ngIf="selectedCars.length > 0">
   <mat-accordion>
@@ -540,8 +551,8 @@
   </mat-accordion>
 </div>
 <div class="pageNumbersContainer">
-  <div class="pageNumbers" *ngIf="pageNumber>0" fxLayout="row" fxFlex="60" fxLayoutAlign="space-between">
-    <mat-panel-title class="pageNumbers" fxFlex="12" *ngFor="let num of pageNumber | numberList: recentPage; trackBy: trackByFn">
+  <div class="pageNumbers" *ngIf="pageNumber>0" fxLayout="row" fxFlex="100" fxLayoutAlign="end">
+    <mat-panel-title class="pageNumbers" fxFlex="5" *ngFor="let num of pageNumber | numberList: recentPage; trackBy: trackByFn">
       <button *ngIf="num == recentPage" type="button" (click)="goToPage(num)" class="recentPage" mat-mini-fab><b>{{num}}</b></button>
       <button *ngIf="num != recentPage" type="button" (click)="goToPage(num)" class="miniFab" mat-mini-fab><b>{{num}}</b></button>
     </mat-panel-title>
