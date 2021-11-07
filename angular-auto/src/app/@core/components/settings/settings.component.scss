@@ -6,6 +6,7 @@ table {
   .plus {
     color: deeppink;
     font-size: 200%;
+    cursor: pointer;
   }
 }
 
@@ -57,6 +58,10 @@ table {
 
 .mat-form-field {
   width: 30%;
+}
+
+.delete {
+  cursor: pointer;
 }
 
 input {

@@ -1,5 +1,7 @@
 import {Action} from "@ngrx/store";
 import {CarFilterRequest, CarUpdateModel, ICar} from "../../@core/models/car";
+import {SearchParameters} from "../../@core/models/searchParameters";
+import {CarsAndQuantity} from "../../@core/models/carsAndQuantity";
 
 export enum ECarActions {
   GetCars = '[Car] Get cars',
@@ -15,16 +17,17 @@ export enum ECarActions {
   UpdateCarSalesman = '[CarUpdateRequest] Update car salesman',
   UpdateCarHandOverDate = '[CarUpdateRequest] Update car hand over date',
   UpdateCarTypeOfBuying = '[CarUpdateRequest] Update car type of buying',
+  UpdateSearchParameters = '[SearchParameters] Update search parameters',
 }
 
 export class GetCars implements Action {
   public readonly type = ECarActions.GetCars;
-  constructor(public payload: boolean) {}
+  constructor(public payload: CarFilterRequest) {}
 }
 
 export class GetCarsSuccess implements Action {
   public readonly type = ECarActions.GetCarsSuccess;
-  constructor(public payload: ICar[]) {}
+  constructor(public payload: CarsAndQuantity) {}
 }
 
 export class GetFilteredCars implements Action {
@@ -34,7 +37,7 @@ export class GetFilteredCars implements Action {
 
 export class GetFilteredCarsSuccess implements Action {
   public readonly type = ECarActions.GetFilteredCarsSuccess;
-  constructor(public readonly payload: ICar[]) {}
+  constructor(public readonly payload: CarsAndQuantity) {}
 }
 
 export class GetFilteredCarsError implements Action {
@@ -91,6 +94,12 @@ export class UpdateCarTypeOfBuying implements Action {
   }
 }
 
+export class UpdateSearchParameters implements Action {
+  public readonly type = ECarActions.UpdateSearchParameters;
+  constructor(public readonly payload: SearchParameters) {
+  }
+}
+
 export type CarActions =
   GetCars |
   GetCarsSuccess |
@@ -104,4 +113,5 @@ export type CarActions =
   StoreNameOfBuyer |
   UpdateCarSalesman |
   UpdateCarHandOverDate |
-  UpdateCarTypeOfBuying;
+  UpdateCarTypeOfBuying |
+  UpdateSearchParameters;

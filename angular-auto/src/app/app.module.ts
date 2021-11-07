@@ -64,6 +64,8 @@ import {CompanyEffects} from "./@store/effects/company.effects";
 import {WitnessEffects} from "./@store/effects/witness.effects";
 import {SalesmanEffects} from "./@store/effects/salesman.effects";
 import {OrderEffects} from "./@store/effects/order.effects";
+import {NumberPipe} from "./@core/components/filter/numberPipe";
+import {MatChipsModule} from '@angular/material/chips';
 
 // console.log all actions
 export function debug(reducer: ActionReducer<any>): ActionReducer<any> {
@@ -102,6 +104,7 @@ export const metaReducers: MetaReducer<any>[] = [];
     LoaderComponent,
     InsurancePageComponent,
     InstantBuyingDialogComponent,
+    NumberPipe
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
@@ -117,6 +120,7 @@ export const metaReducers: MetaReducer<any>[] = [];
     MatDatepickerModule,
     MatNativeDateModule,
     MatExpansionModule,
+    MatChipsModule,
     NgbModule,
     MatCardModule,
     MatDialogModule,
@@ -140,6 +144,7 @@ export const metaReducers: MetaReducer<any>[] = [];
     TransferHttpCacheModule,
     MatIconModule
   ],
+  exports: [NumberPipe],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },{ provide: 'isBrowser', useValue: true },],
   bootstrap: [AppComponent],
   entryComponents: [DialogComponent, InstantBuyingDialogComponent, WarningDialogComponent, CreditDialogComponent, CarTimeInfoComponent, SalesmanComponent, WitnessDialogComponent, WitnessPickerDialogComponent]

@@ -88,22 +88,26 @@ export class HttpService {
     });
   }
 
-  public getAllCars(isSold: boolean): Observable<any> {
+  public getAllCars(isSold: boolean, limit: number, offset: number): Observable<any> {
     const urlPostFix = `getAllCars`;
     const params = new HttpParams()
-      .set('isSold', isSold.toString());
+      .set('isSold', isSold.toString())
+      .set('limit', limit.toString())
+      .set('offset', offset.toString());
     return this.http.get(this.carServerUrl + urlPostFix, {
       headers: httpOptions.headers,
       params: params
     });
   }
 
-  public getSingleCar(filter: string, filterType: string, soldOrNot: string): Observable<any> {
-    const urlPostFix = 'getSingleCar';
+  public getFilteredCars(filter: string, filterType: string, isSold: boolean, limit: number, offset: number): Observable<any> {
+    const urlPostFix = 'getFilteredCars';
     const params = new HttpParams()
       .set('filter', filter)
       .set('filterType', filterType)
-      .set('soldOrNot', soldOrNot);
+      .set('isSold', isSold.toString())
+      .set('limit', limit.toString())
+      .set('offset', offset.toString());
     return this.http.get(this.carServerUrl + urlPostFix, {
       headers: httpOptions.headers,
       params: params

@@ -27,8 +27,8 @@ public class Company {
     private String phoneNumber;
     private String email;
 
-    @OneToOne(mappedBy = "company")
-    private Orders orders;
+    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true, mappedBy = "company")
+    private List<Orders> orders = new ArrayList<>();
 
     public Company() {
     }

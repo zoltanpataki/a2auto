@@ -28,9 +28,14 @@ export class CarEffects {
   getCars$ = this._actions$.pipe(
     ofType<GetCars>(ECarActions.GetCars),
     map(action => action.payload),
-    switchMap(isSold => this._httpService.getAllCars(isSold)),
-    switchMap(cars => {
-      return of(new GetCarsSuccess(cars));
+    switchMap(carFilterRequest => this._httpService.getAllCars(
+        carFilterRequest.isSold,
+        carFilterRequest.pageLimit,
+        carFilterRequest.pageOffset
+      )
+    ),
+    switchMap(carsAndQuantity => {
+      return of(new GetCarsSuccess(carsAndQuantity));
     }),
     catchError((error) => {
       return of(new GetCarsError('Az adatbáziskapcsolat váratlanul megszakadt!'));
@@ -41,13 +46,16 @@ export class CarEffects {
   getFilteredCars$ = this._actions$.pipe(
     ofType<GetFilteredCars>(ECarActions.GetFilteredCars),
     map(action => action.payload),
-    switchMap(carFilterRequest => this._httpService.getSingleCar(
-      carFilterRequest.formValue,
-      carFilterRequest.selectedFilterValue,
-      carFilterRequest.soldOrNot)
+    switchMap(carFilterRequest => this._httpService.getFilteredCars(
+      carFilterRequest.carSearchText,
+      carFilterRequest.selectedFilterType,
+      carFilterRequest.isSold,
+      carFilterRequest.pageLimit,
+      carFilterRequest.pageOffset
+    )
       .pipe(
-        switchMap(cars => {
-          return of(new GetFilteredCarsSuccess(cars));
+        switchMap(carsAndQuantity => {
+          return of(new GetFilteredCarsSuccess(carsAndQuantity));
         }),
         catchError((error) => {
           if (error.error.errorCode === '404') {
@@ -147,5 +155,6 @@ export class CarEffects {
     private _httpService: HttpService,
     private _actions$: Actions,
     private _store: Store<IAppState>
-  ) {}
+  ) {
+  }
 }

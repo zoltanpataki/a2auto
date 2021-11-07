@@ -123,14 +123,18 @@ export interface ICar {
 }
 
 export class CarFilterRequest {
-  formValue: string;
-  selectedFilterValue: string;
-  soldOrNot: string;
+  carSearchText: string;
+  selectedFilterType: string;
+  isSold: boolean;
+  pageLimit: number;
+  pageOffset: number;
 
-  constructor(formValue: string, selectedFilterValue: string, soldOrNot: string) {
-    this.formValue = formValue;
-    this.selectedFilterValue = selectedFilterValue;
-    this.soldOrNot = soldOrNot;
+  constructor(carSearchText: string, selectedFilterType: string, isSold: boolean, pageLimit: number, pageOffset: number) {
+    this.carSearchText = carSearchText;
+    this.selectedFilterType = selectedFilterType;
+    this.isSold = isSold;
+    this.pageLimit = pageLimit;
+    this.pageOffset = pageOffset;
   }
 }
 

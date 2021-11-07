@@ -6,7 +6,7 @@ const selectCars = (state: IAppState) => state.cars;
 
 export const selectCarList = createSelector(
   selectCars,
-  (state: ICarState) => state.cars
+  (state: ICarState) => state.carsAndQuantity
 );
 
 export const selectCarError = createSelector(
@@ -17,6 +17,11 @@ export const selectCarError = createSelector(
 export const selectPickedCar = createSelector(
   selectCars,
   (state: ICarState) => state.pickedCar
+);
+
+export const selectSearchParameters = createSelector(
+  selectCars,
+  (state: ICarState) => state.searchParameters
 );
 
 export const selectClickedCarIndex = createSelector(

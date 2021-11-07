@@ -27,7 +27,7 @@ import {
   selectCarError,
   selectCarList,
   selectClickedCarIndex,
-  selectPickedCar
+  selectPickedCar, selectSearchParameters
 } from "../../../@store/selectors/car.selectors";
 import {
   GetCars,
@@ -37,7 +37,7 @@ import {
   StoreNameOfBuyer,
   StorePickedCar,
   UpdateCarHandOverDate,
-  UpdateCarSalesman, UpdateCarTypeOfBuying
+  UpdateCarSalesman, UpdateCarTypeOfBuying, UpdateSearchParameters
 } from "../../../@store/actions/car.actions";
 import {Observable} from "rxjs";
 import {Constants} from "../../models/constants";
@@ -125,6 +125,8 @@ import {selectWitnessList} from "../../../@store/selectors/witness.selectors";
 import {GetSalesmen} from "../../../@store/actions/salesman.actions";
 import {InheritanceChargeRequest, InheritanceTaxInfoForChainedApiCall} from "../../models/inheritanceTax";
 import {StoreIsBlankPage} from "../../../@store/actions/util.actions";
+import {SearchParameters} from "../../models/searchParameters";
+import {CarsAndQuantity} from "../../models/carsAndQuantity";
 
 @Component({
   selector: 'app-filter',
@@ -148,13 +150,12 @@ export class FilterComponent implements OnInit {
   public companyFilters = [{viewValue: 'Név', value: 'name'}, {viewValue: 'Cégjegyzékszám', value: 'companyRegistrationNumber'}];
   public selectedCompanyFilter: SelectedFilter;
   public selectedCars: Car[] = [];
-  public selectedCarsObs: Observable<ICar[]>;
+  public selectedCarsAndQuantity$: Observable<CarsAndQuantity>;
   public carErrorObs: Observable<string>;
   public orderErrorObs: Observable<string>;
   public inheritanceTaxErrorObs: Observable<string>;
   public selectedCarHeader = ['Márka', 'Modell', 'Rendszám', 'Vevő', 'Vásárlás dátuma'];
   public typeOfBuying = ['KÉSZPÉNZ', 'ÁTUTALÁS', 'HITEL'];
-  public noMatch = false;
   public selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporateObs: Observable<boolean>;
   public selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate: boolean;
   public alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlreadyObs: Observable<boolean>;
@@ -241,6 +242,10 @@ export class FilterComponent implements OnInit {
   public DONT_WANT_CALCULATION: string = Constants.DONT_WANT_CALCULATION;
   public COUNT_IN: string = Constants.COUNT_IN;
   public NO_COUNT_IN: string = Constants.NO_COUNT_IN;
+  public numberOfPages: number = 0;
+  public recentPage: number = 1;
+  public searchParameters$: Observable<SearchParameters>;
+  public searchParameters: SearchParameters;
 
   constructor(private httpService: HttpService,
               public utilService: UtilService,
@@ -283,7 +288,8 @@ export class FilterComponent implements OnInit {
   ngOnInit() {
     if (sessionStorage.getItem('selectedCars')) {
       this.selectedCars = JSON.parse(sessionStorage.getItem('selectedCars'));
-      this._store.dispatch(new GetCarsSuccess(this.selectedCars));
+      const carsAndQuantity = new CarsAndQuantity(this.selectedCars.length, this.selectedCars)
+      this._store.dispatch(new GetCarsSuccess(carsAndQuantity));
     }
 
     if (this.utilService.witnessesObs == null) {
@@ -337,7 +343,7 @@ export class FilterComponent implements OnInit {
     this.utilService.witnessesObs = this._store.pipe(select(selectWitnessList));
     this.clickedCarIndexObs = this._store.pipe(select(selectClickedCarIndex));
     this.carOfTransactionObs = this._store.pipe(select(selectPickedCar));
-    this.selectedCarsObs = this._store.pipe(select(selectCarList));
+    this.selectedCarsAndQuantity$ = this._store.pipe(select(selectCarList));
     this.carErrorObs = this._store.pipe(select(selectCarError));
     this.orderErrorObs = this._store.pipe(select(selectOrderError));
     this.inheritanceTaxErrorObs = this._store.pipe(select(selectInheritanceTaxError));
@@ -373,13 +379,29 @@ export class FilterComponent implements OnInit {
     this.creditDataObs = this._store.pipe(select(selectCredit));
     this.creditNeedsToBeRecalculatedObs = this._store.pipe(select(selectCreditNeedsToBeRecalculated));
     this.descriptionListObs = this._store.pipe(select(selectRemarks));
+    this.searchParameters$ = this._store.pipe(select(selectSearchParameters));
 
     //subscriptions
 
-    this.selectedCarsObs.subscribe(selectedCars => {
-      this.selectedCars = selectedCars;
-      if (null != selectedCars) {
-        sessionStorage.setItem('selectedCars', JSON.stringify(selectedCars));
+    this.selectedCarsAndQuantity$.subscribe(selectedCarsAndQuantity => {
+      this.selectedCars = selectedCarsAndQuantity.cars;
+      if (null != this.selectedCars) {
+        //get info whether the search was for sold or active cars by checking the first item of the car list
+        const sold = this.selectedCars[0].sold
+        sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
+        this.numberOfPages = Math.floor(selectedCarsAndQuantity.quantity / Constants.PAGE_LIMIT);
+        if (null != this.searchParameters) {
+          this.searchParameters.totalQuantity = selectedCarsAndQuantity.quantity;
+        } else {
+          this.searchParameters = new SearchParameters(
+            Constants.NULL_CAR_SEARCH_TEXT,
+            Constants.NULL_SELECTED_FILTER_TYPE,
+            Constants.NULL_IS_SOLD,
+            Constants.NULL_PAGE_NUMBER,
+            selectedCarsAndQuantity.quantity
+          )
+        }
+        sessionStorage.setItem('searchParameters', JSON.stringify(this.searchParameters));
       }
     });
 
@@ -689,6 +711,15 @@ export class FilterComponent implements OnInit {
         sessionStorage.setItem('creditNeedsToBeRecalculated', JSON.stringify(creditNeedsToBeRecalculated));
       }
     });
+
+    this.searchParameters$.subscribe(searchParameters => {
+      this.searchParameters = searchParameters;
+      if (null != this.searchParameters) {
+        sessionStorage.setItem('searchParameters', JSON.stringify(this.searchParameters));
+        this.numberOfPages = Math.floor(this.searchParameters.totalQuantity / Constants.PAGE_LIMIT);
+        this.recentPage = this.searchParameters.page;
+      }
+    });
   }
 
   // Retrieve all the data after refresh
@@ -775,6 +806,9 @@ export class FilterComponent implements OnInit {
     }
     if (sessionStorage.getItem('selectedOrganizer')) {
       this.selectedOrganizer = JSON.parse(sessionStorage.getItem('selectedOrganizer'));
+    }
+    if (sessionStorage.getItem('searchParameters')) {
+      this._store.dispatch(new UpdateSearchParameters(JSON.parse(sessionStorage.getItem('searchParameters'))));
     }
   }
 
@@ -1079,7 +1113,7 @@ export class FilterComponent implements OnInit {
 
   public checkSelectedFilter() {
     this.clickedCarIndex = null;
-    sessionStorage.removeItem('clickerCarIndex');
+    sessionStorage.removeItem('clickedCarIndex');
     if ('sold' !== this.selectedFilter.value && this.secondarySelectedFilter != null) {
       this.secondarySelectedFilter = null;
     }
@@ -1153,11 +1187,13 @@ export class FilterComponent implements OnInit {
   // The getSingleCar call gets called through the http.service.ts with three parameters,
   // the first is the actual string searched in that type,
   // the second is the name of the search type eg.: 'type', 'name', 'plateNumber'
-  // the third is the soldOrNot, which helps distinguish between sold and active cars.
+  // the third is the isSold, which helps distinguish between sold and active cars.
   // The getAllCars method gets called in the same service
 
   public filterCars(form: any) {
     this.selectedOrganizer = null;
+    this.numberOfPages = 0;
+    this.recentPage = 1;
     if (this.validateFormFieldLength(form.value)) {
       this.clearSelectedCars();
       if (form.value.plateNumber
@@ -1173,28 +1209,36 @@ export class FilterComponent implements OnInit {
         this.utilService.emptySearchField = true;
       } else {
         sessionStorage.clear();
-        let formValue = null;
+        let carSearchText = null;
         this.utilService.validPlateNumber = true;
         this.utilService.emptySearchField = false;
         switch (Object.keys(form.value)[0]) {
           case 'name': {
-            formValue = form.value.name.toUpperCase();
+            carSearchText = form.value.name.toUpperCase();
             break;
           }
           case 'type': {
-            formValue = form.value.type.toUpperCase();
+            carSearchText = form.value.type.toUpperCase();
             break;
           }
           case 'plateNumber': {
-            formValue = form.value.plateNumber.toUpperCase();
+            carSearchText = form.value.plateNumber.toUpperCase();
             break;
           }
         }
 
         if (this.selectedFilter.value !== 'all') {
-          const soldOrNot = this.selectedFilter.value === 'sold';
-          const selectedFilterValue = soldOrNot ? this.secondarySelectedFilter.value : this.selectedFilter.value;
-          const carFilterRequest = new CarFilterRequest(formValue, selectedFilterValue, soldOrNot.toString());
+          const isSold = this.selectedFilter.value === 'sold';
+          const selectedFilterType = isSold ? this.secondarySelectedFilter.value : this.selectedFilter.value;
+          const carFilterRequest = new CarFilterRequest(
+            carSearchText,
+            selectedFilterType,
+            isSold,
+            Constants.PAGE_LIMIT,
+            Constants.FIRST_PAGE_OFFSET
+          );
+          const searchParameters = new SearchParameters(carSearchText, selectedFilterType, isSold, 1, Constants.SELECTED_CARS_QUANTITY_NOT_KNOWN_YET)
+          this._store.dispatch(new UpdateSearchParameters(searchParameters));
           this._store.dispatch(new GetFilteredCars(carFilterRequest));
         } else {
           this.getAllCars(false);
@@ -1209,9 +1253,18 @@ export class FilterComponent implements OnInit {
   public getAllCars(isSold: boolean) {
     this.clickedCarIndex = null;
     this.selectedOrganizer = null;
-    sessionStorage.removeItem('clickerCarIndex');
+    sessionStorage.removeItem('clickedCarIndex');
     this.clearSelectedCars();
-    this._store.dispatch(new GetCars(isSold));
+    const carFilterRequest = new CarFilterRequest(
+      Constants.NULL_CAR_SEARCH_TEXT,
+      Constants.NULL_SELECTED_FILTER_TYPE,
+      isSold,
+      Constants.PAGE_LIMIT,
+      Constants.FIRST_PAGE_OFFSET
+    );
+    const searchParameters = new SearchParameters(null, null, isSold, 1, Constants.SELECTED_CARS_QUANTITY_NOT_KNOWN_YET);
+    this._store.dispatch(new UpdateSearchParameters(searchParameters));
+    this._store.dispatch(new GetCars(carFilterRequest));
   }
 
   // This is the modal section.
@@ -2102,6 +2155,46 @@ export class FilterComponent implements OnInit {
     )
     const updateRequest = new UpdateDescriptionWithAmountRequest(index, updatedDescriptionWithAmount);
     this._store.dispatch(new UpdateDescriptionWithAmount(updateRequest));
+  }
+
+  public goToPage(pageNumber: number) {
+    this.recentPage = pageNumber;
+    const OFFSET = (pageNumber - 1) * Constants.PAGE_LIMIT;
+    if (null == this.searchParameters.searchedText && null == this.searchParameters.searchBy) {
+      const searchParameters = new SearchParameters(
+        null,
+        null,
+        this.searchParameters.isSold,
+        pageNumber,
+        Constants.SELECTED_CARS_QUANTITY_NOT_KNOWN_YET
+      );
+      this._store.dispatch(new UpdateSearchParameters(searchParameters));
+      const carFilterRequest = new CarFilterRequest(
+        Constants.NULL_CAR_SEARCH_TEXT,
+        Constants.NULL_SELECTED_FILTER_TYPE,
+        this.searchParameters.isSold,
+        Constants.PAGE_LIMIT,
+        OFFSET
+      );
+      this._store.dispatch(new GetCars(carFilterRequest));
+    } else {
+      const searchParameters = new SearchParameters(
+        this.searchParameters.searchedText,
+        this.searchParameters.searchBy,
+        this.searchParameters.isSold,
+        pageNumber,
+        Constants.SELECTED_CARS_QUANTITY_NOT_KNOWN_YET
+      );
+      this._store.dispatch(new UpdateSearchParameters(searchParameters));
+      const carFilterRequest = new CarFilterRequest(
+        this.searchParameters.searchedText,
+        this.searchParameters.searchBy,
+        this.searchParameters.isSold,
+        Constants.PAGE_LIMIT,
+        OFFSET
+      );
+      this._store.dispatch(new GetFilteredCars(carFilterRequest));
+    }
   }
 }
 

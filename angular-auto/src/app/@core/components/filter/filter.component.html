@@ -28,8 +28,11 @@
     <div class="databaseIcon">
       <i class="material-icons allCars soldCars" (click)="getAllCars(true)" matTooltip="Összes eladott autó betöltése">time_to_leave</i>
     </div>
+    <div class="quantityContainer" *ngIf="searchParameters && searchParameters.totalQuantity">
+      <p class="quantity" mat-flat-button color="accent">{{searchParameters.totalQuantity}}&#160;db</p>
+    </div>
   </div>
-  <div *ngIf="selectedCarsObs | async">
+  <div *ngIf="selectedCars">
     <mat-form-field>
       <mat-label>Rendezés</mat-label>
       <mat-select [(ngModel)]="selectedOrganizer" name="organizer">
@@ -92,7 +95,15 @@
     <button mat-button>Keresés</button>
   </form>
 </div>
-<div class="selectedCars" *ngIf="selectedCarsObs | async">
+<div class="pageNumbersContainer">
+  <div class="pageNumbers" *ngIf="numberOfPages>0" fxLayout="row" fxFlex="100" fxLayoutAlign="end">
+    <mat-panel-title class="pageNumbers" fxFlex="5" *ngFor="let num of numberOfPages | numberList: recentPage; trackBy: trackByFn">
+      <button *ngIf="num == recentPage" type="button" (click)="goToPage(num)" class="recentPage" mat-mini-fab><b>{{num}}</b></button>
+      <button *ngIf="num != recentPage" type="button" (click)="goToPage(num)" class="miniFab" mat-mini-fab><b>{{num}}</b></button>
+    </mat-panel-title>
+  </div>
+</div>
+<div class="selectedCars" *ngIf="selectedCars">
   <mat-accordion>
     <mat-card>
       <div class="selectedCarHeaders" fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
@@ -106,7 +117,7 @@
         <mat-panel-title fxFlex="5"></mat-panel-title>
       </div>
     </mat-card>
-    <mat-expansion-panel [disabled]="true" #mep="matExpansionPanel" [expanded]="i == clickedCarIndex" hideToggle *ngFor="let car of selectedCarsObs | async; index as i; trackBy: trackByFn">
+    <mat-expansion-panel [disabled]="true" #mep="matExpansionPanel" [expanded]="i == clickedCarIndex" hideToggle *ngFor="let car of selectedCars; index as i; trackBy: trackByFn">
       <mat-expansion-panel-header>
         <div fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
           <mat-panel-title fxFlex="15">
@@ -542,5 +553,13 @@
       </div>
     </mat-expansion-panel>
   </mat-accordion>
+</div>
+<div class="pageNumbersContainer">
+  <div class="pageNumbers" *ngIf="numberOfPages>0" fxLayout="row" fxFlex="100" fxLayoutAlign="end">
+    <mat-panel-title class="pageNumbers" fxFlex="5" *ngFor="let num of numberOfPages | numberList: recentPage; trackBy: trackByFn">
+      <button *ngIf="num == recentPage" type="button" (click)="goToPage(num)" class="recentPage" mat-mini-fab><b>{{num}}</b></button>
+      <button *ngIf="num != recentPage" type="button" (click)="goToPage(num)" class="miniFab" mat-mini-fab><b>{{num}}</b></button>
+    </mat-panel-title>
+  </div>
 </div>
 

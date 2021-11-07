@@ -15,6 +15,8 @@ export abstract class Constants {
   static readonly IT_IS_NOT_ADDING: boolean = false;
   static readonly IT_IS_DESCRIPTION_DELETE: boolean = true;
   static readonly IT_IS_NOT_DESCRIPTION_DELETE: boolean = false;
+  static readonly PAGE_LIMIT: number = 10;
+  static readonly FIRST_PAGE_OFFSET: number = 0;
 
   // null constants
 
@@ -28,4 +30,9 @@ export abstract class Constants {
   static readonly NULL_SELECTED_BETWEEN_INDIVIDUAL_AND_CORPORATE_TRUE_IF_INDIVIDUAL_FALSE_IF_CORPORATE: boolean = null;
   static readonly NULL_CAR_HAND_OVER_DATE: Date = null;
   static readonly NULL_CAR_TYPE_OF_BUYING: string = null;
+  static readonly NULL_CAR_SEARCH_TEXT: string = null;
+  static readonly NULL_SELECTED_FILTER_TYPE: string = null;
+  static readonly SELECTED_CARS_QUANTITY_NOT_KNOWN_YET: number = null;
+  static readonly NULL_IS_SOLD: boolean = null;
+  static readonly NULL_PAGE_NUMBER: number = null;
 }

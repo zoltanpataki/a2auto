@@ -9,28 +9,28 @@ export const carReducers = (
     case ECarActions.GetCarsSuccess: {
       return {
         ...state,
-        cars: action.payload,
+        carsAndQuantity: action.payload,
         error: null
       };
     }
     case ECarActions.GetFilteredCarsSuccess: {
       return {
         ...state,
-        cars: action.payload,
+        carsAndQuantity: action.payload,
         error: null
       }
     }
     case ECarActions.GetFilteredCarsError: {
       return {
         ...state,
-        cars: null,
+        carsAndQuantity: null,
         error: action.payload
       }
     }
     case ECarActions.GetCarsError: {
       return {
         ...state,
-        cars: null,
+        carsAndQuantity: null,
         error: action.payload
       }
     }
@@ -50,6 +50,12 @@ export const carReducers = (
       return {
         ...state,
         pickedCar: action.payload
+      }
+    }
+    case ECarActions.UpdateSearchParameters: {
+      return {
+        ...state,
+        searchParameters: action.payload
       }
     }
     default:
