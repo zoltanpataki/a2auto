@@ -61,7 +61,6 @@ export class UtilService {
     sessionStorage.removeItem('a2Representation');
     sessionStorage.removeItem('typeOfBuying');
     sessionStorage.removeItem('nameOfBuyer');
-    sessionStorage.removeItem('searchParameters');
   }
 
   public createBlankWitnessToUtilServiceWitnessList(): Witness {

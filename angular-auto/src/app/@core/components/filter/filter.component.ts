@@ -334,7 +334,6 @@ export class FilterComponent implements OnInit {
     sessionStorage.removeItem('userSearchDataOnCompanyPage');
     sessionStorage.removeItem('pickedUserOnUserPage');
     sessionStorage.removeItem('indexOfPickedUserOnUserPage');
-    sessionStorage.removeItem('searchParameters');
   }
 
   // Sets the data to null when expansion order is collapsed
