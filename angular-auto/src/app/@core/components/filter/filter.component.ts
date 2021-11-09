@@ -34,8 +34,23 @@ export class FilterComponent implements OnInit {
     return Direction;
   }
   public countInCarSupplementForm: FormGroup;
-  public filters = [{viewValue: 'Modell', value: 'name'}, {viewValue: 'Rendszám', value: 'plateNumber'}, {viewValue: 'Márka', value: 'type'}, {viewValue: 'Összes', value: 'all'}, {viewValue: 'Eladott', value: 'sold'}];
-  public organizers = [{viewValue: 'Márka', value: 'type', direction: Direction.up, icon: 'loyalty', iconColor: '#6C6EA0'}, {viewValue: 'Márka', value: 'type', direction: Direction.down, icon: 'loyalty', iconColor: '#6C6EA0'}, {viewValue: 'Vásárló', value: 'buyer', direction: Direction.up, icon: 'person', iconColor: '#F4D03F'}, {viewValue: 'Vásárló', value: 'buyer', direction: Direction.down, icon: 'person', iconColor: '#F4D03F'}, {viewValue: 'Model', value: 'name', direction: Direction.up, icon: 'webhook', iconColor: '#58D68D'}, {viewValue: 'Model', value: 'name', direction: Direction.down, icon: 'webhook', iconColor: '#58D68D'}, {viewValue: 'Rendszám', value: 'plateNumber', direction: Direction.up, icon: 'fingerprint', iconColor: 'deeppink'}, {viewValue: 'Rendszám', value: 'plateNumber', direction: Direction.down, icon: 'fingerprint', iconColor: 'deeppink'}];
+  public filters = [
+    {viewValue: 'Modell', value: 'name'},
+    {viewValue: 'Rendszám', value: 'plateNumber'},
+    {viewValue: 'Márka', value: 'type'},
+    {viewValue: 'Összes', value: 'all'},
+    {viewValue: 'Eladott', value: 'sold'}
+  ];
+  public organizers = [
+    {viewValue: 'Márka', value: 'type', direction: Direction.up, icon: 'loyalty', iconColor: '#6C6EA0'},
+    {viewValue: 'Márka', value: 'type', direction: Direction.down, icon: 'loyalty', iconColor: '#6C6EA0'},
+    {viewValue: 'Vásárló', value: 'buyer', direction: Direction.up, icon: 'person', iconColor: '#F4D03F'},
+    {viewValue: 'Vásárló', value: 'buyer', direction: Direction.down, icon: 'person', iconColor: '#F4D03F'},
+    {viewValue: 'Model', value: 'name', direction: Direction.up, icon: 'webhook', iconColor: '#58D68D'},
+    {viewValue: 'Model', value: 'name', direction: Direction.down, icon: 'webhook', iconColor: '#58D68D'},
+    {viewValue: 'Rendszám', value: 'plateNumber', direction: Direction.up, icon: 'fingerprint', iconColor: 'deeppink'},
+    {viewValue: 'Rendszám', value: 'plateNumber', direction: Direction.down, icon: 'fingerprint', iconColor: 'deeppink'}
+  ];
   public secondaryFilters = [{viewValue: 'Modell', value: 'name'}, {viewValue: 'Rendszám', value: 'plateNumber'}, {viewValue: 'Márka', value: 'type'}];
   public userFilters = [{viewValue: 'Név', value: 'name'}, {viewValue: 'Város', value: 'city'}];
   public selectedFilter: SelectedFilter;
