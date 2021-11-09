@@ -33,16 +33,88 @@
     </div>
   </div>
   <div *ngIf="selectedCars && selectedCars.length > 0">
-    <mat-form-field>
+    <mat-form-field class="ordering">
       <mat-label>Rendezés</mat-label>
       <mat-select [(ngModel)]="selectedOrganizer" name="organizer">
         <mat-select-trigger *ngIf="selectedOrganizer">
-          <i *ngIf="selectedOrganizer.direction == direction.down" class="material-icons orderIcon">sort_by_alpha</i>
-          <i *ngIf="selectedOrganizer.direction == direction.up" class="material-icons orderIcon">sort_by_alpha</i> &#160;{{selectedOrganizer.viewValue}}
+          <div *ngIf="selectedOrganizer.direction == direction.down">
+            <div class="order" fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
+              <div class="icon" fxFlex="15">
+                <i class="material-icons" style="{{'color: ' + selectedOrganizer.iconColor}}">{{selectedOrganizer.icon}}</i>
+              </div>
+              <div fxFlex="5">
+                A
+              </div>
+              <div class="icon" fxFlex="18">
+                <i class="material-icons arrow">trending_flat</i>
+              </div>
+              <div fxFlex="12">
+                Z
+              </div>
+              <div fxFlex="50">
+                {{selectedOrganizer.viewValue}}
+              </div>
+            </div>
+          </div>
+          <div *ngIf="selectedOrganizer.direction == direction.up">
+            <div class="order" fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
+              <div class="icon" fxFlex="15">
+                <i class="material-icons" style="{{'color: ' + selectedOrganizer.iconColor}}">{{selectedOrganizer.icon}}</i>
+              </div>
+              <div fxFlex="5">
+                Z
+              </div>
+              <div class="icon" fxFlex="18">
+                <i class="material-icons">trending_flat</i>
+              </div>
+              <div fxFlex="12">
+                A
+              </div>
+              <div fxFlex="50">
+                {{selectedOrganizer.viewValue}}
+              </div>
+            </div>
+          </div>
         </mat-select-trigger>
         <mat-option (click)="checkSelectedOrganizer()" *ngFor="let organizer of organizers; trackBy: trackByFn" [value]="organizer">
-          <i *ngIf="organizer.direction == direction.up" class="material-icons orderIcon">sort_by_alpha</i>
-          <i *ngIf="organizer.direction == direction.down" class="material-icons orderIcon">sort_by_alpha</i> &#160;{{organizer.viewValue}}
+          <div *ngIf="organizer.direction == direction.up">
+            <div class="order" fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
+              <div class="icon" fxFlex="15">
+                <i class="material-icons" style="{{'color: ' + organizer.iconColor}}">{{organizer.icon}}</i>
+              </div>
+              <div fxFlex="5">
+                A
+              </div>
+              <div class="icon" fxFlex="18">
+                <i class="material-icons">trending_flat</i>
+              </div>
+              <div fxFlex="12">
+                Z
+              </div>
+              <div fxFlex="50">
+                {{organizer.viewValue}}
+              </div>
+            </div>
+          </div>
+          <div *ngIf="organizer.direction == direction.down">
+            <div class="order" fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
+              <div class="icon" fxFlex="15">
+                <i class="material-icons" style="{{'color: ' + organizer.iconColor}}">{{organizer.icon}}</i>
+              </div>
+              <div fxFlex="5">
+                Z
+              </div>
+              <div class="icon" fxFlex="18">
+                <i class="material-icons">trending_flat</i>
+              </div>
+              <div fxFlex="12">
+                A
+              </div>
+              <div fxFlex="50">
+                {{organizer.viewValue}}
+              </div>
+            </div>
+          </div>
         </mat-option>
       </mat-select>
     </mat-form-field>

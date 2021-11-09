@@ -3,11 +3,13 @@
   color: white;
 }
 
-.filterRow, .filters {
+.filterRow {
   display: flex;
 }
 
 .filters {
+  display: flex;
+  max-width: 95%;
   justify-content: space-between;
 }
 
@@ -254,4 +256,22 @@ table {
   padding-left: 5%;
   padding-right: 5%;
   margin-left: 20%;
+}
+
+.order {
+  font-size: 120%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.icon {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.ordering {
+  min-width: 200%;
+  padding-right: 50%;
 }
