@@ -727,7 +727,15 @@ export class FilterComponent implements OnInit {
           this.recentPage = 1
           const isSold = this.selectedFilter.value === 'sold';
           const selectedFilterValue = isSold ? this.secondarySelectedFilter.value : this.selectedFilter.value;
-          this.httpService.getFilteredCars(formValue, selectedFilterValue, isSold.toString(), this.PAGE_LIMIT.toString(), '0').subscribe(data => {
+          this.httpService.getFilteredCars(
+            formValue,
+            selectedFilterValue,
+            isSold.toString(),
+            this.PAGE_LIMIT.toString(),
+            '0',
+            this.selectedOrganizer.value,
+            this.selectedOrganizer.direction.toString()
+          ).subscribe(data => {
             if (!data) {
               this.noMatch = true;
             } else {
@@ -747,7 +755,15 @@ export class FilterComponent implements OnInit {
             }
           });
         } else {
-          this.httpService.getAllCars(false, this.PAGE_LIMIT, 0).subscribe(data => {
+          const orderBy = this.selectedOrganizer != null ? this.selectedOrganizer.value : null;
+          const orderDirection = this.selectedOrganizer != null ? this.selectedOrganizer.direction.toString() : null;
+          this.httpService.getAllCars(
+            false,
+            this.PAGE_LIMIT,
+            0,
+            orderBy,
+            orderDirection
+          ).subscribe(data => {
             this.selectedCars = data.cars;
             this.searchParameters = new SearchParameters(null, null, false, 1, data.quantity);
             sessionStorage.setItem('searchParameters', JSON.stringify(this.searchParameters));
@@ -769,7 +785,13 @@ export class FilterComponent implements OnInit {
     this.selectedOrganizer = null;
     sessionStorage.removeItem('clickedCarIndex');
     this.clearSelectedCars();
-    this.httpService.getAllCars(isSold, this.PAGE_LIMIT, 0).subscribe(data => {
+    this.httpService.getAllCars(
+      isSold,
+      this.PAGE_LIMIT,
+      0,
+      null,
+      null
+    ).subscribe(data => {
       this.selectedCars = data.cars;
       this.searchParameters = new SearchParameters(null, null, isSold, 1, data.quantity);
       sessionStorage.setItem('searchParameters', JSON.stringify(this.searchParameters));
@@ -1751,8 +1773,16 @@ export class FilterComponent implements OnInit {
   public goToPage(pageNumber: number) {
     this.recentPage = pageNumber;
     const OFFSET = (pageNumber - 1) * this.PAGE_LIMIT;
+    const orderBy = this.selectedOrganizer != null ? this.selectedOrganizer.value : null;
+    const orderDirection = this.selectedOrganizer != null ? this.selectedOrganizer.direction.toString() : null;
     if (null == this.searchParameters.searchedText && null == this.searchParameters.searchBy) {
-      this.httpService.getAllCars(this.searchParameters.isSold, this.PAGE_LIMIT, OFFSET).subscribe(data => {
+      this.httpService.getAllCars(
+        this.searchParameters.isSold,
+        this.PAGE_LIMIT,
+        OFFSET,
+        orderBy,
+        orderDirection
+      ).subscribe(data => {
         this.selectedCars = data.cars;
         this.searchParameters = new SearchParameters(null, null, this.searchParameters.isSold, pageNumber, data.quantity);
         sessionStorage.setItem('searchParameters', JSON.stringify(this.searchParameters));
@@ -1760,11 +1790,14 @@ export class FilterComponent implements OnInit {
       });
     } else {
       this.httpService.getFilteredCars(
-          this.searchParameters.searchedText,
-          this.searchParameters.searchBy,
-          this.searchParameters.isSold.toString(),
-          this.PAGE_LIMIT.toString(),
-          OFFSET.toString()).subscribe(data => {
+        this.searchParameters.searchedText,
+        this.searchParameters.searchBy,
+        this.searchParameters.isSold.toString(),
+        this.PAGE_LIMIT.toString(),
+        OFFSET.toString(),
+        orderBy,
+        orderDirection
+      ).subscribe(data => {
         if (!data) {
           this.noMatch = true;
         } else {

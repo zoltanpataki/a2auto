@@ -88,26 +88,64 @@ export class HttpService {
     });
   }
 
-  public getAllCars(isSold: boolean, limit: number, offset: number): Observable<any> {
+  public getAllCars(
+    isSold: boolean,
+    limit: number,
+    offset: number,
+    orderBy: string,
+    orderDirection: string
+  ): Observable<any> {
     const urlPostFix = `getAllCars`;
-    const params = new HttpParams()
-      .set('isSold', isSold.toString())
-      .set('limit', limit.toString())
-      .set('offset', offset.toString());
+    let params;
+    if (orderBy != null && orderDirection != null) {
+      params = new HttpParams()
+        .set('isSold', isSold.toString())
+        .set('limit', limit.toString())
+        .set('offset', offset.toString())
+        .set('orderBy', orderBy)
+        .set('orderDirection', orderDirection);
+    } else {
+      params = new HttpParams()
+        .set('isSold', isSold.toString())
+        .set('limit', limit.toString())
+        .set('offset', offset.toString());
+    }
+
     return this.http.get(this.carServerUrl + urlPostFix, {
       headers: httpOptions.headers,
       params: params
     });
   }
 
-  public getFilteredCars(filter: string, filterType: string, isSold: string, limit: string, offset: string): Observable<any> {
+  public getFilteredCars(
+    filter: string,
+    filterType: string,
+    isSold: string,
+    limit: string,
+    offset: string,
+    orderBy: string,
+    orderDirection: string
+  ): Observable<any> {
     const urlPostFix = 'getFilteredCars';
-    const params = new HttpParams()
-      .set('filter', filter)
-      .set('filterType', filterType)
-      .set('isSold', isSold)
-      .set('limit', limit)
-      .set('offset', offset);
+    let params;
+    if (orderBy != null && orderDirection != null) {
+      params = new HttpParams()
+        .set('filter', filter)
+        .set('filterType', filterType)
+        .set('isSold', isSold)
+        .set('limit', limit)
+        .set('offset', offset)
+        .set('orderBy', orderBy)
+        .set('orderDirection', orderDirection);
+    } else {
+      params = new HttpParams()
+        .set('filter', filter)
+        .set('filterType', filterType)
+        .set('isSold', isSold)
+        .set('limit', limit)
+        .set('offset', offset)
+        .set('orderBy', 'notOrdered');
+    }
     return this.http.get(this.carServerUrl + urlPostFix, {
       headers: httpOptions.headers,
       params: params

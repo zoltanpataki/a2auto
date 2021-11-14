@@ -164,7 +164,7 @@
   </form>
 </div>
 <div class="pageNumbersContainer">
-  <div class="pageNumbers" *ngIf="pageNumber>0" fxLayout="row" fxFlex="100" fxLayoutAlign="end">
+  <div class="pageNumbers" *ngIf="pageNumber && pageNumber>0" fxLayout="row" fxFlex="100" fxLayoutAlign="end">
     <mat-panel-title class="pageNumbers" fxFlex="5" *ngFor="let num of pageNumber | numberList: recentPage; trackBy: trackByFn">
       <button *ngIf="num == recentPage" type="button" (click)="goToPage(num)" class="recentPage" mat-mini-fab><b>{{num}}</b></button>
       <button *ngIf="num != recentPage" type="button" (click)="goToPage(num)" class="miniFab" mat-mini-fab><b>{{num}}</b></button>

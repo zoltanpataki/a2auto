@@ -420,49 +420,4 @@ public class Car {
     public void setSold(boolean sold) {
         this.sold = sold;
     }
-
-    @Override
-    public String toString() {
-        return "Car{" +
-                "id=" + id +
-                ", user=" + user +
-                ", company=" + company +
-                ", name='" + name + '\'' +
-                ", type='" + type + '\'' +
-                ", color='" + color + '\'' +
-                ", plateNumber='" + plateNumber + '\'' +
-                ", specification='" + specification + '\'' +
-                ", bodyNumber='" + bodyNumber + '\'' +
-                ", engineNumber='" + engineNumber + '\'' +
-                ", capacity=" + capacity +
-                ", vintage=" + vintage +
-                ", mileage=" + mileage +
-                ", motExpiry=" + motExpiry +
-                ", price=" + price +
-                ", purchasingPrice=" + purchasingPrice +
-                ", cost=" + cost +
-                ", costDescriptions='" + costDescriptions + '\'' +
-                ", dateOfArrival=" + dateOfArrival +
-                ", dateOfLeaving=" + dateOfLeaving +
-                ", typeOfBuying='" + typeOfBuying + '\'' +
-                ", inheritanceTax=" + inheritanceTax +
-                ", downPayment=" + downPayment +
-                ", payedAmount=" + payedAmount +
-                ", kwh=" + kwh +
-                ", carRegistry='" + carRegistry + '\'' +
-                ", documentsHandover=" + documentsHandover +
-                ", dueOfContract=" + dueOfContract +
-                ", carHandover=" + carHandover +
-                ", dateOfContract=" + dateOfContract +
-                ", sold=" + sold +
-                ", carOrTruck='" + carOrTruck + '\'' +
-                ", salesman='" + salesman + '\'' +
-                ", insuranceNumber='" + insuranceNumber + '\'' +
-                ", weight=" + weight +
-                ", maxWeightAllowed=" + maxWeightAllowed +
-                ", fuelType='" + fuelType + '\'' +
-                ", nameOfBuyer='" + nameOfBuyer + '\'' +
-                ", firstRegistration=" + firstRegistration +
-                '}';
-    }
 }

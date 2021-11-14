@@ -213,31 +213,4 @@ public class Users {
     public void setHealthcareNumber(String healthcareNumber) {
         this.healthcareNumber = healthcareNumber;
     }
-
-    @Override
-    public String toString() {
-        return "Users{" +
-                "id=" + id +
-                ", cars=" + cars +
-                ", fullName='" + fullName + '\'' +
-                ", birthName='" + birthName + '\'' +
-                ", zipCode='" + zipCode + '\'' +
-                ", city='" + city + '\'' +
-                ", address='" + address + '\'' +
-                ", birthPlace='" + birthPlace + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", email='" + email + '\'' +
-                ", nameOfMother='" + nameOfMother + '\'' +
-                ", birthDate=" + birthDate +
-                ", personNumber='" + personNumber + '\'' +
-                ", idCardNumber='" + idCardNumber + '\'' +
-                ", dueTimeOfIdCard='" + dueTimeOfIdCard + '\'' +
-                ", drivingLicenceNumber='" + drivingLicenceNumber + '\'' +
-                ", dueTimeOfDrivingLicence='" + dueTimeOfDrivingLicence + '\'' +
-                ", taxNumber='" + taxNumber + '\'' +
-                ", healthcareNumber='" + healthcareNumber + '\'' +
-                ", nationality='" + nationality + '\'' +
-                ", order=" + orders +
-                '}';
-    }
 }

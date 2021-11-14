@@ -12,7 +12,9 @@ public interface CarsController {
     ResponseEntity<Object> getAllCars(
             @RequestParam String isSold,
             @RequestParam String limit,
-            @RequestParam String offset
+            @RequestParam String offset,
+            @RequestParam(required = false) String orderBy,
+            @RequestParam(required = false) String orderDirection
     );
 
     @PostMapping("/saveCar")
@@ -24,7 +26,9 @@ public interface CarsController {
             @RequestParam String filterType,
             @RequestParam String isSold,
             @RequestParam String limit,
-            @RequestParam String offset
+            @RequestParam String offset,
+            @RequestParam(required = false) String orderBy,
+            @RequestParam(required = false) String orderDirection
     );
 
     @GetMapping("/getSingleCarById/{id}")
