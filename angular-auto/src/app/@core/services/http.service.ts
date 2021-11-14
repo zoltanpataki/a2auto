@@ -7,6 +7,7 @@ import {Salesmen} from "../models/salesmen";
 import {Witness} from "../models/witness";
 import {Utility} from "../models/utility";
 import {InheritanceTax} from "../models/inheritanceTax";
+import {Direction} from "../models/organizer";
 
 const httpOptions = {
   headers: new HttpHeaders({

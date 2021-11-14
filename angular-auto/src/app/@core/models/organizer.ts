@@ -15,7 +15,7 @@ export class Organizer {
 }
 
 export enum Direction {
-  up,
-  down
+  up = 'up',
+  down = 'down'
 }
 

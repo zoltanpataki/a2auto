@@ -615,8 +615,9 @@ export class FilterComponent implements OnInit {
   public checkSelectedOrganizer() {
     const selectedDirection = this.selectedOrganizer.direction;
     const organizerType = this.selectedOrganizer.value;
-    this.sortSelectedCars(this.selectedCars, organizerType, selectedDirection);
-    sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
+    this.goToPage(1);
+    //this.sortSelectedCars(this.selectedCars, organizerType, selectedDirection);
+    //sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
     sessionStorage.setItem('selectedOrganizer', JSON.stringify(this.selectedOrganizer));
   }
 
@@ -756,7 +757,7 @@ export class FilterComponent implements OnInit {
           });
         } else {
           const orderBy = this.selectedOrganizer != null ? this.selectedOrganizer.value : null;
-          const orderDirection = this.selectedOrganizer != null ? this.selectedOrganizer.direction.toString() : null;
+          const orderDirection = this.selectedOrganizer != null ? this.selectedOrganizer.direction : null;
           this.httpService.getAllCars(
             false,
             this.PAGE_LIMIT,
@@ -1774,7 +1775,7 @@ export class FilterComponent implements OnInit {
     this.recentPage = pageNumber;
     const OFFSET = (pageNumber - 1) * this.PAGE_LIMIT;
     const orderBy = this.selectedOrganizer != null ? this.selectedOrganizer.value : null;
-    const orderDirection = this.selectedOrganizer != null ? this.selectedOrganizer.direction.toString() : null;
+    const orderDirection = this.selectedOrganizer != null ? this.selectedOrganizer.direction : null;
     if (null == this.searchParameters.searchedText && null == this.searchParameters.searchBy) {
       this.httpService.getAllCars(
         this.searchParameters.isSold,
