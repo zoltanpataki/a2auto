@@ -57,7 +57,7 @@
     "domino": "^2.1.4",
     "express": "^4.15.2",
     "font-awesome": "^4.7.0",
-    "jspdf": "^1.5.3",
+    "jspdf": "^2.3.1",
     "ng2-currency-mask": "^5.3.1",
     "ngx-spinner": "^10.0.1",
     "rxjs": "~6.6.3",
