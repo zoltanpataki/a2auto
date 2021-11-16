@@ -35,4 +35,6 @@ export abstract class Constants {
   static readonly SELECTED_CARS_QUANTITY_NOT_KNOWN_YET: number = null;
   static readonly NULL_IS_SOLD: boolean = null;
   static readonly NULL_PAGE_NUMBER: number = null;
+  static readonly NULL_ORDER_BY: string = null;
+  static readonly NULL_ORDER_DIRECTION: string = null;
 }

@@ -31,7 +31,9 @@ export class CarEffects {
     switchMap(carFilterRequest => this._httpService.getAllCars(
         carFilterRequest.isSold,
         carFilterRequest.pageLimit,
-        carFilterRequest.pageOffset
+        carFilterRequest.pageOffset,
+        carFilterRequest.orderBy,
+        carFilterRequest.orderDirection
       )
     ),
     switchMap(carsAndQuantity => {
@@ -51,7 +53,9 @@ export class CarEffects {
       carFilterRequest.selectedFilterType,
       carFilterRequest.isSold,
       carFilterRequest.pageLimit,
-      carFilterRequest.pageOffset
+      carFilterRequest.pageOffset,
+      carFilterRequest.orderBy,
+      carFilterRequest.orderDirection
     )
       .pipe(
         switchMap(carsAndQuantity => {

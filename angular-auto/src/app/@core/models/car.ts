@@ -128,13 +128,25 @@ export class CarFilterRequest {
   isSold: boolean;
   pageLimit: number;
   pageOffset: number;
+  orderBy: string;
+  orderDirection: string;
 
-  constructor(carSearchText: string, selectedFilterType: string, isSold: boolean, pageLimit: number, pageOffset: number) {
+  constructor(
+    carSearchText: string,
+    selectedFilterType: string,
+    isSold: boolean,
+    pageLimit: number,
+    pageOffset: number,
+    orderBy: string,
+    orderDirection: string
+  ) {
     this.carSearchText = carSearchText;
     this.selectedFilterType = selectedFilterType;
     this.isSold = isSold;
     this.pageLimit = pageLimit;
     this.pageOffset = pageOffset;
+    this.orderBy = orderBy;
+    this.orderDirection = orderDirection;
   }
 }
 

@@ -23,11 +23,19 @@ public class CarsControllerImpl implements CarsController {
 
 
     @Override
-    public ResponseEntity<Object> getAllCars(String isSold, String limit, String offset) {
+    public ResponseEntity<Object> getAllCars(
+            String isSold,
+            String limit,
+            String offset,
+            String orderBy,
+            String orderDirection
+    ) {
         return carService.getAllCars(
                 Boolean.parseBoolean(isSold),
                 Integer.parseInt(limit),
-                Integer.parseInt(offset)
+                Integer.parseInt(offset),
+                orderBy,
+                orderDirection
         );
     }
 
@@ -37,13 +45,23 @@ public class CarsControllerImpl implements CarsController {
     }
 
     @Override
-    public ResponseEntity<Object> getFilteredCars(String filter, String filterType, String isSold, String limit, String offset) {
+    public ResponseEntity<Object> getFilteredCars(
+            String filter,
+            String filterType,
+            String isSold,
+            String limit,
+            String offset,
+            String orderBy,
+            String orderDirection
+    ) {
         return carService.getFilteredCars(
                 filter,
                 filterType,
                 Boolean.parseBoolean(isSold),
                 Integer.parseInt(limit),
-                Integer.parseInt(offset)
+                Integer.parseInt(offset),
+                orderBy,
+                orderDirection
         );
     }
 

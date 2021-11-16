@@ -29,23 +29,91 @@
       <i class="material-icons allCars soldCars" (click)="getAllCars(true)" matTooltip="Összes eladott autó betöltése">time_to_leave</i>
     </div>
     <div class="quantityContainer" *ngIf="searchParameters && searchParameters.totalQuantity">
-      <p class="quantity" mat-flat-button color="accent">{{searchParameters.totalQuantity}}&#160;db</p>
+      <p class="quantity" color="accent">{{searchParameters.totalQuantity}}&#160;db&#160;</p>
     </div>
   </div>
-  <div *ngIf="selectedCars">
-    <mat-form-field>
+  <div *ngIf="selectedCars && selectedCars.length > 0">
+    <mat-form-field class="ordering">
       <mat-label>Rendezés</mat-label>
       <mat-select [(ngModel)]="selectedOrganizer" name="organizer">
         <mat-select-trigger *ngIf="selectedOrganizer">
-          <div class="selectItems">
-            <i *ngIf="selectedOrganizer.direction == direction.down" class="material-icons orderIcon">text_rotation_angledown</i>
-            <i *ngIf="selectedOrganizer.direction == direction.up" class="material-icons orderIcon">text_rotation_angleup</i> &#160;{{selectedOrganizer.viewValue}}
+          <div *ngIf="selectedOrganizer.direction == direction.down">
+            <div class="order" fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
+              <div class="icon" fxFlex="15">
+                <i class="material-icons" style="{{'color: ' + selectedOrganizer.iconColor}}">{{selectedOrganizer.icon}}</i>
+              </div>
+              <div fxFlex="5">
+                Z
+              </div>
+              <div class="icon" fxFlex="18">
+                <i class="material-icons arrow">trending_flat</i>
+              </div>
+              <div fxFlex="12">
+                A
+              </div>
+              <div fxFlex="50">
+                {{selectedOrganizer.viewValue}}
+              </div>
+            </div>
+          </div>
+          <div *ngIf="selectedOrganizer.direction == direction.up">
+            <div class="order" fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
+              <div class="icon" fxFlex="15">
+                <i class="material-icons" style="{{'color: ' + selectedOrganizer.iconColor}}">{{selectedOrganizer.icon}}</i>
+              </div>
+              <div fxFlex="5">
+                A
+              </div>
+              <div class="icon" fxFlex="18">
+                <i class="material-icons">trending_flat</i>
+              </div>
+              <div fxFlex="12">
+                Z
+              </div>
+              <div fxFlex="50">
+                {{selectedOrganizer.viewValue}}
+              </div>
+            </div>
           </div>
         </mat-select-trigger>
         <mat-option (click)="checkSelectedOrganizer()" *ngFor="let organizer of organizers; trackBy: trackByFn" [value]="organizer">
-          <div class="selectItems">
-            <i *ngIf="organizer.direction == direction.up" class="material-icons orderIcon">text_rotation_angleup</i>
-            <i *ngIf="organizer.direction == direction.down" class="material-icons orderIcon">text_rotation_angledown</i> &#160;{{organizer.viewValue}}
+          <div *ngIf="organizer.direction == direction.up">
+            <div class="order" fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
+              <div class="icon" fxFlex="15">
+                <i class="material-icons" style="{{'color: ' + organizer.iconColor}}">{{organizer.icon}}</i>
+              </div>
+              <div fxFlex="5">
+                A
+              </div>
+              <div class="icon" fxFlex="18">
+                <i class="material-icons">trending_flat</i>
+              </div>
+              <div fxFlex="12">
+                Z
+              </div>
+              <div fxFlex="50">
+                {{organizer.viewValue}}
+              </div>
+            </div>
+          </div>
+          <div *ngIf="organizer.direction == direction.down">
+            <div class="order" fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">
+              <div class="icon" fxFlex="15">
+                <i class="material-icons" style="{{'color: ' + organizer.iconColor}}">{{organizer.icon}}</i>
+              </div>
+              <div fxFlex="5">
+                Z
+              </div>
+              <div class="icon" fxFlex="18">
+                <i class="material-icons">trending_flat</i>
+              </div>
+              <div fxFlex="12">
+                A
+              </div>
+              <div fxFlex="50">
+                {{organizer.viewValue}}
+              </div>
+            </div>
           </div>
         </mat-option>
       </mat-select>
@@ -96,14 +164,14 @@
   </form>
 </div>
 <div class="pageNumbersContainer">
-  <div class="pageNumbers" *ngIf="numberOfPages>0" fxLayout="row" fxFlex="100" fxLayoutAlign="end">
+  <div class="pageNumbers" *ngIf="numberOfPages && numberOfPages>0" fxLayout="row" fxFlex="100" fxLayoutAlign="end">
     <mat-panel-title class="pageNumbers" fxFlex="5" *ngFor="let num of numberOfPages | numberList: recentPage; trackBy: trackByFn">
       <button *ngIf="num == recentPage" type="button" (click)="goToPage(num)" class="recentPage" mat-mini-fab><b>{{num}}</b></button>
       <button *ngIf="num != recentPage" type="button" (click)="goToPage(num)" class="miniFab" mat-mini-fab><b>{{num}}</b></button>
     </mat-panel-title>
   </div>
 </div>
-<div class="selectedCars" *ngIf="selectedCars">
+<div class="selectedCars" *ngIf="selectedCars && selectedCars.length>0">
   <mat-accordion>
     <mat-card>
       <div class="selectedCarHeaders" fxLayout="row" fxFlex="100" fxLayoutAlign="space-between">

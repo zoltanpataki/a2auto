@@ -139,8 +139,23 @@ export class FilterComponent implements OnInit {
     return Direction;
   }
   public countInCarSupplementForm: FormGroup;
-  public filters = [{viewValue: 'Modell', value: 'name'}, {viewValue: 'Rendszám', value: 'plateNumber'}, {viewValue: 'Márka', value: 'type'}, {viewValue: 'Összes', value: 'all'}, {viewValue: 'Eladott', value: 'sold'}];
-  public organizers = [{viewValue: 'Márka', value: 'type', direction: Direction.up}, {viewValue: 'Márka', value: 'type', direction: Direction.down}, {viewValue: 'Vásárló', value: 'buyer', direction: Direction.up}, {viewValue: 'Vásárló', value: 'buyer', direction: Direction.down}, {viewValue: 'Modell', value: 'name', direction: Direction.up}, {viewValue: 'Modell', value: 'name', direction: Direction.down}, {viewValue: 'Rendszám', value: 'plateNumber', direction: Direction.up}, {viewValue: 'Rendszám', value: 'plateNumber', direction: Direction.down}];
+  public filters = [
+    {viewValue: 'Modell', value: 'name'},
+    {viewValue: 'Rendszám', value: 'plateNumber'},
+    {viewValue: 'Márka', value: 'type'},
+    {viewValue: 'Összes', value: 'all'},
+    {viewValue: 'Eladott', value: 'sold'}
+  ];
+  public organizers = [
+    {viewValue: 'Márka', value: 'type', direction: Direction.up, icon: 'loyalty', iconColor: '#6C6EA0'},
+    {viewValue: 'Márka', value: 'type', direction: Direction.down, icon: 'loyalty', iconColor: '#6C6EA0'},
+    {viewValue: 'Vásárló', value: 'buyer', direction: Direction.up, icon: 'person', iconColor: '#F4D03F'},
+    {viewValue: 'Vásárló', value: 'buyer', direction: Direction.down, icon: 'person', iconColor: '#F4D03F'},
+    {viewValue: 'Model', value: 'name', direction: Direction.up, icon: 'webhook', iconColor: '#58D68D'},
+    {viewValue: 'Model', value: 'name', direction: Direction.down, icon: 'webhook', iconColor: '#58D68D'},
+    {viewValue: 'Rendszám', value: 'plateNumber', direction: Direction.up, icon: 'fingerprint', iconColor: 'deeppink'},
+    {viewValue: 'Rendszám', value: 'plateNumber', direction: Direction.down, icon: 'fingerprint', iconColor: 'deeppink'}
+  ];
   public secondaryFilters = [{viewValue: 'Modell', value: 'name'}, {viewValue: 'Rendszám', value: 'plateNumber'}, {viewValue: 'Márka', value: 'type'}];
   public userFilters = [{viewValue: 'Név', value: 'name'}, {viewValue: 'Város', value: 'city'}];
   public selectedFilter: SelectedFilter;
@@ -384,24 +399,27 @@ export class FilterComponent implements OnInit {
     //subscriptions
 
     this.selectedCarsAndQuantity$.subscribe(selectedCarsAndQuantity => {
-      this.selectedCars = selectedCarsAndQuantity.cars;
-      if (null != this.selectedCars) {
-        //get info whether the search was for sold or active cars by checking the first item of the car list
-        const sold = this.selectedCars[0].sold
-        sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
-        this.numberOfPages = Math.floor(selectedCarsAndQuantity.quantity / Constants.PAGE_LIMIT);
-        if (null != this.searchParameters) {
-          this.searchParameters.totalQuantity = selectedCarsAndQuantity.quantity;
-        } else {
-          this.searchParameters = new SearchParameters(
-            Constants.NULL_CAR_SEARCH_TEXT,
-            Constants.NULL_SELECTED_FILTER_TYPE,
-            Constants.NULL_IS_SOLD,
-            Constants.NULL_PAGE_NUMBER,
-            selectedCarsAndQuantity.quantity
-          )
+      console.log(selectedCarsAndQuantity);
+      if (null != selectedCarsAndQuantity) {
+        this.selectedCars = selectedCarsAndQuantity.cars;
+        if (null != this.selectedCars) {
+          //get info whether the search was for sold or active cars by checking the first item of the car list
+          const sold = this.selectedCars[0].sold
+          sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
+          this.numberOfPages = Math.floor(selectedCarsAndQuantity.quantity / Constants.PAGE_LIMIT);
+          if (null != this.searchParameters) {
+            this.searchParameters.totalQuantity = selectedCarsAndQuantity.quantity;
+          } else {
+            this.searchParameters = new SearchParameters(
+              Constants.NULL_CAR_SEARCH_TEXT,
+              Constants.NULL_SELECTED_FILTER_TYPE,
+              Constants.NULL_IS_SOLD,
+              Constants.NULL_PAGE_NUMBER,
+              selectedCarsAndQuantity.quantity
+            )
+          }
+          sessionStorage.setItem('searchParameters', JSON.stringify(this.searchParameters));
         }
-        sessionStorage.setItem('searchParameters', JSON.stringify(this.searchParameters));
       }
     });
 
@@ -1122,8 +1140,9 @@ export class FilterComponent implements OnInit {
   public checkSelectedOrganizer() {
     const selectedDirection = this.selectedOrganizer.direction;
     const organizerType = this.selectedOrganizer.value;
-    this.sortSelectedCars(this.selectedCars, organizerType, selectedDirection);
-    sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
+    this.goToPage(1);
+    //this.sortSelectedCars(this.selectedCars, organizerType, selectedDirection);
+    //sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
     sessionStorage.setItem('selectedOrganizer', JSON.stringify(this.selectedOrganizer));
   }
 
@@ -1235,7 +1254,9 @@ export class FilterComponent implements OnInit {
             selectedFilterType,
             isSold,
             Constants.PAGE_LIMIT,
-            Constants.FIRST_PAGE_OFFSET
+            Constants.FIRST_PAGE_OFFSET,
+            Constants.NULL_ORDER_BY,
+            Constants.NULL_ORDER_DIRECTION
           );
           const searchParameters = new SearchParameters(carSearchText, selectedFilterType, isSold, 1, Constants.SELECTED_CARS_QUANTITY_NOT_KNOWN_YET)
           this._store.dispatch(new UpdateSearchParameters(searchParameters));
@@ -1260,7 +1281,9 @@ export class FilterComponent implements OnInit {
       Constants.NULL_SELECTED_FILTER_TYPE,
       isSold,
       Constants.PAGE_LIMIT,
-      Constants.FIRST_PAGE_OFFSET
+      Constants.FIRST_PAGE_OFFSET,
+      Constants.NULL_ORDER_BY,
+      Constants.NULL_ORDER_DIRECTION
     );
     const searchParameters = new SearchParameters(null, null, isSold, 1, Constants.SELECTED_CARS_QUANTITY_NOT_KNOWN_YET);
     this._store.dispatch(new UpdateSearchParameters(searchParameters));
@@ -2160,6 +2183,8 @@ export class FilterComponent implements OnInit {
   public goToPage(pageNumber: number) {
     this.recentPage = pageNumber;
     const OFFSET = (pageNumber - 1) * Constants.PAGE_LIMIT;
+    const orderBy = this.selectedOrganizer != null ? this.selectedOrganizer.value : null;
+    const orderDirection = this.selectedOrganizer != null ? this.selectedOrganizer.direction : null;
     if (null == this.searchParameters.searchedText && null == this.searchParameters.searchBy) {
       const searchParameters = new SearchParameters(
         null,
@@ -2174,7 +2199,9 @@ export class FilterComponent implements OnInit {
         Constants.NULL_SELECTED_FILTER_TYPE,
         this.searchParameters.isSold,
         Constants.PAGE_LIMIT,
-        OFFSET
+        OFFSET,
+        orderBy,
+        orderDirection
       );
       this._store.dispatch(new GetCars(carFilterRequest));
     } else {
@@ -2191,7 +2218,9 @@ export class FilterComponent implements OnInit {
         this.searchParameters.searchBy,
         this.searchParameters.isSold,
         Constants.PAGE_LIMIT,
-        OFFSET
+        OFFSET,
+        orderBy,
+        orderDirection
       );
       this._store.dispatch(new GetFilteredCars(carFilterRequest));
     }
