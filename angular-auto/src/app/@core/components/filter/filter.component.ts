@@ -725,7 +725,7 @@ export class FilterComponent implements OnInit {
 
         if (this.selectedFilter.value !== 'all') {
           this.pageNumber = 0;
-          this.recentPage = 1
+          this.recentPage = 1;
           const isSold = this.selectedFilter.value === 'sold';
           const selectedFilterValue = isSold ? this.secondarySelectedFilter.value : this.selectedFilter.value;
           this.httpService.getFilteredCars(
@@ -734,8 +734,8 @@ export class FilterComponent implements OnInit {
             isSold.toString(),
             this.PAGE_LIMIT.toString(),
             '0',
-            this.selectedOrganizer.value,
-            this.selectedOrganizer.direction.toString()
+            null,
+            null
           ).subscribe(data => {
             if (!data) {
               this.noMatch = true;

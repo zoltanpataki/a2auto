@@ -29,7 +29,7 @@
       <i class="material-icons allCars soldCars" (click)="getAllCars(true)" matTooltip="Összes eladott autó betöltése">time_to_leave</i>
     </div>
     <div class="quantityContainer" *ngIf="searchParameters && searchParameters.totalQuantity">
-      <p class="quantity" mat-flat-button color="accent">{{searchParameters.totalQuantity}}&#160;db</p>
+      <p class="quantity" color="accent">{{searchParameters.totalQuantity}}&#160;db&#160;</p>
     </div>
   </div>
   <div *ngIf="selectedCars && selectedCars.length > 0">

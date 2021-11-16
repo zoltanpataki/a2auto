@@ -50,40 +50,35 @@ public class CarService {
             String orderBy,
             String orderDirection
     ) {
-        try {
-            if (!isSold) {
-                List<Car> cars = carRepository
-                        .findBySoldOrderByIdDesc(IS_SOLD_FALSE)
-                        .orElseThrow(() -> new EntityNotFoundException("Cars are not found order by id!"));
-                List<Car> pagedCars;
-                if (orderBy == null) {
-                    pagedCars = carRepository
-                            .findBySoldOrderByIdDesc(IS_SOLD_FALSE, createPageRequest(limit, offset))
-                            .orElseThrow(() -> new EntityNotFoundException("Paged cars are not found order by id!"));
-                    System.out.println(pagedCars);
-                } else {
-                    pagedCars = getPagedCars(IS_SOLD_FALSE, orderBy, orderDirection, limit, offset);
-                }
-                CarsAndQuantity carsAndQuantity = new CarsAndQuantity(cars.size(), pagedCars);
-                return new ResponseEntity<>(carsAndQuantity, HttpStatus.OK);
+        if (!isSold) {
+            List<Car> cars = carRepository
+                    .findBySoldOrderByIdDesc(IS_SOLD_FALSE)
+                    .orElseThrow(() -> new EntityNotFoundException("Cars are not found order by id!"));
+            List<Car> pagedCars;
+            if (orderBy == null) {
+                pagedCars = carRepository
+                        .findBySoldOrderByIdDesc(IS_SOLD_FALSE, createPageRequest(limit, offset))
+                        .orElseThrow(() -> new EntityNotFoundException("Paged cars are not found order by id!"));
+                System.out.println(pagedCars);
             } else {
-                List<Car> cars = carRepository
-                        .findBySoldOrderByDateOfLeavingDesc(IS_SOLD_TRUE)
-                        .orElseThrow(() -> new EntityNotFoundException("Sold Cars are not found order by date of leaving!"));
-                List<Car> pagedCars;
-                if (orderBy == null) {
-                    pagedCars = carRepository
-                            .findBySoldOrderByDateOfLeavingDesc(IS_SOLD_TRUE, createPageRequest(limit, offset))
-                            .orElseThrow(() -> new EntityNotFoundException("Sold Paged cars are not found order by date of leaving!"));
-                } else {
-                    pagedCars = getPagedCars(IS_SOLD_TRUE, orderBy, orderDirection, limit, offset);
-                }
-                CarsAndQuantity carsAndQuantity = new CarsAndQuantity(cars.size(), pagedCars);
-                return new ResponseEntity<>(carsAndQuantity, HttpStatus.OK);
+                pagedCars = getPagedCars(IS_SOLD_FALSE, orderBy, orderDirection, limit, offset);
             }
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-            throw new ConnectionTemporarilyLostException("Couldn't get all cars at the moment!");
+            CarsAndQuantity carsAndQuantity = new CarsAndQuantity(cars.size(), pagedCars);
+            return new ResponseEntity<>(carsAndQuantity, HttpStatus.OK);
+        } else {
+            List<Car> cars = carRepository
+                    .findBySoldOrderByDateOfLeavingDesc(IS_SOLD_TRUE)
+                    .orElseThrow(() -> new EntityNotFoundException("Sold Cars are not found order by date of leaving!"));
+            List<Car> pagedCars;
+            if (orderBy == null) {
+                pagedCars = carRepository
+                        .findBySoldOrderByDateOfLeavingDesc(IS_SOLD_TRUE, createPageRequest(limit, offset))
+                        .orElseThrow(() -> new EntityNotFoundException("Sold Paged cars are not found order by date of leaving!"));
+            } else {
+                pagedCars = getPagedCars(IS_SOLD_TRUE, orderBy, orderDirection, limit, offset);
+            }
+            CarsAndQuantity carsAndQuantity = new CarsAndQuantity(cars.size(), pagedCars);
+            return new ResponseEntity<>(carsAndQuantity, HttpStatus.OK);
         }
     }
 
@@ -149,167 +144,151 @@ public class CarService {
         switch (filterType) {
             case "plateNumber":
                 if (isSold) {
-                    try {
-                        List<Car> soldCarsByPlateNumber = carRepository
-                                .findByPlateNumberAndSoldTrue(filter)
-                                .orElseThrow(() -> new EntityNotFoundException("Sold cars are not found by plate number!"));
-                        List<Car> pagedSoldCarsByPlateNumber = new ArrayList<>();
-                        if (orderBy == null) {
-                            pagedSoldCarsByPlateNumber = carRepository
-                                    .findByPlateNumberAndSoldTrueOrderByDateOfLeavingDesc(filter, createPageRequest(limit, offset))
-                                    .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by plate number order by date of leaving!"));
-                        }
-                        if ("type".equals(orderBy)) {
-                            pagedSoldCarsByPlateNumber = "up".equals(orderDirection) ?
-                                    carRepository
-                                            .findByPlateNumberAndSoldTrueOrderByTypeAsc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by plate number order by type in asc!")) :
-                                    carRepository
-                                            .findByPlateNumberAndSoldTrueOrderByTypeDesc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by plate number order by type in desc!"));
-                        }
-                        if ("name".equals(orderBy)) {
-                            pagedSoldCarsByPlateNumber = "up".equals(orderDirection) ?
-                                    carRepository
-                                            .findByPlateNumberAndSoldTrueOrderByNameAsc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Sold Paged cars are not found by plate number order by name in asc!")) :
-                                    carRepository
-                                            .findByPlateNumberAndSoldTrueOrderByNameDesc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by plate number order by name in desc!"));
-                        }
-                        if ("plateNumber".equals(orderBy)) {
-                            pagedSoldCarsByPlateNumber = "up".equals(orderDirection) ?
-                                    carRepository
-                                            .findByPlateNumberAndSoldTrueOrderByPlateNumberAsc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by plate number order by plate number in asc!")) :
-                                    carRepository
-                                            .findByPlateNumberAndSoldTrueOrderByPlateNumberDesc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by plate number order by plate number in desc!"));
-                        }
-                        if ("buyer".equals(orderBy)) {
-                            pagedSoldCarsByPlateNumber = "up".equals(orderDirection) ?
-                                    carRepository
-                                            .findByPlateNumberAndSoldTrueOrderByNameOfBuyerAsc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by plate number order by buyer in asc!")) :
-                                    carRepository
-                                            .findByPlateNumberAndSoldTrueOrderByNameOfBuyerDesc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by plate number order by buyer in desc!"));
-                        }
-                        CarsAndQuantity carsAndQuantity = new CarsAndQuantity(soldCarsByPlateNumber.size(), pagedSoldCarsByPlateNumber);
-                        return new ResponseEntity<>(carsAndQuantity, HttpStatus.OK);
-                    } catch (Exception e) {
-                        logger.info(e.getMessage());
-                        throw new ConnectionTemporarilyLostException("Couldn't get all cars at the moment!");
+                    List<Car> soldCarsByPlateNumber = carRepository
+                            .findByPlateNumberAndSoldTrue(filter)
+                            .orElseThrow(() -> new EntityNotFoundException("Sold cars are not found by plate number!"));
+                    List<Car> pagedSoldCarsByPlateNumber = new ArrayList<>();
+                    if (orderBy == null) {
+                        pagedSoldCarsByPlateNumber = carRepository
+                                .findByPlateNumberAndSoldTrueOrderByDateOfLeavingDesc(filter, createPageRequest(limit, offset))
+                                .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by plate number order by date of leaving!"));
                     }
+                    if ("type".equals(orderBy)) {
+                        pagedSoldCarsByPlateNumber = "up".equals(orderDirection) ?
+                                carRepository
+                                        .findByPlateNumberAndSoldTrueOrderByTypeAsc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by plate number order by type in asc!")) :
+                                carRepository
+                                        .findByPlateNumberAndSoldTrueOrderByTypeDesc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by plate number order by type in desc!"));
+                    }
+                    if ("name".equals(orderBy)) {
+                        pagedSoldCarsByPlateNumber = "up".equals(orderDirection) ?
+                                carRepository
+                                        .findByPlateNumberAndSoldTrueOrderByNameAsc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Sold Paged cars are not found by plate number order by name in asc!")) :
+                                carRepository
+                                        .findByPlateNumberAndSoldTrueOrderByNameDesc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by plate number order by name in desc!"));
+                    }
+                    if ("plateNumber".equals(orderBy)) {
+                        pagedSoldCarsByPlateNumber = "up".equals(orderDirection) ?
+                                carRepository
+                                        .findByPlateNumberAndSoldTrueOrderByPlateNumberAsc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by plate number order by plate number in asc!")) :
+                                carRepository
+                                        .findByPlateNumberAndSoldTrueOrderByPlateNumberDesc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by plate number order by plate number in desc!"));
+                    }
+                    if ("buyer".equals(orderBy)) {
+                        pagedSoldCarsByPlateNumber = "up".equals(orderDirection) ?
+                                carRepository
+                                        .findByPlateNumberAndSoldTrueOrderByNameOfBuyerAsc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by plate number order by buyer in asc!")) :
+                                carRepository
+                                        .findByPlateNumberAndSoldTrueOrderByNameOfBuyerDesc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by plate number order by buyer in desc!"));
+                    }
+                    CarsAndQuantity carsAndQuantity = new CarsAndQuantity(soldCarsByPlateNumber.size(), pagedSoldCarsByPlateNumber);
+                    return new ResponseEntity<>(carsAndQuantity, HttpStatus.OK);
                 } else {
-                    try {
-                        List<Car> activeCarsByPlateNumber = carRepository
-                                .findByPlateNumberAndSoldFalse(filter)
-                                .orElseThrow(() -> new EntityNotFoundException("Active cars are not found by plate number!"));
-                        List<Car> pagedActiveCarsByPlateNumber = new ArrayList<>();
-                        if (orderBy == null) {
-                            pagedActiveCarsByPlateNumber = carRepository
-                                    .findByPlateNumberAndSoldFalseOrderByIdDesc(filter, createPageRequest(limit, offset))
-                                    .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by plate number order by id!"));
-                        }
-                        if ("type".equals(orderBy)) {
-                            pagedActiveCarsByPlateNumber = "up".equals(orderDirection) ?
-                                    carRepository
-                                            .findByPlateNumberAndSoldFalseOrderByTypeAsc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by plate number order by type in asc!")) :
-                                    carRepository
-                                            .findByPlateNumberAndSoldFalseOrderByTypeDesc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by plate number order by type in desc!"));
-                        }
-                        if ("name".equals(orderBy)) {
-                            pagedActiveCarsByPlateNumber = "up".equals(orderDirection) ?
-                                    carRepository
-                                            .findByPlateNumberAndSoldFalseOrderByNameAsc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by plate number order by name in asc!")) :
-                                    carRepository
-                                            .findByPlateNumberAndSoldFalseOrderByNameDesc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by plate number order by name in desc!"));
-                        }
-                        if ("plateNumber".equals(orderBy)) {
-                            pagedActiveCarsByPlateNumber = "up".equals(orderDirection) ?
-                                    carRepository
-                                            .findByPlateNumberAndSoldFalseOrderByPlateNumberAsc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by plate number order by plate number in asc!")) :
-                                    carRepository
-                                            .findByPlateNumberAndSoldFalseOrderByPlateNumberDesc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by plate number order by plate number in desc!"));
-                        }
-                        if ("buyer".equals(orderBy)) {
-                            pagedActiveCarsByPlateNumber = "up".equals(orderDirection) ?
-                                    carRepository
-                                            .findByPlateNumberAndSoldFalseOrderByNameOfBuyerAsc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by plate number order by buyer in asc!")) :
-                                    carRepository
-                                            .findByPlateNumberAndSoldFalseOrderByNameOfBuyerDesc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by plate number order by buyer in desc!"));
-                        }
-                        CarsAndQuantity carsAndQuantity = new CarsAndQuantity(activeCarsByPlateNumber.size(), pagedActiveCarsByPlateNumber);
-                        return new ResponseEntity<>(carsAndQuantity, HttpStatus.OK);
-                    } catch (Exception e) {
-                        logger.info(e.getMessage());
-                        throw new ConnectionTemporarilyLostException("Couldn't get all cars at the moment!");
+                    List<Car> activeCarsByPlateNumber = carRepository
+                            .findByPlateNumberAndSoldFalse(filter)
+                            .orElseThrow(() -> new EntityNotFoundException("Active car is not found by plate number!"));
+                    List<Car> pagedActiveCarsByPlateNumber = new ArrayList<>();
+                    if (orderBy == null) {
+                        pagedActiveCarsByPlateNumber = carRepository
+                                .findByPlateNumberAndSoldFalseOrderByIdDesc(filter, createPageRequest(limit, offset))
+                                .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by plate number order by id!"));
                     }
+                    if ("type".equals(orderBy)) {
+                        pagedActiveCarsByPlateNumber = "up".equals(orderDirection) ?
+                                carRepository
+                                        .findByPlateNumberAndSoldFalseOrderByTypeAsc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by plate number order by type in asc!")) :
+                                carRepository
+                                        .findByPlateNumberAndSoldFalseOrderByTypeDesc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by plate number order by type in desc!"));
+                    }
+                    if ("name".equals(orderBy)) {
+                        pagedActiveCarsByPlateNumber = "up".equals(orderDirection) ?
+                                carRepository
+                                        .findByPlateNumberAndSoldFalseOrderByNameAsc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by plate number order by name in asc!")) :
+                                carRepository
+                                        .findByPlateNumberAndSoldFalseOrderByNameDesc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by plate number order by name in desc!"));
+                    }
+                    if ("plateNumber".equals(orderBy)) {
+                        pagedActiveCarsByPlateNumber = "up".equals(orderDirection) ?
+                                carRepository
+                                        .findByPlateNumberAndSoldFalseOrderByPlateNumberAsc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by plate number order by plate number in asc!")) :
+                                carRepository
+                                        .findByPlateNumberAndSoldFalseOrderByPlateNumberDesc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by plate number order by plate number in desc!"));
+                    }
+                    if ("buyer".equals(orderBy)) {
+                        pagedActiveCarsByPlateNumber = "up".equals(orderDirection) ?
+                                carRepository
+                                        .findByPlateNumberAndSoldFalseOrderByNameOfBuyerAsc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by plate number order by buyer in asc!")) :
+                                carRepository
+                                        .findByPlateNumberAndSoldFalseOrderByNameOfBuyerDesc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by plate number order by buyer in desc!"));
+                    }
+                    CarsAndQuantity carsAndQuantity = new CarsAndQuantity(activeCarsByPlateNumber.size(), pagedActiveCarsByPlateNumber);
+                    return new ResponseEntity<>(carsAndQuantity, HttpStatus.OK);
                 }
             case "type":
                 if (isSold) {
-                    try {
-                        List<Car> soldCarsByType = carRepository
-                                .findByTypeContainingAndSoldTrue(filter)
-                                .orElseThrow(() -> new EntityNotFoundException("Sold car is not found by type!"));
-                        List<Car> pagedSoldCarsByType = new ArrayList<>();
-                        if (orderBy == null) {
-                            pagedSoldCarsByType = carRepository
-                                    .findByTypeContainingAndSoldTrueOrderByDateOfLeavingDesc(filter, createPageRequest(limit, offset))
-                                    .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by type order by date of leaving!"));
-                        }
-                        if ("type".equals(orderBy)) {
-                            pagedSoldCarsByType = "up".equals(orderDirection) ?
-                                    carRepository
-                                            .findByTypeContainingAndSoldTrueOrderByTypeAsc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by type order by type in asc!")) :
-                                    carRepository
-                                            .findByTypeContainingAndSoldTrueOrderByTypeDesc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by type order by type in desc!"));
-                        }
-                        if ("name".equals(orderBy)) {
-                            pagedSoldCarsByType = "up".equals(orderDirection) ?
-                                    carRepository
-                                            .findByTypeContainingAndSoldTrueOrderByNameAsc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Sold Paged cars are not found by type order by name in asc!")) :
-                                    carRepository
-                                            .findByTypeContainingAndSoldTrueOrderByNameDesc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by type order by name in desc!"));
-                        }
-                        if ("plateNumber".equals(orderBy)) {
-                            pagedSoldCarsByType = "up".equals(orderDirection) ?
-                                    carRepository
-                                            .findByTypeContainingAndSoldTrueOrderByPlateNumberAsc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by type order by plate number in asc!")) :
-                                    carRepository
-                                            .findByTypeContainingAndSoldTrueOrderByPlateNumberDesc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by type order by plate number in desc!"));
-                        }
-                        if ("buyer".equals(orderBy)) {
-                            pagedSoldCarsByType = "up".equals(orderDirection) ?
-                                    carRepository
-                                            .findByTypeContainingAndSoldTrueOrderByNameOfBuyerAsc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by type order by buyer in asc!")) :
-                                    carRepository
-                                            .findByTypeContainingAndSoldTrueOrderByNameOfBuyerDesc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by type order by buyer in desc!"));
-                        }
-                        CarsAndQuantity carsAndQuantity = new CarsAndQuantity(soldCarsByType.size(), pagedSoldCarsByType);
-                        return new ResponseEntity<>(carsAndQuantity, HttpStatus.OK);
-                    } catch (Exception e) {
-                        logger.info(e.getMessage());
-                        throw new ConnectionTemporarilyLostException("Couldn't get all cars at the moment!");
+                    List<Car> soldCarsByType = carRepository
+                            .findByTypeContainingAndSoldTrue(filter)
+                            .orElseThrow(() -> new EntityNotFoundException("Sold car is not found by type!"));
+                    List<Car> pagedSoldCarsByType = new ArrayList<>();
+                    if (orderBy == null) {
+                        pagedSoldCarsByType = carRepository
+                                .findByTypeContainingAndSoldTrueOrderByDateOfLeavingDesc(filter, createPageRequest(limit, offset))
+                                .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by type order by date of leaving!"));
                     }
-
+                    if ("type".equals(orderBy)) {
+                        pagedSoldCarsByType = "up".equals(orderDirection) ?
+                                carRepository
+                                        .findByTypeContainingAndSoldTrueOrderByTypeAsc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by type order by type in asc!")) :
+                                carRepository
+                                        .findByTypeContainingAndSoldTrueOrderByTypeDesc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by type order by type in desc!"));
+                    }
+                    if ("name".equals(orderBy)) {
+                        pagedSoldCarsByType = "up".equals(orderDirection) ?
+                                carRepository
+                                        .findByTypeContainingAndSoldTrueOrderByNameAsc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Sold Paged cars are not found by type order by name in asc!")) :
+                                carRepository
+                                        .findByTypeContainingAndSoldTrueOrderByNameDesc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by type order by name in desc!"));
+                    }
+                    if ("plateNumber".equals(orderBy)) {
+                        pagedSoldCarsByType = "up".equals(orderDirection) ?
+                                carRepository
+                                        .findByTypeContainingAndSoldTrueOrderByPlateNumberAsc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by type order by plate number in asc!")) :
+                                carRepository
+                                        .findByTypeContainingAndSoldTrueOrderByPlateNumberDesc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by type order by plate number in desc!"));
+                    }
+                    if ("buyer".equals(orderBy)) {
+                        pagedSoldCarsByType = "up".equals(orderDirection) ?
+                                carRepository
+                                        .findByTypeContainingAndSoldTrueOrderByNameOfBuyerAsc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by type order by buyer in asc!")) :
+                                carRepository
+                                        .findByTypeContainingAndSoldTrueOrderByNameOfBuyerDesc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by type order by buyer in desc!"));
+                    }
+                    CarsAndQuantity carsAndQuantity = new CarsAndQuantity(soldCarsByType.size(), pagedSoldCarsByType);
+                    return new ResponseEntity<>(carsAndQuantity, HttpStatus.OK);
                 } else {
                     try {
                         List<Car> activeCarsByType = carRepository
@@ -367,111 +346,101 @@ public class CarService {
                 }
             case "name":
                 if (isSold) {
-                    try {
-                        List<Car> soldCarsByName = carRepository
-                                .findByNameContainingAndSoldTrue(filter)
-                                .orElseThrow(() -> new EntityNotFoundException("Sold car is not found by name!"));
-                        List<Car> pagedSoldCarsByName = new ArrayList<>();
-                        if (orderBy == null) {
-                            pagedSoldCarsByName = carRepository
-                                    .findByNameContainingAndSoldTrueOrderByDateOfLeavingDesc(filter, createPageRequest(limit, offset))
-                                    .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by name order by date of leaving!"));
-                        }
-                        if ("type".equals(orderBy)) {
-                            pagedSoldCarsByName = "up".equals(orderDirection) ?
-                                    carRepository
-                                            .findByNameContainingAndSoldTrueOrderByTypeAsc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by name order by type in asc!")) :
-                                    carRepository
-                                            .findByNameContainingAndSoldTrueOrderByTypeDesc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by name order by type in desc!"));
-                        }
-                        if ("name".equals(orderBy)) {
-                            pagedSoldCarsByName = "up".equals(orderDirection) ?
-                                    carRepository
-                                            .findByNameContainingAndSoldTrueOrderByNameAsc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Sold Paged cars are not found by name order by name in asc!")) :
-                                    carRepository
-                                            .findByNameContainingAndSoldTrueOrderByNameDesc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by name order by name in desc!"));
-                        }
-                        if ("plateNumber".equals(orderBy)) {
-                            pagedSoldCarsByName = "up".equals(orderDirection) ?
-                                    carRepository
-                                            .findByNameContainingAndSoldTrueOrderByPlateNumberAsc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by name order by plate number in asc!")) :
-                                    carRepository
-                                            .findByNameContainingAndSoldTrueOrderByPlateNumberDesc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by name order by plate number in desc!"));
-                        }
-                        if ("buyer".equals(orderBy)) {
-                            pagedSoldCarsByName = "up".equals(orderDirection) ?
-                                    carRepository
-                                            .findByNameContainingAndSoldTrueOrderByNameOfBuyerAsc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by name order by buyer in asc!")) :
-                                    carRepository
-                                            .findByNameContainingAndSoldTrueOrderByNameOfBuyerDesc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by name order by buyer in desc!"));
-                        }
-                        CarsAndQuantity carsAndQuantity = new CarsAndQuantity(soldCarsByName.size(), pagedSoldCarsByName);
-                        return new ResponseEntity<>(carsAndQuantity, HttpStatus.OK);
-                    } catch (Exception e) {
-                        logger.info(e.getMessage());
-                        throw new ConnectionTemporarilyLostException("Couldn't get all cars at the moment!");
+                    List<Car> soldCarsByName = carRepository
+                            .findByNameContainingAndSoldTrue(filter)
+                            .orElseThrow(() -> new EntityNotFoundException("Sold car is not found by name!"));
+                    List<Car> pagedSoldCarsByName = new ArrayList<>();
+                    if (orderBy == null) {
+                        pagedSoldCarsByName = carRepository
+                                .findByNameContainingAndSoldTrueOrderByDateOfLeavingDesc(filter, createPageRequest(limit, offset))
+                                .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by name order by date of leaving!"));
                     }
+                    if ("type".equals(orderBy)) {
+                        pagedSoldCarsByName = "up".equals(orderDirection) ?
+                                carRepository
+                                        .findByNameContainingAndSoldTrueOrderByTypeAsc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by name order by type in asc!")) :
+                                carRepository
+                                        .findByNameContainingAndSoldTrueOrderByTypeDesc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by name order by type in desc!"));
+                    }
+                    if ("name".equals(orderBy)) {
+                        pagedSoldCarsByName = "up".equals(orderDirection) ?
+                                carRepository
+                                        .findByNameContainingAndSoldTrueOrderByNameAsc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Sold Paged cars are not found by name order by name in asc!")) :
+                                carRepository
+                                        .findByNameContainingAndSoldTrueOrderByNameDesc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by name order by name in desc!"));
+                    }
+                    if ("plateNumber".equals(orderBy)) {
+                        pagedSoldCarsByName = "up".equals(orderDirection) ?
+                                carRepository
+                                        .findByNameContainingAndSoldTrueOrderByPlateNumberAsc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by name order by plate number in asc!")) :
+                                carRepository
+                                        .findByNameContainingAndSoldTrueOrderByPlateNumberDesc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by name order by plate number in desc!"));
+                    }
+                    if ("buyer".equals(orderBy)) {
+                        pagedSoldCarsByName = "up".equals(orderDirection) ?
+                                carRepository
+                                        .findByNameContainingAndSoldTrueOrderByNameOfBuyerAsc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by name order by buyer in asc!")) :
+                                carRepository
+                                        .findByNameContainingAndSoldTrueOrderByNameOfBuyerDesc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Sold paged cars are not found by name order by buyer in desc!"));
+                    }
+                    CarsAndQuantity carsAndQuantity = new CarsAndQuantity(soldCarsByName.size(), pagedSoldCarsByName);
+                    return new ResponseEntity<>(carsAndQuantity, HttpStatus.OK);
                 } else {
-                    try {
-                        List<Car> activeCarsByName = carRepository
-                                .findByNameContainingAndSoldFalse(filter)
-                                .orElseThrow(() -> new EntityNotFoundException("Active car is not found by name!"));
-                        List<Car> pagedActiveCarsByName = new ArrayList<>();
-                        if (orderBy == null) {
-                            pagedActiveCarsByName = carRepository
-                                    .findByNameContainingAndSoldFalseOrderByIdDesc(filter, createPageRequest(limit, offset))
-                                    .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by name order by id!"));
-                        }
-                        if ("type".equals(orderBy)) {
-                            pagedActiveCarsByName = "up".equals(orderDirection) ?
-                                    carRepository
-                                            .findByNameContainingAndSoldFalseOrderByTypeAsc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by name order by type in asc!")) :
-                                    carRepository
-                                            .findByNameContainingAndSoldFalseOrderByTypeDesc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by name order by type in desc!"));
-                        }
-                        if ("name".equals(orderBy)) {
-                            pagedActiveCarsByName = "up".equals(orderDirection) ?
-                                    carRepository
-                                            .findByNameContainingAndSoldFalseOrderByNameAsc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by name order by name in asc!")) :
-                                    carRepository
-                                            .findByNameContainingAndSoldFalseOrderByNameDesc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by name order by name in desc!"));
-                        }
-                        if ("plateNumber".equals(orderBy)) {
-                            pagedActiveCarsByName = "up".equals(orderDirection) ?
-                                    carRepository
-                                            .findByNameContainingAndSoldFalseOrderByPlateNumberAsc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by name order by plate number in asc!")) :
-                                    carRepository
-                                            .findByNameContainingAndSoldFalseOrderByPlateNumberDesc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by name order by plate number in desc!"));
-                        }
-                        if ("buyer".equals(orderBy)) {
-                            pagedActiveCarsByName = "up".equals(orderDirection) ?
-                                    carRepository
-                                            .findByNameContainingAndSoldFalseOrderByNameOfBuyerAsc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by name order by buyer in asc!")) :
-                                    carRepository
-                                            .findByNameContainingAndSoldFalseOrderByNameOfBuyerDesc(filter, createPageRequest(limit, offset))
-                                            .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by name order by buyer in desc!"));
-                        }
-                        CarsAndQuantity carsAndQuantity = new CarsAndQuantity(activeCarsByName.size(), pagedActiveCarsByName);
-                        return new ResponseEntity<>(carsAndQuantity, HttpStatus.OK);
-                    } catch (Exception e) {
-                        logger.info(e.getMessage());
-                        throw new ConnectionTemporarilyLostException("Couldn't get all cars at the moment!");
+                    List<Car> activeCarsByName = carRepository
+                            .findByNameContainingAndSoldFalse(filter)
+                            .orElseThrow(() -> new EntityNotFoundException("Active car is not found by name!"));
+                    List<Car> pagedActiveCarsByName = new ArrayList<>();
+                    if (orderBy == null) {
+                        pagedActiveCarsByName = carRepository
+                                .findByNameContainingAndSoldFalseOrderByIdDesc(filter, createPageRequest(limit, offset))
+                                .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by name order by id!"));
                     }
+                    if ("type".equals(orderBy)) {
+                        pagedActiveCarsByName = "up".equals(orderDirection) ?
+                                carRepository
+                                        .findByNameContainingAndSoldFalseOrderByTypeAsc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by name order by type in asc!")) :
+                                carRepository
+                                        .findByNameContainingAndSoldFalseOrderByTypeDesc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by name order by type in desc!"));
+                    }
+                    if ("name".equals(orderBy)) {
+                        pagedActiveCarsByName = "up".equals(orderDirection) ?
+                                carRepository
+                                        .findByNameContainingAndSoldFalseOrderByNameAsc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by name order by name in asc!")) :
+                                carRepository
+                                        .findByNameContainingAndSoldFalseOrderByNameDesc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by name order by name in desc!"));
+                    }
+                    if ("plateNumber".equals(orderBy)) {
+                        pagedActiveCarsByName = "up".equals(orderDirection) ?
+                                carRepository
+                                        .findByNameContainingAndSoldFalseOrderByPlateNumberAsc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by name order by plate number in asc!")) :
+                                carRepository
+                                        .findByNameContainingAndSoldFalseOrderByPlateNumberDesc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by name order by plate number in desc!"));
+                    }
+                    if ("buyer".equals(orderBy)) {
+                        pagedActiveCarsByName = "up".equals(orderDirection) ?
+                                carRepository
+                                        .findByNameContainingAndSoldFalseOrderByNameOfBuyerAsc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by name order by buyer in asc!")) :
+                                carRepository
+                                        .findByNameContainingAndSoldFalseOrderByNameOfBuyerDesc(filter, createPageRequest(limit, offset))
+                                        .orElseThrow(() -> new EntityNotFoundException("Active paged cars are not found by name order by buyer in desc!"));
+                    }
+                    CarsAndQuantity carsAndQuantity = new CarsAndQuantity(activeCarsByName.size(), pagedActiveCarsByName);
+                    return new ResponseEntity<>(carsAndQuantity, HttpStatus.OK);
                 }
         }
         return null;

@@ -240,19 +240,16 @@ table {
 }
 
 .quantity {
-  font-size: 110%;
+  font-size: 125%;
   font-weight: bolder;
-  border-radius: 10px;
-  border: 3px solid deeppink;
-  background-color: deeppink;
+  border-radius: 7px;
+  border: 3px solid black;
+  background-color: black;
   color: white;
-  padding: 10%;
+  padding: 5%;
 }
 
 .quantityContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   padding-left: 5%;
   padding-right: 5%;
   margin-left: 20%;

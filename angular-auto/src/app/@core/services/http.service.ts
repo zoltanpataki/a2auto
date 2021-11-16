@@ -144,8 +144,7 @@ export class HttpService {
         .set('filterType', filterType)
         .set('isSold', isSold)
         .set('limit', limit)
-        .set('offset', offset)
-        .set('orderBy', 'notOrdered');
+        .set('offset', offset);
     }
     return this.http.get(this.carServerUrl + urlPostFix, {
       headers: httpOptions.headers,
