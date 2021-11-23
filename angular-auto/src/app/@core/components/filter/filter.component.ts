@@ -1786,6 +1786,8 @@ export class FilterComponent implements OnInit {
       ).subscribe(data => {
         this.selectedCars = data.cars;
         this.searchParameters = new SearchParameters(null, null, this.searchParameters.isSold, pageNumber, data.quantity);
+        this.setDataToNull();
+        this.clickedCarIndex = null;
         sessionStorage.setItem('searchParameters', JSON.stringify(this.searchParameters));
         sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
       });
@@ -1810,6 +1812,8 @@ export class FilterComponent implements OnInit {
             pageNumber,
             data.quantity
           );
+          this.setDataToNull();
+          this.clickedCarIndex = null;
           sessionStorage.setItem('searchParameters', JSON.stringify(this.searchParameters));
           sessionStorage.setItem('selectedCars', JSON.stringify(this.selectedCars));
         }
