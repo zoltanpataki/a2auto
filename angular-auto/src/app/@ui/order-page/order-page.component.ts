@@ -74,17 +74,17 @@ export class OrderPageComponent implements OnInit, OnDestroy {
     this.subscriptionOrder$ = this.order$.subscribe(order => {
       this.order = order;
       console.log(this.order);
-      // if (null != this.order) {
-      //   sessionStorage.setItem('order', JSON.stringify(this.order));
-      // }
+      if (null != this.order) {
+        sessionStorage.setItem('order', JSON.stringify(this.order));
+      }
     });
 
     this.subscriptionOrderedCar$ = this.orderedCar$.subscribe(car => {
       this.orderedCar = car;
       console.log(this.orderedCar);
-      // if (null != this.orderedCar) {
-      //   sessionStorage.setItem('orderedCar', JSON.stringify(this.orderedCar));
-      // }
+      if (null != this.orderedCar) {
+        sessionStorage.setItem('orderedCar', JSON.stringify(this.orderedCar));
+      }
     });
 
     this.subscriptionIsBlankPage$ = this.isBlankPage$.subscribe(isBlankPage => {

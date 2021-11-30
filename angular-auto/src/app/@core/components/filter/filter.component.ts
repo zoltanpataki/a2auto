@@ -327,8 +327,7 @@ export class FilterComponent implements OnInit {
     if (sessionStorage.getItem('order')) {
       const order = JSON.parse(sessionStorage.getItem('order'));
       if (order.carId && order.carId === this.carOfTransaction.id) {
-        this._store.dispatch(new UpdateOrder(JSON.parse(sessionStorage.getItem('order'))));
-        this.setFilterComponentVariablesAccordingToOrder(this.newOrder);
+        this._store.dispatch(new UpdateOrder(order));
         this.getDataFromSessionStorageAfterRefresh();
       }
     } else {
@@ -399,7 +398,6 @@ export class FilterComponent implements OnInit {
     //subscriptions
 
     this.selectedCarsAndQuantity$.subscribe(selectedCarsAndQuantity => {
-      console.log(selectedCarsAndQuantity);
       if (null != selectedCarsAndQuantity) {
         this.selectedCars = selectedCarsAndQuantity.cars;
         if (null != this.selectedCars) {
@@ -435,6 +433,7 @@ export class FilterComponent implements OnInit {
     });
 
     this.carErrorObs.subscribe(errorMsg => {
+      console.log('111111111111111')
       if (null !== errorMsg) {
         const action = 'Hiba :('
         this.utilService.openSnackBar(errorMsg, action);
@@ -442,6 +441,7 @@ export class FilterComponent implements OnInit {
     });
 
     this.orderErrorObs.subscribe(errorMsg => {
+      console.log('2222222222222222222')
       if (null !== errorMsg) {
         const action = 'Hiba :('
         this.utilService.openSnackBar(errorMsg, action);
@@ -449,6 +449,7 @@ export class FilterComponent implements OnInit {
     });
 
     this.inheritanceTaxErrorObs.subscribe(errorMsg => {
+      console.log('33333333333333333333333')
       if (null !== errorMsg) {
         const action = 'Hiba :('
         this.utilService.openSnackBar(errorMsg, action);
@@ -552,7 +553,6 @@ export class FilterComponent implements OnInit {
 
     this.userSearchResultObs.subscribe(userSearchData => {
       this.userSearchResult.data = userSearchData;
-      this.changeDetectorRefs.detectChanges();
       if (null != userSearchData) {
         sessionStorage.setItem('userSearchData', JSON.stringify(userSearchData));
         this.orderProgress = this.utilService.getRelevantOrderProgress(this.orderProgress, 2, 2);
@@ -562,7 +562,6 @@ export class FilterComponent implements OnInit {
 
     this.pickedUserObs.subscribe(pickedUser => {
       this.pickedUser = pickedUser;
-      this.changeDetectorRefs.detectChanges();
       if (null != pickedUser) {
         sessionStorage.setItem('pickedUser', JSON.stringify(pickedUser));
       }
@@ -570,7 +569,6 @@ export class FilterComponent implements OnInit {
 
     this.indexOfPickedUserObs.subscribe(index => {
       this.indexOfPickedUser = index;
-      this.changeDetectorRefs.detectChanges();
       if (null != index) {
         sessionStorage.setItem('indexOfPickedUser', index.toString());
       }
@@ -578,7 +576,6 @@ export class FilterComponent implements OnInit {
 
     this.companySearchResultObs.subscribe(companySearchData => {
       this.companySearchResult.data = companySearchData;
-      this.changeDetectorRefs.detectChanges();
       if (null != companySearchData) {
         sessionStorage.setItem('companySearchData', JSON.stringify(companySearchData));
         this.orderProgress = this.utilService.getRelevantOrderProgress(this.orderProgress, 2, 2);
@@ -588,7 +585,6 @@ export class FilterComponent implements OnInit {
 
     this.pickedCompanyObs.subscribe(pickedCompany => {
       this.pickedCompany = pickedCompany;
-      this.changeDetectorRefs.detectChanges();
       if (null != pickedCompany) {
         sessionStorage.setItem('pickedCompany', JSON.stringify(pickedCompany));
       }
@@ -596,7 +592,6 @@ export class FilterComponent implements OnInit {
 
     this.indexOfPickedCompanyObs.subscribe(index => {
       this.indexOfPickedCompany = index;
-      this.changeDetectorRefs.detectChanges();
       if (null != index) {
         sessionStorage.setItem('indexOfPickedCompany', index.toString());
       }
@@ -604,7 +599,6 @@ export class FilterComponent implements OnInit {
 
     this.inheritanceTaxObs.subscribe(inheritanceTax => {
       this.inheritanceTax = inheritanceTax;
-      this.changeDetectorRefs.detectChanges();
       if (null != inheritanceTax) {
         sessionStorage.setItem('inheritanceTax', this.inheritanceTax.toString());
       }
@@ -612,7 +606,6 @@ export class FilterComponent implements OnInit {
 
     this.countInCarObs.subscribe(countInCar => {
       this.countInCar = countInCar;
-      this.changeDetectorRefs.detectChanges();
       if (null != countInCar) {
         sessionStorage.setItem('countInCar', JSON.stringify(this.countInCar));
       }
@@ -1731,11 +1724,9 @@ export class FilterComponent implements OnInit {
     if (carIndex !== this.clickedCarIndex) {
       this._store.dispatch(new StorePickedCar(car));
       this._store.dispatch(new GetOrder(car.id));
-      const indexOfPickedCar = this.clickedCarIndex !== carIndex ? carIndex : null;
-      this._store.dispatch(new StoreClickedCarIndex(indexOfPickedCar));
+      this._store.dispatch(new StoreClickedCarIndex(carIndex));
     } else {
-      this.clickedCarIndex = this.clickedCarIndex !== carIndex ? carIndex : null;
-      this._store.dispatch(new StoreClickedCarIndex(this.clickedCarIndex));
+      this._store.dispatch(new StoreClickedCarIndex(null));
       this._store.dispatch(new OrderError(Constants.NULL_ERROR));
     }
   }

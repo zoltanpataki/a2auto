@@ -1,4 +1,4 @@
-import {Component, OnInit, Inject, PLATFORM_ID} from '@angular/core';
+import {Component, OnInit, Inject, PLATFORM_ID, ChangeDetectionStrategy} from '@angular/core';
 import { Select } from '@ngxs/store';
 import {HttpService} from "./@core/services/http.service";
 import {UtilService} from "./@core/services/util.service";
@@ -11,16 +11,20 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit {
   @Select(LoaderState.status)
   public loadingStatus$: Observable<boolean>;
   title = 'angular-auto';
 
-  constructor(@Inject(PLATFORM_ID) private platformId: any, @Inject(DOCUMENT) private document: any, private httpService: HttpService,
-              private utilService: UtilService,) {
-  }
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: any,
+    @Inject(DOCUMENT) private document: any,
+    private httpService: HttpService,
+    private utilService: UtilService,
+    ) {}
 
   ngOnInit(): void {
     this.httpService.getCompany('A2', 'name').subscribe(data => {
