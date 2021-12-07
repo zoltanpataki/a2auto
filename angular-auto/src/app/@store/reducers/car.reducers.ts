@@ -35,7 +35,6 @@ export const carReducers = (
       }
     }
     case ECarActions.UpdateCarError: {
-      console.log('itt 333')
       return {
         ...state,
         error: action.payload

@@ -18,9 +18,10 @@ import {
   UpdateCarTypeOfBuying
 } from "../actions/car.actions";
 import {catchError, map, switchMap, withLatestFrom} from "rxjs/operators";
-import {Observable, of} from "rxjs";
+import {of} from "rxjs";
 import {selectCarList} from "../selectors/car.selectors";
 import cloneDeep from 'lodash.clonedeep';
+import {CarsAndQuantity} from "../../@core/models/carsAndQuantity";
 
 @Injectable()
 export class CarEffects {
@@ -72,12 +73,12 @@ export class CarEffects {
   );
 
   @Effect()
-  storeNameOfBuyer$ = this._actions$.pipe(
+  updateNameOfBuyer$ = this._actions$.pipe(
     ofType<StoreNameOfBuyer>(ECarActions.StoreNameOfBuyer),
     map(action => action.payload),
     withLatestFrom(this._store.pipe(select(selectCarList))),
-    switchMap(([carUpdateModel, cars]) => {
-      let allCars = cloneDeep(cars);
+    switchMap(([carUpdateModel, carsAndQuantity]) => {
+      let allCars = cloneDeep(carsAndQuantity.cars);
       let pickedCar = allCars[carUpdateModel.clickedCarIndex];
       pickedCar.nameOfBuyer = carUpdateModel.nameOfBuyer;
       allCars[carUpdateModel.clickedCarIndex] = pickedCar;
@@ -85,10 +86,10 @@ export class CarEffects {
         console.log(data);
       });
       sessionStorage.setItem("selectedCars", allCars);
-      return of(new GetCarsSuccess(allCars));
+      return of(new GetCarsSuccess(new CarsAndQuantity(carsAndQuantity.quantity, allCars)));
     }),
     catchError((error) => {
-      return of(new UpdateCarError('Az adatbáziskapcsolat váratlanul megszakadt!'));
+      return of(new UpdateCarError('Az adatbáziskapcsolat váratlanul megszakadt! 1111'));
     })
   );
 
@@ -97,8 +98,8 @@ export class CarEffects {
     ofType<UpdateCarSalesman>(ECarActions.UpdateCarSalesman),
     map(action => action.payload),
     withLatestFrom(this._store.pipe(select(selectCarList))),
-    switchMap(([carUpdateModel, cars]) => {
-      let allCars = cloneDeep(cars);
+    switchMap(([carUpdateModel, carsAndQuantity]) => {
+      let allCars = cloneDeep(carsAndQuantity.cars);
       let pickedCar = allCars[carUpdateModel.clickedCarIndex];
       pickedCar.salesman = carUpdateModel.salesman;
       allCars[carUpdateModel.clickedCarIndex] = pickedCar;
@@ -106,7 +107,7 @@ export class CarEffects {
         console.log(data);
       });
       sessionStorage.setItem("selectedCars", allCars);
-      return of(new GetCarsSuccess(allCars));
+      return of(new GetCarsSuccess(new CarsAndQuantity(carsAndQuantity.quantity, allCars)));
     }),
     catchError((error) => {
       return of(new UpdateCarError('Az adatbáziskapcsolat váratlanul megszakadt!'));
@@ -118,8 +119,8 @@ export class CarEffects {
     ofType<UpdateCarHandOverDate>(ECarActions.UpdateCarHandOverDate),
     map(action => action.payload),
     withLatestFrom(this._store.pipe(select(selectCarList))),
-    switchMap(([carUpdateModel, cars]) => {
-      let allCars = cloneDeep(cars);
+    switchMap(([carUpdateModel, carsAndQuantity]) => {
+      let allCars = cloneDeep(carsAndQuantity.cars);
       let pickedCar = allCars[carUpdateModel.clickedCarIndex];
       pickedCar.carHandover = carUpdateModel.carHandOverDate;
       allCars[carUpdateModel.clickedCarIndex] = pickedCar;
@@ -127,7 +128,7 @@ export class CarEffects {
         console.log(data);
       });
       sessionStorage.setItem("selectedCars", allCars);
-      return of(new GetCarsSuccess(allCars));
+      return of(new GetCarsSuccess(new CarsAndQuantity(carsAndQuantity.quantity, allCars)));
     }),
     catchError((error) => {
       return of(new UpdateCarError('Az adatbáziskapcsolat váratlanul megszakadt!'));
@@ -139,8 +140,8 @@ export class CarEffects {
     ofType<UpdateCarTypeOfBuying>(ECarActions.UpdateCarTypeOfBuying),
     map(action => action.payload),
     withLatestFrom(this._store.pipe(select(selectCarList))),
-    switchMap(([carUpdateModel, cars]) => {
-      let allCars = cloneDeep(cars);
+    switchMap(([carUpdateModel, carsAndQuantity]) => {
+      let allCars = cloneDeep(carsAndQuantity.cars);
       let pickedCar = allCars[carUpdateModel.clickedCarIndex];
       pickedCar.typeOfBuying = carUpdateModel.typeOfBuying;
       allCars[carUpdateModel.clickedCarIndex] = pickedCar;
@@ -148,7 +149,7 @@ export class CarEffects {
         console.log(data);
       });
       sessionStorage.setItem("selectedCars", allCars);
-      return of(new GetCarsSuccess(allCars));
+      return of(new GetCarsSuccess(new CarsAndQuantity(carsAndQuantity.quantity, allCars)));
     }),
     catchError((error) => {
       return of(new UpdateCarError('Az adatbáziskapcsolat váratlanul megszakadt!'));

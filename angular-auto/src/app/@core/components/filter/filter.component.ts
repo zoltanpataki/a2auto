@@ -433,7 +433,6 @@ export class FilterComponent implements OnInit {
     });
 
     this.carErrorObs.subscribe(errorMsg => {
-      console.log('111111111111111')
       if (null !== errorMsg) {
         const action = 'Hiba :('
         this.utilService.openSnackBar(errorMsg, action);
@@ -441,7 +440,6 @@ export class FilterComponent implements OnInit {
     });
 
     this.orderErrorObs.subscribe(errorMsg => {
-      console.log('2222222222222222222')
       if (null !== errorMsg) {
         const action = 'Hiba :('
         this.utilService.openSnackBar(errorMsg, action);
@@ -449,7 +447,6 @@ export class FilterComponent implements OnInit {
     });
 
     this.inheritanceTaxErrorObs.subscribe(errorMsg => {
-      console.log('33333333333333333333333')
       if (null !== errorMsg) {
         const action = 'Hiba :('
         this.utilService.openSnackBar(errorMsg, action);
@@ -904,8 +901,20 @@ export class FilterComponent implements OnInit {
     this._store.dispatch(new StoreExtraPayment(null));
     this._store.dispatch(new StoreSalesman(null));
     this._store.dispatch(new StoreTypeOfBuying(null));
-    this._store.dispatch(new UpdateOrder(null));
+    if (this.newOrder != null && this.newOrder.id == null) {
+      const carUpdateRequest = new CarUpdateModel(
+        Constants.NULL_NAME_OF_BUYER,
+        Constants.NULL_SALESMAN,
+        this.clickedCarIndex,
+        Constants.NULL_CAR_HAND_OVER_DATE,
+        Constants.NULL_CAR_TYPE_OF_BUYING);
+      this._store.dispatch(new StoreNameOfBuyer(carUpdateRequest));
+      this._store.dispatch(new UpdateCarSalesman(carUpdateRequest));
+      this._store.dispatch(new UpdateCarTypeOfBuying(carUpdateRequest));
+      this._store.dispatch(new UpdateCarHandOverDate(carUpdateRequest));
+    }
     this._store.dispatch(new GetInheritanceTaxSuccess(null));
+    this._store.dispatch(new UpdateOrder(null));
     this._store.dispatch(new StoreCountInCar(null));
     this._store.dispatch(new StoreCountInCarSupplement(null));
     this.setOrderProgressInSessionStorage(0);
