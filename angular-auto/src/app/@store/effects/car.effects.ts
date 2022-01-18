@@ -7,7 +7,7 @@ import {
   ECarActions,
   GetCars,
   GetCarsError,
-  GetCarsSuccess,
+  GetCarsSuccess, GetCountInCar,
   GetFilteredCars,
   GetFilteredCarsError,
   GetFilteredCarsSuccess,
@@ -22,6 +22,8 @@ import {of} from "rxjs";
 import {selectCarList} from "../selectors/car.selectors";
 import cloneDeep from 'lodash.clonedeep';
 import {CarsAndQuantity} from "../../@core/models/carsAndQuantity";
+import {GetCompaniesSuccess} from "../actions/company.actions";
+import {StoreCountInCar} from "../actions/order.actions";
 
 @Injectable()
 export class CarEffects {
@@ -70,6 +72,22 @@ export class CarEffects {
           }
         })
       ))
+  );
+
+  @Effect()
+  getCountInCar$ = this._actions$.pipe(
+    ofType<GetCountInCar>(ECarActions.GetCountInCar),
+    map(action => action.payload),
+    switchMap(countInCarId =>
+      this._httpService.getSingleCarById(countInCarId)
+        .pipe(
+          switchMap(car => {
+            return of(new StoreCountInCar(car));
+          }),
+          catchError((error) => {
+            return of(new GetCarsError('Az adatbáziskapcsolat váratlanul megszakadt!'));
+          })
+        ))
   );
 
   @Effect()

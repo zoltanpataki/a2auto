@@ -10,6 +10,7 @@ export enum ECarActions {
   GetFilteredCarsSuccess = '[Car] Get filtered cars success',
   GetFilteredCarsError = '[string] Get filtered cars error',
   GetCarsError = '[string] Get cars error',
+  GetCountInCar = '[Car] Get count in car',
   StoreClickedCarIndex = '[number] Store clicked car index',
   StorePickedCar = '[Car] Store picked car',
   UpdateCarError = '[string] Update car error',
@@ -48,6 +49,12 @@ export class GetFilteredCarsError implements Action {
 
 export class GetCarsError implements Action {
   public readonly type = ECarActions.GetCarsError;
+  constructor(public readonly payload: string) {
+  }
+}
+
+export class GetCountInCar implements Action {
+  public readonly type = ECarActions.GetCountInCar;
   constructor(public readonly payload: string) {
   }
 }

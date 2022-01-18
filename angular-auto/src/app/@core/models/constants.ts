@@ -17,6 +17,7 @@ export abstract class Constants {
   static readonly IT_IS_NOT_DESCRIPTION_DELETE: boolean = false;
   static readonly PAGE_LIMIT: number = 10;
   static readonly FIRST_PAGE_OFFSET: number = 0;
+  static readonly INDEX_OF_FIRST_ITEM_IN_LIST: number = 0;
 
   // null constants
 

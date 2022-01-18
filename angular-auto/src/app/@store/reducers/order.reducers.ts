@@ -1,5 +1,9 @@
 import {initialOrderState, IOrderState} from "../state/order.state";
-import {EOrderActions, OrderActions} from "../actions/order.actions";
+import {
+  EOrderActions,
+  OrderActions,
+  StoreAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready
+} from "../actions/order.actions";
 
 export const orderReducers = (
   state = initialOrderState,
@@ -43,6 +47,9 @@ export const orderReducers = (
       }
     }
     case EOrderActions.StoreAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready: {
+      console.log('anyád')
+      console.log(action.payload)
+      console.log(state.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready)
       return {
         ...state,
         alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready: action.payload

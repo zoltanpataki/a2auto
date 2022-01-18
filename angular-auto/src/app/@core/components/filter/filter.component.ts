@@ -31,7 +31,7 @@ import {
 } from "../../../@store/selectors/car.selectors";
 import {
   GetCars,
-  GetCarsSuccess,
+  GetCarsSuccess, GetCountInCar,
   GetFilteredCars,
   StoreClickedCarIndex,
   StoreNameOfBuyer,
@@ -937,100 +937,62 @@ export class FilterComponent implements OnInit {
   private setFilterComponentVariablesAccordingToOrder(order: Order) {
     this.setOrderProgressInSessionStorage(10);
 
-    if (order.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready) {
-      this.previousOrNew = 'new';
-      this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = true;
-    } else {
-      this.previousOrNew = 'previous';
-      this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready = false;
-    }
-    sessionStorage.setItem('alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready', this.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready.toString());
-    if (order.selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate) {
-      this.individualOrCorporate = 'individual';
-      this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate = true;
-    } else {
-      this.individualOrCorporate = 'corporate';
-      this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate = false;
-    }
-    sessionStorage.setItem('selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate', this.selectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate.toString());
-    if (order.wantInheritanceTaxCalculation) {
-      this.askForInheritanceTaxCalculation = 'wantCalculation';
-      this.wantInheritanceTaxCalculation = true;
-    } else {
-      this.askForInheritanceTaxCalculation = 'dontWantCalculation';
-      this.wantInheritanceTaxCalculation = false;
-    }
-    sessionStorage.setItem('wantInheritanceTaxCalculation', this.wantInheritanceTaxCalculation.toString());
+    this._store.dispatch(new StoreAlreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready(order.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready));
+    this._store.dispatch(new StoreSelectedBetweenIndividualAndCompanyTrueIfIndividualFalseIfCorporate(order.selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate));
+    this._store.dispatch(new StoreWantInheritanceTaxCalculation(order.wantInheritanceTaxCalculation));
+
     if (order.inheritanceTax != null) {
-      this.inheritanceTax = order.inheritanceTax;
-      sessionStorage.setItem('inheritanceTax', this.inheritanceTax.toString());
+      this._store.dispatch(new GetInheritanceTaxSuccess(order.inheritanceTax));
     }
+    this._store.dispatch(new StoreThereIsCountInCar(order.thereIsCountInCar));
     if (order.thereIsCountInCar) {
-      this.addCountInCar = 'countIn';
-      this.thereIsCountInCar = true;
-      this.httpService.getSingleCarById(order.countInCarId.toString()).subscribe(data => {
-        this.countInCar = data;
-      });
-    } else {
-      this.addCountInCar = 'noCountIn';
-      this.thereIsCountInCar = false;
+      this._store.dispatch(new GetCountInCar(order.countInCarId.toString()));
     }
-    sessionStorage.setItem('thereIsCountInCar', this.thereIsCountInCar.toString());
     if (order.countInCarSupplement != null) {
-      this.countInCarSupplement = order.countInCarSupplement;
+      this._store.dispatch(new StoreCountInCarSupplement(order.countInCarSupplement));
     }
     if (order.downPayment != null) {
-      this.downPayment = order.downPayment;
-      sessionStorage.setItem('downPayment', this.downPayment.toString());
+      this._store.dispatch(new StoreDownPayment(order.downPayment));
     }
     if (order.extra != null) {
-      this.extra = order.extra;
-      sessionStorage.setItem('extra', this.extra.toString());
+      this._store.dispatch(new StoreExtraPayment(order.extra));
     }
     if (order.credit != null) {
-      this.creditData = order.credit;
-      sessionStorage.setItem('credit', JSON.stringify(this.creditData));
+      this._store.dispatch(new StoreCredit(order.credit));
     }
     if (order.alreadyOrNewCustomerSelectorTrueIfNewFalseIfAlready) {
       if (order.selectedBetweenIndividualOrCorporateTrueIfIndividualFalseIfCorporate) {
-        this.newUser = order.users;
-        sessionStorage.setItem('newUserDuringSell', JSON.stringify(this.newUser));
+        this._store.dispatch(new StoreNewUser(order.users));
       } else {
-        this.newCompany = order.company;
-        sessionStorage.setItem('newCompanyDuringSell', JSON.stringify(this.newCompany));
+        this._store.dispatch(new StoreNewCompany(order.company));
       }
     } else {
       if (order.users != null) {
         let userList: Users[] = [];
         userList.push(order.users);
-        this.userSearchResult.data = userList;
-        sessionStorage.setItem('userSearchData', JSON.stringify(userList));
-        this.indexOfPickedUser = 0;
-        sessionStorage.setItem('indexOfPickedUser', this.indexOfPickedUser.toString());
-        this.pickedUser = order.users;
-        sessionStorage.setItem('pickedUser', JSON.stringify(this.pickedUser));
+        this._store.dispatch(new GetUsersSuccess(userList));
+        this._store.dispatch(new StorePickedUserIndex(Constants.INDEX_OF_FIRST_ITEM_IN_LIST));
+        this._store.dispatch(new StorePickedUser(order.users));
       }
       if (order.company != null) {
         let companyList: Company[] = [];
         companyList.push(order.company);
-        this.companySearchResult.data = companyList;
-        sessionStorage.setItem('companySearchData', JSON.stringify(companyList));
-        this.indexOfPickedCompany = 0;
-        sessionStorage.setItem('indexOfPickedCompany', this.indexOfPickedCompany.toString());
-        this.pickedCompany = order.company;
-        sessionStorage.setItem('pickedCompany', JSON.stringify(this.pickedCompany));
+        this._store.dispatch(new GetCompaniesSuccess(companyList));
+        this._store.dispatch(new StorePickedCompanyIndex(Constants.INDEX_OF_FIRST_ITEM_IN_LIST));
+        this._store.dispatch(new StorePickedCompany(order.company));
       }
     }
-    this.selectedTypeOfBuying = order.selectedTypeOfBuying;
-    this.salesman = this.carOfTransaction.salesman;
+    this._store.dispatch(new StoreTypeOfBuying(order.selectedTypeOfBuying));
+    this._store.dispatch(new StoreSalesman(this.carOfTransaction.salesman));
+
     if (order.description != null) {
-      this.descriptionList = order.description;
+      this._store.dispatch(new StoreRemarks(order.description));
     }
     if (order.descriptionsWithAmount != null) {
-      this.listOfDescriptionsWithAmount = order.descriptionsWithAmount;
+      this._store.dispatch(new StoreDescriptionsWithAmount(order.descriptionsWithAmount));
       this.listOfDescriptionsWithAmount.forEach((descriptionWithAmount, index) => {
         if (descriptionWithAmount.charged == 'AJÁNDÉK') {
-          this.giftIndexList.push(index);
+          this.addToGiftIndexList(index);
         }
       });
       this.setDescriptionForm();

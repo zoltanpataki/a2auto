@@ -17,7 +17,7 @@
 
 ## Quick dependency ordering
 * npm install --save-dev --legacy-peer-deps
-* more comes here soon.....
+* more comes here soon..... :smile:
 
 ### A2Auto PROD settings:
 * spring.datasource.url=jdbc:mysql://localhost:3307/a2db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&characterEncoding=UTF-8
