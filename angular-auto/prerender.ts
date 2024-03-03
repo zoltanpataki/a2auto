@@ -22,7 +22,7 @@
 // global['Prism'] = null;
 
 // tslint:disable: ordered-imports
-import 'zone.js/dist/zone-node';
+import 'zone.js/node';
 
 import 'reflect-metadata';
 // tslint:disable-next-line: ordered-imports
