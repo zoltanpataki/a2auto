@@ -8,7 +8,7 @@ import {Car} from "../../models/car";
 import {WarningDialogComponent} from "../../dialog/warning-dialog/warning-dialog.component";
 import {CreditDialogComponent} from "../../dialog/credit-dialog/credit-dialog.component";
 import {CountInCarSupplement} from "../../models/countInCarSupplement";
-import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup} from "@angular/forms";
 import {MatTableDataSource} from "@angular/material/table";
 import {Users} from "../../models/users";
 import {Credit} from "../../models/credit";
@@ -33,7 +33,7 @@ export class FilterComponent implements OnInit {
   public get direction(): typeof Direction {
     return Direction;
   }
-  public countInCarSupplementForm: FormGroup;
+  public countInCarSupplementForm: UntypedFormGroup;
   public filters = [
     {viewValue: 'Modell', value: 'name'},
     {viewValue: 'Rendszám', value: 'plateNumber'},
@@ -97,12 +97,12 @@ export class FilterComponent implements OnInit {
   public descriptionList: Description[] = [];
   public switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer: boolean = true;
   // Downpayment form variables
-  public downPaymentForm: FormGroup;
+  public downPaymentForm: UntypedFormGroup;
   public downPayment: number;
   // Description with amount form variables
-  public descriptionForm: FormGroup;
-  public description: FormArray;
-  public descriptions: FormArray;
+  public descriptionForm: UntypedFormGroup;
+  public description: UntypedFormArray;
+  public descriptions: UntypedFormArray;
   public listOfDescriptionsWithAmount: DescriptionWithAmount[] = [];
   public chargedBehalf = ['AJÁNDÉK', 'VEVŐ FIZETI'];
   public giftIndexList = [];
@@ -120,7 +120,7 @@ export class FilterComponent implements OnInit {
   constructor(private httpService: HttpService,
               public utilService: UtilService,
               private dialog: MatDialog,
-              private formBuilder: FormBuilder,
+              private formBuilder: UntypedFormBuilder,
               private changeDetectorRefs: ChangeDetectorRef,
               public router: Router,) {
     router.events
@@ -541,12 +541,12 @@ export class FilterComponent implements OnInit {
   }
 
   public addNewDescriptionWithAmountRow(descriptionWithAmount: DescriptionWithAmount) {
-    this.descriptions = this.descriptionForm.get('description') as FormArray;
+    this.descriptions = this.descriptionForm.get('description') as UntypedFormArray;
     this.descriptions.push(this.createDescriptionWithAmountRow(descriptionWithAmount));
   }
 
   public removeDescriptionWithAmountRow(index: number) {
-    this.descriptions = this.descriptionForm.get('description') as FormArray;
+    this.descriptions = this.descriptionForm.get('description') as UntypedFormArray;
     if (this.descriptions.length === 1) {
       this.giftIndexList = [];
       this.listOfDescriptionsWithAmount = [];
@@ -909,7 +909,7 @@ export class FilterComponent implements OnInit {
   // And finally the evaluateCarOfContract method gets called where actions will take place depends on the transaction
   // which can be sell or buy from the A2 company perspective.
 
-  public openCarTimeInfoDialog(car: Car, orderedCarId: number, sellOrBuy: string, descriptionForm: FormGroup, countInCarSupplementForm: FormGroup) {
+  public openCarTimeInfoDialog(car: Car, orderedCarId: number, sellOrBuy: string, descriptionForm: UntypedFormGroup, countInCarSupplementForm: UntypedFormGroup) {
     const carTimeInfoDialogConfig = new MatDialogConfig();
 
     carTimeInfoDialogConfig.disableClose = true;
@@ -942,7 +942,7 @@ export class FilterComponent implements OnInit {
   // This method sets all the configurations for the dialog and injects the WitnessPickerDialogComponent in here.
   // After the dialog was closed and the result is not null the clicked document gets generated.
 
-  public openWitnessPickerModal(descriptionForm: FormGroup, countInCarSupplementForm: FormGroup): void {
+  public openWitnessPickerModal(descriptionForm: UntypedFormGroup, countInCarSupplementForm: UntypedFormGroup): void {
     const witnessPickerDialogConfig = new MatDialogConfig();
 
     witnessPickerDialogConfig.disableClose = true;
@@ -978,7 +978,7 @@ export class FilterComponent implements OnInit {
 
   // Navigates to the clicked document and structure it depends on the transaction is sell or buy from the A2 company perspective.
 
-  private evaluateCarOfContract(resultOfCarTimeInfoDialog: any, orderedCarId: number, descriptionForm: FormGroup, countInCarSupplementForm: FormGroup) {
+  private evaluateCarOfContract(resultOfCarTimeInfoDialog: any, orderedCarId: number, descriptionForm: UntypedFormGroup, countInCarSupplementForm: UntypedFormGroup) {
     if (this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer) {
       this.carOfTransaction = resultOfCarTimeInfoDialog.car;
       this.navigateToOrderOrSellingOrWarrantOrInsurancePage(this.carOfTransaction, orderedCarId, '/sellingPage', resultOfCarTimeInfoDialog.witness1, resultOfCarTimeInfoDialog.witness2, null, resultOfCarTimeInfoDialog.representation, descriptionForm, countInCarSupplementForm, resultOfCarTimeInfoDialog.typeOfBuying);
@@ -1454,7 +1454,7 @@ export class FilterComponent implements OnInit {
   // After field length validation the countInCarSupplement is saved into the sessionStorage
   // later on it will be part of the saved order
 
-  public saveCountInCarSupplement(form: FormGroup) {
+  public saveCountInCarSupplement(form: UntypedFormGroup) {
     if (this.validateFormFieldLength(form.value)) {
       this.countInCarSupplement = new CountInCarSupplement(
         form.value.countInPrice,
@@ -1469,7 +1469,7 @@ export class FilterComponent implements OnInit {
   // Down payment and extra payment are saved into the sessionStorage
   // later on it will be part of the saved order
 
-  public saveDownPaymentAmount(form: FormGroup, car: Car) {
+  public saveDownPaymentAmount(form: UntypedFormGroup, car: Car) {
     this.downPayment = form.value.downPayment;
     this.extra = form.value.extra;
     car.downPayment = this.downPayment;
@@ -1545,7 +1545,7 @@ export class FilterComponent implements OnInit {
   // If any changes happens on the down payment form then ngModelChange triggers this method
   // and the new value gets updated in sessionStorage, and later on it will be part of the order.
 
-  public saveChangedDownPayment(form: FormGroup) {
+  public saveChangedDownPayment(form: UntypedFormGroup) {
     this.downPayment = form.value.downPayment;
     if (this.downPayment != null) {
       sessionStorage.setItem('downPayment', this.downPayment.toString());
@@ -1559,7 +1559,7 @@ export class FilterComponent implements OnInit {
   // If any changes happens on the extra form then ngModelChange triggers this method
   // and the new value gets updated in sessionStorage, and later on it will be part of the order.
 
-  public saveChangedExtra(form: FormGroup) {
+  public saveChangedExtra(form: UntypedFormGroup) {
     this.extra = form.value.extra;
     if (this.extra != null) {
       sessionStorage.setItem('extra', this.extra.toString());
@@ -1576,7 +1576,7 @@ export class FilterComponent implements OnInit {
   // the second when it will be a gift.
   // Two variables are saved into the sessionStorage: listOfDescriptionWithAmount, giftIndexList.
 
-  public saveDescriptions(descriptionForm: FormGroup) {
+  public saveDescriptions(descriptionForm: UntypedFormGroup) {
     this.listOfDescriptionsWithAmount = [];
     descriptionForm.value.description.forEach(descriptionWithAmount => {
       const descriptionAmount = descriptionWithAmount.charged === 'AJÁNDÉK' ? 0 : descriptionWithAmount.amount;
@@ -1617,7 +1617,7 @@ export class FilterComponent implements OnInit {
   // After the backend call the prepareNavigationToOrderPageOrSellingPageOrWarrantPageOrInsurancePage method
   // gets called with the returned value.
 
-  public navigateToOrderOrSellingOrWarrantOrInsurancePage(car: Car, orderedCarId: number, targetRoute: string,  witness1: Witness, witness2: Witness, warrantType: string, a2Representation: string, descriptionForm: FormGroup, countInCarSupplementForm: FormGroup, pickedTypeOfBuyingForCountInCar: string) {
+  public navigateToOrderOrSellingOrWarrantOrInsurancePage(car: Car, orderedCarId: number, targetRoute: string,  witness1: Witness, witness2: Witness, warrantType: string, a2Representation: string, descriptionForm: UntypedFormGroup, countInCarSupplementForm: UntypedFormGroup, pickedTypeOfBuyingForCountInCar: string) {
     if (this.downPayment != null) {
       car.downPayment = this.downPayment;
       this.updateCarOfTransaction(car);
@@ -1709,7 +1709,7 @@ export class FilterComponent implements OnInit {
 
   // It opens the carTimeInfoDialog, and it is decided at this point that the selling page will be for sell or buy.
 
-  public gatherSellingPageInfo(car: Car, orderedCarId: number, sellOrBuy: string, descriptionForm: FormGroup, countInCarSupplementForm: FormGroup) {
+  public gatherSellingPageInfo(car: Car, orderedCarId: number, sellOrBuy: string, descriptionForm: UntypedFormGroup, countInCarSupplementForm: UntypedFormGroup) {
     this.switchBetweenA2AsBuyerOrSellerTrueIfSellerFalseIfBuyer = sellOrBuy === 'sell';
     this.openCarTimeInfoDialog(car, orderedCarId, sellOrBuy, descriptionForm, countInCarSupplementForm);
   }
@@ -1725,20 +1725,20 @@ export class FilterComponent implements OnInit {
 
   // Navigates to insurance page
 
-  public navigateToInsurancePage(car: Car, descriptionForm: FormGroup, countInCarSupplementForm: FormGroup) {
+  public navigateToInsurancePage(car: Car, descriptionForm: UntypedFormGroup, countInCarSupplementForm: UntypedFormGroup) {
     this.navigateToOrderOrSellingOrWarrantOrInsurancePage(car, car.id, '/insurance', null, null, null, null, descriptionForm, countInCarSupplementForm, null);
   }
 
   // Opens the witness picker dialog
 
-  public openWitnessPickerForWarrantPage(descriptionForm: FormGroup, countInCarSupplementForm: FormGroup) {
+  public openWitnessPickerForWarrantPage(descriptionForm: UntypedFormGroup, countInCarSupplementForm: UntypedFormGroup) {
     this.openWitnessPickerModal(descriptionForm, countInCarSupplementForm);
   }
 
   // This is a technical method, it collects data from form array.
   // It is used to collect descriptions.
 
-  get formData() {return <FormArray>this.descriptionForm.get('description');}
+  get formData() {return <UntypedFormArray>this.descriptionForm.get('description');}
 
   // Validates the length of the form fields
 

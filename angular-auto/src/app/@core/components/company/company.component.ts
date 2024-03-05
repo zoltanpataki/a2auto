@@ -5,7 +5,7 @@ import {UtilService} from "../../services/util.service";
 import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 import {Address} from "../../models/address";
 import {filter} from "rxjs/operators";
-import {FormControl, FormGroupDirective, NgForm, Validators} from "@angular/forms";
+import {UntypedFormControl, FormGroupDirective, NgForm, Validators} from "@angular/forms";
 import {ErrorStateMatcher} from "@angular/material/core";
 import {SelectedFilter} from "../../models/selectedFilter";
 import { MatTableDataSource } from '@angular/material/table';
@@ -13,7 +13,7 @@ import { MatTableDataSource } from '@angular/material/table';
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
 
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+  isErrorState(control: UntypedFormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     const isSubmitted = form && form.submitted;
     return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
   }
@@ -27,7 +27,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 export class CompanyComponent implements OnInit {
 
 
-  emailFormControl = new FormControl('', [
+  emailFormControl = new UntypedFormControl('', [
     Validators.email,
   ]);
 

@@ -3,7 +3,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {Car} from "../../models/car";
 import {UtilService} from "../../services/util.service";
 import {Witness} from "../../models/witness";
-import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup} from "@angular/forms";
 import {Description} from "../../models/description";
 
 @Component({
@@ -27,8 +27,8 @@ export class CarTimeInfoComponent implements OnInit {
   private pickedTypeOfBuying: string;
 
   public remarkPartOpen: boolean = false;
-  public remarkForm: FormGroup;
-  public description: FormArray;
+  public remarkForm: UntypedFormGroup;
+  public description: UntypedFormArray;
   private remarkList: Description[] = [];
   public sellOrBuy: string;
   public today: string
@@ -36,7 +36,7 @@ export class CarTimeInfoComponent implements OnInit {
   constructor(private dialogRef: MatDialogRef<CarTimeInfoComponent>,
               @Inject(MAT_DIALOG_DATA) public data,
               public utilService: UtilService,
-              private formBuilder: FormBuilder,) {}
+              private formBuilder: UntypedFormBuilder,) {}
 
   ngOnInit() {
     this.sellOrBuy = this.data.sellOrBuy;
@@ -84,12 +84,12 @@ export class CarTimeInfoComponent implements OnInit {
   }
 
   public addNewRemarkRow(remark: Description) {
-    this.description = this.remarkForm.get('description') as FormArray;
+    this.description = this.remarkForm.get('description') as UntypedFormArray;
     this.description.push(this.createRemarkRow(remark));
   }
 
   public removeRemarkRow(index: number) {
-    this.description = this.remarkForm.get('description') as FormArray;
+    this.description = this.remarkForm.get('description') as UntypedFormArray;
     if (this.description.length === 1) {
       this.remarkList = [];
       this.createFormGroupForRemark();
@@ -135,7 +135,7 @@ export class CarTimeInfoComponent implements OnInit {
     this.remarkPartOpen = true;
   }
 
-  public saveRemark(form: FormGroup) {
+  public saveRemark(form: UntypedFormGroup) {
     this.remarkPartOpen = false;
     this.remarkList = [];
     form.value.description.forEach(description => {
@@ -208,7 +208,7 @@ export class CarTimeInfoComponent implements OnInit {
     }
   }
 
-  get formData() {return <FormArray>this.remarkForm.get('description');}
+  get formData() {return <UntypedFormArray>this.remarkForm.get('description');}
 
   public clearAllDates() {
     this.carData.dateOfContract = null;

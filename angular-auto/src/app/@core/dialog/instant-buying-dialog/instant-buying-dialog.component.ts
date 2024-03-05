@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {Car} from "../../models/car";
-import {FormArray, FormBuilder, FormGroup} from "@angular/forms";
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup} from "@angular/forms";
 import {Description} from "../../models/description";
 import {Witness} from "../../models/witness";
 import {UtilService} from "../../services/util.service";
@@ -20,8 +20,8 @@ export class InstantBuyingDialogComponent implements OnInit {
   public carData : Car;
   public remarkPartOpen: boolean = false;
   public userPartOpen: boolean = false;
-  public remarkForm: FormGroup;
-  public description: FormArray;
+  public remarkForm: UntypedFormGroup;
+  public description: UntypedFormArray;
   public remarkList: Description[] = [];
   public carHandoverTime = {};
   public fields1 = {dueOfContract: 'Eladás dátuma', documentsHandover: 'Dokumentumok átadásának időpontja', dateOfContract : 'Szerződés szerinti teljesítés időpontja'};
@@ -68,7 +68,7 @@ export class InstantBuyingDialogComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public data,
               private httpService: HttpService,
               public utilService: UtilService,
-              private formBuilder: FormBuilder,) { }
+              private formBuilder: UntypedFormBuilder,) { }
 
   ngOnInit() {
     if (this.userData == null) {
@@ -96,12 +96,12 @@ export class InstantBuyingDialogComponent implements OnInit {
   }
 
   public addNewRemarkRow(description: string) {
-    this.description = this.remarkForm.get('description') as FormArray;
+    this.description = this.remarkForm.get('description') as UntypedFormArray;
     this.description.push(this.createRemarkRow(description));
   }
 
   public removeRemarkRow(index: number) {
-    this.description = this.remarkForm.get('description') as FormArray;
+    this.description = this.remarkForm.get('description') as UntypedFormArray;
     this.description.removeAt(index);
   }
 
@@ -138,7 +138,7 @@ export class InstantBuyingDialogComponent implements OnInit {
     this.remarkPartOpen = true;
   }
 
-  public saveRemark(form: FormGroup) {
+  public saveRemark(form: UntypedFormGroup) {
     this.remarkPartOpen = false;
     this.remarkList = [];
     form.value.description.forEach(description => {
@@ -299,6 +299,6 @@ export class InstantBuyingDialogComponent implements OnInit {
     }
   }
 
-  get formData() {return <FormArray>this.remarkForm.get('description');}
+  get formData() {return <UntypedFormArray>this.remarkForm.get('description');}
 
 }
