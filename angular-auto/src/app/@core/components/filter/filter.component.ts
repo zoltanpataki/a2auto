@@ -2,14 +2,14 @@ import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angu
 import {HttpService} from "../../services/http.service";
 import {UtilService} from "../../services/util.service";
 import {SelectedFilter} from "../../models/selectedFilter";
-import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
+import {MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig} from "@angular/material/legacy-dialog";
 import {DialogComponent} from "../../dialog/dialog.component";
 import {Car} from "../../models/car";
 import {WarningDialogComponent} from "../../dialog/warning-dialog/warning-dialog.component";
 import {CreditDialogComponent} from "../../dialog/credit-dialog/credit-dialog.component";
 import {CountInCarSupplement} from "../../models/countInCarSupplement";
 import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup} from "@angular/forms";
-import {MatTableDataSource} from "@angular/material/table";
+import {MatLegacyTableDataSource as MatTableDataSource} from "@angular/material/legacy-table";
 import {Users} from "../../models/users";
 import {Credit} from "../../models/credit";
 import {Company} from "../../models/company";

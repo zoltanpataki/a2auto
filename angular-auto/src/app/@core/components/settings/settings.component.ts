@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {MatTableDataSource} from "@angular/material/table";
-import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
+import {MatLegacyTableDataSource as MatTableDataSource} from "@angular/material/legacy-table";
+import {MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig} from "@angular/material/legacy-dialog";
 import {SalesmanComponent} from "../../dialog/salesman/salesman.component";
 import {UtilService} from "../../services/util.service";
 import {HttpService} from "../../services/http.service";

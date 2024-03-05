@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {MatDialogRef} from "@angular/material/dialog";
+import {MatLegacyDialogRef as MatDialogRef} from "@angular/material/legacy-dialog";
 import {WarningDialogComponent} from "../warning-dialog/warning-dialog.component";
 import {Witness} from "../../models/witness";
 import {UtilService} from "../../services/util.service";
