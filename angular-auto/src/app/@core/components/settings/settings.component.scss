@@ -19,7 +19,6 @@ table {
 }
 
 .inheritanceTax1Table {
-  width: 90%;
   text-align: center;
 }
 
@@ -31,7 +30,7 @@ table {
 .settingsContainer {
   width: 100%;
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: column wrap;
   justify-content: space-between;
 }
 
@@ -39,20 +38,7 @@ table {
   width: 50%;
 }
 
-.mat-column-min, .mat-column-max {
-  width: 16% !important;
-  max-width: 16% !important;
-}
-
-.mat-column-kw, .mat-column-young, .mat-column-mediumAged, .mat-column-old {
-  width: 17% !important;
-}
-
-.mat-column-kw, .mat-column-max {
-  border-right: 1px black solid;
-}
-
-.mat-header-cell.iTax {
+.mat-mdc-header-cell.iTax {
   text-align: center;
 }
 
@@ -66,14 +52,5 @@ table {
 
 input {
   text-align: center;
-}
-
-::ng-deep .mat-column-kw div.mat-form-field-infix,
-::ng-deep .mat-column-min div.mat-form-field-infix,
-::ng-deep .mat-column-max div.mat-form-field-infix,
-::ng-deep .mat-column-young div.mat-form-field-infix,
-::ng-deep .mat-column-mediumAged div.mat-form-field-infix,
-::ng-deep .mat-column-old div.mat-form-field-infix {
-  width: 16% !important;
 }
 

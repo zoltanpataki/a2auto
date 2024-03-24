@@ -4,7 +4,7 @@ import {HttpService} from "../../services/http.service";
 import {UtilService} from "../../services/util.service";
 import {NavigationEnd, Router} from "@angular/router";
 import {filter} from "rxjs/operators";
-import {MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig} from "@angular/material/legacy-dialog";
+import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {InstantBuyingDialogComponent} from "../../dialog/instant-buying-dialog/instant-buying-dialog.component";
 
 @Component({

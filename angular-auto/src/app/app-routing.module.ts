@@ -11,6 +11,8 @@ import {GdprPageComponent} from "./@ui/gdpr-page/gdpr-page.component";
 import {SettingsComponent} from "./@core/components/settings/settings.component";
 import {WarrantPageComponent} from "./@ui/warrant-page/warrant-page.component";
 import {InsurancePageComponent} from "./@ui/insurance-page/insurance-page.component";
+import {UserPickerComponent} from "./@core/components/user-picker/user-picker.component";
+import {WarrantLawsPageComponent} from "./@ui/warrant-laws-page/warrant-laws-page.component";
 
 
 const routes: Routes = [
@@ -57,6 +59,14 @@ const routes: Routes = [
   {
     path: 'insurance',
     component: InsurancePageComponent
+  },
+  {
+    path: 'userPicker',
+    component: UserPickerComponent
+  },
+  {
+    path: 'warrantLawsPage',
+    component: WarrantLawsPageComponent
   },
   {
     path: '**',

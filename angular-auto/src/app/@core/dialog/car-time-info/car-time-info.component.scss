@@ -51,3 +51,7 @@ button {
   width: 50%;
   margin: 0 auto;
 }
+
+::ng-deep .visually-hidden {
+  display: none;
+}

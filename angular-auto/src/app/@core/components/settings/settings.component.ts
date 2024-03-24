@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {MatLegacyTableDataSource as MatTableDataSource} from "@angular/material/legacy-table";
-import {MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig} from "@angular/material/legacy-dialog";
+import {MatTableDataSource} from "@angular/material/table";
+import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {SalesmanComponent} from "../../dialog/salesman/salesman.component";
 import {UtilService} from "../../services/util.service";
 import {HttpService} from "../../services/http.service";
@@ -25,7 +25,7 @@ export class SettingsComponent implements OnInit {
   public salesmanDisplayedColumns = ['name', 'symbol'];
   private witnessList = [];
   public witnesses = new MatTableDataSource<any>();
-  public witnessDisplayedColumns = ['name', 'idCardNumber', 'symbol'];
+  public witnessDisplayedColumns = ['witnessName', 'idCardNumber', 'symbol'];
   public inheritanceTax1 = new MatTableDataSource<any>();
   public inheritanceTax1Columns = ['kw', 'min', 'max', 'young', 'mediumAged', 'old'];
   public utilityList = [];
