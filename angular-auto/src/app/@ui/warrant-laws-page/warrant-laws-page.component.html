@@ -1,0 +1,44 @@
+<div class="warrantLawsContainer" id="warrantLawsContainer">
+  <div class="header">
+    <img src="assets/logo.png" style="width:1000px;height:150px;">
+  </div>
+  <div class="title">
+    <h2>TÁJÉKOZTÓ SZAVATOSSÁGI JOGOKRÓL ÉS KÖTELEZETTSÉGEKTŐL</h2>
+  </div>
+  <div class="section">
+    <p>A 2013. évi V. A Polgári Törvénykönyvről rendelkezései alapján a használt autókra a kellékszavatosság fogalma vonatkozik. Magánszemély vásárló esetén <strong>két alap lehetőséget</strong>  különítünk el:</p>
+  </div>
+  <div class="section">
+    <ol>
+      <li><strong>Az értékesítő magánszemély</strong>: ebben az esetben a vevőnek egy év áll rendelkezésére, hogy jelezze a hibát az Eladó felé igazolható módon. A vevőnek kell bizonyítania, hogy a hiba oka már fennállt az eladáskor is.</li>
+      <li><strong>Az értékesítő nem magánszemély</strong>: ez esetben úgynevezett fogyasztói szerződés kötnek a felek. Fogyasztói szerződésekre két év kellékszavatosság vonatkozik, azonban a szerződő felek dönthetnek úgy, hogy csak <strong>egy éves időszakra vonatkozik</strong> a szavatosság. Az <strong>első hat hónapban</strong> az <strong>eladónak</strong> kell bizonyítania, hogy a probléma nem állt fenn az eladáskor, a <strong>második hat hónapban</strong> már a <strong>vevőt terheli</strong> a bizonyítás kötelezettsége.</li>
+    </ol>
+  </div>
+  <div>
+    <div class="section">
+      <p>Bármely adásvétel esetén az <strong>eladó köteles tájékoztatni a vevőt</strong> minden lényeges körülményről, azonban <strong>a vevőt ezzel egyidejűleg terheli a tájékozódási kötelezettség.</strong></p>
+    </div>
+    <div class="section">
+      <p>A vevő a megvásárolni kívánt gépjárművet megtekintheti, megvizsgálhatja. Amennyiben a Vevő nem él a megtekintés és/vagy megvizsgálás lehetőségével, azokra a hibákra, amelyeket a vevő kellően gondos, észszerű megtekintés mellett felismerhetett volna (ezek az ún. nyílt hibák), úgy kell tekinteni, mint amelyeket elfogadott és az autót ezek ismeretében vette meg.</p>
+    </div>
+    <div class="section">
+      <p>A használt autó <strong>eladója nem felel azért a hibáért, amelyet vásárláskor közölt a vevővel, vagy amelyről a vevőnek tudnia kellett</strong>, akár azért, mert azt észlelte, akár azért, mert azt fel kellett volna ismernie gondos, észszerű megtekintés mellett. Ilyen, az <strong>eladón utólag nem számon kérhető hibák azok is, amelyeket a vevőnek az eladó tájékoztatása</strong>, a szerződéskötés körülményei, illetőleg <strong>a gépjármű életkora, állapota és használtsági foka alapján egyébként számításba kellett vennie.</strong> Ide sorolandóak továbbá azok a hibák is, amelyek fennállása, illetve jelentkezése a nyílt hibákra <strong>tekintettel feltételezhető, előrelátható.</strong></p>
+    </div>
+    <div class="section">
+      <p>Az általunk értékesített gépjárművek esetében bizonyos feltételek fennállása esetén a <strong>Vevőnek lehetősége van</strong> az Eladó képviselője által megismertetett <strong>műszaki garancia biztosítás kötésére</strong>, amely <strong>akár 3 éves időszakra</strong> is <strong>köthető</strong> (6 hónaptól 36 hónap választható). <strong>Ez</strong> a biztosítás a <strong>Vevő részére</strong> a jogszabályban foglaltaknál lényegesen <strong>nagyobb biztonságot nyújt</strong> - hasonló az új gépjármű értékesítéshez például nem kizárólag a fő alkatrészekre vonatkozik a helytállás.</p>
+    </div>
+    <div class="section">
+      <p>Az A2 Autócentrum <strong>tájékoztatását megismertem, megértettem</strong>, esetleges kérdéseimre kimerítően választ kaptam, és a tájékoztatás <strong>tartalmát elfogadom</strong>, a tájékoztatót alkalmasnak tartom arra, hogy felelős döntést hozzak a gépjármű vásárlásról és esetleges kiegészítő biztosítás megkötéséről.</p>
+    </div>
+  </div>
+  <div class="date sectionSeparateur">
+    <p class="texts">Kelt: Székesfehérvár, {{today | date:'yyyy-MM-dd'}}</p>
+  </div>
+  <div class="signature">
+    <p class="upperLineBuyer" *ngIf="pickedUser && pickedUser.fullName">{{pickedUser.fullName}}</p>
+    <p class="upperLineBuyer" *ngIf="!pickedUser">Vásárló aláírása</p>
+  </div>
+</div>
+<div>
+  <button (click)="captureScreen()" mat-button>PDF Generálás</button>
+</div>

@@ -1,0 +1,44 @@
+.userSearchContainer {
+  display: flex;
+  flex-flow: row wrap;
+  width: 100%;
+  margin-bottom: 5%;
+}
+
+.userFilterRightSide {
+  width: 75%;
+}
+
+.userFilterLeftSide {
+  width: 20%;
+}
+
+table {
+  width: 100%;
+}
+
+.search {
+  width: 100%;
+}
+
+.searchButton {
+  width: 70%;
+  max-width: 70% !important;
+}
+
+.searchType {
+  width: 100% !important;
+}
+
+.searchField {
+  width: 70% !important;
+}
+
+button:focus {
+  outline: none;
+}
+
+.mat-mdc-button {
+  background-color: deeppink;
+  color: white;
+}

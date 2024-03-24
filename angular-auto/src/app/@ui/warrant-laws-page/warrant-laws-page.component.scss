@@ -1,0 +1,68 @@
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  border: 0;
+  overflow: hidden; /*  Disable scrollbars */
+  display: block;  /* No floating content on sides */
+}
+
+p, h1, li {
+  font-family: "Times New Roman", Times, serif !important;
+}
+
+p, li {
+  font-size: 200%;
+  text-align: justify;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+}
+
+img {
+  margin-top: 4%;
+}
+
+.title {
+  margin-top: 2%;
+  margin-bottom: 4%;
+  text-align: center;
+  font-size: 200%;
+  font-weight: bold;
+}
+
+h2 {
+  font-weight: bold;
+}
+
+.section {
+  margin-bottom: 2%;
+  margin-left: 12%;
+  margin-right: 12%;
+}
+
+.date {
+  margin-bottom: 2%;
+  margin-left: 12%;
+}
+
+.signature {
+  margin-left: 45%;
+}
+
+.upperLineBuyer {
+  text-align: center;
+  min-width: 15%;
+  max-width: 60%;
+  border-top: 1px solid black;
+  padding-left: 5%;
+  padding-right: 5%;
+  padding-top: 1%;
+}
+
+button {
+  background-color: deeppink;
+  color: white;
+}
