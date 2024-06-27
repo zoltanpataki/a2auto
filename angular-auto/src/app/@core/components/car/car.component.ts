@@ -6,6 +6,7 @@ import {NavigationEnd, Router} from "@angular/router";
 import {filter} from "rxjs/operators";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {InstantBuyingDialogComponent} from "../../dialog/instant-buying-dialog/instant-buying-dialog.component";
+import {Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-car',
@@ -121,7 +122,7 @@ export class CarComponent implements OnInit {
 
   public saveCar(form: any) {
     if (this.validateFormFieldLength(form.value)) {
-      if (form.value.plateNumber.length < 6) {
+      if (!this.isPlateNumberValid(form.value.plateNumber)) {
         this.utilService.validPlateNumber = false;
       } else if (isNaN(Number(form.value.vintage))) {
         this.notValidVintage = true;
@@ -544,5 +545,10 @@ export class CarComponent implements OnInit {
     this.tooLongFieldValue = list[1];
     this.isThereLongFieldValue = true;
     return false;
+  }
+
+  private isPlateNumberValid(plateNumber: string): boolean {
+    const result = plateNumber.trim().match('[a-z, A-Z]{3,4}[1-9]{3}')
+    return result != null && result.length > 0;
   }
 }

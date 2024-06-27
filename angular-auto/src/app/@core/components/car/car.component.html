@@ -13,10 +13,10 @@
         <div>
           <mat-form-field class="example-full-width">
             <label>
-              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput placeholder="Rendszám (6 karakter)" maxlength="6" minlength="6" (ngModelChange)="itemChanged(carForm)" ngModel="{{carData.plateNumber}}" name="plateNumber">
+              <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" matInput placeholder="Rendszám (6-7 karakter)" maxlength="7" minlength="6" (ngModelChange)="itemChanged(carForm)" ngModel="{{carData.plateNumber}}" name="plateNumber">
             </label>
           </mat-form-field>
-          <mat-error *ngIf="!utilService.validPlateNumber">A rendszám hossza 6 karakter kell legyen</mat-error>
+          <mat-error *ngIf="!utilService.validPlateNumber">A rendszám hossza nem megfelelő formátumú (ABC123 v. ABCD123)</mat-error>
         </div>
         <div *ngFor="let item of fieldsOneSecondHalf | keyvalue:keepOriginalOrder; trackBy: trackByFn">
           <mat-form-field class="example-full-width">
