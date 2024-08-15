@@ -548,7 +548,7 @@ export class CarComponent implements OnInit {
   }
 
   private isPlateNumberValid(plateNumber: string): boolean {
-    const result = plateNumber.trim().match('[a-z, A-Z]{3,4}[1-9]{3}')
+    const result = plateNumber.trim().match('[a-z, A-Z]{3,4}[0-9]{3}')
     return result != null && result.length > 0;
   }
 }
